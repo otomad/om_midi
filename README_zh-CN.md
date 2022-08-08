@@ -26,7 +26,7 @@ om_midi，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自�
 ### 版本对比
 > 除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。
 
-版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文UI | 额外的实用关键帧
+版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文 UI | 额外的实用关键帧
 :--- | :--- | :---: | :---: | :---: | :---:
 v0.1 | [David Van Brink (omino) 的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌
 v1.0 | [Dora (NGDXW) 的修改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️
