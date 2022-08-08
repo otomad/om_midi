@@ -11,7 +11,7 @@ om_midi，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自�
 
 感谢脚本原作者们 [David Van Brink (omino)](http://omino.com/)、[Dora (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
-**姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper).
+**姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
 ### 说明文档
 * [家鳖大帝的中文说明文档](https://om.z4hd.cf/)
