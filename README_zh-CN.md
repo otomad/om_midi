@@ -30,14 +30,14 @@ om_midi，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自�
 
 版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文 UI | 额外的实用关键帧
 :--- | :--- | :---: | :---: | :---: | :---:
-v0.1 | [David Van Brink (omino) 的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌
+v0.1 | [大卫·范·布林克 (omino) 的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌
 v1.0 | [Dora (NGDXW) 的修改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️
-v1.1 | [韩琦的预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️
+v1.0 Plus | [韩琦的预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️
 v1.2 | [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ✔️ | ✔️
 v2.0 | [Dora (NGDXW) 的二次修改版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️
 
 ### 参考
-* [David Van Brink (omino) 的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
+* [大卫·范·布林克 (omino) 的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [Dora (NGDXW) 的修改版](https://www.bilibili.com/read/cv170398)
 * [韩琦的预设](https://www.bilibili.com/video/av29649969)
 * [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh)
