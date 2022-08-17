@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
 import afterEffectJsx from 'rollup-plugin-ae-jsx';
 import pkg from './package.json';
+import { terser } from 'rollup-plugin-terser';
 
 export default {
 	input: 'src/index.ts',
@@ -36,5 +37,6 @@ export default {
 			strict: true,
 		}),
 		// afterEffectJsx(),
+		terser(),
 	],
 };

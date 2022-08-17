@@ -2522,7 +2522,7 @@ declare class _Control {
    * For orientation = column: left, right, fill
    * For orientation = stack: top, bottom, left, right, fill
    */
-  alignment: string
+  alignment: "top" | "bottom" | "left" | "right" | "fill"
 
   /**
    * The boundaries of the element, in parent-relative coordinates.
@@ -2640,131 +2640,179 @@ declare class _Control {
 
 /**
  * Creation properties.
- * @param name A unique name for the control.
  */
 interface _AddControlProperties {
+  /**
+   * A unique name for the control.
+   */
   name?: string
 }
 
 /**
  * Creation properties of a DropDownList.
- * @param name A unique name for the control.
- * @param items An array of strings for the text of each list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
  */
-interface _AddControlPropertiesDropDownList {
-  name?: string
+interface _AddControlPropertiesDropDownList extends _AddControlProperties {
+  /**
+   * An array of strings for the text of each list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
+   */
   items?: string[]
 }
 
 /**
  * Creation properties of an EditText.
- * @param name A unique name for the control.
- * @param multiline When false (the default), the control displays a single line of text. When true, the control displays multiple lines, in which case the text wraps within the width of the control.
- * @param borderless When true, the control is drawn with no border. Default is false.
- * @param scrollable For multiline elements only. When true (the default), the text field has a vertical scrollbar that is enabled when the element contains more text than fits in the visible area. When false, no vertical scrollbar appears; if the element contains more text than fits in the visible area, the arrow keys can be used to scroll the text up and down.
- * @param readonly When false (the default), the control accepts text input. When true, the control does not accept input but only displays the contents of the text property.
- * @param noecho When false (the default), the control displays input text. When true, the control does not display input text (used for password input fields).
- * @param enterKeySignalsOnChange When false (the default), the control signals an onChange event when the editable text is changed and the control loses the keyboard focus (that is, the user tabs to another control, clicks outside the control, or types Enter). When true, the control only signals an onChange() event when the editable text is changed and the user types Enter; other changes to the keyboard focus do not signal the event.
- * @param wantReturn Only applies to multiple line edit controls in ScriptUI Version 6.0 or later. When true the RETURN/ENTER keystroke is considered as text-input advancing the cursor to the next line. The default value is false.
  */
-interface _AddControlPropertiesEditText {
-  name?: string
+interface _AddControlPropertiesEditText extends _AddControlProperties {
+  /**
+   * When false (the default), the control displays a single line of text. When true, the control displays multiple lines, in which case the text wraps within the width of the control.
+   */
   multiline?: boolean
+  /**
+   * When true, the control is drawn with no border. Default is false.
+   */
   borderless?: boolean
+  /**
+   * For multiline elements only. When true (the default), the text field has a vertical scrollbar that is enabled when the element contains more text than fits in the visible area. When false, no vertical scrollbar appears; if the element contains more text than fits in the visible area, the arrow keys can be used to scroll the text up and down.
+   */
   scrollable?: boolean
+  /**
+   * When false (the default), the control accepts text input. When true, the control does not accept input but only displays the contents of the text property.
+   */
   readonly?: boolean
+  /**
+   * When false (the default), the control displays input text. When true, the control does not display input text (used for password input fields).
+   */
   noecho?: boolean
+  /**
+   * When false (the default), the control signals an onChange event when the editable text is changed and the control loses the keyboard focus (that is, the user tabs to another control, clicks outside the control, or types Enter). When true, the control only signals an onChange() event when the editable text is changed and the user types Enter; other changes to the keyboard focus do not signal the event.
+   */
   enterKeySignalsOnChange?: boolean
+  /**
+   * Only applies to multiple line edit controls in ScriptUI Version 6.0 or later. When true the RETURN/ENTER keystroke is considered as text-input advancing the cursor to the next line. The default value is false.
+   */
   wantReturn?: boolean
 }
 
 /**
  * Creation properties of an IconButton.
- * @param name A unique name for the control.
- * @param style A string for the visual style, either "button", which has a visible border with a raised or 3D appearance, or "toolbutton", which has a flat appearance, appropriate for inclusion in a toolbar.
- * @param toggle For a button-style control, a value of true causes it to get a button-pressed appearance the first time it is clicked, and alternate with the unpressed appearance each time it is clicked. The toggle state is reflected in the control’s value property.
  */
-interface _AddControlPropertiesIconButton {
-  name?: string
+interface _AddControlPropertiesIconButton extends _AddControlProperties {
+  /**
+   * A string for the visual style, either "button", which has a visible border with a raised or 3D appearance, or "toolbutton", which has a flat appearance, appropriate for inclusion in a toolbar.
+   */
   style?: "button" | "toolbutton"
+  /**
+   * For a button-style control, a value of true causes it to get a button-pressed appearance the first time it is clicked, and alternate with the unpressed appearance each time it is clicked. The toggle state is reflected in the control’s value property.
+   */
   toggle?: boolean
 }
 
 /**
  * Creation properties of a ListBox.
- * @param name A unique name for the control.
- * @param multiselect When false (the default), only one item can be selected. When true, multiple items can be selected.
- * @param selected When true, multiple items can be selected.
- * @param items An array of strings for the text of each list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
- * @param numberOfColumns A number of columns in which to display the items; default is 1. When there are multiple columns, each ListItem object represents a selectable row. Its text and image values specify the label in the first column, and the subitems property specifies the labels in the additional columns.
- * @param showHeaders True to display column titles.
- * @param columnWidths An array of numbers for the preferred width in pixels of each column.
- * @param columnTitles A corresponding array of strings for the title of each column, to be shown if showHeaders is true.
  */
-interface _AddControlPropertiesListBox {
-  name?: string
+interface _AddControlPropertiesListBox extends _AddControlProperties {
+  /**
+   * When false (the default), only one item can be selected. When true, multiple items can be selected.
+   */
   multiselect?: boolean
+  /**
+   * When true, multiple items can be selected.
+   */
   selected?: boolean
+  /**
+   * An array of strings for the text of each list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
+   */
   items?: string[]
+  /**
+   * A number of columns in which to display the items; default is 1. When there are multiple columns, each ListItem object represents a selectable row. Its text and image values specify the label in the first column, and the subitems property specifies the labels in the additional columns.
+   */
   numberOfColumns?: number
+  /**
+   * True to display column titles.
+   */
   showHeaders?: boolean
+  /**
+   * An array of numbers for the preferred width in pixels of each column.
+   */
   columnWidths?: number[]
+  /**
+   * A corresponding array of strings for the title of each column, to be shown if showHeaders is true.
+   */
   columnTitles?: string[]
 }
 
 /**
  * Creation properties of a Panel.
- * @param name A unique name for the control.
- * @param borderStyle A string that specifies the appearance of the border drawn around the panel. One of black, etched, gray, raised, sunken. Default is etched.
- * @param su1PanelCoordinates Photoshop only. When true, this panel automatically adjusts the positions of its children for compatibility with Photoshop CS. Default is false, meaning that the panel does not adjust the positions of its children, even if the parent window has automatic adjustment enabled.
  */
-interface _AddControlPropertiesPanel {
-  name?: string
+interface _AddControlPropertiesPanel extends _AddControlProperties {
+  /**
+   * A string that specifies the appearance of the border drawn around the panel. One of black, etched, gray, raised, sunken. Default is etched.
+   */
   borderStyle?: string
+  /**
+   * Photoshop only. When true, this panel automatically adjusts the positions of its children for compatibility with Photoshop CS. Default is false, meaning that the panel does not adjust the positions of its children, even if the parent window has automatic adjustment enabled.
+   */
   su1PanelCoordinates?: boolean
 }
 
 /**
  * Creation properties of a StaticText.
- * @param name A unique name for the control.
- * @param multiline When false (the default), the control displays a single line of text. When true, the control displays multiple lines, in which case the text wraps within the width of the control.
- * @param scrolling When false (the default), the displayed text cannot be scrolled. When true, the displayed text can be vertically scrolled using the Up Arrow and Down Arrow; this case implies multiline=true.
- * @param truncate If middle or end, defines where to remove characters from the text and replace them with an ellipsis if the specified title does not fit within the space reserved for it. If none, and the text does not fit, characters are removed from the end, without any replacement ellipsis character.
  */
-interface _AddControlPropertiesStaticText {
-  name?: string
+interface _AddControlPropertiesStaticText extends _AddControlProperties {
+  /**
+   * When false (the default), the control displays a single line of text. When true, the control displays multiple lines, in which case the text wraps within the width of the control.
+   */
   multiline?: boolean
+  /**
+   * When false (the default), the displayed text cannot be scrolled. When true, the displayed text can be vertically scrolled using the Up Arrow and Down Arrow; this case implies multiline=true.
+   */
   scrolling?: boolean
+  /**
+   * If middle or end, defines where to remove characters from the text and replace them with an ellipsis if the specified title does not fit within the space reserved for it. If none, and the text does not fit, characters are removed from the end, without any replacement ellipsis character.
+   */
   truncate?: string
 }
 
 /**
  * Creation properties of a TreeView.
- * @param name A unique name for the control.
- * @param items An array of strings for the text of each top-level list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
  */
-interface _AddControlPropertiesTreeView {
-  name?: string
+interface _AddControlPropertiesTreeView extends _AddControlProperties {
+  /**
+   * An array of strings for the text of each top-level list item. An item object is created for each item. An item with the text string "-" creates a separator item. Supply this property, or the items argument to the add() method, not both. This form is most useful for elements defined using Resource Specifications.
+   */
   items?: string[]
 }
 
 /**
  * Creation properties of a Window.
- * @param resizeable When true, the window can be resized by the user. Default is false.
- * @param su1PanelCoordinates Photoshop only. When true, the child panels of this window automatically adjust the positions of their children for compatibility with Photoshop CS (in which the vertical coordinate was measured from outside the frame). Default is false. Individual panels can override the parent window’s setting.
- * @param closeButton Bridge only. When true, the title bar includes a button to close the window, if the platform and window type allow it. When false, it does not. Default is true. Not used for dialogs.
- * @param maximizeButton Bridge only. When true, the title bar includes a button to expand the window to its maximum size (typically, the entire screen), if the platform and window type allow it. When false, it does not. Default is false for type palette, true for type window. Not used for dialogs.
- * @param minimizeButton Bridge only. When true, the title bar includes a button to minimize or iconify the window, if the platform and window type allow it. When false, it does not. Default is false for type palette, true for type window. Main windows cannot have a minimize button in Mac OS. Not used for dialogs.
- * @param independent When true, a window of type window is independent of other application windows, and can be hidden behind them in Windows. In Mac OS, has no effect. Default is false.
- * @param borderless When true, the window has no title bar or borders. Properties that control those features are ignored.
  */
 interface _AddControlPropertiesWindow {
+  /**
+   * When true, the window can be resized by the user. Default is false.
+   */
   resizeable?: boolean
+  /**
+   * Photoshop only. When true, the child panels of this window automatically adjust the positions of their children for compatibility with Photoshop CS (in which the vertical coordinate was measured from outside the frame). Default is false. Individual panels can override the parent window’s setting.
+   */
   su1PanelCoordinates?: boolean
+  /**
+   * Bridge only. When true, the title bar includes a button to close the window, if the platform and window type allow it. When false, it does not. Default is true. Not used for dialogs.
+   */
   closeButton?: boolean
+  /**
+   * Bridge only. When true, the title bar includes a button to expand the window to its maximum size (typically, the entire screen), if the platform and window type allow it. When false, it does not. Default is false for type palette, true for type window. Not used for dialogs.
+   */
   maximizeButton?: boolean
+  /**
+   * Bridge only. When true, the title bar includes a button to minimize or iconify the window, if the platform and window type allow it. When false, it does not. Default is false for type palette, true for type window. Main windows cannot have a minimize button in Mac OS. Not used for dialogs.
+   */
   minimizeButton?: boolean
+  /**
+   * When true, a window of type window is independent of other application windows, and can be hidden behind them in Windows. In Mac OS, has no effect. Default is false.
+   */
   independent?: boolean
+  /**
+   * When true, the window has no title bar or borders. Properties that control those features are ignored.
+   */
   borderless?: boolean
 }
 
