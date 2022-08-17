@@ -3,6 +3,8 @@
 [![Cover](cover.png)](#om_midi)
 <div align="center">
 	<h2>om_midi</h2>
+	<img src="https://img.shields.io/badge/STATE-UNDER%20DEVELOPMENT-red?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/VERSION-3.0‐ALPHA-orange?style=flat-square" alt="Badge" />
 
 **EN** | [简中](README_zh-CN.md)
 </div>
