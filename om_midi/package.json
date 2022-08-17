@@ -1,0 +1,36 @@
+{
+  "name": "om_midi",
+  "version": "1.0.1",
+  "description": "After Effects Expression Library",
+  "main": "dist/om_midi.jsx",
+  "scripts": {
+    "test": "jest --watch",
+    "tsc": "tsc",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "release": "npm run build && gh release create $(node -pe \"require('./package.json').version\") $(node -pe \"require('./package.json').main\")"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "@rollup/plugin-replace": "^2.4.1",
+    "@rollup/plugin-typescript": "^8.2.0",
+    "@types/jest": "^26.0.22",
+    "expression-globals-typescript": "^3.2.6",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "rollup": "^2.42.4",
+    "rollup-plugin-ae-jsx": "^2.0.0",
+    "ts-jest": "^26.5.4",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
+  }
+}

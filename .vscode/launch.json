@@ -1,0 +1,18 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "extendscript-debug",
+			"request": "launch",
+			"name": "Run Current Script",
+			"program": "${file}",
+			"stopOnEntry": false,
+			"excludes": [
+				"undefined",
+				"builtin",
+				"Function",
+				"prototype"
+			],
+		}
+	]
+}
