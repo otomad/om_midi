@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "esnext",
+		"target": "es5",
+		"noImplicitAny": true,
+		"moduleResolution": "node",
+		"strict": true,
+		"noLib": true,
+		"typeRoots": [],
+	},
+	"exclude": [
+		"node_modules",
+	],
+}
