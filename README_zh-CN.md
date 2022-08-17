@@ -11,7 +11,7 @@
 
 om_midi，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om_midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
-感谢脚本原作者们 [David Van Brink (omino)](http://omino.com/)、[Dora (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
+感谢脚本原作者们 [大卫·范·布林克 (omino)](http://omino.com/)、[Dora (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
 **姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
@@ -23,7 +23,7 @@ om_midi，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自�
 
 ### 安装
 下载脚本文件并将其移动至位于 AfterEffects 安装目录的 `Script` 或 `Script\ScriptUI` 文件夹中。
-> (例如：C:\\Program Files\\Adobe\\Adobe After Effects CC 2022)
+> (例如：C:\\Program Files\\Adobe\\Adobe After Effects 2022)
 
 ### 版本对比
 > 除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。

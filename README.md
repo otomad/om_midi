@@ -23,7 +23,7 @@ Thanks to original script creators [David Van Brink (omino)](http://omino.com/),
 
 ### Install
 Download the latest script file and move it to the `Script` or `Script\ScriptUI` folder located in the After Effects installation directory.
-> (ie. C:\\Program Files\\Adobe\\Adobe After Effects CC 2022)
+> (ie. C:\\Program Files\\Adobe\\Adobe After Effects 2022)
 
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
