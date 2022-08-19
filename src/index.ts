@@ -1,4 +1,4 @@
 import user from "./user";
-import buildUI from "./ui";
+import buildPortal from "./ui/portal.ui";
 
-buildUI(<Panel><any>this, user);
+buildPortal(<Panel><any>this, user);

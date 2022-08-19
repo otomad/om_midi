@@ -1,6 +1,6 @@
 const User: IUser = {
-	scriptName: "testScript",
-	version: "3.0.12",
+	scriptName: "om_midi",
+	version: "3.0",
 };
 
 export interface IUser {

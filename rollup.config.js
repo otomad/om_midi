@@ -37,6 +37,6 @@ export default {
 			strict: true,
 		}),
 		// afterEffectJsx(),
-		// terser(),
+		terser(),
 	],
 };
