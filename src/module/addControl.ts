@@ -1,27 +1,57 @@
-type controlTypeKey = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
+//#region 类型
+type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
 
-type containerType = Window | Panel | Group | TabbedPanel;
+type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
 
-function addControl(parent: containerType, type: "button", params?: Partial<Button>, properties?: _AddControlProperties): Button;
-function addControl(parent: containerType, type: "checkbox", params?: Partial<Checkbox>, properties?: _AddControlProperties): Checkbox;
-function addControl(parent: containerType, type: "dropdownlist", params?: Partial<DropDownList>, properties?: _AddControlPropertiesDropDownList): DropDownList;
-function addControl(parent: containerType, type: "edittext", params?: Partial<EditText>, properties?: _AddControlPropertiesEditText): EditText;
-function addControl(parent: containerType, type: "flashplayer", params?: Partial<FlashPlayer>, properties?: _AddControlProperties): FlashPlayer;
-function addControl(parent: containerType, type: "group", params?: Partial<Group>, properties?: _AddControlProperties): Group;
-function addControl(parent: containerType, type: "iconbutton", params?: Partial<IconButton>, properties?: _AddControlPropertiesIconButton): IconButton;
-function addControl(parent: containerType, type: "image", params?: Partial<Image>, properties?: _AddControlProperties): Image;
-function addControl(parent: containerType, type: "listbox", params?: Partial<ListBox>, properties?: _AddControlPropertiesListBox): ListBox;
-function addControl(parent: containerType, type: "panel", params?: Partial<Panel>, properties?: _AddControlPropertiesPanel): Panel;
-function addControl(parent: containerType, type: "progressbar", params?: Partial<Progressbar>, properties?: _AddControlProperties): Progressbar;
-function addControl(parent: containerType, type: "radiobutton", params?: Partial<RadioButton>, properties?: _AddControlProperties): RadioButton;
-function addControl(parent: containerType, type: "scrollbar", params?: Partial<Scrollbar>, properties?: _AddControlProperties): Scrollbar;
-function addControl(parent: containerType, type: "slider", params?: Partial<Slider>, properties?: _AddControlProperties): Slider;
-function addControl(parent: containerType, type: "statictext", params?: Partial<StaticText>, properties?: _AddControlPropertiesStaticText): StaticText;
-function addControl(parent: containerType, type: "tab", params?: Partial<Tab>, properties?: _AddControlProperties): Tab;
-function addControl(parent: containerType, type: "tabbedpanel", params?: Partial<TabbedPanel>, properties?: _AddControlProperties): TabbedPanel;
-function addControl(parent: containerType, type: "treeview", params?: Partial<TreeView>, properties?: _AddControlPropertiesTreeView): TreeView;
-function addControl<C extends _Control>(parent: containerType, type: controlTypeKey, params?: Partial<C>, properties?: _AddControlProperties): C {
-	const control = parent.add(type as any, undefined, undefined, properties) as unknown as C;
+type ControlType<C extends ControlTypeName> =
+	C extends "button" ? Button :
+	C extends "checkbox" ? Checkbox :
+	C extends "dropdownlist" ? DropDownList :
+	C extends "edittext" ? EditText :
+	C extends "flashplayer" ? FlashPlayer :
+	C extends "group" ? Group :
+	C extends "iconbutton" ? IconButton :
+	C extends "image" ? Image :
+	C extends "listbox" ? ListBox :
+	C extends "panel" ? Panel :
+	C extends "progressbar" ? Progressbar :
+	C extends "radiobutton" ? RadioButton :
+	C extends "scrollbar" ? Scrollbar :
+	C extends "slider" ? Slider :
+	C extends "statictext" ? StaticText :
+	C extends "tab" ? Tab :
+	C extends "tabbedpanel" ? TabbedPanel :
+	C extends "treeview" ? TreeView : never;
+	
+type PropertiesType<C extends ControlTypeName> =
+	C extends "dropdownlist" ? _AddControlPropertiesDropDownList :
+	C extends "edittext" ? _AddControlPropertiesEditText :
+	C extends "iconbutton" ? _AddControlPropertiesIconButton :
+	C extends "listbox" ? _AddControlPropertiesListBox :
+	C extends "panel" ? _AddControlPropertiesPanel :
+	C extends "statictext" ? _AddControlPropertiesStaticText :
+	C extends "treeview" ? _AddControlPropertiesTreeView : _AddControlProperties;
+//#endregion
+
+/**
+ * 添加控件，并同时添加参数。
+ * @param parent - 父容器。
+ * @param type - 控件类型。
+ * @param params - 控件参数。
+ * @param properties - 控件属性。
+ * @returns 添加的控件。
+ */
+export default function addControl<C extends ControlTypeName>(parent: ContainerType, type: C, params?: Partial<ControlType<C>>, properties?: PropertiesType<C>): ControlType<C> {
+	let _control: _Control;
+	if (type == "group")
+		_control = parent.add(type, undefined, properties);
+	else if (type == "progressbar")
+		_control = parent.add(type, undefined, undefined, undefined, properties);
+	else if (type == "scrollbar" || type == "slider")
+		_control = parent.add(type as any, undefined, undefined, undefined, undefined, properties);
+	else
+		_control = parent.add(type as any, undefined, undefined, properties);
+	const control = _control as ControlType<C>;
 	if (params != undefined)
 		for (const key in params)
 			if (Object.prototype.hasOwnProperty.call(params, key))
@@ -29,4 +59,9 @@ function addControl<C extends _Control>(parent: containerType, type: controlType
 	return control;
 }
 
-export default addControl;
+export function addItems(dropDownList: DropDownList, ...items: string[]): DropDownList {
+	for (const item of items)
+		dropDownList.add("item", item);
+	dropDownList.selection = 0;
+	return dropDownList;
+}

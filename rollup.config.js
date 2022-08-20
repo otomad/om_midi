@@ -37,6 +37,10 @@ export default {
 			strict: true,
 		}),
 		// afterEffectJsx(),
-		terser(),
+		terser({
+			compress: {
+				conditionals: false, // 傻逼 ExtendScript 会把三元运算符的每一个选项都计算一遍。
+			},
+		}),
 	],
 };

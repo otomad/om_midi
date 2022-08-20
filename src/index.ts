@@ -1,4 +1,4 @@
 import user from "./user";
-import buildPortal from "./ui/portal.ui";
+import Portal from "./ui/Portal";
 
-buildPortal(<Panel><any>this, user);
+Portal.build(<Panel><any>this, user);

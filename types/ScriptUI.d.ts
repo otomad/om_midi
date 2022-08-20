@@ -9,6 +9,8 @@ declare enum _Alignment {
   CENTER,
 }
 
+type _AlignmentName = "top" | "bottom" | "left" | "right" | "fill" | "center";
+
 declare enum _FontStyle {
   REGULAR,
   BOLD,
@@ -124,7 +126,7 @@ declare class Window extends _Control {
    * Tells the layout manager how unlike-sized children of this container should be aligned within a column or row.
    * Order of creation determines which children are at the top of a column or the left of a row; the earlier a child is created, the closer it is to the top or left of its column or row. If defined, alignment for a child element overrides the alignChildren setting for the parent container. See alignment property for values.
    */
-  alignChildren: string
+  alignChildren: _AlignmentName
 
   /**
    * For windows of type dialog, the UI element to notify when the user presses a cancellation key combination.
@@ -920,13 +922,13 @@ declare class IconButton extends _Control {
   /**
    * The image object that defines the image to be drawn.
    */
-  image: ScriptUIImage
+  image: ScriptUIImage | string
 
   /**
    * The image object that defines the image to be drawn.
    * Same as IconButton.image.
    */
-  icon: ScriptUIImage
+  icon: ScriptUIImage | string
 
   /**
    * The key sequence that invokes the onShortcutKey() callback for this element (in Windows only).
@@ -1968,7 +1970,7 @@ declare class Group extends _Control {
    * Tells the layout manager how unlike-sized children of this container should be aligned within a column or row.
    * Order of creation determines which children are at the top of a column or the left of a row; the earlier a child is created, the closer it is to the top or left of its column or row. If defined, alignment for a child element overrides the alignChildren setting for the parent container. See alignment property for values.
    */
-  alignChildren: string | [string, string]
+  alignChildren: _AlignmentName | [_AlignmentName, _AlignmentName]
 
   /**
    * An array of child elements.
@@ -2036,7 +2038,7 @@ declare class Panel extends _Control {
   /**
    * Specifies how to align the child elements.
    */
-  alignChildren: string | [string, string]
+  alignChildren: _AlignmentName | [_AlignmentName, _AlignmentName]
 
   /**
    * Reserve space for the specified number of characters; affects calculation of preferredSize .
@@ -2522,7 +2524,7 @@ declare class _Control {
    * For orientation = column: left, right, fill
    * For orientation = stack: top, bottom, left, right, fill
    */
-  alignment: "top" | "bottom" | "left" | "right" | "fill"
+	alignment: _AlignmentName | [_AlignmentName, _AlignmentName]
 
   /**
    * The boundaries of the element, in parent-relative coordinates.
