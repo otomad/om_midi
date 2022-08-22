@@ -22,7 +22,7 @@
 原版理论上支持 `CS5` 及以后的版本。至于现在的版本，抱歉我不知道<s>为了爽一把增加了一大堆 ECMAScript 6+ 的新特性鬼知道老版本 AE 打不打得开</s>。欢迎来测试一下。
 
 ### 安装
-下载脚本文件并将其移动至位于 AfterEffects 安装目录的 `Script` 或 `Script\ScriptUI` 文件夹中。
+下载脚本文件并将其移动至位于 After Effects 安装目录的 `Script` 或 `Script\ScriptUI` 文件夹中。
 > (例如：C:\\Program Files\\Adobe\\Adobe After Effects 2022)
 
 ### 版本对比
