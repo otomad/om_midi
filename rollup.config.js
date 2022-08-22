@@ -1,23 +1,22 @@
-import typescript from '@rollup/plugin-typescript';
-import replace from '@rollup/plugin-replace';
-import afterEffectJsx from 'rollup-plugin-ae-jsx';
-import pkg from './package.json';
-import { terser } from 'rollup-plugin-terser';
+import typescript from "@rollup/plugin-typescript";
+import replace from "@rollup/plugin-replace";
+// import afterEffectJsx from "rollup-plugin-ae-jsx";
+import pkg from "./package.json";
+import { terser } from "rollup-plugin-terser";
+import license from "rollup-plugin-license";
+import User from "./src/user";
+import path from "path";
 
-export default {
-	input: 'src/index.ts',
+const enableTerser = true;
+
+export default [{
+	input: "src/index.ts",
 	output: {
 		file: pkg.main,
-		format: 'cjs',
-		format: 'es',
+		format: "cjs",
+		format: "es",
 	},
 	onwarn: function (warning) {
-		// Skip certain warnings
-
-		// should intercept ... but doesn't in some rollup versions
-		// if (warning.code === 'THIS_IS_UNDEFINED') { return; }
-
-		// console.warn everything else
 		console.warn(warning.message);
 	},
 	context: "this",
@@ -30,17 +29,28 @@ export default {
 			},
 		}),
 		typescript({
-			module: 'esnext',
-			target: 'es5',
+			module: "esnext",
+			target: "es5",
 			noImplicitAny: true,
-			moduleResolution: 'node',
+			moduleResolution: "node",
 			strict: true,
 		}),
 		// afterEffectJsx(),
-		terser({
+		enableTerser ? terser({
 			compress: {
 				conditionals: false, // 傻逼 ExtendScript 会把三元运算符的每一个选项都计算一遍。
 			},
+		}) : undefined,
+		license({
+			banner: {
+				content: {
+					file: path.join(__dirname, "banner.template.ejs"),
+				},
+				data: {
+					scriptName: User.scriptName,
+					version: User.version,
+				},
+			}
 		}),
 	],
-};
+}];

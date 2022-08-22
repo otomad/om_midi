@@ -1,7 +1,7 @@
 //#region 类型
 type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
 
-type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
+export type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
 
 type ControlType<C extends ControlTypeName> =
 	C extends "button" ? Button :

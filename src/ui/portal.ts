@@ -5,6 +5,9 @@ import ApplyEffectsTab from "./ApplyEffectsTab";
 import ToolsTab from "./ToolsTab";
 import getComp from "../module/getComp";
 import SettingsDialog from "./SettingsDialog";
+import setNumberEditText, { NumberType } from "../module/setNumberEditText";
+
+const LARGE_NUMBER = 1e5;
 
 export default class Portal {
 	//#region 组件对象
@@ -17,6 +20,9 @@ export default class Portal {
 	selectTrackGroup: Group;
 	selectTrackLbl: StaticText;
 	selectTrackBtn: Button;
+	selectBpmGroup: Group;
+	selectBpmLbl: StaticText;
+	selectBpmTxt: EditText;
 	tabs: TabbedPanel;
 	applyBtn: Button;
 	buttonGroup: Group;
@@ -32,37 +38,49 @@ export default class Portal {
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		const MidiGroupsParams: Partial<Group> = { orientation: "row", spacing: 7 };
 		const MidiButtonHeight = 22;
+		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		this.selectMidiGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectMidiLbl = addControl(this.selectMidiGroup, "statictext", { text: "MIDI 文件" });
 		setLabelMinWidth(this.selectMidiLbl);
 		this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", bounds: [0, 0, 15, MidiButtonHeight] });
-		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: ["fill", "center"] });
+		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
 		this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
 		setLabelMinWidth(this.selectTrackLbl);
-		this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: ["fill", "center"], maximumSize: [Number.MAX_VALUE, MidiButtonHeight] });
+		this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight] });
+		this.selectBpmGroup = addControl(this.group, "group", MidiGroupsParams);
+		this.selectBpmLbl = addControl(this.selectBpmGroup, "statictext", { text: "设定 BPM" });
+		setLabelMinWidth(this.selectBpmLbl);
+		this.selectBpmTxt = addControl(this.selectBpmGroup, "edittext", { text: "120", alignment: FILL_CENTER });
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
-		this.applyBtn = addControl(this.buttonGroup, "button", { text: "应用(&A)", alignment: "left" });
-		this.settingBtn = addControl(this.buttonGroup, "button", { text: "设置(&S)", alignment: ["right", "center"] });
+		this.applyBtn = addControl(this.buttonGroup, "button", { text: "应用", alignment: "left" });
+		this.settingBtn = addControl(this.buttonGroup, "button", { text: "设置", alignment: ["right", "center"] });
+		
+		this.nullObjTab = new NullObjTab(this);
+		this.applyEffectsTab = new ApplyEffectsTab(this);
+		this.toolsTab = new ToolsTab(this);
+		
+		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
-			if (this.selectMidiName) {
-				this.selectMidiName.text = file.displayName;
+			this.selectMidiName.text = file.displayName;
+			if (file && file.open("r")) {
+				file.encoding = "binary";
+				var content = file.read();
+				file.close();
+				alert(content.charCodeAt(0).toString(16));
 			}
 		}
 		this.applyBtn.onClick = () => {
 			const comp = getComp();
 			if (comp === null) return;
-			const nullLayer = comp.layers.addNull(1e4);
+			const nullLayer = comp.layers.addNull(LARGE_NUMBER);
 			nullLayer.name = "fuck";
 		}
 		this.settingBtn.onClick = () => {
 			new SettingsDialog().show();
 		}
-		this.nullObjTab = new NullObjTab(this);
-		this.applyEffectsTab = new ApplyEffectsTab(this);
-		this.toolsTab = new ToolsTab(this);
 	}
 	
 	public static build(thisObj: Panel, User: IUser): Portal {

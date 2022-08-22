@@ -1,4 +1,5 @@
 import addControl, { addItems } from "../module/addControl";
+import setNumberEditText, { NumberType } from "../module/setNumberEditText";
 import { SPACING, tabGroupParams } from "./NullObjTab";
 import { setLabelMinWidth } from "./Portal";
 import ToolsTab from "./ToolsTab";
@@ -45,16 +46,8 @@ export default class MarkerConductor {
 		this.startTimeCombo = addControl(this.startTimeGroup, "dropdownlist", { alignment: FILL });
 		addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
 		
-		this.beatTxt.onChange = () => {
-			this.beatTxt.text = this.beatTxt.text.replace(/[^\d]/g, "");
-		}
-		this.bpmTxt.onChange = () => {
-			let text = this.bpmTxt.text.replace(/[^\d\.]/g, "").replace(/\.+/g, ".").replace(/\.$/g, "");
-			const matches = text.match(/\d+\.\d+/g);
-			if (matches) text = matches[0];
-			text = text.replace(/^\./g, "0.");
-			this.bpmTxt.text = text;
-		}
+		setNumberEditText(this.beatTxt, NumberType.POSITIVE_INT, 4);
+		setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 	}
 	
 	private addGroup(): Group {

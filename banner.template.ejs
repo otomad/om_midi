@@ -1,0 +1,26 @@
+<%= data.scriptName %> v<%= data.version %>
+After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
+希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
+描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
+
+脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
+脚本作者：兰音
+
+部署时间：<%= moment().format('YYYY/MM/DD dddd H:mm:ss') %>
+Copyright (c) 2022, Ranne
+
+原作者介绍：
+Date: Sun Dec 25 22:58:10 PST 2011
+Author: David Van Brink
+This script is part of the omino adobe script suite.
+The latest version can be found at http://omino.com/pixelblog/.
+
+I write these because I like to. Please enjoy as you see fit.
+
+Questions to poly@omino.com, subject line should start with "plugins" so my spam filter lets it in.
+
+This file has been preprocessed to be standalone. I develop them against some reusable libraries
+-- such as for dialog layout -- but for distribution it's nicer to have just one file. dvb 2007.
+
+Description: This After Effects script reads a Standard MIDI file (.mid)
+and creates layers and keyframes corresponding to the notes and controllers in that MIDI file.
