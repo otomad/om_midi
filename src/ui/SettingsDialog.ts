@@ -2,6 +2,7 @@ import Separator from "../components/Separator";
 import addControl, { addItems } from "../module/addControl";
 import Setting from "../module/Setting";
 import str from "../languages/strings";
+import { CannotFindWindowError } from "../exceptions";
 
 const ABOUT = "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。";
 
@@ -24,7 +25,7 @@ export default class SettingsDialog {
 		this.window = new Window("dialog", "设置", undefined, {
 			resizeable: false,
 		});
-		if (this.window === null) throw new Error("无法找到或创建窗口。");
+		if (this.window === null) throw new CannotFindWindowError();
 		
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.aboutLbl = addControl(this.group, "statictext", { text: ABOUT }, { multiline: true });

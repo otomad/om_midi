@@ -6,8 +6,9 @@ import { terser } from "rollup-plugin-terser";
 import license from "rollup-plugin-license";
 import User from "./src/user";
 import path from "path";
+import selfExecute from "./custom_modules/rollup-plugin-self-execute";
 
-const enableTerser = true;
+const enableTerser = false;
 
 export default [{
 	input: "src/index.ts",
@@ -36,6 +37,9 @@ export default [{
 			strict: true,
 		}),
 		// afterEffectJsx(),
+		selfExecute({
+			"this": "thisObj",
+		}),
 		enableTerser ? terser({
 			compress: {
 				conditionals: false, // 傻逼 ExtendScript 会把三元运算符的每一个选项都计算一遍。

@@ -6,6 +6,8 @@ import ToolsTab from "./ToolsTab";
 import getComp from "../module/getComp";
 import SettingsDialog from "./SettingsDialog";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
+import { CannotFindWindowError } from "../exceptions";
+import Midi from "../midi/Midi";
 
 const LARGE_NUMBER = 1e5;
 
@@ -31,6 +33,8 @@ export default class Portal {
 	nullObjTab: NullObjTab;
 	applyEffectsTab: ApplyEffectsTab;
 	toolsTab: ToolsTab
+	
+	midi?: Midi;
 	//#endregion
 	
 	private constructor(window: Window | Panel) {
@@ -65,11 +69,11 @@ export default class Portal {
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
 			this.selectMidiName.text = file.displayName;
-			if (file && file.open("r")) {
-				file.encoding = "binary";
-				var content = file.read();
-				file.close();
-				alert(content.charCodeAt(0).toString(16));
+			try {
+				this.midi = new Midi(file);
+				alert(this.midi.trackCount.toString());
+			} catch (error) {
+				throw error;
 			}
 		}
 		this.applyBtn.onClick = () => {
@@ -88,7 +92,7 @@ export default class Portal {
 			new Window("palette", User.scriptName + " v" + User.version, undefined, {
 				resizeable: true,
 			});
-		if (window === null) throw new Error("无法找到或创建窗口。");
+		if (window === null) throw new CannotFindWindowError();
 		const portal = new Portal(window);
 		if (window instanceof Window) {
 			window.onResizing = window.onResize = () => window.layout.resize();

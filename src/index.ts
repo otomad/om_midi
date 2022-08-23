@@ -1,4 +1,6 @@
 import user from "./user";
 import Portal from "./ui/Portal";
 
-Portal.build(<Panel><any>this, user);
+declare const thisObj: Panel;
+
+Portal.build(thisObj, user);

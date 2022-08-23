@@ -1,5 +1,7 @@
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 
+import { UnsupportedSettingTypeError } from "../exceptions";
+
 const sectionName = "om_midi";
 
 const Setting = {
@@ -11,7 +13,7 @@ const Setting = {
 			if (typeof defaultValue == "string") result = str;
 			else if (typeof defaultValue == "number") result = Number(str);
 			else if (typeof defaultValue == "boolean") result = str !== "0";
-			else throw new Error("不支持的类型。")
+			else throw new UnsupportedSettingTypeError();
 			return result as T;
 		}
 	},
