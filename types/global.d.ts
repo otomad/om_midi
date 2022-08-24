@@ -27,7 +27,7 @@ declare interface Application {}
  * @param title The title of the alert; ignored on the Macintosh
  * @param errorIcon Display an Error icon; ignored on the Macintosh
  */
-declare function alert(message: string, title?: string, errorIcon?: boolean): void
+declare function alert(message: string | number, title?: string, errorIcon?: boolean): void
 
 /**
  * Displays an alert box with Yes and No buttons; returns true for Yes

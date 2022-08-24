@@ -7,7 +7,7 @@
  * 脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署时间：2022/08/23 Tuesday 17:43:13
+ * 部署时间：2022/08/24 Wednesday 16:11:31
  * Copyright (c) 2022, Ranne
  * 
  * 原作者介绍：
@@ -246,8 +246,8 @@ var MyError = /** @class */ (function (_super) {
     __extends(MyError, _super);
     function MyError(msg) {
         var _this = this;
-        alert(msg);
-        _this = _super.call(this, msg) || this;
+        alert(msg.toString());
+        _this = _super.call(this, msg.toString()) || this;
         return _this;
     }
     return MyError;
@@ -287,12 +287,26 @@ var MidiTrackHeaderValidationError = /** @class */ (function (_super) {
     }
     return MidiTrackHeaderValidationError;
 }(MyError));
-var MidiSystemExclusiveEventsError = /** @class */ (function (_super) {
-    __extends(MidiSystemExclusiveEventsError, _super);
-    function MidiSystemExclusiveEventsError() {
+var MidiCustomEventsError = /** @class */ (function (_super) {
+    __extends(MidiCustomEventsError, _super);
+    function MidiCustomEventsError() {
         return _super.call(this, "错误：自定义 MIDI 事件无法读取。") || this;
     }
-    return MidiSystemExclusiveEventsError;
+    return MidiCustomEventsError;
+}(MyError));
+var MidiNoTrackError = /** @class */ (function (_super) {
+    __extends(MidiNoTrackError, _super);
+    function MidiNoTrackError() {
+        return _super.call(this, "错误：该 MIDI 文件不包含任何有效轨道。") || this;
+    }
+    return MidiNoTrackError;
+}(MyError));
+var NotAfterEffectsError = /** @class */ (function (_super) {
+    __extends(NotAfterEffectsError, _super);
+    function NotAfterEffectsError() {
+        return _super.call(this, "错误：请在 Adobe After Effects 上使用此脚本。") || this;
+    }
+    return NotAfterEffectsError;
 }(MyError));
 
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
@@ -373,117 +387,70 @@ var SettingsDialog = /** @class */ (function () {
     return SettingsDialog;
 }());
 
-var BinContentReader = /** @class */ (function () {
-    /**
-     * 二进制文件内容读取。
-     * @param data - 解析为二进制数据的字符串。
-     */
-    function BinContentReader(data) {
-        this.pointer = 0;
-        this.data = data;
+var IFileReader = /** @class */ (function () {
+    function IFileReader() {
     }
-    /**
-     * 数据长度 / 字节大小。
-     */
-    BinContentReader.prototype.length = function () {
-        return this.data.length;
+    return IFileReader;
+}());
+
+var BinFileReader = /** @class */ (function (_super) {
+    __extends(BinFileReader, _super);
+    function BinFileReader(file) {
+        var _this = _super.call(this) || this;
+        _this.file = file;
+        return _this;
+    }
+    BinFileReader.prototype.getPointer = function () {
+        return this.file.tell();
     };
-    /**
-     * 将指针移动指定的字节数。
-     * @param bytes - 移动字节数。
-     */
-    BinContentReader.prototype.movePointer = function (bytes) {
-        this.pointer += bytes;
-        if (this.pointer < 0 || this.pointer >= this.length()) ;
-        return this.pointer;
+    BinFileReader.prototype.length = function () {
+        return this.file.length;
     };
-    /**
-     * 获得指定偏移量上或指针所处的字节值。
-     * @param offset - 指定偏移量上的字节值。可选，留空表示当前指针所处字节值。
-     * @returns 指定偏移量上或指针所处的字节值。
-     */
-    BinContentReader.prototype.getByte = function (offset) {
-        offset !== null && offset !== void 0 ? offset : (offset = this.pointer);
-        if (offset >= this.length())
-            return -1;
-        return this.data.charCodeAt(offset);
-    };
-    /**
-     * 读取指定字节数的值。
-     * @param bytes - 读取指定的字节数。默认为 1 个字节。
-     * @returns - 指定字节数的值。
-     */
-    BinContentReader.prototype.readByte = function (bytes) {
+    BinFileReader.prototype.readByte = function (bytes) {
         if (bytes === void 0) { bytes = 1; }
-        bytes = Math.min(bytes, this.length() - this.pointer); // 避免数据溢出。
-        if (bytes < 1)
-            return -1; // 文件读完了。
+        var str = this.file.read(bytes);
         var value = 0;
-        for (var i = 0; i < bytes; i++) {
+        for (var i = 0; i < str.length; i++) {
             value <<= 8;
-            value += this.getByte();
-            write(this.getByte().toString(16) + " ");
-            write(String.fromCharCode(this.getByte()) + "\n");
-            this.pointer++;
+            value += str.charCodeAt(i);
         }
         return value;
     };
-    /**
-     * 从指定的偏移量开始读取指定字节数的值。
-     * @param offset - 从指定的偏移量开始读取。
-     * @param bytes - 读取指定的字节数。默认为 1 个字节。
-     * @returns - 指定字节数的值。
-     */
-    BinContentReader.prototype.readByteFrom = function (offset, bytes) {
-        if (bytes === void 0) { bytes = 1; }
-        bytes = Math.min(bytes, this.length() - offset);
-        if (bytes < 1)
-            return -1;
-        var value = 0;
-        for (var i = 0; i < bytes; i++) {
-            value <<= 8;
-            value += this.getByte(offset++);
-        }
-        return value;
+    BinFileReader.prototype.readString = function (bytes) {
+        return this.file.read(bytes);
     };
-    /**
-     * 读取指定字节数的字符串。
-     * @param bytes - 读取指定的字节数。
-     * @returns - 指定字节数的字符串。
-     */
-    BinContentReader.prototype.readString = function (bytes) {
-        bytes = Math.min(bytes, this.length() - this.pointer);
-        var text = "";
-        if (bytes < 1)
-            return text;
-        for (var i = 0; i < bytes; i++)
-            text += this.data[this.pointer++];
-        return text;
-    };
-    /**
-     * 读取指定字节数的数字数组。
-     * @param bytes - 读取指定的字节数。
-     * @returns - 指定字节数的数字数组。
-     */
-    BinContentReader.prototype.readByteArray = function (bytes) {
-        bytes = Math.min(bytes, this.length() - this.pointer);
+    BinFileReader.prototype.readByteArray = function (bytes) {
+        var str = this.file.read(bytes);
         var array = [];
-        if (bytes < 1)
-            return array;
-        for (var i = 0; i < bytes; i++) {
-            array.push(this.getByte());
-            this.pointer++;
-        }
+        for (var i = 0; i < str.length; i++)
+            array.push(str.charCodeAt(i));
         return array;
     };
-    /**
-     * 是否阅读完毕？
-     */
-    BinContentReader.prototype.isReadOver = function () {
-        return this.pointer >= this.length();
+    BinFileReader.prototype.readDeltaTime = function () {
+        var value = 0;
+        var isLowByte = false;
+        while (!(this.isReadOver() || isLowByte)) {
+            value <<= 7;
+            var b = this.file.read(1).charCodeAt(0);
+            if (!(b & 128))
+                isLowByte = true;
+            value += b & 127;
+        }
+        return value;
     };
-    return BinContentReader;
-}());
+    BinFileReader.prototype.isReadOver = function () {
+        return this.file.eof;
+    };
+    BinFileReader.prototype.movePointer = function (bytes) {
+        this.file.seek(bytes, 1);
+    };
+    BinFileReader.prototype.setPointer = function (pos) {
+        if (pos < 0 || pos >= this.length())
+            return false;
+        return this.file.seek(pos, 0);
+    };
+    return BinFileReader;
+}(IFileReader));
 
 /**
  * MIDI 文件格式类型。
@@ -642,11 +609,171 @@ var NoteOffEvent = /** @class */ (function (_super) {
     }
     return NoteOffEvent;
 }(NoteOnOffEvent));
+var SystemExclusiveEvents = /** @class */ (function (_super) {
+    __extends(SystemExclusiveEvents, _super);
+    function SystemExclusiveEvents(values) {
+        return _super.call(this, RegularEventType.SYSTEM_EXCLUSIVE_EVENTS, values) || this;
+    }
+    return SystemExclusiveEvents;
+}(RegularEvent));
+
+var MidiTrack = /** @class */ (function () {
+    function MidiTrack(parent, offset, size) {
+        this.events = [];
+        this.length = 0;
+        this.noteCount = 0;
+        this.splice = [].splice;
+        this.parent = parent;
+        this.offset = offset;
+        this.size = size;
+        this.readNotes();
+    }
+    // 以下全部没法用 setter 属性。
+    MidiTrack.prototype.setName = function (value) { var _a; (_a = this.name) !== null && _a !== void 0 ? _a : (this.name = value); };
+    MidiTrack.prototype.setInstrument = function (value) { var _a; (_a = this.instrument) !== null && _a !== void 0 ? _a : (this.instrument = value); };
+    MidiTrack.prototype.setMidiPort = function (value) { var _a; (_a = this.midiPort) !== null && _a !== void 0 ? _a : (this.midiPort = value); };
+    MidiTrack.prototype.setTempo = function (value) { var _a, _b; var _c; (_a = this.tempo) !== null && _a !== void 0 ? _a : (this.tempo = value); (_b = (_c = this.parent.midi).bpm) !== null && _b !== void 0 ? _b : (_c.bpm = this.bpm()); };
+    MidiTrack.prototype.bpm = function () {
+        if (this.tempo === undefined)
+            return undefined;
+        var bpm = 6e7 / this.tempo;
+        return parseFloat(bpm.toFixed(2));
+    };
+    MidiTrack.prototype.push = function (item) {
+        this[this.events.length] = item;
+        this.events.push(item);
+        this.length = this.events.length;
+    };
+    MidiTrack.prototype.readNotes = function () {
+        var endOffset = this.offset + this.size;
+        var statusByte, lastStatusByte; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
+        while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
+            var deltaTime = this.parent.readDeltaTime();
+            statusByte = this.parent.readByte(1);
+            if (statusByte === -1)
+                break;
+            else if (statusByte & 128)
+                lastStatusByte = statusByte;
+            else {
+                statusByte = lastStatusByte;
+                this.parent.movePointer(-1);
+            }
+            var note = null;
+            if (statusByte === 0xff) { // 元数据事件
+                var metaType = this.parent.readByte(1);
+                var metaEventLength = this.parent.readDeltaTime();
+                switch (metaType) {
+                    case MetaEventType.END_OF_TRACK:
+                        if (this.parent.getPointer() !== endOffset)
+                            alert("\u8F68\u9053\u7ED3\u675F\u4F4D\u7F6E\u6709\u8BEF\u3002\u5E94\u4E3A " + endOffset + "\uFF0C\u5B9E\u9645 " + this.parent.getPointer());
+                    case MetaEventType.END_OF_FILE:
+                        return;
+                    case MetaEventType.TEXT_EVENT:
+                    case MetaEventType.COPYRIGHT_NOTICE:
+                    case MetaEventType.TRACK_NAME:
+                    case MetaEventType.INSTRUMENT_NAME:
+                    case MetaEventType.LYRICS:
+                    case MetaEventType.MARKER:
+                    case MetaEventType.CUE_POINT:
+                        var textContent = this.parent.readString(metaEventLength);
+                        note = new TextMetaEvent(metaType, textContent);
+                        if (metaType === MetaEventType.TRACK_NAME)
+                            this.setName(textContent);
+                        else if (metaType === MetaEventType.INSTRUMENT_NAME)
+                            this.setInstrument(textContent);
+                        break;
+                    case MetaEventType.MIDI_PORT: // 长度一般为 1
+                    case MetaEventType.MIDI_PORT_2: // 长度一般为 1
+                    case MetaEventType.KEY_SIGNATURE: // 长度一般为 2
+                    case MetaEventType.SET_TEMPO: // 长度一般为 3
+                        var numberValue = this.parent.readByte(metaEventLength);
+                        note = new NumberMetaEvent(metaType, numberValue);
+                        if (metaType === MetaEventType.MIDI_PORT || metaType === MetaEventType.MIDI_PORT_2)
+                            this.setMidiPort(numberValue);
+                        else if (metaType === MetaEventType.SET_TEMPO)
+                            this.setTempo(numberValue);
+                        break;
+                    case MetaEventType.SMPTE_OFFSET: // 长度一般为 5
+                        var smpteOffset = this.parent.readByteArray(metaEventLength);
+                        note = new SmpteOffsetMetaEvent(smpteOffset);
+                        break;
+                    case MetaEventType.TIME_SIGNATURE: // 长度一般为 4
+                        var timeSignature = this.parent.readByteArray(metaEventLength);
+                        note = new TimeSignatureMetaEvent(timeSignature);
+                        break;
+                    default: // 自定义事件
+                        var customValue = this.parent.readByteArray(metaEventLength);
+                        note = new CustomMetaEvent(metaType, customValue);
+                        break;
+                }
+            }
+            else { // 常规事件
+                var regularType = statusByte >> 4; // 只取前半字节
+                switch (regularType) {
+                    case RegularEventType.NOTE_AFTERTOUCH:
+                    case RegularEventType.CONTROLLER:
+                    case RegularEventType.PITCH_BEND_EVENT:
+                    case RegularEventType.NOTE_OFF:
+                    case RegularEventType.NOTE_ON:
+                        var byte2 = this.parent.readByteArray(2); // 读两位
+                        if (regularType == RegularEventType.NOTE_ON) {
+                            note = new NoteOnEvent(byte2);
+                            this.noteCount++;
+                        }
+                        else if (regularType == RegularEventType.NOTE_OFF)
+                            note = new NoteOffEvent(byte2);
+                        else
+                            note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略
+                        break;
+                    case RegularEventType.PROGRAM_CHANGE:
+                    case RegularEventType.CHANNEL_AFTERTOUCH:
+                        var byte1 = this.parent.readByteArray(1); // 读一位
+                        note = new RegularEvent(regularType, byte1);
+                        break;
+                    case RegularEventType.END_OF_FILE:
+                        return;
+                    case RegularEventType.SYSTEM_EXCLUSIVE_EVENTS:
+                        var systemExclusiveEventLength = this.parent.readDeltaTime();
+                        note = new SystemExclusiveEvents(this.parent.readByteArray(systemExclusiveEventLength));
+                        break;
+                    default: // 自定义事件，不知道怎么读。
+                        throw new MidiCustomEventsError();
+                }
+            }
+            if (note !== null) {
+                note.deltaTime = deltaTime;
+                this.push(note);
+            }
+        }
+    };
+    /**
+     * 表示标识当前轨道的名称。
+     * 用于在界面当中显示。
+     * @returns - 标识当前轨道的名称。
+     */
+    MidiTrack.prototype.toString = function () {
+        var _a;
+        var description = "CH " + ((_a = this.midiPort) !== null && _a !== void 0 ? _a : "?");
+        if (this.name)
+            description += ": " + this.name;
+        description += " (" + this.noteCount + ")";
+        return description;
+    };
+    /**
+     * 返回当前指针的偏移量。
+     * 只是为了调试更方便。
+     * @returns 当前指针的偏移量。
+     */
+    MidiTrack.prototype.getPointer = function () { return this.parent.getPointer(); };
+    return MidiTrack;
+}());
 
 var MidiReader = /** @class */ (function (_super) {
     __extends(MidiReader, _super);
     function MidiReader(midi) {
-        var _this = _super.call(this, midi.content) || this;
+        var _this = 
+        // super(midi.content);
+        _super.call(this, midi.file) || this;
         _this.midi = midi;
         _this.readHeader();
         _this.readTracks();
@@ -675,139 +802,13 @@ var MidiReader = /** @class */ (function (_super) {
             if (headerValidation !== 0x4D54726B) { // MTrk - Midi Track
                 throw new MidiTrackHeaderValidationError();
             }
-            this.readByte(4); // 当前轨道字节长度（舍弃）
-            var track = new MidiTrack();
+            var trackSize = this.readByte(4); // 当前轨道字节长度（舍弃）
+            var track = new MidiTrack(this, this.getPointer(), trackSize);
             this.midi.tracks.push(track);
-            this.readNotes(track);
-            if (this.readByteFrom(this.pointer) === 0x0)
-                this.movePointer(1);
         }
-    };
-    MidiReader.prototype.readNotes = function (track) {
-        while (!this.isReadOver()) {
-            var deltaTime = this.readDeltaTime();
-            var statusByte = this.readByte(1);
-            if (statusByte === -1)
-                break;
-            var note = null;
-            if (statusByte === 0xff) { // 元数据事件
-                var metaType = this.readByte(1);
-                var metaEventLength = this.readDeltaTime();
-                switch (metaType) {
-                    case MetaEventType.END_OF_TRACK:
-                    case MetaEventType.END_OF_FILE:
-                        return;
-                    case MetaEventType.TEXT_EVENT:
-                    case MetaEventType.COPYRIGHT_NOTICE:
-                    case MetaEventType.TRACK_NAME:
-                    case MetaEventType.INSTRUMENT_NAME:
-                    case MetaEventType.LYRICS:
-                    case MetaEventType.MARKER:
-                    case MetaEventType.CUE_POINT:
-                        var textContent = this.readString(metaEventLength);
-                        note = new TextMetaEvent(metaType, textContent);
-                        if (metaType === MetaEventType.TRACK_NAME)
-                            track.setName(textContent);
-                        else if (metaType === MetaEventType.INSTRUMENT_NAME)
-                            track.setInstrument(textContent);
-                        break;
-                    case MetaEventType.MIDI_PORT: // 长度一般为 1
-                    case MetaEventType.MIDI_PORT_2: // 长度一般为 1
-                    case MetaEventType.KEY_SIGNATURE: // 长度一般为 2
-                    case MetaEventType.SET_TEMPO: // 长度一般为 3
-                        var numberValue = this.readByte(metaEventLength);
-                        note = new NumberMetaEvent(metaType, numberValue);
-                        if (metaType === MetaEventType.MIDI_PORT || metaType === MetaEventType.MIDI_PORT_2)
-                            track.setMidiPort(numberValue);
-                        else if (metaType === MetaEventType.SET_TEMPO)
-                            track.setTempo(numberValue);
-                        break;
-                    case MetaEventType.SMPTE_OFFSET: // 长度一般为 5
-                        var smpteOffset = this.readByteArray(metaEventLength);
-                        note = new SmpteOffsetMetaEvent(smpteOffset);
-                        break;
-                    case MetaEventType.TIME_SIGNATURE: // 长度一般为 4
-                        var timeSignature = this.readByteArray(metaEventLength);
-                        note = new TimeSignatureMetaEvent(timeSignature);
-                        break;
-                    default: // 自定义事件
-                        var customValue = this.readByteArray(metaEventLength);
-                        note = new CustomMetaEvent(metaType, customValue);
-                        break;
-                }
-            }
-            else { // 标准事件
-                var regularType = statusByte >> 4; // 只取前半字节
-                switch (regularType) {
-                    case RegularEventType.NOTE_AFTERTOUCH:
-                    case RegularEventType.CONTROLLER:
-                    case RegularEventType.PITCH_BEND_EVENT:
-                    case RegularEventType.NOTE_OFF:
-                    case RegularEventType.NOTE_ON:
-                        var byte2 = this.readByteArray(2); // 读两位
-                        if (regularType == RegularEventType.NOTE_ON)
-                            note = new NoteOnEvent(byte2);
-                        else if (regularType == RegularEventType.NOTE_OFF)
-                            note = new NoteOffEvent(byte2);
-                        else
-                            note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略
-                        break;
-                    case RegularEventType.PROGRAM_CHANGE:
-                    case RegularEventType.CHANNEL_AFTERTOUCH:
-                        var byte1 = this.readByteArray(1); // 读一位
-                        note = new RegularEvent(regularType, byte1);
-                    case RegularEventType.END_OF_FILE:
-                        return;
-                    default:
-                        throw new MidiSystemExclusiveEventsError(); // 自定义事件。读不了。
-                }
-            }
-            if (note !== null) {
-                note.deltaTime = deltaTime;
-                track.push(note);
-            }
-        }
-    };
-    /**
-     * 读取事件时间间隔（不定长数字）。
-     * @returns 事件时间间隔。
-     */
-    MidiReader.prototype.readDeltaTime = function () {
-        var value = 0;
-        var isLowByte = false;
-        while (!(this.isReadOver() || isLowByte)) {
-            value <<= 7;
-            var b = this.readByte(1); // 来自 ECMAScript 3 的 ExtendScript 会认为 byte 是保留字。
-            if (!(b & 128))
-                isLowByte = true;
-            value += b & 127;
-        }
-        return value;
     };
     return MidiReader;
-}(BinContentReader));
-var MidiTrack = /** @class */ (function () {
-    function MidiTrack() {
-        this.events = [];
-        this.length = 0;
-    }
-    // 以下全部没法用 setter 属性。
-    MidiTrack.prototype.setName = function (value) { var _a; (_a = this.name) !== null && _a !== void 0 ? _a : (this.name = value); };
-    MidiTrack.prototype.setInstrument = function (value) { var _a; (_a = this.instrument) !== null && _a !== void 0 ? _a : (this.instrument = value); };
-    MidiTrack.prototype.setMidiPort = function (value) { var _a; (_a = this.midiPort) !== null && _a !== void 0 ? _a : (this.midiPort = value); };
-    MidiTrack.prototype.setTempo = function (value) { var _a; (_a = this.tempo) !== null && _a !== void 0 ? _a : (this.tempo = value); };
-    MidiTrack.prototype.bpm = function () {
-        if (this.tempo === undefined)
-            return undefined;
-        return 6e7 / this.tempo;
-    };
-    MidiTrack.prototype.push = function (item) {
-        this[this.events.length] = item;
-        this.events.push(item);
-        this.length = this.events.length;
-    };
-    return MidiTrack;
-}());
+}(BinFileReader));
 
 var Midi = /** @class */ (function () {
     /**
@@ -819,16 +820,29 @@ var Midi = /** @class */ (function () {
         this.trackCount = 0;
         this.timeDivision = 0;
         this.tracks = [];
+        this.file = file;
         if (file && file.open("r")) {
             file.encoding = "binary"; // 读取为二进制编码。
             this.length = file.length;
-            this.content = file.read(this.length);
-            file.close();
+            // this.content = file.read(this.length);
             this.midiReader = new MidiReader(this);
+            file.close();
+            this.removeNotNoteTrack();
         }
         else
             throw new FileUnreadableError();
     }
+    /**
+     * 删除不是音符的轨道。
+     * 可根据需要调用。
+     */
+    Midi.prototype.removeNotNoteTrack = function () {
+        for (var i = this.tracks.length - 1; i >= 0; i--) {
+            var track = this.tracks[i];
+            if (track.noteCount === 0)
+                this.tracks.splice(i, 1);
+        }
+    };
     return Midi;
 }());
 
@@ -850,7 +864,7 @@ var Portal = /** @class */ (function () {
         this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
         this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
         setLabelMinWidth(this.selectTrackLbl);
-        this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight] });
+        this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight], enabled: false });
         this.selectBpmGroup = addControl(this.group, "group", MidiGroupsParams);
         this.selectBpmLbl = addControl(this.selectBpmGroup, "statictext", { text: "设定 BPM" });
         setLabelMinWidth(this.selectBpmLbl);
@@ -865,13 +879,22 @@ var Portal = /** @class */ (function () {
         setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
         this.selectMidiBtn.onClick = function () {
             var file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
-            _this.selectMidiName.text = file.displayName;
+            if (file === null)
+                return;
             try {
-                _this.midi = new Midi(file);
-                alert(_this.midi.trackCount.toString());
+                var midi = new Midi(file);
+                if (midi.bpm)
+                    _this.selectBpmTxt.text = String(midi.bpm);
+                if (midi.tracks.length === 0)
+                    throw new MidiNoTrackError();
+                _this.selectMidiName.text = file.displayName;
+                var firstTrack = midi.tracks[0];
+                _this.selectTrackBtn.text = firstTrack.toString();
+                _this.selectTrackBtn.enabled = true;
+                _this.midi = midi;
             }
             catch (error) {
-                throw error;
+                // throw new MyError(error as Error);
             }
         };
         this.applyBtn.onClick = function () {
@@ -928,6 +951,9 @@ function setLabelMinWidth(label) {
     }, { multiline: true }).minimumSize = [380, 0];
 } */
 
-Portal.build(thisObj, User);
+if (BridgeTalk.appName !== "aftereffects")
+    throw new NotAfterEffectsError();
+else
+    Portal.build(thisObj, User);
 
 })(this);

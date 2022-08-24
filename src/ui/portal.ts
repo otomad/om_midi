@@ -6,8 +6,9 @@ import ToolsTab from "./ToolsTab";
 import getComp from "../module/getComp";
 import SettingsDialog from "./SettingsDialog";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
-import { CannotFindWindowError } from "../exceptions";
+import { CannotFindWindowError, MidiNoTrackError, MyError } from "../exceptions";
 import Midi from "../midi/Midi";
+import ProgressPalette from "./ProgressPalette";
 
 const LARGE_NUMBER = 1e5;
 
@@ -51,7 +52,7 @@ export default class Portal {
 		this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
 		setLabelMinWidth(this.selectTrackLbl);
-		this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight] });
+		this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight], enabled: false });
 		this.selectBpmGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectBpmLbl = addControl(this.selectBpmGroup, "statictext", { text: "设定 BPM" });
 		setLabelMinWidth(this.selectBpmLbl);
@@ -68,12 +69,18 @@ export default class Portal {
 		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
-			this.selectMidiName.text = file.displayName;
+			if (file === null) return;
 			try {
-				this.midi = new Midi(file);
-				alert(this.midi.trackCount.toString());
+				const midi = new Midi(file);
+				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
+				if (midi.tracks.length === 0) throw new MidiNoTrackError();
+				this.selectMidiName.text = file.displayName;
+				const firstTrack = midi.tracks[0];
+				this.selectTrackBtn.text = firstTrack.toString();
+				this.selectTrackBtn.enabled = true;
+				this.midi = midi;
 			} catch (error) {
-				throw error;
+				// throw new MyError(error as Error);
 			}
 		}
 		this.applyBtn.onClick = () => {

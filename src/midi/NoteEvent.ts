@@ -94,12 +94,18 @@ class NoteOnOffEvent extends RegularEvent {
 
 export class NoteOnEvent extends NoteOnOffEvent {
 	constructor(values: number[]) {
-		super(RegularEventType.NOTE_ON, values)
+		super(RegularEventType.NOTE_ON, values);
 	}
 }
 
 export class NoteOffEvent extends NoteOnOffEvent {
 	constructor(values: number[]) {
-		super(RegularEventType.NOTE_OFF, values)
+		super(RegularEventType.NOTE_OFF, values);
+	}
+}
+
+export class SystemExclusiveEvents extends RegularEvent {
+	constructor(values: number[]) {
+		super(RegularEventType.SYSTEM_EXCLUSIVE_EVENTS, values);
 	}
 }
