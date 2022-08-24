@@ -11,7 +11,7 @@ export default class MidiTrack {
 	private size: number;
 	
 	private events: NoteEvent[] = [];
-	length: number = 0;
+	length(): number { return this.events.length; };
 	
 	constructor(parent: MidiReader, offset: number, size: number) {
 		this.parent = parent;
@@ -23,14 +23,14 @@ export default class MidiTrack {
 
 	name?: string;
 	instrument?: string;
-	midiPort?: number;
+	channel?: number;
 	tempo?: number; // 微秒每拍
 	noteCount: number = 0;
 
 	// 以下全部没法用 setter 属性。
 	setName(value: string) { this.name ??= value; }
 	setInstrument(value: string) { this.instrument ??= value; }
-	setMidiPort(value: number) { this.midiPort ??= value; }
+	setChannel(value: number) { this.channel ??= value; }
 	setTempo(value: number) { this.tempo ??= value; this.parent.midi.bpm ??= this.bpm(); }
 
 	bpm() {
@@ -40,9 +40,7 @@ export default class MidiTrack {
 	}
 
 	push(item: NoteEvent) {
-		(this as any)[this.events.length] = item;
 		this.events.push(item);
-		this.length = this.events.length;
 	}
 
 	private splice = [].splice;
@@ -90,9 +88,7 @@ export default class MidiTrack {
 					case MetaEventType.SET_TEMPO: // 长度一般为 3
 						const numberValue = this.parent.readByte(metaEventLength);
 						note = new NumberMetaEvent(metaType, numberValue);
-						if (metaType === MetaEventType.MIDI_PORT || metaType === MetaEventType.MIDI_PORT_2)
-							this.setMidiPort(numberValue);
-						else if (metaType === MetaEventType.SET_TEMPO)
+						if (metaType === MetaEventType.SET_TEMPO)
 							this.setTempo(numberValue);
 						break;
 					case MetaEventType.SMPTE_OFFSET: // 长度一般为 5
@@ -109,6 +105,7 @@ export default class MidiTrack {
 						break;
 				}
 			} else { // 常规事件
+				this.setChannel((statusByte & 0x0f) + 1); // 后半字节表示通道编号。
 				const regularType: RegularEventType = statusByte >> 4; // 只取前半字节
 				switch (regularType) {
 					case RegularEventType.NOTE_AFTERTOUCH:
@@ -154,7 +151,7 @@ export default class MidiTrack {
 	 * @returns - 标识当前轨道的名称。
 	 */
 	toString(): string {
-		let description = `CH ${this.midiPort ?? "?"}`;
+		let description = `CH ${this.channel ?? 0}`;
 		if (this.name) description += ": " + this.name;
 		description += ` (${this.noteCount})`;
 		return description;

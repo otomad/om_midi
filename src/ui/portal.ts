@@ -75,7 +75,7 @@ export default class Portal {
 				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
 				if (midi.tracks.length === 0) throw new MidiNoTrackError();
 				this.selectMidiName.text = file.displayName;
-				const firstTrack = midi.tracks[0];
+				const firstTrack = midi.tracks[midi.preferredTrackIndex];
 				this.selectTrackBtn.text = firstTrack.toString();
 				this.selectTrackBtn.enabled = true;
 				this.midi = midi;

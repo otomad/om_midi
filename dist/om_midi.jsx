@@ -7,7 +7,7 @@
  * 脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署时间：2022/08/24 Wednesday 16:11:31
+ * 部署时间：2022/08/24 Wednesday 16:32:37
  * Copyright (c) 2022, Ranne
  * 
  * 原作者介绍：
@@ -620,7 +620,6 @@ var SystemExclusiveEvents = /** @class */ (function (_super) {
 var MidiTrack = /** @class */ (function () {
     function MidiTrack(parent, offset, size) {
         this.events = [];
-        this.length = 0;
         this.noteCount = 0;
         this.splice = [].splice;
         this.parent = parent;
@@ -628,10 +627,11 @@ var MidiTrack = /** @class */ (function () {
         this.size = size;
         this.readNotes();
     }
+    MidiTrack.prototype.length = function () { return this.events.length; };
     // 以下全部没法用 setter 属性。
     MidiTrack.prototype.setName = function (value) { var _a; (_a = this.name) !== null && _a !== void 0 ? _a : (this.name = value); };
     MidiTrack.prototype.setInstrument = function (value) { var _a; (_a = this.instrument) !== null && _a !== void 0 ? _a : (this.instrument = value); };
-    MidiTrack.prototype.setMidiPort = function (value) { var _a; (_a = this.midiPort) !== null && _a !== void 0 ? _a : (this.midiPort = value); };
+    MidiTrack.prototype.setChannel = function (value) { var _a; (_a = this.channel) !== null && _a !== void 0 ? _a : (this.channel = value); };
     MidiTrack.prototype.setTempo = function (value) { var _a, _b; var _c; (_a = this.tempo) !== null && _a !== void 0 ? _a : (this.tempo = value); (_b = (_c = this.parent.midi).bpm) !== null && _b !== void 0 ? _b : (_c.bpm = this.bpm()); };
     MidiTrack.prototype.bpm = function () {
         if (this.tempo === undefined)
@@ -640,9 +640,7 @@ var MidiTrack = /** @class */ (function () {
         return parseFloat(bpm.toFixed(2));
     };
     MidiTrack.prototype.push = function (item) {
-        this[this.events.length] = item;
         this.events.push(item);
-        this.length = this.events.length;
     };
     MidiTrack.prototype.readNotes = function () {
         var endOffset = this.offset + this.size;
@@ -688,9 +686,7 @@ var MidiTrack = /** @class */ (function () {
                     case MetaEventType.SET_TEMPO: // 长度一般为 3
                         var numberValue = this.parent.readByte(metaEventLength);
                         note = new NumberMetaEvent(metaType, numberValue);
-                        if (metaType === MetaEventType.MIDI_PORT || metaType === MetaEventType.MIDI_PORT_2)
-                            this.setMidiPort(numberValue);
-                        else if (metaType === MetaEventType.SET_TEMPO)
+                        if (metaType === MetaEventType.SET_TEMPO)
                             this.setTempo(numberValue);
                         break;
                     case MetaEventType.SMPTE_OFFSET: // 长度一般为 5
@@ -708,6 +704,7 @@ var MidiTrack = /** @class */ (function () {
                 }
             }
             else { // 常规事件
+                this.setChannel((statusByte & 0x0f) + 1); // 后半字节表示通道编号。
                 var regularType = statusByte >> 4; // 只取前半字节
                 switch (regularType) {
                     case RegularEventType.NOTE_AFTERTOUCH:
@@ -753,7 +750,7 @@ var MidiTrack = /** @class */ (function () {
      */
     MidiTrack.prototype.toString = function () {
         var _a;
-        var description = "CH " + ((_a = this.midiPort) !== null && _a !== void 0 ? _a : "?");
+        var description = "CH " + ((_a = this.channel) !== null && _a !== void 0 ? _a : 0);
         if (this.name)
             description += ": " + this.name;
         description += " (" + this.noteCount + ")";
@@ -820,6 +817,7 @@ var Midi = /** @class */ (function () {
         this.trackCount = 0;
         this.timeDivision = 0;
         this.tracks = [];
+        this.preferredTrackIndex = 0;
         this.file = file;
         if (file && file.open("r")) {
             file.encoding = "binary"; // 读取为二进制编码。
@@ -828,6 +826,7 @@ var Midi = /** @class */ (function () {
             this.midiReader = new MidiReader(this);
             file.close();
             this.removeNotNoteTrack();
+            this.setPreferredTrack();
         }
         else
             throw new FileUnreadableError();
@@ -841,6 +840,18 @@ var Midi = /** @class */ (function () {
             var track = this.tracks[i];
             if (track.noteCount === 0)
                 this.tracks.splice(i, 1);
+        }
+    };
+    /**
+     * 设定首选轨道。
+     */
+    Midi.prototype.setPreferredTrack = function () {
+        for (var i = 0; i < this.tracks.length; i++) {
+            var track = this.tracks[i];
+            if (track.channel !== 10) {
+                this.preferredTrackIndex = i;
+                break;
+            }
         }
     };
     return Midi;
@@ -888,7 +899,7 @@ var Portal = /** @class */ (function () {
                 if (midi.tracks.length === 0)
                     throw new MidiNoTrackError();
                 _this.selectMidiName.text = file.displayName;
-                var firstTrack = midi.tracks[0];
+                var firstTrack = midi.tracks[midi.preferredTrackIndex];
                 _this.selectTrackBtn.text = firstTrack.toString();
                 _this.selectTrackBtn.enabled = true;
                 _this.midi = midi;

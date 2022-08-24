@@ -14,6 +14,7 @@ export default class Midi {
 	timeDivision: number | [number, number] = 0;
 	tracks: MidiTrack[] = [];
 	bpm?: number;
+	preferredTrackIndex = 0;
 	
 	/**
 	 * 构建 MIDI 对象。
@@ -28,6 +29,7 @@ export default class Midi {
 			this.midiReader = new MidiReader(this);
 			file.close();
 			this.removeNotNoteTrack();
+			this.setPreferredTrack();
 		} else throw new FileUnreadableError();
 	}
 	
@@ -40,6 +42,19 @@ export default class Midi {
 			const track = this.tracks[i];
 			if (track.noteCount === 0)
 				this.tracks.splice(i, 1);
+		}
+	}
+	
+	/**
+	 * 设定首选轨道。
+	 */
+	setPreferredTrack(): void {
+		for (let i = 0; i < this.tracks.length; i++) {
+			const track = this.tracks[i];
+			if (track.channel !== 10) {
+				this.preferredTrackIndex = i;
+				break;
+			}
 		}
 	}
 }
