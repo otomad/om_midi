@@ -7,7 +7,7 @@
  * 脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署时间：2022/08/24 Wednesday 16:32:37
+ * 部署时间：2022/08/24 Wednesday 17:50:09
  * Copyright (c) 2022, Ranne
  * 
  * 原作者介绍：
@@ -857,11 +857,126 @@ var Midi = /** @class */ (function () {
     return Midi;
 }());
 
+var MidiTrackSelector = /** @class */ (function () {
+    function MidiTrackSelector(parent) {
+        var _this = this;
+        this.parent = parent;
+        this.window = new Window("dialog", "选择 MIDI 轨道", undefined, {
+            resizeable: true,
+        });
+        if (this.window === null)
+            throw new CannotFindWindowError();
+        this.window.onResizing = this.window.onResize = function () { return _this.window.layout.resize(); };
+        this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"] });
+        this.selectAllCheck = addControl(this.group, "checkbox", { text: "全选" });
+        this.trackList = addControl(this.group, "listbox", { alignment: ["fill", "fill"] }, {
+            multiselect: true, numberOfColumns: 4, showHeaders: true,
+            columnTitles: ["通道", "名称", "音符数"],
+            columnWidths: [50, 225, 75],
+        });
+        this.trackList.size = [400, 400];
+        this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
+        this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
+        this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
+        this.window.defaultElement = this.okBtn;
+        this.window.cancelElement = this.cancelBtn;
+        this.initMidiTracks();
+        this.selectAllCheck.onClick = function () {
+            var checked = _this.selectAllCheck.value;
+            for (var _i = 0, _a = _this.trackList.items; _i < _a.length; _i++) {
+                var item = _a[_i];
+                item.checked = item.selected = checked;
+            }
+        };
+        this.trackList.onChange = function () { return _this.trackList_onChange(); };
+        this.okBtn.onClick = function () {
+            var _a;
+            if (!_this.parent.midi) {
+                _this.window.close();
+                return;
+            }
+            var checks = [];
+            for (var i = 0; i < _this.trackList.items.length; i++) {
+                var item = _this.trackList.items[i];
+                if (item.checked)
+                    checks.push(i);
+            }
+            var text = "";
+            if (checks.length === 0) {
+                alert("请至少选择一条轨道。");
+                return;
+            }
+            else if (checks.length === 1)
+                text = _this.parent.midi.tracks[checks[0]].toString();
+            else {
+                var arr = [];
+                for (var _i = 0, checks_1 = checks; _i < checks_1.length; _i++) {
+                    var index = checks_1[_i];
+                    var track = _this.parent.midi.tracks[index];
+                    var text_1 = String((_a = track.channel) !== null && _a !== void 0 ? _a : 0);
+                    if (track.name)
+                        text_1 += ": " + track.name;
+                    arr.push(text_1);
+                }
+                text = arr.join("; ");
+            }
+            _this.parent.selectedTracksIndex = checks;
+            _this.parent.selectTrackBtn.text = text;
+            _this.window.close();
+        };
+    }
+    MidiTrackSelector.prototype.show = function () {
+        this.window.center();
+        this.window.show();
+    };
+    MidiTrackSelector.prototype.initMidiTracks = function () {
+        var _a, _b;
+        if (this.parent.midi)
+            for (var i = 0; i < this.parent.midi.tracks.length; i++) {
+                var track = this.parent.midi.tracks[i];
+                var item = this.trackList.add("item", String((_a = track.channel) !== null && _a !== void 0 ? _a : 0));
+                item.checked = arrayContain(this.parent.selectedTracksIndex, i);
+                item.subItems[0].text = (_b = track.name) !== null && _b !== void 0 ? _b : "";
+                item.subItems[1].text = track.noteCount;
+            }
+        this.trackList_onChange(true);
+    };
+    MidiTrackSelector.prototype.trackList_onChange = function (forInitTracks) {
+        if (forInitTracks === void 0) { forInitTracks = false; }
+        var checkAll = true;
+        for (var _i = 0, _a = this.trackList.items; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (!forInitTracks)
+                item.checked = item.selected;
+            if (!item.checked)
+                checkAll = false;
+        }
+        this.selectAllCheck.value = checkAll;
+    };
+    return MidiTrackSelector;
+}());
+/**
+ * 检查数组内是否包含某个对象。
+ * 垃圾 ExtendScript 居然不自带该方法。
+ * @param array - 数组。
+ * @param item - 要查找的对象。
+ * @returns - 是否包含该对象。
+ */
+function arrayContain(array, item) {
+    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
+        var i = array_1[_i];
+        if (i === item)
+            return true;
+    }
+    return false;
+}
+
 var LARGE_NUMBER = 1e5;
 var Portal = /** @class */ (function () {
     //#endregion
     function Portal(window) {
         var _this = this;
+        this.selectedTracksIndex = [];
         this.window = window;
         this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
         var MidiGroupsParams = { orientation: "row", spacing: 7 };
@@ -899,6 +1014,7 @@ var Portal = /** @class */ (function () {
                 if (midi.tracks.length === 0)
                     throw new MidiNoTrackError();
                 _this.selectMidiName.text = file.displayName;
+                _this.selectedTracksIndex = [midi.preferredTrackIndex];
                 var firstTrack = midi.tracks[midi.preferredTrackIndex];
                 _this.selectTrackBtn.text = firstTrack.toString();
                 _this.selectTrackBtn.enabled = true;
@@ -917,6 +1033,9 @@ var Portal = /** @class */ (function () {
         };
         this.settingBtn.onClick = function () {
             new SettingsDialog().show();
+        };
+        this.selectTrackBtn.onClick = function () {
+            new MidiTrackSelector(_this).show();
         };
     }
     Portal.build = function (thisObj, User) {

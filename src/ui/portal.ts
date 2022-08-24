@@ -9,6 +9,7 @@ import setNumberEditText, { NumberType } from "../module/setNumberEditText";
 import { CannotFindWindowError, MidiNoTrackError, MyError } from "../exceptions";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
+import MidiTrackSelector from "./MidiTrackSelector";
 
 const LARGE_NUMBER = 1e5;
 
@@ -36,6 +37,7 @@ export default class Portal {
 	toolsTab: ToolsTab
 	
 	midi?: Midi;
+	selectedTracksIndex: number[] = [];
 	//#endregion
 	
 	private constructor(window: Window | Panel) {
@@ -75,6 +77,7 @@ export default class Portal {
 				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
 				if (midi.tracks.length === 0) throw new MidiNoTrackError();
 				this.selectMidiName.text = file.displayName;
+				this.selectedTracksIndex = [midi.preferredTrackIndex];
 				const firstTrack = midi.tracks[midi.preferredTrackIndex];
 				this.selectTrackBtn.text = firstTrack.toString();
 				this.selectTrackBtn.enabled = true;
@@ -91,6 +94,9 @@ export default class Portal {
 		}
 		this.settingBtn.onClick = () => {
 			new SettingsDialog().show();
+		}
+		this.selectTrackBtn.onClick = () => {
+			new MidiTrackSelector(this).show();
 		}
 	}
 	
