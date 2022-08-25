@@ -2,6 +2,7 @@ import { MidiCustomEventsError } from "../exceptions";
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import { CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
+import str from "../languages/strings";
 
 export default class MidiTrack {
 	// extends Array<NoteEvent> // 继承后绑定不上对象
@@ -10,7 +11,7 @@ export default class MidiTrack {
 	private offset: number;
 	private size: number;
 	
-	private events: NoteEvent[] = [];
+	events: NoteEvent[] = [];
 	length(): number { return this.events.length; };
 	
 	constructor(parent: MidiReader, offset: number, size: number) {
@@ -47,15 +48,14 @@ export default class MidiTrack {
 	
 	private readNotes(): void {
 		const endOffset = this.offset + this.size;
-		let statusByte: number,
-			lastStatusByte: number; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
+		let statusByte: number;
 		while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
 			let deltaTime = this.parent.readDeltaTime();
+			const lastStatusByte = statusByte!; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
 			statusByte = this.parent.readByte(1);
 			if (statusByte === -1) break;
-			else if (statusByte & 0b1000_0000) lastStatusByte = statusByte;
-			else {
-				statusByte = lastStatusByte!;
+			else if (!(statusByte & 0b1000_0000)) {
+				statusByte = lastStatusByte;
 				this.parent.movePointer(-1);
 			}
 			let note: NoteEvent | null = null;
@@ -65,7 +65,7 @@ export default class MidiTrack {
 				switch (metaType) {
 					case MetaEventType.END_OF_TRACK:
 						if (this.parent.getPointer() !== endOffset)
-							alert(`轨道结束位置有误。应为 ${endOffset}，实际 ${this.parent.getPointer()}`);
+							alert(`轨道结束位置有误。应为 ${endOffset}，实际 ${this.parent.getPointer()}`, localize(str.error), true);
 					case MetaEventType.END_OF_FILE:
 						return;
 					case MetaEventType.TEXT_EVENT:
@@ -148,10 +148,10 @@ export default class MidiTrack {
 	/**
 	 * 表示标识当前轨道的名称。
 	 * 用于在界面当中显示。
-	 * @returns - 标识当前轨道的名称。
+	 * @returns 标识当前轨道的名称。
 	 */
 	toString(): string {
-		let description = `CH ${this.channel ?? 0}`;
+		let description = `${localize(str.channel_abbr)} ${this.channel ?? 0}`;
 		if (this.name) description += ": " + this.name;
 		description += ` (${this.noteCount})`;
 		return description;

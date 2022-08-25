@@ -3,6 +3,7 @@ import addControl, { addItems } from "../module/addControl";
 import Setting from "../module/Setting";
 import str from "../languages/strings";
 import { CannotFindWindowError } from "../exceptions";
+import { getDropDownListSelectedIndex } from "../module/extensions";
 
 const ABOUT = "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。";
 
@@ -17,12 +18,12 @@ export default class SettingsDialog {
 	cancelBtn: Button;
 	languageGroup: Group;
 	languageLbl: StaticText;
-	langugaeCombo: DropDownList;
+	languageCombo: DropDownList;
 	usingSelectedLayerName: Checkbox;
 	//#endregion
 	
 	constructor() {
-		this.window = new Window("dialog", "设置", undefined, {
+		this.window = new Window("dialog", localize(str.settings), undefined, {
 			resizeable: false,
 		});
 		if (this.window === null) throw new CannotFindWindowError();
@@ -32,8 +33,11 @@ export default class SettingsDialog {
 		this.separator = new Separator(this.group);
 		this.languageGroup = addControl(this.group, "group", { orientation: "row" });
 		this.languageLbl = addControl(this.languageGroup, "statictext", { text: "语言" });
-		this.langugaeCombo = addControl(this.languageGroup, "dropdownlist");
-		addItems(this.langugaeCombo, "应用默认值", "简体中文", "English", "日本語");
+		this.languageCombo = addControl(this.languageGroup, "dropdownlist");
+		addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
+		const selectedLanguageIndex = Setting.get("Language", 0);
+		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
+			this.languageCombo.selection = selectedLanguageIndex;
 		this.usingSelectedLayerName = addControl(this.group, "checkbox", { text: "使用选择图层名称而不是轨道名称" });
 		this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
@@ -44,6 +48,8 @@ export default class SettingsDialog {
 		
 		this.okBtn.onClick = () => {
 			Setting.set("UsingSelectedLayerName", this.usingSelectedLayerName.value);
+			Setting.set("Language", getDropDownListSelectedIndex(this.languageCombo));
+			$.locale = SettingsDialog.langIso[getDropDownListSelectedIndex(this.languageCombo)]
 			this.window.close();
 		}
 	}
@@ -52,4 +58,6 @@ export default class SettingsDialog {
 		this.window.center();
 		this.window.show();
 	}
+	
+	private static langIso = ["", "zh_CN", "en", "ja"];
 }

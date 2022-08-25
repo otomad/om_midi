@@ -1,21 +1,17 @@
 import addControl from "../module/addControl";
 import Portal from "./Portal";
 import MarkerConductor from "./MarkerConductor";
+import BaseTab from "./BaseTab";
 
-export default class ToolsTab {
+export default class ToolsTab extends BaseTab {
 	//#region 组件对象
-	parent: Portal;
-	tab: Tab;
-	group: Group;
 	toolsCombo: DropDownList;
 	toolsPanel: Group;
 	marker: MarkerConductor;
 	//#endregion
 	
 	constructor(parent: Portal) {
-		this.parent = parent;
-		this.tab = addControl(this.parent.tabs, "tab", { text: "工具" });
-		this.group = addControl(this.tab, "group", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
+		super(parent, "工具", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
 		this.toolsCombo = addControl(this.group, "dropdownlist");
 		this.toolsCombo.add("item", "标记生成");
 		this.toolsCombo.selection = 0;

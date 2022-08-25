@@ -10,8 +10,12 @@ import { CannotFindWindowError, MidiNoTrackError, MyError } from "../exceptions"
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
+import str from "../languages/strings";
+import apply from "../core/Core";
+import BaseTab from "./BaseTab";
+import Core from "../core/Core";
 
-const LARGE_NUMBER = 1e5;
+export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 
 export default class Portal {
 	//#region 组件对象
@@ -37,7 +41,8 @@ export default class Portal {
 	toolsTab: ToolsTab
 	
 	midi?: Midi;
-	selectedTracksIndex: number[] = [];
+	selectedTrackIndexes: number[] = [];
+	core: Core;
 	//#endregion
 	
 	private constructor(window: Window | Panel) {
@@ -49,7 +54,7 @@ export default class Portal {
 		this.selectMidiGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectMidiLbl = addControl(this.selectMidiGroup, "statictext", { text: "MIDI 文件" });
 		setLabelMinWidth(this.selectMidiLbl);
-		this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", bounds: [0, 0, 15, MidiButtonHeight] });
+		this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", size: [15, MidiButtonHeight] });
 		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
 		this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
 		this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
@@ -61,37 +66,35 @@ export default class Portal {
 		this.selectBpmTxt = addControl(this.selectBpmGroup, "edittext", { text: "120", alignment: FILL_CENTER });
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
-		this.applyBtn = addControl(this.buttonGroup, "button", { text: "应用", alignment: "left" });
-		this.settingBtn = addControl(this.buttonGroup, "button", { text: "设置", alignment: ["right", "center"] });
+		this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
+		this.settingBtn = addControl(this.buttonGroup, "button", { text: localize(str.settings), alignment: ["right", "center"] });
 		
 		this.nullObjTab = new NullObjTab(this);
 		this.applyEffectsTab = new ApplyEffectsTab(this);
 		this.toolsTab = new ToolsTab(this);
 		
+		this.core = new Core(this);
 		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
 			if (file === null) return;
+			let midi: Midi;
 			try {
-				const midi = new Midi(file);
+				midi = new Midi(file);
 				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
 				if (midi.tracks.length === 0) throw new MidiNoTrackError();
 				this.selectMidiName.text = file.displayName;
-				this.selectedTracksIndex = [midi.preferredTrackIndex];
+				this.selectedTrackIndexes = [midi.preferredTrackIndex];
 				const firstTrack = midi.tracks[midi.preferredTrackIndex];
 				this.selectTrackBtn.text = firstTrack.toString();
 				this.selectTrackBtn.enabled = true;
 				this.midi = midi;
 			} catch (error) {
+				if (midi!) midi.file.close();
 				// throw new MyError(error as Error);
 			}
 		}
-		this.applyBtn.onClick = () => {
-			const comp = getComp();
-			if (comp === null) return;
-			const nullLayer = comp.layers.addNull(LARGE_NUMBER);
-			nullLayer.name = "fuck";
-		}
+		this.applyBtn.onClick = () => this.core.apply();
 		this.settingBtn.onClick = () => {
 			new SettingsDialog().show();
 		}
@@ -116,6 +119,19 @@ export default class Portal {
 			window.layout.resize();
 		}
 		return portal;
+	}
+	
+	getSelectedTab(): BaseTab | null {
+		switch ((this.tabs.selection as Tab).text) {
+			case this.nullObjTab.tab.text:
+				return this.nullObjTab;
+			case this.applyEffectsTab.tab.text:
+				return this.applyEffectsTab;
+			case this.toolsTab.tab.text:
+				return this.toolsTab;
+			default:
+				return null;
+		}
 	}
 }
 

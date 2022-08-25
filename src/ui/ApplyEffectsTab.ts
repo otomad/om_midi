@@ -1,23 +1,18 @@
 import addControl from "../module/addControl";
-import { tabGroupParams } from "./NullObjTab";
+import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 
-export default class ApplyEffectsTab {
+export default class ApplyEffectsTab extends BaseTab {
 	//#region 组件对象
-	parent: Portal;
-	tab: Tab;
-	group: Group;
 	timeRemap: Checkbox;
 	hFlip: Checkbox;
 	cwRotation: Checkbox;
 	//#endregion
 
 	constructor(parent: Portal) {
-		this.parent = parent;
-		this.tab = addControl(this.parent.tabs, "tab", { text: "应用效果" });
-		this.group = addControl(this.tab, "group", tabGroupParams);
-		this.timeRemap = addControl(this.group, "checkbox", { text: "时间重映射" });
-		this.hFlip = addControl(this.group, "checkbox", { text: "水平翻转" });
-		this.cwRotation = addControl(this.group, "checkbox", { text: "顺时针旋转" });
+		super(parent, "应用效果");
+		this.timeRemap = this.addCheckbox("时间重映射");
+		this.hFlip = this.addCheckbox("水平翻转");
+		this.cwRotation = this.addCheckbox("顺时针旋转");
 	}
 }

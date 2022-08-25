@@ -1,8 +1,10 @@
+import str from "./languages/strings";
+
 export class MyError extends Error {
 	constructor(msg: Error);
 	constructor(msg: string);
 	constructor(msg: string | Error) {
-		alert(msg.toString());
+		alert(msg.toString(), localize(str.error), true);
 		super(msg.toString());
 	}
 }
@@ -52,5 +54,29 @@ export class MidiNoTrackError extends MyError {
 export class NotAfterEffectsError extends MyError {
 	constructor() {
 		super("错误：请在 Adobe After Effects 上使用此脚本。");
+	}
+}
+
+export class CannotCreateFileError extends MyError {
+	constructor() {
+		super("错误：无法创建文件。");
+	}
+}
+
+export class CannotFindCompositionError extends MyError {
+	constructor() {
+		super("错误：无法找到活动合成。请先激活一个合成。");
+	}
+}
+
+export class NoMidiError extends MyError {
+	constructor() {
+		super("错误：请先打开一个有效的 MIDI 文件。")
+	}
+}
+
+export class NoOptionsCheckedError extends MyError {
+	constructor() {
+		super("错误：请至少勾选一个项目。");
 	}
 }

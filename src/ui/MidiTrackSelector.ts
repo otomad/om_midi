@@ -1,6 +1,7 @@
 import { CannotFindWindowError } from "../exceptions";
 import str from "../languages/strings";
 import addControl from "../module/addControl";
+import { arrayContains } from "../module/extensions";
 import Portal from "./Portal";
 
 export default class MidiTrackSelector {
@@ -54,7 +55,7 @@ export default class MidiTrackSelector {
 			}
 			let text = "";
 			if (checks.length === 0) {
-				alert("请至少选择一条轨道。");
+				alert("请至少选择一条轨道。", localize(str.warning));
 				return;
 			} else if (checks.length === 1)
 				text = this.parent.midi.tracks[checks[0]].toString();
@@ -68,7 +69,7 @@ export default class MidiTrackSelector {
 				}
 				text = arr.join("; ");
 			}
-			this.parent.selectedTracksIndex = checks;
+			this.parent.selectedTrackIndexes = checks;
 			this.parent.selectTrackBtn.text = text;
 			this.window.close();
 		}
@@ -84,7 +85,7 @@ export default class MidiTrackSelector {
 			for (let i = 0; i < this.parent.midi.tracks.length; i++) {
 				const track = this.parent.midi.tracks[i];
 				const item = this.trackList.add("item", String(track.channel ?? 0))
-				item.checked = arrayContain(this.parent.selectedTracksIndex, i);
+				item.checked = arrayContains(this.parent.selectedTrackIndexes, i);
 				item.subItems[0].text = track.name ?? "";
 				item.subItems[1].text = track.noteCount;
 			}
@@ -99,18 +100,4 @@ export default class MidiTrackSelector {
 		}
 		this.selectAllCheck.value = checkAll;
 	}
-}
-
-/**
- * 检查数组内是否包含某个对象。
- * 垃圾 ExtendScript 居然不自带该方法。
- * @param array - 数组。
- * @param item - 要查找的对象。
- * @returns - 是否包含该对象。
- */
-function arrayContain<T>(array: T[], item: T): boolean {
-	for (const i of array)
-		if (i === item)
-			return true;
-	return false;
 }

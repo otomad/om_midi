@@ -1476,12 +1476,12 @@ declare class Layer extends PropertyGroup {
   readonly transform: _TransformGroup
 
   /** Transform shortcuts */
-  readonly anchorPoint: TwoDProperty | ThreeDProperty
-  readonly position: TwoDProperty | ThreeDProperty
+  readonly anchorPoint: TwoOrThreeDProperty
+  readonly position: TwoOrThreeDProperty
   readonly xPosition: OneDProperty
   readonly yPosition: OneDProperty
   readonly zPosition: OneDProperty
-  readonly scale: TwoDProperty | ThreeDProperty
+  readonly scale: TwoOrThreeDProperty
   readonly orientation: ThreeDProperty
   readonly rotation: OneDProperty
   readonly xRotation: OneDProperty
@@ -1931,6 +1931,11 @@ declare interface ShapePropertyType extends PropertyClassMembers {
   value: Shape
 }
 
+declare interface TwoOrThreeDType extends PropertyClassMembers {
+	propertyValueType: PropertyValueType.TwoD | PropertyValueType.ThreeD;
+	value: TwoDPoint | ThreeDPoint
+}
+
 type NoValueProperty = Property<NoValueType>
 type ColorProperty = Property<ColorType>
 type OneDProperty = Property<OneDType>
@@ -1939,6 +1944,7 @@ type ThreeDProperty = Property<ThreeDType>
 type ShapeProperty = Property<ShapePropertyType>
 type MarkerValueProperty = Property<MarkerValueType>
 type TextDocumentProperty = Property<TextDocumentType>
+type TwoOrThreeDProperty = Property<TwoOrThreeDType>
 
 type AnyProperty =
   | NoValueProperty

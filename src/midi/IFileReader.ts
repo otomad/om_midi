@@ -12,21 +12,21 @@ export default abstract class IFileReader {
 	/**
 	 * 读取指定字节数的值。
 	 * @param bytes - 读取指定的字节数。默认为 1 个字节。
-	 * @returns - 指定字节数的值。
+	 * @returns 指定字节数的值。
 	 */
 	protected abstract readByte(bytes: number): number;
 	
 	/**
 	 * 读取指定字节数的字符串。
 	 * @param bytes - 读取指定的字节数。
-	 * @returns - 指定字节数的字符串。
+	 * @returns 指定字节数的字符串。
 	 */
 	protected abstract readString(bytes: number): string;
 	
 	/**
 	 * 读取指定字节数的数字数组。
 	 * @param bytes - 读取指定的字节数。
-	 * @returns - 指定字节数的数字数组。
+	 * @returns 指定字节数的数字数组。
 	 */
 	protected abstract readByteArray(bytes: number): number[];
 	

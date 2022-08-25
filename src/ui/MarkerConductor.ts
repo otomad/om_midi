@@ -1,6 +1,6 @@
 import addControl, { addItems } from "../module/addControl";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
-import { SPACING, tabGroupParams } from "./NullObjTab";
+import { SPACING } from "./BaseTab";
 import { setLabelMinWidth } from "./Portal";
 import ToolsTab from "./ToolsTab";
 

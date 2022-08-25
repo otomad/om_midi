@@ -56,7 +56,7 @@ export default class BinContentReader extends IFileReader {
 	 * 从指定的偏移量开始读取指定字节数的值。
 	 * @param offset - 从指定的偏移量开始读取。
 	 * @param bytes - 读取指定的字节数。默认为 1 个字节。
-	 * @returns - 指定字节数的值。
+	 * @returns 指定字节数的值。
 	 */
 	protected readByteFrom(offset: number, bytes: number = 1): number {
 		bytes = Math.min(bytes, this.length() - offset);

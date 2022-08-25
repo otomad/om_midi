@@ -1,4 +1,6 @@
 import { FileUnreadableError } from "../exceptions";
+import convertTextEncoding from "../module/convertTextEncoding";
+import { stringTrim } from "../module/extensions";
 import MidiFormatType from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import MidiTrack from "./MidiTrack";
@@ -30,12 +32,14 @@ export default class Midi {
 			file.close();
 			this.removeNotNoteTrack();
 			this.setPreferredTrack();
+			this.convertTracksNameEncoding();
 		} else throw new FileUnreadableError();
 	}
 	
 	/**
 	 * 删除不是音符的轨道。
 	 * 可根据需要调用。
+	 * 如果将来需要读取动态 BPM、节拍等信息时再对此处做出修改。
 	 */
 	removeNotNoteTrack(): void {
 		for (let i = this.tracks.length - 1; i >= 0; i--) {
@@ -55,6 +59,26 @@ export default class Midi {
 				this.preferredTrackIndex = i;
 				break;
 			}
+		}
+	}
+	
+	/**
+	 * 将 Latin1 编码的轨道名称转换回系统默认编码。
+	 */
+	convertTracksNameEncoding() {
+		const tracks: MidiTrack[] = [];
+		let trackNames: string[] = [];
+		for (const track of this.tracks)
+			if (track.name) {
+				tracks.push(track);
+				trackNames.push(track.name);
+			}
+		trackNames = convertTextEncoding(trackNames);
+		for (let i = 0; i < tracks.length && i < trackNames.length; i++) {
+			const track = tracks[i];
+			let name: string | undefined = stringTrim(trackNames[i]);
+			if (name == "") name = undefined;
+			track.name = name;
 		}
 	}
 }

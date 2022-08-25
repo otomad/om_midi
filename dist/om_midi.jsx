@@ -7,7 +7,7 @@
  * 脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署时间：2022/08/24 Wednesday 17:50:09
+ * 部署时间：2022/08/25 Thursday 17:24:40
  * Copyright (c) 2022, Ranne
  * 
  * 原作者介绍：
@@ -77,6 +77,37 @@ function addItems(dropDownList) {
     return dropDownList;
 }
 
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
 var SPACING = 2;
 var tabGroupParams = {
     orientation: "column",
@@ -85,37 +116,64 @@ var tabGroupParams = {
     spacing: SPACING,
     margins: [10, 5, 10, 0],
 };
-var NullObjTab = /** @class */ (function () {
-    //#endregion
-    function NullObjTab(parent) {
+var BaseTab = /** @class */ (function () {
+    function BaseTab(parent, text, groupParams) {
+        if (groupParams === void 0) { groupParams = tabGroupParams; }
         this.parent = parent;
-        this.tab = addControl(this.parent.tabs, "tab", { text: "空对象" });
-        this.group = addControl(this.tab, "group", tabGroupParams);
-        this.pitch = addControl(this.group, "checkbox", { text: "音高" });
-        this.velocity = addControl(this.group, "checkbox", { text: "力度" });
-        this.duration = addControl(this.group, "checkbox", { text: "持续时间" });
-        this.scale = addControl(this.group, "checkbox", { text: "缩放" });
-        this.cwRotation = addControl(this.group, "checkbox", { text: "顺时针旋转" });
-        this.count = addControl(this.group, "checkbox", { text: "计数" });
-        this.bool = addControl(this.group, "checkbox", { text: "布尔" });
-        this.timeRemap = addControl(this.group, "checkbox", { text: "时间重映射（拉伸）" });
-        this.timeRemap2 = addControl(this.group, "checkbox", { text: "时间重映射（截断）" });
+        this.tab = addControl(this.parent.tabs, "tab", { text: text });
+        this.group = addControl(this.tab, "group", groupParams);
     }
-    return NullObjTab;
+    /**
+     * 获取组内勾选了的复选框。
+     * @returns 勾选了的复选框。
+     */
+    BaseTab.prototype.getCheckedChecks = function () {
+        var checks = [];
+        for (var _i = 0, _a = this.group.children; _i < _a.length; _i++) {
+            var check = _a[_i];
+            if (check instanceof Checkbox && check.value)
+                checks.push(check);
+        }
+        return checks;
+    };
+    BaseTab.prototype.addCheckbox = function (text) {
+        return addControl(this.group, "checkbox", { text: text });
+    };
+    return BaseTab;
 }());
 
-var ApplyEffectsTab = /** @class */ (function () {
+var NullObjTab = /** @class */ (function (_super) {
+    __extends(NullObjTab, _super);
+    //#endregion
+    function NullObjTab(parent) {
+        var _this = _super.call(this, parent, "空对象") || this;
+        _this.pitch = _this.addCheckbox("音高");
+        _this.velocity = _this.addCheckbox("力度");
+        _this.duration = _this.addCheckbox("持续时间");
+        _this.scale = _this.addCheckbox("缩放");
+        _this.cwRotation = _this.addCheckbox("顺时针旋转");
+        _this.count = _this.addCheckbox("计数");
+        _this.bool = _this.addCheckbox("布尔");
+        _this.timeRemap = _this.addCheckbox("时间重映射（拉伸）");
+        _this.timeRemap2 = _this.addCheckbox("时间重映射（截断）");
+        _this.whirl = _this.addCheckbox("来回");
+        return _this;
+    }
+    return NullObjTab;
+}(BaseTab));
+
+var ApplyEffectsTab = /** @class */ (function (_super) {
+    __extends(ApplyEffectsTab, _super);
     //#endregion
     function ApplyEffectsTab(parent) {
-        this.parent = parent;
-        this.tab = addControl(this.parent.tabs, "tab", { text: "应用效果" });
-        this.group = addControl(this.tab, "group", tabGroupParams);
-        this.timeRemap = addControl(this.group, "checkbox", { text: "时间重映射" });
-        this.hFlip = addControl(this.group, "checkbox", { text: "水平翻转" });
-        this.cwRotation = addControl(this.group, "checkbox", { text: "顺时针旋转" });
+        var _this = _super.call(this, parent, "应用效果") || this;
+        _this.timeRemap = _this.addCheckbox("时间重映射");
+        _this.hFlip = _this.addCheckbox("水平翻转");
+        _this.cwRotation = _this.addCheckbox("顺时针旋转");
+        return _this;
     }
     return ApplyEffectsTab;
-}());
+}(BaseTab));
 
 var NumberType;
 (function (NumberType) {
@@ -177,31 +235,20 @@ var MarkerConductor = /** @class */ (function () {
     return MarkerConductor;
 }());
 
-var ToolsTab = /** @class */ (function () {
+var ToolsTab = /** @class */ (function (_super) {
+    __extends(ToolsTab, _super);
     //#endregion
     function ToolsTab(parent) {
-        this.parent = parent;
-        this.tab = addControl(this.parent.tabs, "tab", { text: "工具" });
-        this.group = addControl(this.tab, "group", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
-        this.toolsCombo = addControl(this.group, "dropdownlist");
-        this.toolsCombo.add("item", "标记生成");
-        this.toolsCombo.selection = 0;
-        this.toolsPanel = addControl(this.group, "group", { alignment: "fill", alignChildren: "fill" });
-        this.marker = new MarkerConductor(this);
+        var _this = _super.call(this, parent, "工具", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] }) || this;
+        _this.toolsCombo = addControl(_this.group, "dropdownlist");
+        _this.toolsCombo.add("item", "标记生成");
+        _this.toolsCombo.selection = 0;
+        _this.toolsPanel = addControl(_this.group, "group", { alignment: "fill", alignChildren: "fill" });
+        _this.marker = new MarkerConductor(_this);
+        return _this;
     }
     return ToolsTab;
-}());
-
-/**
- * 获取当前激活合成。
- * @returns 当前合成。如果当前没有激活的合成则返回 null。
- */
-function getComp() {
-    var comp = app.project.activeItem;
-    if (!isValid(comp))
-        return null;
-    return comp;
-}
+}(BaseTab));
 
 var Separator = /** @class */ (function () {
     function Separator(parent) {
@@ -211,42 +258,49 @@ var Separator = /** @class */ (function () {
     return Separator;
 }());
 
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-    return extendStatics(d, b);
+var str = {
+    ok: {
+        zh: "确定",
+        en: "OK",
+        ja: "OK",
+    },
+    cancel: {
+        zh: "取消",
+        en: "Cancel",
+        ja: "キャンセル",
+    },
+    channel_abbr: {
+        zh: "通道",
+        en: "CH",
+        ja: "チャネル",
+    },
+    error: {
+        zh: "错误",
+        en: "Error",
+        ja: "エラー",
+    },
+    warning: {
+        zh: "警告",
+        en: "Warning",
+        ja: "警告",
+    },
+    apply: {
+        zh: "应用",
+        en: "Apply",
+        ja: "適用",
+    },
+    settings: {
+        zh: "设置",
+        en: "Settings",
+        ja: "設定",
+    },
 };
-
-function __extends(d, b) {
-    if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
 
 var MyError = /** @class */ (function (_super) {
     __extends(MyError, _super);
     function MyError(msg) {
         var _this = this;
-        alert(msg.toString());
+        alert(msg.toString(), localize(str.error), true);
         _this = _super.call(this, msg.toString()) || this;
         return _this;
     }
@@ -308,6 +362,34 @@ var NotAfterEffectsError = /** @class */ (function (_super) {
     }
     return NotAfterEffectsError;
 }(MyError));
+var CannotCreateFileError = /** @class */ (function (_super) {
+    __extends(CannotCreateFileError, _super);
+    function CannotCreateFileError() {
+        return _super.call(this, "错误：无法创建文件。") || this;
+    }
+    return CannotCreateFileError;
+}(MyError));
+var CannotFindCompositionError = /** @class */ (function (_super) {
+    __extends(CannotFindCompositionError, _super);
+    function CannotFindCompositionError() {
+        return _super.call(this, "错误：无法找到活动合成。请先激活一个合成。") || this;
+    }
+    return CannotFindCompositionError;
+}(MyError));
+var NoMidiError = /** @class */ (function (_super) {
+    __extends(NoMidiError, _super);
+    function NoMidiError() {
+        return _super.call(this, "错误：请先打开一个有效的 MIDI 文件。") || this;
+    }
+    return NoMidiError;
+}(MyError));
+var NoOptionsCheckedError = /** @class */ (function (_super) {
+    __extends(NoOptionsCheckedError, _super);
+    function NoOptionsCheckedError() {
+        return _super.call(this, "错误：请至少勾选一个项目。") || this;
+    }
+    return NoOptionsCheckedError;
+}(MyError));
 
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 var sectionName = "om_midi";
@@ -340,23 +422,59 @@ var Setting = {
     }
 };
 
-var str = {
-    ok: {
-        zh: "确定",
-        en: "OK",
-    },
-    cancel: {
-        zh: "取消",
-        en: "Cancel",
-    },
-};
+/**
+ * 删除字符串头尾的空白字符。
+ * 垃圾 ExtendScript 居然不自带 trim 方法。
+ * @param str - 源字符串。
+ * @returns 删除头尾空白字符后的字符串。
+ */
+function stringTrim(str) {
+    return str.replace(/^\s+|\s+$/g, "");
+}
+/**
+ * 检查数组内是否包含某个对象。
+ * 垃圾 ExtendScript 居然不自带 contains / includes 方法。
+ * @param array - 数组。
+ * @param item - 要查找的对象。
+ * @returns 是否包含该对象。
+ */
+function arrayContains(array, item) {
+    return arrayIndexOf(array, item) !== -1;
+}
+/**
+ * 检查数组内某个对象的索引值。
+ * 如果找不到，返回 -1。
+ * 垃圾 ExtendScript 居然不自带 indexOf 方法。
+ * @param array - 数组。
+ * @param item - 要查找的对象。
+ * @returns 该对象的索引值。
+ */
+function arrayIndexOf(array, item) {
+    for (var i = 0; i < array.length; i++)
+        if (array[i] === item)
+            return i;
+    return -1;
+}
+/**
+ * 返回给定的下拉菜单的选中项序号。<br />
+ * 下拉菜单自身的属性 selection 只能返回选中项内容。<br />
+ * 如果未选中项，则返回 -1。
+ * @param list - 下拉菜单列表。
+ * @returns 下拉菜单的选中项序号。
+ */
+function getDropDownListSelectedIndex(list) {
+    for (var i = 0; i < list.items.length; i++)
+        if (list.items[i].selected)
+            return i;
+    return -1;
+}
 
 var ABOUT = "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。";
 var SettingsDialog = /** @class */ (function () {
     //#endregion
     function SettingsDialog() {
         var _this = this;
-        this.window = new Window("dialog", "设置", undefined, {
+        this.window = new Window("dialog", localize(str.settings), undefined, {
             resizeable: false,
         });
         if (this.window === null)
@@ -366,8 +484,11 @@ var SettingsDialog = /** @class */ (function () {
         this.separator = new Separator(this.group);
         this.languageGroup = addControl(this.group, "group", { orientation: "row" });
         this.languageLbl = addControl(this.languageGroup, "statictext", { text: "语言" });
-        this.langugaeCombo = addControl(this.languageGroup, "dropdownlist");
-        addItems(this.langugaeCombo, "应用默认值", "简体中文", "English", "日本語");
+        this.languageCombo = addControl(this.languageGroup, "dropdownlist");
+        addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
+        var selectedLanguageIndex = Setting.get("Language", 0);
+        if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
+            this.languageCombo.selection = selectedLanguageIndex;
         this.usingSelectedLayerName = addControl(this.group, "checkbox", { text: "使用选择图层名称而不是轨道名称" });
         this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
@@ -377,6 +498,8 @@ var SettingsDialog = /** @class */ (function () {
         this.window.cancelElement = this.cancelBtn;
         this.okBtn.onClick = function () {
             Setting.set("UsingSelectedLayerName", _this.usingSelectedLayerName.value);
+            Setting.set("Language", getDropDownListSelectedIndex(_this.languageCombo));
+            $.locale = SettingsDialog.langIso[getDropDownListSelectedIndex(_this.languageCombo)];
             _this.window.close();
         };
     }
@@ -384,8 +507,41 @@ var SettingsDialog = /** @class */ (function () {
         this.window.center();
         this.window.show();
     };
+    SettingsDialog.langIso = ["", "zh_CN", "en", "ja"];
     return SettingsDialog;
 }());
+
+// ²âÊÔ0 → 测试0
+function convertTextEncoding(texts) {
+    if (typeof texts === "string")
+        texts = [texts];
+    if (texts.length === 0)
+        return [];
+    var file = new File(Folder.temp.fsName + "/tmp.txt");
+    var defaultEncoding; // 系统默认编码
+    if (file && file.open("w")) {
+        defaultEncoding = file.encoding;
+        file.encoding = "binary";
+        for (var _i = 0, texts_1 = texts; _i < texts_1.length; _i++) {
+            var text = texts_1[_i];
+            file.writeln(text);
+        }
+        file.close();
+    }
+    else
+        throw new CannotCreateFileError();
+    var results = [];
+    if (file && file.open("r")) {
+        file.encoding = defaultEncoding;
+        while (!file.eof)
+            results.push(file.readln());
+        file.close();
+        file.remove();
+    }
+    else
+        throw new CannotCreateFileError();
+    return results;
+}
 
 var IFileReader = /** @class */ (function () {
     function IFileReader() {
@@ -644,15 +800,14 @@ var MidiTrack = /** @class */ (function () {
     };
     MidiTrack.prototype.readNotes = function () {
         var endOffset = this.offset + this.size;
-        var statusByte, lastStatusByte; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
+        var statusByte;
         while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
             var deltaTime = this.parent.readDeltaTime();
+            var lastStatusByte = statusByte; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
             statusByte = this.parent.readByte(1);
             if (statusByte === -1)
                 break;
-            else if (statusByte & 128)
-                lastStatusByte = statusByte;
-            else {
+            else if (!(statusByte & 128)) {
                 statusByte = lastStatusByte;
                 this.parent.movePointer(-1);
             }
@@ -663,7 +818,7 @@ var MidiTrack = /** @class */ (function () {
                 switch (metaType) {
                     case MetaEventType.END_OF_TRACK:
                         if (this.parent.getPointer() !== endOffset)
-                            alert("\u8F68\u9053\u7ED3\u675F\u4F4D\u7F6E\u6709\u8BEF\u3002\u5E94\u4E3A " + endOffset + "\uFF0C\u5B9E\u9645 " + this.parent.getPointer());
+                            alert("\u8F68\u9053\u7ED3\u675F\u4F4D\u7F6E\u6709\u8BEF\u3002\u5E94\u4E3A " + endOffset + "\uFF0C\u5B9E\u9645 " + this.parent.getPointer(), localize(str.error), true);
                     case MetaEventType.END_OF_FILE:
                         return;
                     case MetaEventType.TEXT_EVENT:
@@ -746,11 +901,11 @@ var MidiTrack = /** @class */ (function () {
     /**
      * 表示标识当前轨道的名称。
      * 用于在界面当中显示。
-     * @returns - 标识当前轨道的名称。
+     * @returns 标识当前轨道的名称。
      */
     MidiTrack.prototype.toString = function () {
         var _a;
-        var description = "CH " + ((_a = this.channel) !== null && _a !== void 0 ? _a : 0);
+        var description = localize(str.channel_abbr) + " " + ((_a = this.channel) !== null && _a !== void 0 ? _a : 0);
         if (this.name)
             description += ": " + this.name;
         description += " (" + this.noteCount + ")";
@@ -827,6 +982,7 @@ var Midi = /** @class */ (function () {
             file.close();
             this.removeNotNoteTrack();
             this.setPreferredTrack();
+            this.convertTracksNameEncoding();
         }
         else
             throw new FileUnreadableError();
@@ -834,6 +990,7 @@ var Midi = /** @class */ (function () {
     /**
      * 删除不是音符的轨道。
      * 可根据需要调用。
+     * 如果将来需要读取动态 BPM、节拍等信息时再对此处做出修改。
      */
     Midi.prototype.removeNotNoteTrack = function () {
         for (var i = this.tracks.length - 1; i >= 0; i--) {
@@ -852,6 +1009,28 @@ var Midi = /** @class */ (function () {
                 this.preferredTrackIndex = i;
                 break;
             }
+        }
+    };
+    /**
+     * 将 Latin1 编码的轨道名称转换回系统默认编码。
+     */
+    Midi.prototype.convertTracksNameEncoding = function () {
+        var tracks = [];
+        var trackNames = [];
+        for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
+            var track = _a[_i];
+            if (track.name) {
+                tracks.push(track);
+                trackNames.push(track.name);
+            }
+        }
+        trackNames = convertTextEncoding(trackNames);
+        for (var i = 0; i < tracks.length && i < trackNames.length; i++) {
+            var track = tracks[i];
+            var name = stringTrim(trackNames[i]);
+            if (name == "")
+                name = undefined;
+            track.name = name;
         }
     };
     return Midi;
@@ -903,7 +1082,7 @@ var MidiTrackSelector = /** @class */ (function () {
             }
             var text = "";
             if (checks.length === 0) {
-                alert("请至少选择一条轨道。");
+                alert("请至少选择一条轨道。", localize(str.warning));
                 return;
             }
             else if (checks.length === 1)
@@ -920,7 +1099,7 @@ var MidiTrackSelector = /** @class */ (function () {
                 }
                 text = arr.join("; ");
             }
-            _this.parent.selectedTracksIndex = checks;
+            _this.parent.selectedTrackIndexes = checks;
             _this.parent.selectTrackBtn.text = text;
             _this.window.close();
         };
@@ -935,7 +1114,7 @@ var MidiTrackSelector = /** @class */ (function () {
             for (var i = 0; i < this.parent.midi.tracks.length; i++) {
                 var track = this.parent.midi.tracks[i];
                 var item = this.trackList.add("item", String((_a = track.channel) !== null && _a !== void 0 ? _a : 0));
-                item.checked = arrayContain(this.parent.selectedTracksIndex, i);
+                item.checked = arrayContains(this.parent.selectedTrackIndexes, i);
                 item.subItems[0].text = (_b = track.name) !== null && _b !== void 0 ? _b : "";
                 item.subItems[1].text = track.noteCount;
             }
@@ -955,28 +1134,172 @@ var MidiTrackSelector = /** @class */ (function () {
     };
     return MidiTrackSelector;
 }());
+
 /**
- * 检查数组内是否包含某个对象。
- * 垃圾 ExtendScript 居然不自带该方法。
- * @param array - 数组。
- * @param item - 要查找的对象。
- * @returns - 是否包含该对象。
+ * 获取当前激活合成。
+ * @returns 当前合成。如果当前没有激活的合成则返回 null。
  */
-function arrayContain(array, item) {
-    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-        var i = array_1[_i];
-        if (i === item)
-            return true;
-    }
-    return false;
+function getComp() {
+    var comp = app.project.activeItem;
+    if (!isValid(comp))
+        return null;
+    return comp;
 }
 
-var LARGE_NUMBER = 1e5;
+var Core = /** @class */ (function () {
+    function Core(portal) {
+        this.portal = portal;
+    }
+    Core.prototype.apply = function () {
+        var comp = getComp();
+        if (comp === null)
+            throw new CannotFindCompositionError();
+        app.beginUndoGroup("om midi");
+        try {
+            if (this.portal.getSelectedTab() === this.portal.nullObjTab)
+                this.applyNull(comp);
+        }
+        catch (error) {
+            // throw new MyError(error as Error);
+        }
+        finally {
+            app.endUndoGroup();
+        }
+    };
+    Core.prototype.applyNull = function (comp) {
+        var _this = this;
+        var _a, _b, _c;
+        var nullTab = this.portal.nullObjTab;
+        if (this.portal.selectedTrackIndexes.length === 0 || !this.portal.midi)
+            throw new NoMidiError();
+        var checks = nullTab.getCheckedChecks();
+        if (checks.length === 0)
+            throw new NoOptionsCheckedError();
+        var usingSelectedLayerName = Setting.get("UsingSelectedLayerName", false);
+        if (comp.selectedLayers.length === 0)
+            usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
+        var ticksPerQuarter = this.portal.midi.timeDivision; // 基本时间每四分音符
+        var secondsPerTick;
+        if (ticksPerQuarter instanceof Array) {
+            secondsPerTick = 1 / ticksPerQuarter[0] / ticksPerQuarter[1]; // 帧每秒这种格式不支持，随便弄一个数不要报错就好了。
+        }
+        else {
+            var quartersPerMinute = parseFloat(this.portal.selectBpmTxt.text), // 四分音符每分钟 (BPM)
+            secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
+            secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
+        }
+        var _loop_1 = function (trackIndex) {
+            var track = (_a = this_1.portal.midi) === null || _a === void 0 ? void 0 : _a.tracks[trackIndex];
+            if (track === undefined)
+                return "continue";
+            var nullLayer = this_1.createNullLayer(comp);
+            nullLayer.name = "[midi]" + (usingSelectedLayerName ? comp.selectedLayers[0].name :
+                (_b = track.name) !== null && _b !== void 0 ? _b : "Channel " + ((_c = track.channel) !== null && _c !== void 0 ? _c : 0));
+            var sliderIndexes = []; // 限制：只能存储索引值。
+            for (var _e = 0, checks_1 = checks; _e < checks_1.length; _e++) {
+                var check = checks_1[_e];
+                var slider = this_1.addSliderControl(nullLayer, check.text);
+                sliderIndexes.push(slider);
+            }
+            var setValueAtTime = function (check, seconds, value, inType, outType) {
+                return _this.setValueAtTime(nullLayer, checks, sliderIndexes, check, seconds, value, inType, outType);
+            };
+            var tick = 0, noteOnCount = 0;
+            var _loop_2 = function (noteEvent) {
+                var lastTick = tick;
+                tick += noteEvent.deltaTime;
+                var seconds = tick * secondsPerTick;
+                var increase = function () {
+                    if (tick <= lastTick) {
+                        tick = lastTick + 0.0005; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
+                        seconds = tick * secondsPerTick;
+                    }
+                };
+                if (noteEvent instanceof NoteOnEvent) {
+                    increase();
+                    setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch(), KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity(), KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.bool, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
+                    setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? -100 : 100, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.cwRotation, seconds, (noteOnCount % 4) * 90, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.timeRemap, seconds, 0, KeyframeInterpolationType.LINEAR);
+                    setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR);
+                    noteOnCount++;
+                }
+                else if (noteEvent instanceof NoteOffEvent) {
+                    increase();
+                    setValueAtTime(nullTab.timeRemap, seconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                }
+            };
+            for (var _f = 0, _g = track.events; _f < _g.length; _f++) {
+                var noteEvent = _g[_f];
+                _loop_2(noteEvent);
+            }
+        };
+        var this_1 = this;
+        for (var _i = 0, _d = this.portal.selectedTrackIndexes; _i < _d.length; _i++) {
+            var trackIndex = _d[_i];
+            _loop_1(trackIndex);
+        }
+    };
+    /**
+     * 创建一个空对象图层。
+     * @param comp - 合成。
+     * @returns 空对象图层。
+     */
+    Core.prototype.createNullLayer = function (comp) {
+        var nullLayer;
+        if (this.nullSource && this.nullSource.parentFolder) { // 如果有现有的空对象纯色，不用重新新建一个。
+            nullLayer = comp.layers.add(this.nullSource, comp.workAreaDuration);
+            nullLayer.opacity.setValue(0);
+            nullLayer.anchorPoint.setValue([0, 0]);
+        }
+        else {
+            nullLayer = comp.layers.addNull(comp.workAreaDuration);
+            this.nullSource = nullLayer.source;
+        }
+        nullLayer.enabled = false;
+        return nullLayer;
+    };
+    /**
+     * 获取指定图层的效果属性集合。
+     * @param layer - 图层。
+     * @returns 效果组。
+     */
+    Core.prototype.getEffects = function (layer) {
+        return layer("Effects");
+    };
+    /**
+     * 为指定图层添加一个表达式控制 - 滑块控制的效果。
+     * @param layer - 图层。
+     * @param name - 滑块名称。
+     * @returns 滑块控制效果序号。
+     */
+    Core.prototype.addSliderControl = function (layer, name) {
+        var slider = this.getEffects(layer).addProperty("ADBE Slider Control"); // 中文版竟然能正常运行？ADBE 是什么鬼？
+        slider.name = name;
+        return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
+    };
+    Core.prototype.setValueAtTime = function (layer, checks, sliderIndexes, check, seconds, value, inType, outType) {
+        if (outType === void 0) { outType = inType; }
+        var index = arrayIndexOf(checks, check);
+        if (index === -1)
+            return;
+        var slider = this.getEffects(layer).property(sliderIndexes[index]).property(1);
+        slider.setValueAtTime(seconds, value);
+        slider.setInterpolationTypeAtKey(slider.numKeys, inType, outType); // 这里投了个巧，直接取最后一个关键帧，因为关键帧不可能插在前面。
+    };
+    return Core;
+}());
+
+var LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 var Portal = /** @class */ (function () {
     //#endregion
     function Portal(window) {
         var _this = this;
-        this.selectedTracksIndex = [];
+        this.selectedTrackIndexes = [];
         this.window = window;
         this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
         var MidiGroupsParams = { orientation: "row", spacing: 7 };
@@ -985,7 +1308,7 @@ var Portal = /** @class */ (function () {
         this.selectMidiGroup = addControl(this.group, "group", MidiGroupsParams);
         this.selectMidiLbl = addControl(this.selectMidiGroup, "statictext", { text: "MIDI 文件" });
         setLabelMinWidth(this.selectMidiLbl);
-        this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", bounds: [0, 0, 15, MidiButtonHeight] });
+        this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", size: [15, MidiButtonHeight] });
         this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
         this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
         this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
@@ -997,40 +1320,38 @@ var Portal = /** @class */ (function () {
         this.selectBpmTxt = addControl(this.selectBpmGroup, "edittext", { text: "120", alignment: FILL_CENTER });
         this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
-        this.applyBtn = addControl(this.buttonGroup, "button", { text: "应用", alignment: "left" });
-        this.settingBtn = addControl(this.buttonGroup, "button", { text: "设置", alignment: ["right", "center"] });
+        this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
+        this.settingBtn = addControl(this.buttonGroup, "button", { text: localize(str.settings), alignment: ["right", "center"] });
         this.nullObjTab = new NullObjTab(this);
         this.applyEffectsTab = new ApplyEffectsTab(this);
         this.toolsTab = new ToolsTab(this);
+        this.core = new Core(this);
         setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
         this.selectMidiBtn.onClick = function () {
             var file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
             if (file === null)
                 return;
+            var midi;
             try {
-                var midi = new Midi(file);
+                midi = new Midi(file);
                 if (midi.bpm)
                     _this.selectBpmTxt.text = String(midi.bpm);
                 if (midi.tracks.length === 0)
                     throw new MidiNoTrackError();
                 _this.selectMidiName.text = file.displayName;
-                _this.selectedTracksIndex = [midi.preferredTrackIndex];
+                _this.selectedTrackIndexes = [midi.preferredTrackIndex];
                 var firstTrack = midi.tracks[midi.preferredTrackIndex];
                 _this.selectTrackBtn.text = firstTrack.toString();
                 _this.selectTrackBtn.enabled = true;
                 _this.midi = midi;
             }
             catch (error) {
+                if (midi)
+                    midi.file.close();
                 // throw new MyError(error as Error);
             }
         };
-        this.applyBtn.onClick = function () {
-            var comp = getComp();
-            if (comp === null)
-                return;
-            var nullLayer = comp.layers.addNull(LARGE_NUMBER);
-            nullLayer.name = "fuck";
-        };
+        this.applyBtn.onClick = function () { return _this.core.apply(); };
         this.settingBtn.onClick = function () {
             new SettingsDialog().show();
         };
@@ -1056,6 +1377,18 @@ var Portal = /** @class */ (function () {
             window.layout.resize();
         }
         return portal;
+    };
+    Portal.prototype.getSelectedTab = function () {
+        switch (this.tabs.selection.text) {
+            case this.nullObjTab.tab.text:
+                return this.nullObjTab;
+            case this.applyEffectsTab.tab.text:
+                return this.applyEffectsTab;
+            case this.toolsTab.tab.text:
+                return this.toolsTab;
+            default:
+                return null;
+        }
     };
     return Portal;
 }());
