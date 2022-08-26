@@ -35,5 +35,9 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.basePitchOctCombo.selection = 5;
 		this.basePitchGroup.enabled = false;
 		this.tunning.onClick = () => this.basePitchGroup.enabled = this.tunning.value;
+		this.cwRotation.onClick = () => this.ccwRotation.value = false;
+		this.ccwRotation.onClick = () => this.cwRotation.value = false;
+		this.timeRemap.onClick = () => this.timeRemap2.value = false;
+		this.timeRemap2.onClick = () => this.timeRemap.value = false;
 	}
 }

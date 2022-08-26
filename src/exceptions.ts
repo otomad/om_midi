@@ -80,3 +80,15 @@ export class NoOptionsCheckedError extends MyError {
 		super("错误：请至少勾选一个项目。");
 	}
 }
+
+export class NoLayerSelectedError extends MyError {
+	constructor() {
+		super("错误：在当前合成中未选中任何图层。");
+	}
+}
+
+export class NotOneTrackForApplyEffectsOnlyError extends MyError {
+	constructor() {
+		super("错误：应用效果只能同时选择一条轨道。");
+	}
+}

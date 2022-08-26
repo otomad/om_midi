@@ -5,7 +5,6 @@ export default class NullObjTab extends BaseTab {
 	//#region 组件对象
 	pitch: Checkbox;
 	velocity: Checkbox;
-	velocity2: Checkbox;
 	duration: Checkbox;
 	scale: Checkbox;
 	cwRotation: Checkbox;
@@ -21,7 +20,6 @@ export default class NullObjTab extends BaseTab {
 		super(parent, "空对象");
 		this.pitch = this.addCheckbox("音高");
 		this.velocity = this.addCheckbox("力度");
-		this.velocity2 = this.addCheckbox("变化力度");
 		this.duration = this.addCheckbox("持续时间");
 		this.scale = this.addCheckbox("缩放");
 		this.cwRotation = this.addCheckbox("顺时针旋转");

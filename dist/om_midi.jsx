@@ -8,7 +8,7 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署日期：2022 年 8 月 26 日 星期五 中午 12:54:10
+ * 部署日期：2022 年 8 月 26 日 星期五 下午 17:35:02
  * Copyright (c) 2022 ~, Ranne
  * 
  * 原作者介绍：
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  * 
- * Building Date: Friday, August 26, 2022 12:54 PM
+ * Building Date: Friday, August 26, 2022 5:35 PM
  * Copyright (c) 2022 ~, Ranne
  * 
  * Introduction of the Original Author:
@@ -204,7 +204,6 @@ var NullObjTab = /** @class */ (function (_super) {
         var _this = _super.call(this, parent, "空对象") || this;
         _this.pitch = _this.addCheckbox("音高");
         _this.velocity = _this.addCheckbox("力度");
-        _this.velocity2 = _this.addCheckbox("变化力度");
         _this.duration = _this.addCheckbox("持续时间");
         _this.scale = _this.addCheckbox("缩放");
         _this.cwRotation = _this.addCheckbox("顺时针旋转");
@@ -238,6 +237,10 @@ var ApplyEffectsTab = /** @class */ (function (_super) {
         _this.basePitchOctCombo.selection = 5;
         _this.basePitchGroup.enabled = false;
         _this.tunning.onClick = function () { return _this.basePitchGroup.enabled = _this.tunning.value; };
+        _this.cwRotation.onClick = function () { return _this.ccwRotation.value = false; };
+        _this.ccwRotation.onClick = function () { return _this.cwRotation.value = false; };
+        _this.timeRemap.onClick = function () { return _this.timeRemap2.value = false; };
+        _this.timeRemap2.onClick = function () { return _this.timeRemap.value = false; };
         return _this;
     }
     return ApplyEffectsTab;
@@ -443,6 +446,20 @@ var NoOptionsCheckedError = /** @class */ (function (_super) {
     }
     return NoOptionsCheckedError;
 }(MyError));
+var NoLayerSelectedError = /** @class */ (function (_super) {
+    __extends(NoLayerSelectedError, _super);
+    function NoLayerSelectedError() {
+        return _super.call(this, "错误：在当前合成中未选中任何图层。") || this;
+    }
+    return NoLayerSelectedError;
+}(MyError));
+var NotOneTrackForApplyEffectsOnlyError = /** @class */ (function (_super) {
+    __extends(NotOneTrackForApplyEffectsOnlyError, _super);
+    function NotOneTrackForApplyEffectsOnlyError() {
+        return _super.call(this, "错误：应用效果只能同时选择一条轨道。") || this;
+    }
+    return NotOneTrackForApplyEffectsOnlyError;
+}(MyError));
 
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 var sectionName = "om_midi";
@@ -475,10 +492,31 @@ var Setting = {
     }
 };
 
-var ABOUT = "om midi\nAfter Effects \u7684\u97F3 MAD / YTPMV \u8F85\u52A9\u811A\u672C\u3002\u5B83\u662F\u4E00\u4E2A\u80FD\u591F\u81EA\u52A8\u5C06 MIDI \u6587\u4EF6\u8F6C\u6362\u4E3A After Effects \u4E2D\u5173\u952E\u5E27\u7684\u811A\u672C\u3002\n\u5E0C\u671B\u5728 om midi \u7684\u5E2E\u52A9\u4E0B\uFF0C\u53EF\u4EE5\u628A\u4EBA\u4EEC\u4ECE\u67AF\u71E5\u7E41\u91CD\u7684\u97F3\u753B\u5BF9\u9F50\u4E2D\u89E3\u6551\u51FA\u6765\uFF0C\u628A\u66F4\u591A\u7684\u7CBE\u529B\u6295\u5165\u5230\u66F4\u6709\u521B\u9020\u6027\u7684\u5DE5\u4F5C\u4E2D\u3002\n\n\u63CF\u8FF0\uFF1A\u8BFB\u53D6\u4E00\u4E2A MIDI \u5E8F\u5217\uFF0C\u5E76\u4E3A\u5F53\u524D\u5408\u6210\u6DFB\u52A0\u4E00\u4E2A\u6216\u591A\u4E2A\u65B0\u56FE\u5C42\uFF0C\u5176\u4E2D\u5305\u542B\u5404\u4E2A MIDI \u8F68\u9053\u7684\u97F3\u9AD8\u3001\u529B\u5EA6\u548C\u6301\u7EED\u65F6\u95F4\u7B49\u6ED1\u5757\u63A7\u4EF6\u3002\n\n\u811A\u672C\u539F\u4F5C\u8005\uFF1A\u5927\u536B\u00B7\u8303\u00B7\u5E03\u6797\u514B (omino)\u3001Dora (NGDXW)\u3001\u97E9\u7426\u3001\u5BB6\u9CD6\u5927\u5E1D\n\u811A\u672C\u4F5C\u8005\uFF1A\u5170\u97F3";
+/**
+ * 打开网址。
+ * @param url - 网址。
+ */
+function openUrl(url) {
+    var cmd;
+    if ($.os.indexOf("Win") !== -1) { // Windows
+        cmd = "explorer.exe " + url;
+    }
+    else { // macOS
+        cmd = "open " + url;
+    }
+    try {
+        system.callSystem(cmd);
+    }
+    catch (error) {
+        // alert(error);
+    }
+}
+
+var ABOUT = "\u8BFB\u53D6\u4E00\u4E2A MIDI \u5E8F\u5217\uFF0C\u5E76\u4E3A\u5F53\u524D\u5408\u6210\u6DFB\u52A0\u4E00\u4E2A\u6216\u591A\u4E2A\u65B0\u56FE\u5C42\uFF0C\u5176\u4E2D\u5305\u542B\u5404\u4E2A MIDI \u8F68\u9053\u7684\u97F3\u9AD8\u3001\u529B\u5EA6\u548C\u6301\u7EED\u65F6\u95F4\u7B49\u6ED1\u5757\u63A7\u4EF6\u3002\n\n\u811A\u672C\u539F\u4F5C\u8005\uFF1A\u5927\u536B\u00B7\u8303\u00B7\u5E03\u6797\u514B (omino)\u3001Dora (NGDXW)\u3001\u97E9\u7426\u3001\u5BB6\u9CD6\u5927\u5E1D\n\u811A\u672C\u4F5C\u8005\uFF1A\u5170\u97F3";
 var SettingsDialog = /** @class */ (function () {
     //#endregion
     function SettingsDialog() {
+        var _a;
         var _this = this;
         this.window = new Window("dialog", localize(str.settings) + " - " + User.scriptName + " v" + User.version, undefined, {
             resizeable: false,
@@ -487,10 +525,11 @@ var SettingsDialog = /** @class */ (function () {
             throw new CannotFindWindowError();
         this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
         this.aboutLbl = addControl(this.group, "statictext", { text: ABOUT }, { multiline: true });
+        this.openGithubBtnGroup = addControl(this.group, "group", { orientation: "row", alignment: "left" });
+        this.openGithubLatestBtn = addControl(this.openGithubBtnGroup, "button", { text: "检查更新" });
+        this.openGithubPageBtn = addControl(this.openGithubBtnGroup, "button", { text: "仓库地址" });
         this.separator = new Separator(this.group);
-        this.languageGroup = addControl(this.group, "group", { orientation: "row" });
-        this.languageLbl = addControl(this.languageGroup, "statictext", { text: "语言" });
-        this.languageCombo = addControl(this.languageGroup, "dropdownlist");
+        (_a = addGroup(this.group, "语言", "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
         addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
         var selectedLanguageIndex = Setting.get("Language", 0);
         if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
@@ -508,6 +547,8 @@ var SettingsDialog = /** @class */ (function () {
             $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
             _this.window.close();
         };
+        this.openGithubPageBtn.onClick = function () { return openUrl("https://github.com/otomad/om_midi"); };
+        this.openGithubLatestBtn.onClick = function () { return openUrl("https://github.com/otomad/om_midi/releases/latest"); };
     }
     SettingsDialog.prototype.show = function () {
         this.window.center();
@@ -669,7 +710,8 @@ var RegularEventType;
 
 var NoteEvent = /** @class */ (function () {
     function NoteEvent() {
-        this.deltaTime = 0;
+        this.deltaTime = 0; // 与前一项间隔基本时间。
+        this.sofarTick = 0; // 至乐曲开始的基本时间。
     }
     return NoteEvent;
 }());
@@ -750,11 +792,12 @@ var RegularEvent = /** @class */ (function (_super) {
 }(NoteEvent));
 var NoteOnOffEvent = /** @class */ (function (_super) {
     __extends(NoteOnOffEvent, _super);
-    function NoteOnOffEvent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function NoteOnOffEvent(type, values) {
+        var _this = _super.call(this, type, values) || this;
+        _this.pitch = values[0];
+        _this.velocity = values[1];
+        return _this;
     }
-    NoteOnOffEvent.prototype.pitch = function () { return this.value[0]; };
-    NoteOnOffEvent.prototype.velocity = function () { return this.value[1]; };
     return NoteOnOffEvent;
 }(RegularEvent));
 var NoteOnEvent = /** @class */ (function (_super) {
@@ -783,6 +826,7 @@ var MidiTrack = /** @class */ (function () {
     function MidiTrack(parent, offset, size) {
         this.events = [];
         this.noteCount = 0;
+        this.lengthTick = 0; // 此处表示轨道的持续时间。
         this.splice = [].splice;
         this.parent = parent;
         this.offset = offset;
@@ -806,9 +850,11 @@ var MidiTrack = /** @class */ (function () {
     };
     MidiTrack.prototype.readNotes = function () {
         var endOffset = this.offset + this.size;
+        var noteOnStack = []; // 音符开事件栈，用于匹配音符关事件。为什么是栈而不是队列？这与 FL Studio 相匹配。
         var statusByte;
         while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
             var deltaTime = this.parent.readDeltaTime();
+            var sofarTick = this.lengthTick += deltaTime;
             var lastStatusByte = statusByte; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
             statusByte = this.parent.readByte(1);
             if (statusByte === -1)
@@ -866,7 +912,7 @@ var MidiTrack = /** @class */ (function () {
             }
             else { // 常规事件
                 this.setChannel((statusByte & 0x0f) + 1); // 后半字节表示通道编号。
-                var regularType = statusByte >> 4; // 只取前半字节
+                var regularType = statusByte >> 4; // 只取前半字节。
                 switch (regularType) {
                     case RegularEventType.NOTE_AFTERTOUCH:
                     case RegularEventType.CONTROLLER:
@@ -876,12 +922,34 @@ var MidiTrack = /** @class */ (function () {
                         var byte2 = this.parent.readByteArray(2); // 读两位
                         if (regularType == RegularEventType.NOTE_ON) {
                             note = new NoteOnEvent(byte2);
+                            var noteOn = note;
                             this.noteCount++;
+                            for (var _i = 0, noteOnStack_1 = noteOnStack; _i < noteOnStack_1.length; _i++) {
+                                var prevNoteOn = noteOnStack_1[_i];
+                                if (prevNoteOn.interruptDuration === undefined)
+                                    if (sofarTick <= prevNoteOn.sofarTick)
+                                        noteOn.interruptDuration = 0;
+                                    else
+                                        prevNoteOn.interruptDuration = sofarTick - prevNoteOn.sofarTick;
+                            } // 中断复音上的其它音符开。
+                            noteOnStack.push(noteOn);
                         }
-                        else if (regularType == RegularEventType.NOTE_OFF)
+                        else if (regularType == RegularEventType.NOTE_OFF) {
                             note = new NoteOffEvent(byte2);
+                            var noteOff = note;
+                            for (var i = noteOnStack.length - 1; i >= 0; i--) {
+                                var noteOn = noteOnStack[i];
+                                if (noteOn.pitch === noteOff.pitch) {
+                                    noteOn.duration = sofarTick - noteOn.sofarTick; // 计算音符时长。
+                                    noteOn.noteOff = noteOff;
+                                    noteOff.noteOn = noteOn; // 将两个音符关联在一起。
+                                    noteOnStack.splice(i, 1); // 移出栈。
+                                    break;
+                                }
+                            }
+                        }
                         else
-                            note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略
+                            note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
                         break;
                     case RegularEventType.PROGRAM_CHANGE:
                     case RegularEventType.CHANNEL_AFTERTOUCH:
@@ -900,6 +968,7 @@ var MidiTrack = /** @class */ (function () {
             }
             if (note !== null) {
                 note.deltaTime = deltaTime;
+                note.sofarTick = sofarTick;
                 this.push(note);
             }
         }
@@ -1154,6 +1223,8 @@ function getComp() {
     return comp;
 }
 
+var MIN_INTERVAL = 5e-4;
+var NULL_SOURCE_NAME = "om midi null";
 var Core = /** @class */ (function () {
     function Core(portal) {
         this.portal = portal;
@@ -1163,20 +1234,27 @@ var Core = /** @class */ (function () {
         if (comp === null)
             throw new CannotFindCompositionError();
         try {
-            if (this.portal.getSelectedTab() === this.portal.nullObjTab)
-                this.applyNull(comp);
+            var tab = this.portal.getSelectedTab();
+            if (tab === this.portal.nullObjTab)
+                this.applyCreateNullObject(comp);
+            else if (tab === this.portal.applyEffectsTab)
+                this.applyEffects(comp);
+            else if (tab === this.portal.toolsTab) {
+                if (this.portal.toolsTab.toolsCombo.getSelectedIndex() === 0)
+                    this.applyMarkerConductor(comp);
+            }
         }
         catch (error) {
-            // throw new MyError(error as Error);
+            throw new MyError(error);
         }
         finally {
             app.endUndoGroup();
         }
     };
-    Core.prototype.applyNull = function (comp) {
+    Core.prototype.applyCreateNullObject = function (comp) {
         var _this = this;
-        var _a, _b;
-        app.beginUndoGroup("om midi 应用空对象");
+        var _a, _b, _c, _d;
+        app.beginUndoGroup("om midi - Apply Create Null Object");
         var nullTab = this.portal.nullObjTab;
         if (this.portal.selectedTracks.length === 0 || !this.portal.midi)
             throw new NoMidiError();
@@ -1184,71 +1262,180 @@ var Core = /** @class */ (function () {
         if (checks.length === 0)
             throw new NoOptionsCheckedError();
         var usingSelectedLayerName = Setting.get("UsingSelectedLayerName", false);
-        if (comp.selectedLayers.length === 0)
+        var selectedLayer = this.getSelectLayer(comp);
+        if (selectedLayer === null)
             usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
-        var ticksPerQuarter = this.portal.midi.timeDivision; // 基本时间每四分音符
-        var secondsPerTick;
-        if (ticksPerQuarter instanceof Array) {
-            secondsPerTick = 1 / ticksPerQuarter[0] / ticksPerQuarter[1]; // 帧每秒这种格式不支持，随便弄一个数不要报错就好了。
-        }
-        else {
-            var quartersPerMinute = parseFloat(this.portal.selectBpmTxt.text), // 四分音符每分钟 (BPM)
-            secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
-            secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
-        }
+        var secondsPerTick = this.getSecondsPerTick();
         var _loop_1 = function (track) {
             if (track === undefined)
                 return "continue";
             var nullLayer = this_1.createNullLayer(comp);
-            nullLayer.name = "[midi]" + (usingSelectedLayerName ? comp.selectedLayers[0].name :
-                (_a = track.name) !== null && _a !== void 0 ? _a : "Channel " + ((_b = track.channel) !== null && _b !== void 0 ? _b : 0));
-            var sliderIndexes = []; // 限制：只能存储索引值。
-            for (var _d = 0, checks_1 = checks; _d < checks_1.length; _d++) {
-                var check = checks_1[_d];
-                var slider = this_1.addSliderControl(nullLayer, check.text);
-                sliderIndexes.push(slider);
-            }
+            nullLayer.name = "[midi]" + (usingSelectedLayerName && selectedLayer !== null ? selectedLayer.name :
+                ((_a = track.name) !== null && _a !== void 0 ? _a : "Channel " + ((_b = track.channel) !== null && _b !== void 0 ? _b : 0)));
+            for (var _f = 0, checks_1 = checks; _f < checks_1.length; _f++) {
+                var check = checks_1[_f];
+                this_1.addSliderControl(nullLayer, check.text);
+            } // 限制：只能存储索引值。
             var setValueAtTime = function (check, seconds, value, inType, outType) {
-                return _this.setValueAtTime(nullLayer, checks, sliderIndexes, check, seconds, value, inType, outType);
+                return _this.setValueAtTime(nullLayer, checks, check, seconds, value, inType, outType);
             };
-            var tick = 0, noteOnCount = 0;
-            var _loop_2 = function (noteEvent) {
-                var lastTick = tick;
-                tick += noteEvent.deltaTime;
-                var seconds = tick * secondsPerTick;
-                var increase = function () {
-                    if (tick <= lastTick) {
-                        tick = lastTick + 0.0005; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
-                        seconds = tick * secondsPerTick;
-                    }
-                };
+            var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventSofarTick = 0;
+            for (var _g = 0, _h = track.events; _g < _h.length; _g++) {
+                var noteEvent = _h[_g];
+                if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
+                    continue; // 跳过同一时间点上的音符。
+                var seconds = noteEvent.sofarTick * secondsPerTick;
                 if (noteEvent instanceof NoteOnEvent) {
-                    increase();
-                    setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch(), KeyframeInterpolationType.HOLD);
-                    setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity(), KeyframeInterpolationType.HOLD);
+                    if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
+                        noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
+                        noteEvent.duration && noteEvent.duration < 0)
+                        continue;
+                    setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.duration, seconds, (_c = noteEvent.duration) !== null && _c !== void 0 ? _c : 0, KeyframeInterpolationType.HOLD);
                     setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
                     setValueAtTime(nullTab.bool, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
                     setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? -100 : 100, KeyframeInterpolationType.HOLD);
                     setValueAtTime(nullTab.cwRotation, seconds, (noteOnCount % 4) * 90, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.ccwRotation, seconds, ((4 - noteOnCount % 4) % 4) * 90, KeyframeInterpolationType.HOLD);
+                    setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD);
                     setValueAtTime(nullTab.timeRemap, seconds, 0, KeyframeInterpolationType.LINEAR);
                     setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR);
+                    if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
+                        var duration = (_d = noteEvent.interruptDuration) !== null && _d !== void 0 ? _d : noteEvent.duration;
+                        var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
+                        setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                        setValueAtTime(nullTab.whirl, noteOffSeconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                    }
                     noteOnCount++;
+                    lastEventType = RegularEventType.NOTE_ON;
+                    lastEventSofarTick = noteEvent.sofarTick;
                 }
                 else if (noteEvent instanceof NoteOffEvent) {
-                    increase();
-                    setValueAtTime(nullTab.timeRemap, seconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
-                    setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                    var noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
+                    setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD); // 新增松键力度。
+                    setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
+                    lastEventType = RegularEventType.NOTE_OFF;
+                    lastEventSofarTick = noteEvent.sofarTick;
                 }
-            };
-            for (var _e = 0, _f = track.events; _e < _f.length; _e++) {
-                var noteEvent = _f[_e];
-                _loop_2(noteEvent);
             }
         };
         var this_1 = this;
-        for (var _i = 0, _c = this.portal.selectedTracks; _i < _c.length; _i++) {
-            var track = _c[_i];
+        for (var _i = 0, _e = this.portal.selectedTracks; _i < _e.length; _i++) {
+            var track = _e[_i];
             _loop_1(track);
+        }
+    };
+    Core.prototype.applyMarkerConductor = function (comp) {
+        app.beginUndoGroup("om midi - Apply Marker Conductor");
+        var marker = this.portal.toolsTab.marker;
+        var layer;
+        if (marker.markOnCombo.getSelectedIndex() === 1) {
+            var _layer = this.getSelectLayer(comp);
+            if (_layer === null)
+                throw new NoLayerSelectedError();
+            layer = _layer;
+        }
+        else {
+            layer = this.createNullLayer(comp);
+            layer.name = "BPM:" + marker.bpmTxt.text + " (" + marker.beatTxt.text + "/4)";
+        }
+        var startTimePos = marker.startTimeCombo.getSelectedIndex();
+        var startTime = startTimePos === 0 ? comp.displayStartTime :
+            (startTimePos === 1 ? comp.time :
+                (startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。
+        var beat = 1;
+        var nextBeat = function () {
+            var comment = String(beat);
+            beat = beat % parseInt(marker.beatTxt.text) + 1;
+            return comment;
+        };
+        var bpm = parseFloat(marker.bpmTxt.text);
+        while (startTime <= comp.displayStartTime + comp.duration) {
+            layer.marker.setValueAtTime(startTime, new MarkerValue(nextBeat()));
+            startTime += 60 / bpm;
+        }
+    };
+    Core.prototype.applyEffects = function (comp) {
+        var _a, _b;
+        app.beginUndoGroup("om midi - Apply Effects");
+        var effectsTab = this.portal.applyEffectsTab;
+        if (this.portal.selectedTracks.length === 0 || !this.portal.midi)
+            throw new NoMidiError();
+        if (effectsTab.getCheckedChecks().length === 0)
+            throw new NoOptionsCheckedError();
+        if (this.portal.selectedTracks.length !== 1)
+            throw new NotOneTrackForApplyEffectsOnlyError();
+        var layer = this.getSelectLayer(comp);
+        if (layer === null)
+            throw new NoLayerSelectedError();
+        var secondsPerTick = this.getSecondsPerTick();
+        var track = this.portal.selectedTracks[0];
+        if (layer.timeRemapEnabled)
+            layer.timeRemapEnabled = false;
+        var source = layer.source;
+        (+(source.duration / source.frameDuration).toFixed(0) - 1) * source.frameDuration;
+        var layerLength = layer.outPoint - layer.startTime - source.frameDuration;
+        var startTime = 0;
+        if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.tunning.value) {
+            layer.timeRemapEnabled = true;
+            layer.timeRemap.removeKey(2);
+            startTime = layer.timeRemap.value;
+        }
+        var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventSofarTick = 0;
+        for (var _i = 0, _c = track.events; _i < _c.length; _i++) {
+            var noteEvent = _c[_i];
+            if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
+                continue; // 跳过同一时间点上的音符。
+            var seconds = noteEvent.sofarTick * secondsPerTick;
+            if (noteEvent instanceof NoteOnEvent) {
+                if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
+                    noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
+                    noteEvent.duration && noteEvent.duration < 0)
+                    continue;
+                if (effectsTab.hFlip.value) {
+                    var key = layer.scale.addKey(seconds);
+                    layer.scale.setValueAtKey(key, [noteOnCount % 2 ? -100 : 100, 100]);
+                    layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                }
+                if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
+                    var value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
+                    var key = layer.rotation.addKey(seconds);
+                    layer.rotation.setValueAtKey(key, value);
+                    layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                }
+                if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+                    var key = layer.timeRemap.addKey(seconds);
+                    layer.timeRemap.setValueAtKey(key, startTime);
+                    // layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+                    if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
+                        var duration = (_a = noteEvent.interruptDuration) !== null && _a !== void 0 ? _a : noteEvent.duration;
+                        var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
+                        var key2 = layer.timeRemap.addKey(noteOffSeconds);
+                        var endTime = effectsTab.timeRemap.value ? startTime + layerLength : noteOffSeconds - seconds + startTime;
+                        layer.timeRemap.setValueAtKey(key2, endTime);
+                        // layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                    }
+                }
+                if (effectsTab.tunning.value) { // 已知问题：拉伸（时间重映射截断）长度不能比原素材长；如果素材不在项目开头，前面的内容无法播放
+                    var key = layer.timeRemap.addKey(seconds);
+                    layer.timeRemap.setValueAtKey(key, startTime);
+                    // layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+                    if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
+                        var duration = (_b = noteEvent.interruptDuration) !== null && _b !== void 0 ? _b : noteEvent.duration;
+                        var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
+                        var key2 = layer.timeRemap.addKey(noteOffSeconds);
+                        var duration2 = noteOffSeconds - seconds;
+                        var pitch = noteEvent.pitch - 60;
+                        var stretch = Math.pow(2, (pitch / 12));
+                        layer.timeRemap.setValueAtKey(key2, duration2 * stretch + startTime);
+                        // layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                    }
+                }
+                noteOnCount++;
+                lastEventType = RegularEventType.NOTE_ON;
+                lastEventSofarTick = noteEvent.sofarTick;
+            }
         }
     };
     /**
@@ -1258,14 +1445,27 @@ var Core = /** @class */ (function () {
      */
     Core.prototype.createNullLayer = function (comp) {
         var nullLayer;
-        if (this.nullSource && this.nullSource.parentFolder) { // 如果有现有的空对象纯色，不用重新新建一个。
-            nullLayer = comp.layers.add(this.nullSource, comp.workAreaDuration);
-            nullLayer.opacity.setValue(0);
-            nullLayer.anchorPoint.setValue([0, 0]);
-        }
-        else {
-            nullLayer = comp.layers.addNull(comp.workAreaDuration);
-            this.nullSource = nullLayer.source;
+        refindNullSource: while (true) {
+            if (this.nullSource && this.nullSource.parentFolder) { // 如果有现有的空对象纯色，不用重新新建一个。
+                nullLayer = comp.layers.add(this.nullSource, comp.workAreaDuration);
+                nullLayer.opacity.setValue(0);
+                nullLayer.anchorPoint.setValue([0, 0]);
+            }
+            else {
+                nullLayer = comp.layers.addNull(comp.workAreaDuration);
+                var nullSource = nullLayer.source;
+                for (var i = 1; i <= nullSource.parentFolder.items.length; i++) { // 从 1 起始。
+                    var item = nullSource.parentFolder.items[i];
+                    if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) {
+                        this.nullSource = item;
+                        nullSource.remove();
+                        continue refindNullSource;
+                    }
+                }
+                this.nullSource = nullSource;
+                nullLayer.source.name = NULL_SOURCE_NAME;
+            }
+            break;
         }
         nullLayer.enabled = false;
         return nullLayer;
@@ -1289,14 +1489,43 @@ var Core = /** @class */ (function () {
         slider.name = name;
         return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
     };
-    Core.prototype.setValueAtTime = function (layer, checks, sliderIndexes, check, seconds, value, inType, outType) {
+    Core.prototype.setValueAtTime = function (layer, checks, check, seconds, value, inType, outType) {
         if (outType === void 0) { outType = inType; }
         var index = checks.indexOf(check);
         if (index === -1)
             return;
-        var slider = this.getEffects(layer).property(sliderIndexes[index]).property(1);
-        slider.setValueAtTime(seconds, value);
-        slider.setInterpolationTypeAtKey(slider.numKeys, inType, outType); // 这里投了个巧，直接取最后一个关键帧，因为关键帧不可能插在前面。
+        var slider = this.getEffects(layer).property(index + 1).property(1);
+        var key = slider.addKey(seconds);
+        slider.setValueAtKey(key, value);
+        slider.setInterpolationTypeAtKey(key, inType, outType);
+    };
+    /**
+     * 获取当前合成所选中的第一个图层。
+     * @param comp - 合成。
+     * @returns 选中图层。
+     */
+    Core.prototype.getSelectLayer = function (comp) {
+        if (comp.selectedLayers.length === 0)
+            return null;
+        var layer = comp.selectedLayers[0];
+        if (layer instanceof AVLayer)
+            return layer;
+        return null;
+    };
+    Core.prototype.getSecondsPerTick = function () {
+        if (!this.portal.midi)
+            throw new NoMidiError();
+        var secondsPerTick;
+        var ticksPerQuarter = this.portal.midi.timeDivision; // 基本时间每四分音符
+        if (ticksPerQuarter instanceof Array) {
+            secondsPerTick = 1 / ticksPerQuarter[0] / ticksPerQuarter[1]; // 帧每秒这种格式不支持，随便弄一个数不要报错就好了。
+        }
+        else {
+            var quartersPerMinute = parseFloat(this.portal.selectBpmTxt.text), // 四分音符每分钟 (BPM)
+            secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
+            secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
+        }
+        return secondsPerTick;
     };
     return Core;
 }());

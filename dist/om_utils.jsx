@@ -24,7 +24,7 @@ Utils = {
 		if (rate === undefined) rate = 1;
 		var midi = thisComp.layer(midiName || _getMidiName());
 		var progress = midi.effect("时间重映射1")("滑块");
-		var maxDuration = ((thisLayer.source.duration / thisLayer.source.frameDuration).toFixed(0) - 1) * thisLayer.source.frameDuration;
+		var maxDuration = (+(thisLayer.source.duration / thisLayer.source.frameDuration).toFixed(0) - 1) * thisLayer.source.frameDuration;
 		if (stretchOnly)
 			return progress * maxDuration; // 取消注释此行即可强制使用伸缩素材。
 		var currentKey, nextKey = currentKey = progress.nearestKey(thisLayer.time);

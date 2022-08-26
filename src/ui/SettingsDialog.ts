@@ -1,15 +1,12 @@
 import Separator from "../components/Separator";
-import addControl, { addItems } from "../module/addControl";
+import addControl, { addGroup, addItems } from "../module/addControl";
 import Setting from "../module/Setting";
 import str from "../languages/strings";
 import { CannotFindWindowError } from "../exceptions";
 import User from "../user";
+import openUrl from "../module/openUrl";
 
-const ABOUT = `om midi
-After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
-希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
-
-描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
+const ABOUT = `读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
 
 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
 脚本作者：兰音`;
@@ -27,6 +24,9 @@ export default class SettingsDialog {
 	languageLbl: StaticText;
 	languageCombo: DropDownList;
 	usingSelectedLayerName: Checkbox;
+	openGithubBtnGroup: Group;
+	openGithubLatestBtn: Button;
+	openGithubPageBtn: Button;
 	//#endregion
 	
 	constructor() {
@@ -37,10 +37,15 @@ export default class SettingsDialog {
 		
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.aboutLbl = addControl(this.group, "statictext", { text: ABOUT }, { multiline: true });
+		this.openGithubBtnGroup = addControl(this.group, "group", { orientation: "row", alignment: "left" });
+		this.openGithubLatestBtn = addControl(this.openGithubBtnGroup, "button", { text: "检查更新" });
+		this.openGithubPageBtn = addControl(this.openGithubBtnGroup, "button", { text: "仓库地址" });
 		this.separator = new Separator(this.group);
-		this.languageGroup = addControl(this.group, "group", { orientation: "row" });
-		this.languageLbl = addControl(this.languageGroup, "statictext", { text: "语言" });
-		this.languageCombo = addControl(this.languageGroup, "dropdownlist");
+		({
+			group: this.languageGroup,
+			label: this.languageLbl,
+			control: this.languageCombo,
+		} = addGroup(this.group, "语言", "dropdownlist"));
 		addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
 		const selectedLanguageIndex = Setting.get("Language", 0);
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
@@ -59,6 +64,8 @@ export default class SettingsDialog {
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()]
 			this.window.close();
 		}
+		this.openGithubPageBtn.onClick = () => openUrl("https://github.com/otomad/om_midi");
+		this.openGithubLatestBtn.onClick = () => openUrl("https://github.com/otomad/om_midi/releases/latest");
 	}
 	
 	show() {

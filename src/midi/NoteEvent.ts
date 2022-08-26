@@ -1,7 +1,8 @@
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 
 export class NoteEvent {
-	deltaTime: number = 0;
+	deltaTime: number = 0; // 与前一项间隔基本时间。
+	sofarTick: number = 0; // 至乐曲开始的基本时间。
 }
 
 export class MetaEvent extends NoteEvent {
@@ -87,18 +88,30 @@ export class RegularEvent extends NoteEvent {
 	}
 }
 
-class NoteOnOffEvent extends RegularEvent {
-	pitch() { return this.value[0]; }
-	velocity() { return this.value[1]; }
+abstract class NoteOnOffEvent extends RegularEvent {
+	pitch: number;
+	velocity: number;
+	
+	constructor(type: RegularEventType, values: number[]) {
+		super(type, values);
+		this.pitch = values[0];
+		this.velocity = values[1];
+	}
 }
 
 export class NoteOnEvent extends NoteOnOffEvent {
+	noteOff?: NoteOffEvent;
+	duration?: number; // note-off？尝试将时长赋值给 note-on！
+	interruptDuration?: number; // 单轨音 MAD 特殊用途。当有复音时中断前一个音的音符开。
+	
 	constructor(values: number[]) {
 		super(RegularEventType.NOTE_ON, values);
 	}
 }
 
 export class NoteOffEvent extends NoteOnOffEvent {
+	noteOn?: NoteOnEvent;
+	
 	constructor(values: number[]) {
 		super(RegularEventType.NOTE_OFF, values);
 	}

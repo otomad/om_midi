@@ -97,6 +97,6 @@ export function addGroup<C extends ControlTypeName>(parent: ContainerType, name:
 	
 	if (type) control = addControl(group, type, params, properties);
 	
-	const result: IRegularGroup<C> = { group, label, control: control as any };
+	const result: IRegularGroup<C> = { group, label, control: control as NullableControlType<C> };
 	return result;
 }
