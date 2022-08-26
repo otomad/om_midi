@@ -32,7 +32,7 @@ Download the latest script file and move it to the `Script` or `Script\ScriptUI`
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
 
-Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI | Chinese UI | Japanese UI | Additional Useful Keyframes | Select Tracks | Change BPM
+Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI | Chinese UI | Japanese UI | Additional Useful Keyframes | Manually Select MIDI Tracks | Change BPM
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---:
 v0.1 | [David Van Brink (omino)'s Original Edition](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
 v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
