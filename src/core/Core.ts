@@ -3,7 +3,6 @@ import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
 import Setting from "../module/Setting";
 import { NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
-import { arrayIndexOf } from "../module/extensions";
 
 export default class Core {
 	portal: Portal;
@@ -16,7 +15,6 @@ export default class Core {
 	apply() {
 		const comp = getComp();
 		if (comp === null) throw new CannotFindCompositionError();
-		app.beginUndoGroup("om midi");
 		try {
 			if (this.portal.getSelectedTab() === this.portal.nullObjTab)
 				this.applyNull(comp);
@@ -28,8 +26,9 @@ export default class Core {
 	}
 	
 	applyNull(comp: CompItem) {
+		app.beginUndoGroup("om midi 应用空对象");
 		const nullTab = this.portal.nullObjTab;
-		if (this.portal.selectedTrackIndexes.length === 0 || !this.portal.midi) throw new NoMidiError();
+		if (this.portal.selectedTracks.length === 0 || !this.portal.midi) throw new NoMidiError();
 		const checks = nullTab.getCheckedChecks();
 		if (checks.length === 0) throw new NoOptionsCheckedError();
 		let usingSelectedLayerName = Setting.get("UsingSelectedLayerName", false);
@@ -43,8 +42,7 @@ export default class Core {
 				secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
 			secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
 		}
-		for (const trackIndex of this.portal.selectedTrackIndexes) {
-			const track = this.portal.midi?.tracks[trackIndex];
+		for (const track of this.portal.selectedTracks) {
 			if (track === undefined) continue;
 			const nullLayer = this.createNullLayer(comp);
 			nullLayer.name = "[midi]" + (usingSelectedLayerName ? comp.selectedLayers[0].name :
@@ -128,7 +126,7 @@ export default class Core {
 	}
 	
 	private setValueAtTime(layer: AVLayer, checks: Checkbox[], sliderIndexes: number[], check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType: KeyframeInterpolationType = inType): void {
-		const index = arrayIndexOf(checks, check);
+		const index = checks.indexOf(check);
 		if (index === -1) return;
 		const slider = this.getEffects(layer).property(sliderIndexes[index]).property(1) as OneDProperty;
 		slider.setValueAtTime(seconds, value);

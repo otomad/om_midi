@@ -1,9 +1,8 @@
 import { IUser } from "../user";
-import addControl from "../module/addControl";
+import addControl, { addGroup } from "../module/addControl";
 import NullObjTab from "./NullObjTab";
 import ApplyEffectsTab from "./ApplyEffectsTab";
 import ToolsTab from "./ToolsTab";
-import getComp from "../module/getComp";
 import SettingsDialog from "./SettingsDialog";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
 import { CannotFindWindowError, MidiNoTrackError, MyError } from "../exceptions";
@@ -11,9 +10,9 @@ import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
 import str from "../languages/strings";
-import apply from "../core/Core";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
+import MidiTrack from "../midi/MidiTrack";
 
 export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 
@@ -41,29 +40,36 @@ export default class Portal {
 	toolsTab: ToolsTab
 	
 	midi?: Midi;
-	selectedTrackIndexes: number[] = [];
+	selectedTracks: MidiTrack[] = [];
 	core: Core;
 	//#endregion
 	
 	private constructor(window: Window | Panel) {
 		this.window = window;
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
-		const MidiGroupsParams: Partial<Group> = { orientation: "row", spacing: 7 };
 		const MidiButtonHeight = 22;
 		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
-		this.selectMidiGroup = addControl(this.group, "group", MidiGroupsParams);
-		this.selectMidiLbl = addControl(this.selectMidiGroup, "statictext", { text: "MIDI 文件" });
-		setLabelMinWidth(this.selectMidiLbl);
-		this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", size: [15, MidiButtonHeight] });
+		({
+			group: this.selectMidiGroup,
+			label: this.selectMidiLbl,
+			control: this.selectMidiBtn,
+		} = addGroup(this.group, "MIDI 文件", "button", { text: "...", size: [15, MidiButtonHeight] }));
 		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
-		this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
-		this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
-		setLabelMinWidth(this.selectTrackLbl);
-		this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight], enabled: false });
-		this.selectBpmGroup = addControl(this.group, "group", MidiGroupsParams);
-		this.selectBpmLbl = addControl(this.selectBpmGroup, "statictext", { text: "设定 BPM" });
-		setLabelMinWidth(this.selectBpmLbl);
-		this.selectBpmTxt = addControl(this.selectBpmGroup, "edittext", { text: "120", alignment: FILL_CENTER });
+		({
+			group: this.selectTrackGroup,
+			label: this.selectTrackLbl,
+			control: this.selectTrackBtn,
+		} = addGroup(this.group, "选择轨道", "button", {
+			text: "",
+			alignment: FILL_CENTER,
+			maximumSize: [LARGE_NUMBER, MidiButtonHeight],
+			enabled: false,
+		}));
+		({
+			group: this.selectBpmGroup,
+			label: this.selectBpmLbl,
+			control: this.selectBpmTxt,
+		} = addGroup(this.group, "设定 BPM", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }));
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
 		this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
@@ -84,10 +90,11 @@ export default class Portal {
 				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
 				if (midi.tracks.length === 0) throw new MidiNoTrackError();
 				this.selectMidiName.text = file.displayName;
-				this.selectedTrackIndexes = [midi.preferredTrackIndex];
 				const firstTrack = midi.tracks[midi.preferredTrackIndex];
+				this.selectedTracks = [firstTrack];
 				this.selectTrackBtn.text = firstTrack.toString();
 				this.selectTrackBtn.enabled = true;
+				this.selectBpmTxt.enabled = true;
 				this.midi = midi;
 			} catch (error) {
 				if (midi!) midi.file.close();
@@ -133,11 +140,6 @@ export default class Portal {
 				return null;
 		}
 	}
-}
-
-export function setLabelMinWidth(label: StaticText) {
-	const LABEL_MIN_WIDTH = 60;
-	label.minimumSize = [LABEL_MIN_WIDTH, Number.MAX_VALUE];
 }
 
 /* function initPortal(window: Window | Panel) {

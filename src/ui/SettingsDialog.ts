@@ -3,9 +3,16 @@ import addControl, { addItems } from "../module/addControl";
 import Setting from "../module/Setting";
 import str from "../languages/strings";
 import { CannotFindWindowError } from "../exceptions";
-import { getDropDownListSelectedIndex } from "../module/extensions";
+import User from "../user";
 
-const ABOUT = "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。";
+const ABOUT = `om midi
+After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
+希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
+
+描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
+
+脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
+脚本作者：兰音`;
 
 export default class SettingsDialog {
 	//#region 组件对象
@@ -23,7 +30,7 @@ export default class SettingsDialog {
 	//#endregion
 	
 	constructor() {
-		this.window = new Window("dialog", localize(str.settings), undefined, {
+		this.window = new Window("dialog", `${localize(str.settings)} - ${User.scriptName} v${User.version}`, undefined, {
 			resizeable: false,
 		});
 		if (this.window === null) throw new CannotFindWindowError();
@@ -48,8 +55,8 @@ export default class SettingsDialog {
 		
 		this.okBtn.onClick = () => {
 			Setting.set("UsingSelectedLayerName", this.usingSelectedLayerName.value);
-			Setting.set("Language", getDropDownListSelectedIndex(this.languageCombo));
-			$.locale = SettingsDialog.langIso[getDropDownListSelectedIndex(this.languageCombo)]
+			Setting.set("Language", this.languageCombo.getSelectedIndex());
+			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()]
 			this.window.close();
 		}
 	}

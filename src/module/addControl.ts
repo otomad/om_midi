@@ -31,6 +31,10 @@ type PropertiesType<C extends ControlTypeName> =
 	C extends "panel" ? _AddControlPropertiesPanel :
 	C extends "statictext" ? _AddControlPropertiesStaticText :
 	C extends "treeview" ? _AddControlPropertiesTreeView : _AddControlProperties;
+	
+type NullableControlType<C extends ControlTypeName | undefined> =
+	C extends ControlTypeName ? ControlType<C> :
+	C extends undefined ? undefined : never;
 //#endregion
 
 /**
@@ -66,4 +70,33 @@ export function addItems(dropDownList: DropDownList, ...items: string[]): DropDo
 		dropDownList.add("item", item);
 	dropDownList.selection = 0;
 	return dropDownList;
+}
+
+interface IRegularGroup<C extends ControlTypeName> {
+	group: Group,
+	label: StaticText,
+	control: NullableControlType<C>,
+}
+export function addGroup<C extends ControlTypeName>(parent: ContainerType, name: string, type?: C, params?: Partial<ControlType<C>>, properties?: PropertiesType<C>): IRegularGroup<C> {
+	//#region functions
+	const addGroup = () => addControl(parent, "group", { orientation: "row", spacing: 7, alignment: "fill", alignChildren: "fill" });
+	const setLabelMinWidth = (label: StaticText) => {
+		const LABEL_MIN_WIDTH = 60;
+		label.minimumSize = [LABEL_MIN_WIDTH, Number.MAX_VALUE];
+	};
+	const addLabel = (parent: Group, text: string) => {
+		const label = addControl(parent, "statictext", { text });
+		setLabelMinWidth(label);
+		return label;
+	};
+	//#endregion
+	
+	const group = addGroup();
+	const label = addLabel(group, name);
+	let control = undefined;
+	
+	if (type) control = addControl(group, type, params, properties);
+	
+	const result: IRegularGroup<C> = { group, label, control: control as any };
+	return result;
 }

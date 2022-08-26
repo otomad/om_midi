@@ -1,6 +1,5 @@
 import { FileUnreadableError } from "../exceptions";
 import convertTextEncoding from "../module/convertTextEncoding";
-import { stringTrim } from "../module/extensions";
 import MidiFormatType from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import MidiTrack from "./MidiTrack";
@@ -73,10 +72,11 @@ export default class Midi {
 				tracks.push(track);
 				trackNames.push(track.name);
 			}
+		if (trackNames.length === 0) return;
 		trackNames = convertTextEncoding(trackNames);
 		for (let i = 0; i < tracks.length && i < trackNames.length; i++) {
 			const track = tracks[i];
-			let name: string | undefined = stringTrim(trackNames[i]);
+			let name: string | undefined = trackNames[i].trim();
 			if (name == "") name = undefined;
 			track.name = name;
 		}

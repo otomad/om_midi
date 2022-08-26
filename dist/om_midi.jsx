@@ -1,30 +1,54 @@
 /**
  * om midi v3.0
- * After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
+ * 简称 OMM，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
  * 希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
+ * 
  * 描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
  * 
- * 脚本原作者：David Van Brink (omino)、Dora (NGDXW)、韩琦、家鳖大帝
+ * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  * 
- * 部署时间：2022/08/25 Thursday 17:29:16
- * Copyright (c) 2022, Ranne
+ * 部署日期：2022 年 8 月 26 日 星期五 中午 12:54:10
+ * Copyright (c) 2022 ~, Ranne
  * 
  * 原作者介绍：
- * Date: Sun Dec 25 22:58:10 PST 2011
+ * 日期：2011 年 12 月 25 日 星期日 晚上 22:58:10 太平洋时间
+ * 作者：大卫·范·布林克
+ * 
+ * 此脚本是 omino Adobe 脚本套件的一部分。
+ * 我写这些是因为我喜欢。请尽情享受。
+ * 向 poly@omino.com 提出问题，主题行应以“插件”开头，以便我的垃圾邮件过滤器允许它。
+ * 此文件已被预处理为独立脚本。我针对一些可重用的库开发它们——例如对话框布局——但对于分发来说，最好只有一个文件。
+ * 大卫·范·布林克 2007。
+ * 
+ * ****************************************************************************************************
+ * 
+ * om midi v3.0
+ * Or OMM for short, an Otomad/YTPMV assistant script for After Effects. It is a script that automatically
+ * converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be
+ * rescued from tedious aligning video and audio, and put more energy into more creative works.
+ * 
+ * Description: This After Effects script reads a Standard MIDI file (.mid)
+ * and creates layers and keyframes corresponding to the notes and controllers in that MIDI file.
+ * 
+ * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
+ * Script Author: Ranne
+ * 
+ * Building Date: Friday, August 26, 2022 12:54 PM
+ * Copyright (c) 2022 ~, Ranne
+ * 
+ * Introduction of the Original Author:
+ * Date: Sunday, December 25, 2011 10:58 PM PST
  * Author: David Van Brink
  * This script is part of the omino adobe script suite.
- * The latest version can be found at http://omino.com/pixelblog/.
  * 
  * I write these because I like to. Please enjoy as you see fit.
  * 
  * Questions to poly@omino.com, subject line should start with "plugins" so my spam filter lets it in.
  * 
  * This file has been preprocessed to be standalone. I develop them against some reusable libraries
- * -- such as for dialog layout -- but for distribution it's nicer to have just one file. dvb 2007.
- * 
- * Description: This After Effects script reads a Standard MIDI file (.mid)
- * and creates layers and keyframes corresponding to the notes and controllers in that MIDI file.
+ * -- such as for dialog layout -- but for distribution it's nicer to have just one file.
+ * dvb 2007.
  */
 
 (function (thisObj) {
@@ -76,6 +100,27 @@ function addItems(dropDownList) {
     dropDownList.selection = 0;
     return dropDownList;
 }
+function addGroup(parent, name, type, params, properties) {
+    //#region functions
+    var addGroup = function () { return addControl(parent, "group", { orientation: "row", spacing: 7, alignment: "fill", alignChildren: "fill" }); };
+    var setLabelMinWidth = function (label) {
+        var LABEL_MIN_WIDTH = 60;
+        label.minimumSize = [LABEL_MIN_WIDTH, Number.MAX_VALUE];
+    };
+    var addLabel = function (parent, text) {
+        var label = addControl(parent, "statictext", { text: text });
+        setLabelMinWidth(label);
+        return label;
+    };
+    //#endregion
+    var group = addGroup();
+    var label = addLabel(group, name);
+    var control = undefined;
+    if (type)
+        control = addControl(group, type, params, properties);
+    var result = { group: group, label: label, control: control };
+    return result;
+}
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -106,6 +151,16 @@ function __extends(d, b) {
     extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 }
 
 var SPACING = 2;
@@ -149,14 +204,16 @@ var NullObjTab = /** @class */ (function (_super) {
         var _this = _super.call(this, parent, "空对象") || this;
         _this.pitch = _this.addCheckbox("音高");
         _this.velocity = _this.addCheckbox("力度");
+        _this.velocity2 = _this.addCheckbox("变化力度");
         _this.duration = _this.addCheckbox("持续时间");
         _this.scale = _this.addCheckbox("缩放");
         _this.cwRotation = _this.addCheckbox("顺时针旋转");
+        _this.ccwRotation = _this.addCheckbox("逆时针旋转");
         _this.count = _this.addCheckbox("计数");
         _this.bool = _this.addCheckbox("布尔");
-        _this.timeRemap = _this.addCheckbox("时间重映射（拉伸）");
-        _this.timeRemap2 = _this.addCheckbox("时间重映射（截断）");
+        _this.timeRemap = _this.addCheckbox("时间重映射");
         _this.whirl = _this.addCheckbox("来回");
+        _this.noteOn = _this.addCheckbox("音符开");
         return _this;
     }
     return NullObjTab;
@@ -166,10 +223,21 @@ var ApplyEffectsTab = /** @class */ (function (_super) {
     __extends(ApplyEffectsTab, _super);
     //#endregion
     function ApplyEffectsTab(parent) {
+        var _a;
         var _this = _super.call(this, parent, "应用效果") || this;
-        _this.timeRemap = _this.addCheckbox("时间重映射");
+        _this.timeRemap = _this.addCheckbox("时间重映射（拉伸）");
+        _this.timeRemap2 = _this.addCheckbox("时间重映射（截断）");
         _this.hFlip = _this.addCheckbox("水平翻转");
         _this.cwRotation = _this.addCheckbox("顺时针旋转");
+        _this.ccwRotation = _this.addCheckbox("逆时针旋转");
+        _this.tunning = _this.addCheckbox("调音");
+        (_a = addGroup(_this.group, "原始音高", "dropdownlist"), _this.basePitchGroup = _a.group, _this.basePitchLbl = _a.label, _this.basePitchKeyCombo = _a.control);
+        _this.basePitchOctCombo = addControl(_this.basePitchGroup, "dropdownlist");
+        addItems.apply(void 0, __spreadArray([_this.basePitchKeyCombo], "C,C#,D,D#,E,F,F#,G,G#,A,A#,B".split(',')));
+        addItems.apply(void 0, __spreadArray([_this.basePitchOctCombo], "0,1,2,3,4,5,6,7,8,9,10".split(',')));
+        _this.basePitchOctCombo.selection = 5;
+        _this.basePitchGroup.enabled = false;
+        _this.tunning.onClick = function () { return _this.basePitchGroup.enabled = _this.tunning.value; };
         return _this;
     }
     return ApplyEffectsTab;
@@ -199,6 +267,7 @@ function setNumberEditText(editText, type, defaultValue) {
 var MarkerConductor = /** @class */ (function () {
     //#endregion
     function MarkerConductor(parent) {
+        var _a, _b, _c, _d;
         this.parent = parent;
         this.group = addControl(this.parent.toolsPanel, "group", {
             orientation: "column",
@@ -207,31 +276,15 @@ var MarkerConductor = /** @class */ (function () {
             spacing: SPACING,
         });
         var FILL = ["fill", "center"];
-        this.bpmGroup = this.addGroup();
-        this.bpmLbl = this.addLabel(this.bpmGroup, "BPM");
-        this.bpmTxt = addControl(this.bpmGroup, "edittext", { text: "120", alignment: FILL });
-        this.beatGroup = this.addGroup();
-        this.beatLbl = this.addLabel(this.beatGroup, "节拍");
-        this.beatTxt = addControl(this.beatGroup, "edittext", { text: "4", alignment: FILL });
-        this.markOnGroup = this.addGroup();
-        this.markOnLbl = this.addLabel(this.markOnGroup, "标记在");
-        this.markOnCombo = addControl(this.markOnGroup, "dropdownlist", { alignment: FILL });
+        (_a = addGroup(this.group, "BPM", "edittext", { text: "120", alignment: FILL }), this.bpmGroup = _a.group, this.bpmLbl = _a.label, this.bpmTxt = _a.control);
+        (_b = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL }), this.beatGroup = _b.group, this.beatLbl = _b.label, this.beatTxt = _b.control);
+        (_c = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL }), this.markOnGroup = _c.group, this.markOnLbl = _c.label, this.markOnCombo = _c.control);
         addItems(this.markOnCombo, "新建空对象图层", "当前图层");
-        this.startTimeGroup = this.addGroup();
-        this.startTimeLbl = this.addLabel(this.startTimeGroup, "开始位置");
-        this.startTimeCombo = addControl(this.startTimeGroup, "dropdownlist", { alignment: FILL });
+        (_d = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL }), this.startTimeGroup = _d.group, this.startTimeLbl = _d.label, this.startTimeCombo = _d.control);
         addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
         setNumberEditText(this.beatTxt, NumberType.POSITIVE_INT, 4);
         setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);
     }
-    MarkerConductor.prototype.addGroup = function () {
-        return addControl(this.group, "group", { orientation: "row", spacing: 7, alignment: "fill", alignChildren: "fill" });
-    };
-    MarkerConductor.prototype.addLabel = function (parent, text) {
-        var label = addControl(parent, "statictext", { text: text });
-        setLabelMinWidth(label);
-        return label;
-    };
     return MarkerConductor;
 }());
 
@@ -422,59 +475,12 @@ var Setting = {
     }
 };
 
-/**
- * 删除字符串头尾的空白字符。
- * 垃圾 ExtendScript 居然不自带 trim 方法。
- * @param str - 源字符串。
- * @returns 删除头尾空白字符后的字符串。
- */
-function stringTrim(str) {
-    return str.replace(/^\s+|\s+$/g, "");
-}
-/**
- * 检查数组内是否包含某个对象。
- * 垃圾 ExtendScript 居然不自带 contains / includes 方法。
- * @param array - 数组。
- * @param item - 要查找的对象。
- * @returns 是否包含该对象。
- */
-function arrayContains(array, item) {
-    return arrayIndexOf(array, item) !== -1;
-}
-/**
- * 检查数组内某个对象的索引值。
- * 如果找不到，返回 -1。
- * 垃圾 ExtendScript 居然不自带 indexOf 方法。
- * @param array - 数组。
- * @param item - 要查找的对象。
- * @returns 该对象的索引值。
- */
-function arrayIndexOf(array, item) {
-    for (var i = 0; i < array.length; i++)
-        if (array[i] === item)
-            return i;
-    return -1;
-}
-/**
- * 返回给定的下拉菜单的选中项序号。<br />
- * 下拉菜单自身的属性 selection 只能返回选中项内容。<br />
- * 如果未选中项，则返回 -1。
- * @param list - 下拉菜单列表。
- * @returns 下拉菜单的选中项序号。
- */
-function getDropDownListSelectedIndex(list) {
-    for (var i = 0; i < list.items.length; i++)
-        if (list.items[i].selected)
-            return i;
-    return -1;
-}
-
-var ABOUT = "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。";
+var ABOUT = "om midi\nAfter Effects \u7684\u97F3 MAD / YTPMV \u8F85\u52A9\u811A\u672C\u3002\u5B83\u662F\u4E00\u4E2A\u80FD\u591F\u81EA\u52A8\u5C06 MIDI \u6587\u4EF6\u8F6C\u6362\u4E3A After Effects \u4E2D\u5173\u952E\u5E27\u7684\u811A\u672C\u3002\n\u5E0C\u671B\u5728 om midi \u7684\u5E2E\u52A9\u4E0B\uFF0C\u53EF\u4EE5\u628A\u4EBA\u4EEC\u4ECE\u67AF\u71E5\u7E41\u91CD\u7684\u97F3\u753B\u5BF9\u9F50\u4E2D\u89E3\u6551\u51FA\u6765\uFF0C\u628A\u66F4\u591A\u7684\u7CBE\u529B\u6295\u5165\u5230\u66F4\u6709\u521B\u9020\u6027\u7684\u5DE5\u4F5C\u4E2D\u3002\n\n\u63CF\u8FF0\uFF1A\u8BFB\u53D6\u4E00\u4E2A MIDI \u5E8F\u5217\uFF0C\u5E76\u4E3A\u5F53\u524D\u5408\u6210\u6DFB\u52A0\u4E00\u4E2A\u6216\u591A\u4E2A\u65B0\u56FE\u5C42\uFF0C\u5176\u4E2D\u5305\u542B\u5404\u4E2A MIDI \u8F68\u9053\u7684\u97F3\u9AD8\u3001\u529B\u5EA6\u548C\u6301\u7EED\u65F6\u95F4\u7B49\u6ED1\u5757\u63A7\u4EF6\u3002\n\n\u811A\u672C\u539F\u4F5C\u8005\uFF1A\u5927\u536B\u00B7\u8303\u00B7\u5E03\u6797\u514B (omino)\u3001Dora (NGDXW)\u3001\u97E9\u7426\u3001\u5BB6\u9CD6\u5927\u5E1D\n\u811A\u672C\u4F5C\u8005\uFF1A\u5170\u97F3";
 var SettingsDialog = /** @class */ (function () {
     //#endregion
     function SettingsDialog() {
         var _this = this;
-        this.window = new Window("dialog", localize(str.settings), undefined, {
+        this.window = new Window("dialog", localize(str.settings) + " - " + User.scriptName + " v" + User.version, undefined, {
             resizeable: false,
         });
         if (this.window === null)
@@ -498,8 +504,8 @@ var SettingsDialog = /** @class */ (function () {
         this.window.cancelElement = this.cancelBtn;
         this.okBtn.onClick = function () {
             Setting.set("UsingSelectedLayerName", _this.usingSelectedLayerName.value);
-            Setting.set("Language", getDropDownListSelectedIndex(_this.languageCombo));
-            $.locale = SettingsDialog.langIso[getDropDownListSelectedIndex(_this.languageCombo)];
+            Setting.set("Language", _this.languageCombo.getSelectedIndex());
+            $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
             _this.window.close();
         };
     }
@@ -1024,10 +1030,12 @@ var Midi = /** @class */ (function () {
                 trackNames.push(track.name);
             }
         }
+        if (trackNames.length === 0)
+            return;
         trackNames = convertTextEncoding(trackNames);
         for (var i = 0; i < tracks.length && i < trackNames.length; i++) {
             var track = tracks[i];
-            var name = stringTrim(trackNames[i]);
+            var name = trackNames[i].trim();
             if (name == "")
                 name = undefined;
             track.name = name;
@@ -1077,8 +1085,9 @@ var MidiTrackSelector = /** @class */ (function () {
             var checks = [];
             for (var i = 0; i < _this.trackList.items.length; i++) {
                 var item = _this.trackList.items[i];
+                var track = _this.parent.midi.tracks[i];
                 if (item.checked)
-                    checks.push(i);
+                    checks.push(track);
             }
             var text = "";
             if (checks.length === 0) {
@@ -1086,12 +1095,11 @@ var MidiTrackSelector = /** @class */ (function () {
                 return;
             }
             else if (checks.length === 1)
-                text = _this.parent.midi.tracks[checks[0]].toString();
+                text = checks[0].toString();
             else {
                 var arr = [];
                 for (var _i = 0, checks_1 = checks; _i < checks_1.length; _i++) {
-                    var index = checks_1[_i];
-                    var track = _this.parent.midi.tracks[index];
+                    var track = checks_1[_i];
                     var text_1 = String((_a = track.channel) !== null && _a !== void 0 ? _a : 0);
                     if (track.name)
                         text_1 += ": " + track.name;
@@ -1099,7 +1107,7 @@ var MidiTrackSelector = /** @class */ (function () {
                 }
                 text = arr.join("; ");
             }
-            _this.parent.selectedTrackIndexes = checks;
+            _this.parent.selectedTracks = checks;
             _this.parent.selectTrackBtn.text = text;
             _this.window.close();
         };
@@ -1111,10 +1119,10 @@ var MidiTrackSelector = /** @class */ (function () {
     MidiTrackSelector.prototype.initMidiTracks = function () {
         var _a, _b;
         if (this.parent.midi)
-            for (var i = 0; i < this.parent.midi.tracks.length; i++) {
-                var track = this.parent.midi.tracks[i];
+            for (var _i = 0, _c = this.parent.midi.tracks; _i < _c.length; _i++) {
+                var track = _c[_i];
                 var item = this.trackList.add("item", String((_a = track.channel) !== null && _a !== void 0 ? _a : 0));
-                item.checked = arrayContains(this.parent.selectedTrackIndexes, i);
+                item.checked = this.parent.selectedTracks.includes(track);
                 item.subItems[0].text = (_b = track.name) !== null && _b !== void 0 ? _b : "";
                 item.subItems[1].text = track.noteCount;
             }
@@ -1154,7 +1162,6 @@ var Core = /** @class */ (function () {
         var comp = getComp();
         if (comp === null)
             throw new CannotFindCompositionError();
-        app.beginUndoGroup("om midi");
         try {
             if (this.portal.getSelectedTab() === this.portal.nullObjTab)
                 this.applyNull(comp);
@@ -1168,9 +1175,10 @@ var Core = /** @class */ (function () {
     };
     Core.prototype.applyNull = function (comp) {
         var _this = this;
-        var _a, _b, _c;
+        var _a, _b;
+        app.beginUndoGroup("om midi 应用空对象");
         var nullTab = this.portal.nullObjTab;
-        if (this.portal.selectedTrackIndexes.length === 0 || !this.portal.midi)
+        if (this.portal.selectedTracks.length === 0 || !this.portal.midi)
             throw new NoMidiError();
         var checks = nullTab.getCheckedChecks();
         if (checks.length === 0)
@@ -1188,16 +1196,15 @@ var Core = /** @class */ (function () {
             secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
             secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
         }
-        var _loop_1 = function (trackIndex) {
-            var track = (_a = this_1.portal.midi) === null || _a === void 0 ? void 0 : _a.tracks[trackIndex];
+        var _loop_1 = function (track) {
             if (track === undefined)
                 return "continue";
             var nullLayer = this_1.createNullLayer(comp);
             nullLayer.name = "[midi]" + (usingSelectedLayerName ? comp.selectedLayers[0].name :
-                (_b = track.name) !== null && _b !== void 0 ? _b : "Channel " + ((_c = track.channel) !== null && _c !== void 0 ? _c : 0));
+                (_a = track.name) !== null && _a !== void 0 ? _a : "Channel " + ((_b = track.channel) !== null && _b !== void 0 ? _b : 0));
             var sliderIndexes = []; // 限制：只能存储索引值。
-            for (var _e = 0, checks_1 = checks; _e < checks_1.length; _e++) {
-                var check = checks_1[_e];
+            for (var _d = 0, checks_1 = checks; _d < checks_1.length; _d++) {
+                var check = checks_1[_d];
                 var slider = this_1.addSliderControl(nullLayer, check.text);
                 sliderIndexes.push(slider);
             }
@@ -1233,15 +1240,15 @@ var Core = /** @class */ (function () {
                     setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
                 }
             };
-            for (var _f = 0, _g = track.events; _f < _g.length; _f++) {
-                var noteEvent = _g[_f];
+            for (var _e = 0, _f = track.events; _e < _f.length; _e++) {
+                var noteEvent = _f[_e];
                 _loop_2(noteEvent);
             }
         };
         var this_1 = this;
-        for (var _i = 0, _d = this.portal.selectedTrackIndexes; _i < _d.length; _i++) {
-            var trackIndex = _d[_i];
-            _loop_1(trackIndex);
+        for (var _i = 0, _c = this.portal.selectedTracks; _i < _c.length; _i++) {
+            var track = _c[_i];
+            _loop_1(track);
         }
     };
     /**
@@ -1284,7 +1291,7 @@ var Core = /** @class */ (function () {
     };
     Core.prototype.setValueAtTime = function (layer, checks, sliderIndexes, check, seconds, value, inType, outType) {
         if (outType === void 0) { outType = inType; }
-        var index = arrayIndexOf(checks, check);
+        var index = checks.indexOf(check);
         if (index === -1)
             return;
         var slider = this.getEffects(layer).property(sliderIndexes[index]).property(1);
@@ -1298,26 +1305,22 @@ var LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 var Portal = /** @class */ (function () {
     //#endregion
     function Portal(window) {
+        var _a, _b, _c;
         var _this = this;
-        this.selectedTrackIndexes = [];
+        this.selectedTracks = [];
         this.window = window;
         this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
-        var MidiGroupsParams = { orientation: "row", spacing: 7 };
         var MidiButtonHeight = 22;
         var FILL_CENTER = ["fill", "center"];
-        this.selectMidiGroup = addControl(this.group, "group", MidiGroupsParams);
-        this.selectMidiLbl = addControl(this.selectMidiGroup, "statictext", { text: "MIDI 文件" });
-        setLabelMinWidth(this.selectMidiLbl);
-        this.selectMidiBtn = addControl(this.selectMidiGroup, "button", { text: "...", size: [15, MidiButtonHeight] });
+        (_a = addGroup(this.group, "MIDI 文件", "button", { text: "...", size: [15, MidiButtonHeight] }), this.selectMidiGroup = _a.group, this.selectMidiLbl = _a.label, this.selectMidiBtn = _a.control);
         this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
-        this.selectTrackGroup = addControl(this.group, "group", MidiGroupsParams);
-        this.selectTrackLbl = addControl(this.selectTrackGroup, "statictext", { text: "选择轨道" });
-        setLabelMinWidth(this.selectTrackLbl);
-        this.selectTrackBtn = addControl(this.selectTrackGroup, "button", { text: "", alignment: FILL_CENTER, maximumSize: [LARGE_NUMBER, MidiButtonHeight], enabled: false });
-        this.selectBpmGroup = addControl(this.group, "group", MidiGroupsParams);
-        this.selectBpmLbl = addControl(this.selectBpmGroup, "statictext", { text: "设定 BPM" });
-        setLabelMinWidth(this.selectBpmLbl);
-        this.selectBpmTxt = addControl(this.selectBpmGroup, "edittext", { text: "120", alignment: FILL_CENTER });
+        (_b = addGroup(this.group, "选择轨道", "button", {
+            text: "",
+            alignment: FILL_CENTER,
+            maximumSize: [LARGE_NUMBER, MidiButtonHeight],
+            enabled: false,
+        }), this.selectTrackGroup = _b.group, this.selectTrackLbl = _b.label, this.selectTrackBtn = _b.control);
+        (_c = addGroup(this.group, "设定 BPM", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }), this.selectBpmGroup = _c.group, this.selectBpmLbl = _c.label, this.selectBpmTxt = _c.control);
         this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
         this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
@@ -1339,10 +1342,11 @@ var Portal = /** @class */ (function () {
                 if (midi.tracks.length === 0)
                     throw new MidiNoTrackError();
                 _this.selectMidiName.text = file.displayName;
-                _this.selectedTrackIndexes = [midi.preferredTrackIndex];
                 var firstTrack = midi.tracks[midi.preferredTrackIndex];
+                _this.selectedTracks = [firstTrack];
                 _this.selectTrackBtn.text = firstTrack.toString();
                 _this.selectTrackBtn.enabled = true;
+                _this.selectBpmTxt.enabled = true;
                 _this.midi = midi;
             }
             catch (error) {
@@ -1392,10 +1396,6 @@ var Portal = /** @class */ (function () {
     };
     return Portal;
 }());
-function setLabelMinWidth(label) {
-    var LABEL_MIN_WIDTH = 60;
-    label.minimumSize = [LABEL_MIN_WIDTH, Number.MAX_VALUE];
-}
 /* function initPortal(window: Window | Panel) {
     const group = window.add("group");
     group.orientation = "column";
@@ -1414,9 +1414,36 @@ function setLabelMinWidth(label) {
     }, { multiline: true }).minimumSize = [380, 0];
 } */
 
+/// <reference path="prototypes.d.ts" />
+/**
+ * 初始化为 ExtendScript 的扩展方法。
+ */
+function initPrototypes() {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, "");
+    };
+    Array.prototype.indexOf = function (item) {
+        for (var i = 0; i < this.length; i++)
+            if (this[i] === item)
+                return i;
+        return -1;
+    };
+    Array.prototype.includes = function (item) {
+        return this.indexOf(item) !== -1;
+    };
+    DropDownList.prototype.getSelectedIndex = function () {
+        for (var i = 0; i < this.items.length; i++)
+            if (this.items[i].selected)
+                return i;
+        return -1;
+    };
+}
+
 if (BridgeTalk.appName !== "aftereffects")
     throw new NotAfterEffectsError();
-else
+else {
+    initPrototypes();
     Portal.build(thisObj, User);
+}
 
 })(this);

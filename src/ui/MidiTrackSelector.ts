@@ -1,7 +1,7 @@
 import { CannotFindWindowError } from "../exceptions";
 import str from "../languages/strings";
+import MidiTrack from "../midi/MidiTrack";
 import addControl from "../module/addControl";
-import { arrayContains } from "../module/extensions";
 import Portal from "./Portal";
 
 export default class MidiTrackSelector {
@@ -48,28 +48,28 @@ export default class MidiTrackSelector {
 				this.window.close();
 				return;
 			}
-			const checks: number[] = [];
+			const checks: MidiTrack[] = [];
 			for (let i = 0; i < this.trackList.items.length; i++) {
 				const item = this.trackList.items[i];
-				if (item.checked) checks.push(i);
+				const track = this.parent.midi.tracks[i];
+				if (item.checked) checks.push(track);
 			}
 			let text = "";
 			if (checks.length === 0) {
 				alert("请至少选择一条轨道。", localize(str.warning));
 				return;
 			} else if (checks.length === 1)
-				text = this.parent.midi.tracks[checks[0]].toString();
+				text = checks[0].toString();
 			else {
 				const arr: string[] = [];
-				for (const index of checks) {
-					const track = this.parent.midi.tracks[index];
+				for (const track of checks) {
 					let text = String(track.channel ?? 0);
 					if (track.name) text += ": " + track.name;
 					arr.push(text);
 				}
 				text = arr.join("; ");
 			}
-			this.parent.selectedTrackIndexes = checks;
+			this.parent.selectedTracks = checks;
 			this.parent.selectTrackBtn.text = text;
 			this.window.close();
 		}
@@ -82,10 +82,9 @@ export default class MidiTrackSelector {
 	
 	private initMidiTracks() {
 		if (this.parent.midi)
-			for (let i = 0; i < this.parent.midi.tracks.length; i++) {
-				const track = this.parent.midi.tracks[i];
+			for (const track of this.parent.midi.tracks) {
 				const item = this.trackList.add("item", String(track.channel ?? 0))
-				item.checked = arrayContains(this.parent.selectedTrackIndexes, i);
+				item.checked = this.parent.selectedTracks.includes(track);
 				item.subItems[0].text = track.name ?? "";
 				item.subItems[1].text = track.noteCount;
 			}

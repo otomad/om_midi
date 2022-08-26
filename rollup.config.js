@@ -7,8 +7,11 @@ import license from "rollup-plugin-license";
 import User from "./src/user";
 import path from "path";
 import selfExecute from "./custom_modules/rollup-plugin-self-execute";
+import initMomentLocaleZhCn from "./custom_modules/moment-locale-zh-cn";
 
 const enableTerser = false;
+
+initMomentLocaleZhCn();
 
 export default [{
 	input: "src/index.ts",
