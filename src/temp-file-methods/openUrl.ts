@@ -1,6 +1,8 @@
+import TempFile from "./TempFile";
+
 function openUrl_legacy(url: string): void {
 	try {
-		const html = new File(Folder.temp.fsName + "/tmp.html");
+		const html = new TempFile("tmp.html");
 		html.open("w");
 		html.writeln(`<html><head><meta http-equiv="refresh" content="0; url=${url}"></head></html>`);
 		html.close();

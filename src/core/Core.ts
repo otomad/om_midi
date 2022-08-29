@@ -1,4 +1,4 @@
-import { CannotFindCompositionError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../exceptions";
+import { CannotFindCompositionError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
 import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
 import Setting from "../module/Setting";
@@ -109,10 +109,11 @@ export default class Core {
 			layer = this.createNullLayer(comp);
 			layer.name = `BPM:${marker.bpmTxt.text} (${marker.beatTxt.text}/4)`;
 		}
-		const startTimePos = marker.startTimeCombo.getSelectedIndex();
+		const startTimePos = this.portal.startTimeCombo.getSelectedIndex();
 		let startTime = startTimePos === 0 ? comp.displayStartTime :
 			(startTimePos === 1 ? comp.time :
 			(startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。
+		layer.startTime = startTime;
 		let beat = 1;
 		const nextBeat = (): string => {
 			const comment = String(beat);
@@ -218,8 +219,14 @@ export default class Core {
 		let nullLayer: AVLayer;
 	refindNullSource:
 		while (true) {
-			if (this.nullSource && this.nullSource.parentFolder) { // 如果有现有的空对象纯色，不用重新新建一个。
-				nullLayer = comp.layers.add(this.nullSource, comp.workAreaDuration);
+			let hasNullSource = false;
+			try {
+				hasNullSource = !!this.nullSource && !!this.nullSource.parentFolder;
+			} catch (error) {
+				hasNullSource = false;
+			}
+			if (hasNullSource) { // 如果有现有的空对象纯色，不用重新新建一个。
+				nullLayer = comp.layers.add(this.nullSource as AVItem, comp.workAreaDuration);
 				nullLayer.opacity.setValue(0);
 				nullLayer.anchorPoint.setValue([0, 0]);
 			} else {

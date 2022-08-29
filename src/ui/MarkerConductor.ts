@@ -16,9 +16,6 @@ export default class MarkerConductor {
 	markOnGroup: Group;
 	markOnLbl: StaticText;
 	markOnCombo: DropDownList;
-	startTimeGroup: Group;
-	startTimeLbl: StaticText;
-	startTimeCombo: DropDownList;
 	//#endregion
 	
 	constructor(parent: ToolsTab) {
@@ -29,29 +26,23 @@ export default class MarkerConductor {
 			alignChildren: "fill",
 			spacing: SPACING,
 		});
-		const FILL: [_AlignmentName, _AlignmentName] = ["fill", "center"];
+		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		({
 			group: this.bpmGroup,
 			label: this.bpmLbl,
 			control: this.bpmTxt,
-		} = addGroup(this.group, "BPM", "edittext", { text: "120", alignment: FILL }));
+		} = addGroup(this.group, "BPM", "edittext", { text: "120", alignment: FILL_CENTER }));
 		({
 			group: this.beatGroup,
 			label: this.beatLbl,
 			control: this.beatTxt,
-		} = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL }));
+		} = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL_CENTER }));
 		({
 			group: this.markOnGroup,
 			label: this.markOnLbl,
 			control: this.markOnCombo,
-		} = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL }));
+		} = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL_CENTER }));
 		addItems(this.markOnCombo, "新建空对象图层", "当前图层");
-		({
-			group: this.startTimeGroup,
-			label: this.startTimeLbl,
-			control: this.startTimeCombo,
-		} = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL }));
-		addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
 		
 		setNumberEditText(this.beatTxt, NumberType.POSITIVE_INT, 4);
 		setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);

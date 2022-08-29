@@ -1,6 +1,6 @@
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 
-import { UnsupportedSettingTypeError } from "../exceptions";
+import { UnsupportedSettingTypeError } from "../errors";
 
 const sectionName = "om_midi";
 

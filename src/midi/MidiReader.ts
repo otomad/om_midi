@@ -1,4 +1,4 @@
-import { MidiHeaderValidationError, MidiCustomEventsError, MidiTrackHeaderValidationError } from "../exceptions";
+import { MidiHeaderValidationError, MidiCustomEventsError, MidiTrackHeaderValidationError } from "../errors";
 import BinContentReader from "./BinContentReader";
 import BinFileReader from "./BinFileReader";
 import Midi from "./Midi";

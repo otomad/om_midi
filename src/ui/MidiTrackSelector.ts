@@ -1,4 +1,4 @@
-import { CannotFindWindowError } from "../exceptions";
+import { CannotFindWindowError } from "../errors";
 import str from "../languages/strings";
 import MidiTrack from "../midi/MidiTrack";
 import addControl from "../module/addControl";

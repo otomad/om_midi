@@ -1,11 +1,11 @@
 import { IUser } from "../user";
-import addControl, { addGroup } from "../module/addControl";
+import addControl, { addGroup, addItems } from "../module/addControl";
 import NullObjTab from "./NullObjTab";
 import ApplyEffectsTab from "./ApplyEffectsTab";
 import ToolsTab from "./ToolsTab";
 import SettingsDialog from "./SettingsDialog";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
-import { CannotFindWindowError, MidiNoTrackError, MyError } from "../exceptions";
+import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
@@ -30,10 +30,13 @@ export default class Portal {
 	selectBpmGroup: Group;
 	selectBpmLbl: StaticText;
 	selectBpmTxt: EditText;
+	startTimeGroup: Group;
+	startTimeLbl: StaticText;
+	startTimeCombo: DropDownList;
 	tabs: TabbedPanel;
 	applyBtn: Button;
 	buttonGroup: Group;
-	settingBtn: Button;
+	settingBtn: IconButton;
 	
 	nullObjTab: NullObjTab;
 	applyEffectsTab: ApplyEffectsTab;
@@ -46,7 +49,7 @@ export default class Portal {
 	
 	private constructor(window: Window | Panel) {
 		this.window = window;
-		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
+		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
 		const MidiButtonHeight = 22;
 		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		({
@@ -70,10 +73,16 @@ export default class Portal {
 			label: this.selectBpmLbl,
 			control: this.selectBpmTxt,
 		} = addGroup(this.group, "设定 BPM", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }));
+		({
+			group: this.startTimeGroup,
+			label: this.startTimeLbl,
+			control: this.startTimeCombo,
+		} = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL_CENTER }));
+		addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
 		this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
-		this.settingBtn = addControl(this.buttonGroup, "button", { text: localize(str.settings), alignment: ["right", "center"] });
+		this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"] }, { style: "toolbutton" });
 		
 		this.nullObjTab = new NullObjTab(this);
 		this.applyEffectsTab = new ApplyEffectsTab(this);
@@ -97,7 +106,7 @@ export default class Portal {
 				this.selectBpmTxt.enabled = true;
 				this.midi = midi;
 			} catch (error) {
-				if (midi!) midi.file.close();
+				if (midi!) midi.file?.close();
 				// throw new MyError(error as Error);
 			}
 		}
@@ -111,6 +120,7 @@ export default class Portal {
 	}
 	
 	public static build(thisObj: Panel, User: IUser): Portal {
+		$.strict = true;
 		const window = thisObj instanceof Panel ? thisObj :
 			new Window("palette", User.scriptName + " v" + User.version, undefined, {
 				resizeable: true,

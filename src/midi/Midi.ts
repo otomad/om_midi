@@ -1,27 +1,41 @@
-import { FileUnreadableError } from "../exceptions";
-import convertTextEncoding from "../module/convertTextEncoding";
+import { FileUnreadableError } from "../errors";
+import convertTextEncoding from "../temp-file-methods/convertTextEncoding";
 import MidiFormatType from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import MidiTrack from "./MidiTrack";
 
 export default class Midi {
 	// content: string;
-	file: File;
-	private length: number;
-	private midiReader: MidiReader;
+	file?: File;
+	private length?: number;
+	private midiReader?: MidiReader;
 	
-	formatType: MidiFormatType = 1;
+	formatType: MidiFormatType = MidiFormatType.SYNC_MULTI_TRACK;
 	trackCount: number = 0;
 	timeDivision: number | [number, number] = 0;
 	tracks: MidiTrack[] = [];
 	bpm?: number;
 	preferredTrackIndex = 0;
+	isPureQuarter = false;
 	
 	/**
 	 * 构建 MIDI 对象。
 	 * @param file - 一个从 After Effects 打开，但还没有开始读取的 MIDI 文件。
 	 */
-	constructor(file: File) {
+	constructor(file: File);
+	/**
+	 * 构建一个纯四分音符 MIDI。
+	 * @param isPureQuarter - 这是一个纯四分音符 MIDI。必须为 true。
+	 */
+	constructor(isPureQuarter: true);
+	constructor(file: File | true) {
+		if (file === true) {
+			this.isPureQuarter = true;
+			this.formatType = MidiFormatType.SINGLE_TRACK;
+			this.trackCount = 1;
+			this.timeDivision = 1;
+			return;
+		}
 		this.file = file;
 		if (file && file.open("r")) {
 			file.encoding = "binary"; // 读取为二进制编码。

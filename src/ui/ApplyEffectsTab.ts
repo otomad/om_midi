@@ -9,6 +9,7 @@ export default class ApplyEffectsTab extends BaseTab {
 	hFlip: Checkbox;
 	cwRotation: Checkbox;
 	ccwRotation: Checkbox;
+	negative: Checkbox;
 	tunning: Checkbox;
 	basePitchGroup: Group;
 	basePitchLbl: StaticText;
@@ -23,6 +24,7 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.hFlip = this.addCheckbox("水平翻转");
 		this.cwRotation = this.addCheckbox("顺时针旋转");
 		this.ccwRotation = this.addCheckbox("逆时针旋转");
+		this.negative = this.addCheckbox("颜色反转");
 		this.tunning = this.addCheckbox("调音");
 		({
 			group: this.basePitchGroup,

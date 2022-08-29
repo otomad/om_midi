@@ -1,11 +1,12 @@
-import { CannotCreateFileError } from "../exceptions";
+import { CannotCreateFileError } from "../errors";
+import TempFile from "./TempFile";
 
 // ²âÊÔ0 → 测试0
 
 export default function convertTextEncoding(texts: string[] | string): string[] {
 	if (typeof texts === "string") texts = [texts];
 	if (texts.length === 0) return [];
-	const file = new File(Folder.temp.fsName + "/tmp.txt");
+	const file = new TempFile(`tmp${new Date().valueOf()}.txt`);
 	let defaultEncoding: string; // 系统默认编码
 	if (file && file.open("w")) {
 		defaultEncoding = file.encoding;

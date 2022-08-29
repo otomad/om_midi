@@ -2,50 +2,50 @@
  * om midi v3.0
  * 简称 OMM，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
  * 希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
- * 
+ *
  * 描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
- * 
+ *
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
- * 
- * 部署日期：2022 年 8 月 26 日 星期五 下午 17:35:09
+ *
+ * 部署日期：2022 年 8 月 29 日 星期一 上午 11:35:36
  * Copyright (c) 2022 ~, Ranne
- * 
+ *
  * 原作者介绍：
  * 日期：2011 年 12 月 25 日 星期日 晚上 22:58:10 太平洋时间
  * 作者：大卫·范·布林克
- * 
+ *
  * 此脚本是 omino Adobe 脚本套件的一部分。
  * 我写这些是因为我喜欢。请尽情享受。
  * 向 poly@omino.com 提出问题，主题行应以“插件”开头，以便我的垃圾邮件过滤器允许它。
  * 此文件已被预处理为独立脚本。我针对一些可重用的库开发它们——例如对话框布局——但对于分发来说，最好只有一个文件。
  * 大卫·范·布林克 2007。
- * 
+ *
  * ****************************************************************************************************
- * 
+ *
  * om midi v3.0
  * Or OMM for short, an Otomad/YTPMV assistant script for After Effects. It is a script that automatically
  * converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be
  * rescued from tedious aligning video and audio, and put more energy into more creative works.
- * 
+ *
  * Description: This After Effects script reads a Standard MIDI file (.mid)
  * and creates layers and keyframes corresponding to the notes and controllers in that MIDI file.
- * 
+ *
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
- * 
- * Building Date: Friday, August 26, 2022 5:35 PM
+ *
+ * Building Date: Monday, August 29, 2022 11:35 AM
  * Copyright (c) 2022 ~, Ranne
- * 
+ *
  * Introduction of the Original Author:
  * Date: Sunday, December 25, 2011 10:58 PM PST
  * Author: David Van Brink
  * This script is part of the omino adobe script suite.
- * 
+ *
  * I write these because I like to. Please enjoy as you see fit.
- * 
+ *
  * Questions to poly@omino.com, subject line should start with "plugins" so my spam filter lets it in.
- * 
+ *
  * This file has been preprocessed to be standalone. I develop them against some reusable libraries
  * -- such as for dialog layout -- but for distribution it's nicer to have just one file.
  * dvb 2007.
@@ -229,6 +229,7 @@ var ApplyEffectsTab = /** @class */ (function (_super) {
         _this.hFlip = _this.addCheckbox("水平翻转");
         _this.cwRotation = _this.addCheckbox("顺时针旋转");
         _this.ccwRotation = _this.addCheckbox("逆时针旋转");
+        _this.negative = _this.addCheckbox("颜色反转");
         _this.tunning = _this.addCheckbox("调音");
         (_a = addGroup(_this.group, "原始音高", "dropdownlist"), _this.basePitchGroup = _a.group, _this.basePitchLbl = _a.label, _this.basePitchKeyCombo = _a.control);
         _this.basePitchOctCombo = addControl(_this.basePitchGroup, "dropdownlist");
@@ -270,7 +271,7 @@ function setNumberEditText(editText, type, defaultValue) {
 var MarkerConductor = /** @class */ (function () {
     //#endregion
     function MarkerConductor(parent) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         this.parent = parent;
         this.group = addControl(this.parent.toolsPanel, "group", {
             orientation: "column",
@@ -278,13 +279,11 @@ var MarkerConductor = /** @class */ (function () {
             alignChildren: "fill",
             spacing: SPACING,
         });
-        var FILL = ["fill", "center"];
-        (_a = addGroup(this.group, "BPM", "edittext", { text: "120", alignment: FILL }), this.bpmGroup = _a.group, this.bpmLbl = _a.label, this.bpmTxt = _a.control);
-        (_b = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL }), this.beatGroup = _b.group, this.beatLbl = _b.label, this.beatTxt = _b.control);
-        (_c = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL }), this.markOnGroup = _c.group, this.markOnLbl = _c.label, this.markOnCombo = _c.control);
+        var FILL_CENTER = ["fill", "center"];
+        (_a = addGroup(this.group, "BPM", "edittext", { text: "120", alignment: FILL_CENTER }), this.bpmGroup = _a.group, this.bpmLbl = _a.label, this.bpmTxt = _a.control);
+        (_b = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL_CENTER }), this.beatGroup = _b.group, this.beatLbl = _b.label, this.beatTxt = _b.control);
+        (_c = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL_CENTER }), this.markOnGroup = _c.group, this.markOnLbl = _c.label, this.markOnCombo = _c.control);
         addItems(this.markOnCombo, "新建空对象图层", "当前图层");
-        (_d = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL }), this.startTimeGroup = _d.group, this.startTimeLbl = _d.label, this.startTimeCombo = _d.control);
-        addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
         setNumberEditText(this.beatTxt, NumberType.POSITIVE_INT, 4);
         setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);
     }
@@ -307,9 +306,9 @@ var ToolsTab = /** @class */ (function (_super) {
 }(BaseTab));
 
 var Separator = /** @class */ (function () {
-    function Separator(parent) {
+    function Separator(parent, orientation) {
         this.control = parent.add("panel");
-        this.control.alignment = ["fill", "top"];
+        this.control.alignment = orientation === "horizontal" ? ["fill", "top"] : ["center", "fill"];
     }
     return Separator;
 }());
@@ -492,6 +491,14 @@ var Setting = {
     }
 };
 
+var TempFile = /** @class */ (function (_super) {
+    __extends(TempFile, _super);
+    function TempFile(fileName) {
+        return _super.call(this, Folder.temp.fsName + '/' + fileName) || this;
+    }
+    return TempFile;
+}(File));
+
 /**
  * 打开网址。
  * @param url - 网址。
@@ -523,26 +530,33 @@ var SettingsDialog = /** @class */ (function () {
         });
         if (this.window === null)
             throw new CannotFindWindowError();
-        this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
-        this.aboutLbl = addControl(this.group, "statictext", { text: ABOUT }, { multiline: true });
-        this.openGithubBtnGroup = addControl(this.group, "group", { orientation: "row", alignment: "left" });
+        this.group = addControl(this.window, "group", { orientation: "row", alignChildren: "fill", alignment: "fill" });
+        this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
+        this.separator = new Separator(this.group, "vertical");
+        this.rightGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
+        this.aboutLbl = addControl(this.leftGroup, "statictext", { text: ABOUT }, { multiline: true, scrolling: true });
+        this.openGithubBtnGroup = addControl(this.leftGroup, "group", { orientation: "row", alignment: "left" });
         this.openGithubLatestBtn = addControl(this.openGithubBtnGroup, "button", { text: "检查更新" });
         this.openGithubPageBtn = addControl(this.openGithubBtnGroup, "button", { text: "仓库地址" });
-        this.separator = new Separator(this.group);
-        (_a = addGroup(this.group, "语言", "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
+        this.importOmUtilsBtn = addControl(this.openGithubBtnGroup, "button", { text: "导入 om utils" });
+        this.importPureQuarterMidiBtn = addControl(this.openGithubBtnGroup, "button", { text: "导入纯四分 MIDI" });
+        (_a = addGroup(this.rightGroup, "语言", "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
         addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
         var selectedLanguageIndex = Setting.get("Language", 0);
         if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
             this.languageCombo.selection = selectedLanguageIndex;
-        this.usingSelectedLayerName = addControl(this.group, "checkbox", { text: "使用选择图层名称而不是轨道名称" });
+        this.usingSelectedLayerName = addControl(this.rightGroup, "checkbox", { text: "空对象：使用选中图层名称而不是 MIDI 轨道名称" });
         this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
-        this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
+        this.usingLayering = addControl(this.rightGroup, "checkbox", { text: "应用效果：冰鸠さくの特有图层叠叠乐。" });
+        this.usingLayering.value = Setting.get("UsingLayering", false);
+        this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
         this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
         this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
         this.window.defaultElement = this.okBtn;
         this.window.cancelElement = this.cancelBtn;
         this.okBtn.onClick = function () {
             Setting.set("UsingSelectedLayerName", _this.usingSelectedLayerName.value);
+            Setting.set("UsingLayering", _this.usingLayering.value);
             Setting.set("Language", _this.languageCombo.getSelectedIndex());
             $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
             _this.window.close();
@@ -564,7 +578,7 @@ function convertTextEncoding(texts) {
         texts = [texts];
     if (texts.length === 0)
         return [];
-    var file = new File(Folder.temp.fsName + "/tmp.txt");
+    var file = new TempFile("tmp" + new Date().valueOf() + ".txt");
     var defaultEncoding; // 系统默认编码
     if (file && file.open("w")) {
         defaultEncoding = file.encoding;
@@ -589,6 +603,60 @@ function convertTextEncoding(texts) {
         throw new CannotCreateFileError();
     return results;
 }
+
+/**
+ * MIDI 文件格式类型。
+ */
+var MidiFormatType;
+(function (MidiFormatType) {
+    /**
+     * MIDI 文件只有一条轨道，所有的通道都在一条轨道中。
+     */
+    MidiFormatType[MidiFormatType["SINGLE_TRACK"] = 0] = "SINGLE_TRACK";
+    /**
+     * MIDI 文件有多个音轨，并且是同步的，即所有的轨道同时播放。
+     */
+    MidiFormatType[MidiFormatType["SYNC_MULTI_TRACK"] = 1] = "SYNC_MULTI_TRACK";
+    /**
+     * MIDI 文件有多个音轨，不同步。
+     */
+    MidiFormatType[MidiFormatType["ASYNC_MULTI_TRACK"] = 2] = "ASYNC_MULTI_TRACK";
+})(MidiFormatType || (MidiFormatType = {}));
+var MetaEventType;
+(function (MetaEventType) {
+    // 结束
+    MetaEventType[MetaEventType["END_OF_TRACK"] = 47] = "END_OF_TRACK";
+    MetaEventType[MetaEventType["END_OF_FILE"] = -1] = "END_OF_FILE";
+    // 读字符串
+    MetaEventType[MetaEventType["TEXT_EVENT"] = 1] = "TEXT_EVENT";
+    MetaEventType[MetaEventType["COPYRIGHT_NOTICE"] = 2] = "COPYRIGHT_NOTICE";
+    MetaEventType[MetaEventType["TRACK_NAME"] = 3] = "TRACK_NAME";
+    MetaEventType[MetaEventType["INSTRUMENT_NAME"] = 4] = "INSTRUMENT_NAME";
+    MetaEventType[MetaEventType["LYRICS"] = 5] = "LYRICS";
+    MetaEventType[MetaEventType["MARKER"] = 6] = "MARKER";
+    MetaEventType[MetaEventType["CUE_POINT"] = 7] = "CUE_POINT";
+    // 读一位数字
+    MetaEventType[MetaEventType["MIDI_PORT"] = 33] = "MIDI_PORT";
+    MetaEventType[MetaEventType["MIDI_PORT_2"] = 32] = "MIDI_PORT_2";
+    MetaEventType[MetaEventType["SET_TEMPO"] = 81] = "SET_TEMPO";
+    MetaEventType[MetaEventType["KEY_SIGNATURE"] = 89] = "KEY_SIGNATURE";
+    MetaEventType[MetaEventType["SMPTE_OFFSET"] = 84] = "SMPTE_OFFSET";
+    MetaEventType[MetaEventType["TIME_SIGNATURE"] = 88] = "TIME_SIGNATURE";
+    MetaEventType[MetaEventType["SEQUENCER_SPECIFIC"] = 127] = "SEQUENCER_SPECIFIC";
+})(MetaEventType || (MetaEventType = {}));
+var RegularEventType;
+(function (RegularEventType) {
+    RegularEventType[RegularEventType["SYSTEM_EXCLUSIVE_EVENTS"] = 15] = "SYSTEM_EXCLUSIVE_EVENTS";
+    RegularEventType[RegularEventType["NOTE_AFTERTOUCH"] = 10] = "NOTE_AFTERTOUCH";
+    RegularEventType[RegularEventType["CONTROLLER"] = 11] = "CONTROLLER";
+    RegularEventType[RegularEventType["PITCH_BEND_EVENT"] = 14] = "PITCH_BEND_EVENT";
+    RegularEventType[RegularEventType["NOTE_OFF"] = 8] = "NOTE_OFF";
+    RegularEventType[RegularEventType["NOTE_ON"] = 9] = "NOTE_ON";
+    RegularEventType[RegularEventType["PROGRAM_CHANGE"] = 12] = "PROGRAM_CHANGE";
+    RegularEventType[RegularEventType["CHANNEL_AFTERTOUCH"] = 13] = "CHANNEL_AFTERTOUCH";
+    RegularEventType[RegularEventType["END_OF_FILE"] = -1] = "END_OF_FILE";
+})(RegularEventType || (RegularEventType = {}));
+var MidiFormatType$1 = MidiFormatType;
 
 var IFileReader = /** @class */ (function () {
     function IFileReader() {
@@ -654,59 +722,6 @@ var BinFileReader = /** @class */ (function (_super) {
     };
     return BinFileReader;
 }(IFileReader));
-
-/**
- * MIDI 文件格式类型。
- */
-var MidiFormatType;
-(function (MidiFormatType) {
-    /**
-     * MIDI 文件只有一条轨道，所有的通道都在一条轨道中。
-     */
-    MidiFormatType[MidiFormatType["SINGLE_TRACK"] = 0] = "SINGLE_TRACK";
-    /**
-     * MIDI 文件有多个音轨，并且是同步的，即所有的轨道同时播放。
-     */
-    MidiFormatType[MidiFormatType["SYNC_MULTI_TRACK"] = 1] = "SYNC_MULTI_TRACK";
-    /**
-     * MIDI 文件有多个音轨，不同步。
-     */
-    MidiFormatType[MidiFormatType["ASYNC_MULTI_TRACK"] = 2] = "ASYNC_MULTI_TRACK";
-})(MidiFormatType || (MidiFormatType = {}));
-var MetaEventType;
-(function (MetaEventType) {
-    // 结束
-    MetaEventType[MetaEventType["END_OF_TRACK"] = 47] = "END_OF_TRACK";
-    MetaEventType[MetaEventType["END_OF_FILE"] = -1] = "END_OF_FILE";
-    // 读字符串
-    MetaEventType[MetaEventType["TEXT_EVENT"] = 1] = "TEXT_EVENT";
-    MetaEventType[MetaEventType["COPYRIGHT_NOTICE"] = 2] = "COPYRIGHT_NOTICE";
-    MetaEventType[MetaEventType["TRACK_NAME"] = 3] = "TRACK_NAME";
-    MetaEventType[MetaEventType["INSTRUMENT_NAME"] = 4] = "INSTRUMENT_NAME";
-    MetaEventType[MetaEventType["LYRICS"] = 5] = "LYRICS";
-    MetaEventType[MetaEventType["MARKER"] = 6] = "MARKER";
-    MetaEventType[MetaEventType["CUE_POINT"] = 7] = "CUE_POINT";
-    // 读一位数字
-    MetaEventType[MetaEventType["MIDI_PORT"] = 33] = "MIDI_PORT";
-    MetaEventType[MetaEventType["MIDI_PORT_2"] = 32] = "MIDI_PORT_2";
-    MetaEventType[MetaEventType["SET_TEMPO"] = 81] = "SET_TEMPO";
-    MetaEventType[MetaEventType["KEY_SIGNATURE"] = 89] = "KEY_SIGNATURE";
-    MetaEventType[MetaEventType["SMPTE_OFFSET"] = 84] = "SMPTE_OFFSET";
-    MetaEventType[MetaEventType["TIME_SIGNATURE"] = 88] = "TIME_SIGNATURE";
-    MetaEventType[MetaEventType["SEQUENCER_SPECIFIC"] = 127] = "SEQUENCER_SPECIFIC";
-})(MetaEventType || (MetaEventType = {}));
-var RegularEventType;
-(function (RegularEventType) {
-    RegularEventType[RegularEventType["SYSTEM_EXCLUSIVE_EVENTS"] = 15] = "SYSTEM_EXCLUSIVE_EVENTS";
-    RegularEventType[RegularEventType["NOTE_AFTERTOUCH"] = 10] = "NOTE_AFTERTOUCH";
-    RegularEventType[RegularEventType["CONTROLLER"] = 11] = "CONTROLLER";
-    RegularEventType[RegularEventType["PITCH_BEND_EVENT"] = 14] = "PITCH_BEND_EVENT";
-    RegularEventType[RegularEventType["NOTE_OFF"] = 8] = "NOTE_OFF";
-    RegularEventType[RegularEventType["NOTE_ON"] = 9] = "NOTE_ON";
-    RegularEventType[RegularEventType["PROGRAM_CHANGE"] = 12] = "PROGRAM_CHANGE";
-    RegularEventType[RegularEventType["CHANNEL_AFTERTOUCH"] = 13] = "CHANNEL_AFTERTOUCH";
-    RegularEventType[RegularEventType["END_OF_FILE"] = -1] = "END_OF_FILE";
-})(RegularEventType || (RegularEventType = {}));
 
 var NoteEvent = /** @class */ (function () {
     function NoteEvent() {
@@ -1038,16 +1053,20 @@ var MidiReader = /** @class */ (function (_super) {
 }(BinFileReader));
 
 var Midi = /** @class */ (function () {
-    /**
-     * 构建 MIDI 对象。
-     * @param file - 一个从 After Effects 打开，但还没有开始读取的 MIDI 文件。
-     */
     function Midi(file) {
-        this.formatType = 1;
+        this.formatType = MidiFormatType$1.SYNC_MULTI_TRACK;
         this.trackCount = 0;
         this.timeDivision = 0;
         this.tracks = [];
         this.preferredTrackIndex = 0;
+        this.isPureQuarter = false;
+        if (file === true) {
+            this.isPureQuarter = true;
+            this.formatType = MidiFormatType$1.SINGLE_TRACK;
+            this.trackCount = 1;
+            this.timeDivision = 1;
+            return;
+        }
         this.file = file;
         if (file && file.open("r")) {
             file.encoding = "binary"; // 读取为二进制编码。
@@ -1340,10 +1359,11 @@ var Core = /** @class */ (function () {
             layer = this.createNullLayer(comp);
             layer.name = "BPM:" + marker.bpmTxt.text + " (" + marker.beatTxt.text + "/4)";
         }
-        var startTimePos = marker.startTimeCombo.getSelectedIndex();
+        var startTimePos = this.portal.startTimeCombo.getSelectedIndex();
         var startTime = startTimePos === 0 ? comp.displayStartTime :
             (startTimePos === 1 ? comp.time :
                 (startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。
+        layer.startTime = startTime;
         var beat = 1;
         var nextBeat = function () {
             var comment = String(beat);
@@ -1446,7 +1466,14 @@ var Core = /** @class */ (function () {
     Core.prototype.createNullLayer = function (comp) {
         var nullLayer;
         refindNullSource: while (true) {
-            if (this.nullSource && this.nullSource.parentFolder) { // 如果有现有的空对象纯色，不用重新新建一个。
+            var hasNullSource = false;
+            try {
+                hasNullSource = !!this.nullSource && !!this.nullSource.parentFolder;
+            }
+            catch (error) {
+                hasNullSource = false;
+            }
+            if (hasNullSource) { // 如果有现有的空对象纯色，不用重新新建一个。
                 nullLayer = comp.layers.add(this.nullSource, comp.workAreaDuration);
                 nullLayer.opacity.setValue(0);
                 nullLayer.anchorPoint.setValue([0, 0]);
@@ -1534,11 +1561,11 @@ var LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 var Portal = /** @class */ (function () {
     //#endregion
     function Portal(window) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         var _this = this;
         this.selectedTracks = [];
         this.window = window;
-        this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
+        this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
         var MidiButtonHeight = 22;
         var FILL_CENTER = ["fill", "center"];
         (_a = addGroup(this.group, "MIDI 文件", "button", { text: "...", size: [15, MidiButtonHeight] }), this.selectMidiGroup = _a.group, this.selectMidiLbl = _a.label, this.selectMidiBtn = _a.control);
@@ -1550,16 +1577,19 @@ var Portal = /** @class */ (function () {
             enabled: false,
         }), this.selectTrackGroup = _b.group, this.selectTrackLbl = _b.label, this.selectTrackBtn = _b.control);
         (_c = addGroup(this.group, "设定 BPM", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }), this.selectBpmGroup = _c.group, this.selectBpmLbl = _c.label, this.selectBpmTxt = _c.control);
+        (_d = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL_CENTER }), this.startTimeGroup = _d.group, this.startTimeLbl = _d.label, this.startTimeCombo = _d.control);
+        addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
         this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
         this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
-        this.settingBtn = addControl(this.buttonGroup, "button", { text: localize(str.settings), alignment: ["right", "center"] });
+        this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"] }, { style: "toolbutton" });
         this.nullObjTab = new NullObjTab(this);
         this.applyEffectsTab = new ApplyEffectsTab(this);
         this.toolsTab = new ToolsTab(this);
         this.core = new Core(this);
         setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
         this.selectMidiBtn.onClick = function () {
+            var _a;
             var file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
             if (file === null)
                 return;
@@ -1580,7 +1610,7 @@ var Portal = /** @class */ (function () {
             }
             catch (error) {
                 if (midi)
-                    midi.file.close();
+                    (_a = midi.file) === null || _a === void 0 ? void 0 : _a.close();
                 // throw new MyError(error as Error);
             }
         };
@@ -1593,6 +1623,7 @@ var Portal = /** @class */ (function () {
         };
     }
     Portal.build = function (thisObj, User) {
+        $.strict = true;
         var window = thisObj instanceof Panel ? thisObj :
             new Window("palette", User.scriptName + " v" + User.version, undefined, {
                 resizeable: true,
