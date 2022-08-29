@@ -11,7 +11,7 @@ export default class MidiReader extends BinFileReader {
 	
 	constructor(midi: Midi) {
 		// super(midi.content);
-		super(midi.file);
+		super(midi.file as File);
 		this.midi = midi;
 		this.readHeader();
 		this.readTracks();
