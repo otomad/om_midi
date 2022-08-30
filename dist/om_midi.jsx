@@ -8,7 +8,7 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 部署日期：2022 年 8 月 29 日 星期一 上午 11:38:14
+ * 部署日期：2022 年 8 月 29 日 星期一 中午 12:00:31
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Monday, August 29, 2022 11:38 AM
+ * Building Date: Monday, August 29, 2022 12:00 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
@@ -563,6 +563,9 @@ var SettingsDialog = /** @class */ (function () {
         };
         this.openGithubPageBtn.onClick = function () { return openUrl("https://github.com/otomad/om_midi"); };
         this.openGithubLatestBtn.onClick = function () { return openUrl("https://github.com/otomad/om_midi/releases/latest"); };
+        this.importPureQuarterMidiBtn.onClick = function () {
+            confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI");
+        };
     }
     SettingsDialog.prototype.show = function () {
         this.window.center();
@@ -1557,6 +1560,58 @@ var Core = /** @class */ (function () {
     return Core;
 }());
 
+var SETTINGS_ICON = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEMklEQVRIib1WTUgjWRCudeemiK4N4iy6GjYHESHYZC8yvqcEVvxBUEQvUcQQzOYayDALe3IGc1ToGQysoBdJBvUQVi9BXoSAkDQEg+QQiBsRvXQiO8bAHpYsX6c7ZESduewWNP3yut6rqq/qq8o3jDH6Smk11G6/9kAsFqMXWAghnlTinPuIyCNJkgW/NU2DgY9E9EEIkXrmXHWBCCqVyqMPY0z2+XwVTdMqptzf31disViFMbb51DnjrH7/iy9E6Z6cnNQXGxsb+ttms9HQ0BBZrVY35zwghMg9d0HNAOe8GVAQEaCICiEAg9zT00Pn5+e0v78fxH46nQ7DQH9/P2WzWZlzDsjcRo4+CiHURw0Q0ZrX6/W0t7dTKpWCd6okSXJbWxudnp7iew5GOee5QqFgsVqt2PNLkhSem5ujpqYmOj4+9nPOXUKI32u3AivG2NutrS0d5cvLy9ob2OM9MzMDzFsNbP3hcLimg5zgMXUZY0nG2A9mDlCmrZIkFXd2dvSyCgQCqt1ul0dGRqhUKlEoFELluIhIMmCIEtH09PS0B1GYOpC6OwJE9BprGPB7vd618fFxWlhYwGXdxmWzRs03S5L0xoRBVVWKRqMwgpzIhg7Wfgg8Hxsbw953MICQw8lkUg/R5XIhxLd1pfYecACCeslkMiZsw4aeDWV7eHioa6G0UeJmDoahbOJpfPSZHICg7mEceuvr67oenIJzjLFmXA4dCByCY2YOvu3u7v6zXC5fHRwcfD8wMPByYmKCwuHwj8B7ZWVFBiwejydXLBZHyuXym0wm809LS8srh8NB8Xi8r1gs/uX1elE9wB75+AD8iejvfD5PDVRtFSirQDweJ5Sl0RZ0DpTLZajcoi0IIYBt6ubmRvcOXIAjcKJQKCA3qhDiFyHEp894wDlfBskGBwd1RU3TwE714uJC7uvr0y/hnNuIKA8yd3R06IfT6bRuHJXU2dlJDocDxHtvRPDJhGhYkqS9zc3Nl11dXbS6ukrX19fviGivVCq5p6amyGKxtF5dXa00NDT4R0dHX83Pz9PZ2Rnt7u6C7b8lEok2i8UiO51OamxstCcSiRYi+gMQ/edVBIjUXC4329vbS7e3eqsPcs4dRIQnryjKu1Ao9BQPfuac/2Ss9cPIWSKRwFo1DQRDoZBOtOXlZVTCHrCUZfkzJiuK8pDJ4Tomr5ltRydX1eD/04vMifYr5xzl5gEM29vbesmhm6K/AB5FUdCS0WPc6FNHR0d634IOvqMLRyIRMiZd3pxo9e36taIoeRMGIUSUc54sFAoyDmNOcM5n7Xa7BVzJZrPYC2iaFjWMgzvBJ+eBQY7Ag4FU48Li4qL77u7ObcwBkwMgFhL68NyjA+cxCUYiETcYvbS0VPt+cnKCCODts+PyiwYQLiaU0+nEv4pqd6z+s0CVoOc8L0T0L32CI0/szYESAAAAAElFTkSuQmCC";
+
+var Base64Image = /** @class */ (function (_super) {
+    __extends(Base64Image, _super);
+    function Base64Image(base64, imageName) {
+        if (imageName === void 0) { imageName = "tmp" + new Date().valueOf() + ".png"; }
+        var _this = _super.call(this, imageName) || this;
+        if (_this && _this.open("w")) {
+            _this.encoding = "binary";
+            _this.write(Base64Image.base64Decode(base64));
+            _this.close();
+            // this.remove();
+        }
+        else
+            throw new CannotCreateFileError();
+        return _this;
+    }
+    Base64Image.base64Decode = function (s) {
+        var ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        var cache = {
+            RE_NON_ALPHA: new RegExp("[^" + ALPHA + "]"),
+            RE_BAD_EQUALS: /\=([^=]|\=\=)/
+        };
+        var n = s.length >>> 0, a = [];
+        if ((n % 4) || cache.RE_NON_ALPHA.test(s) || cache.RE_BAD_EQUALS.test(s)) {
+            throw Error("Invalid Base64 data");
+        }
+        var c = 0, i0, i1, i2, i3, b, b0, b1, b2;
+        while (c < n) {
+            i0 = ALPHA.indexOf(s[c++]);
+            i1 = ALPHA.indexOf(s[c++]);
+            i2 = ALPHA.indexOf(s[c++]);
+            i3 = ALPHA.indexOf(s[c++]);
+            b = (i0 << 18) + (i1 << 12) + ((i2 & 63) << 6) + (i3 & 63);
+            b0 = (b & (255 << 16)) >> 16;
+            b1 = (i2 == 64) ? -1 : (b & (255 << 8)) >> 8;
+            b2 = (i3 == 64) ? -1 : (b & 255);
+            a[a.length] = String.fromCharCode(b0);
+            if (0 <= b1)
+                a[a.length] = String.fromCharCode(b1);
+            if (0 <= b2)
+                a[a.length] = String.fromCharCode(b2);
+        }
+        // Cleanup and return
+        s = a.join("");
+        a.length = 0;
+        return s;
+    };
+    Base64Image.settingIcon = function () { return new Base64Image(SETTINGS_ICON, "settings_icon.png"); };
+    return Base64Image;
+}(TempFile));
+
 var LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 var Portal = /** @class */ (function () {
     //#endregion
@@ -1582,7 +1637,7 @@ var Portal = /** @class */ (function () {
         this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
         this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
-        this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"] }, { style: "toolbutton" });
+        this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"], image: Base64Image.settingIcon() }, { style: "toolbutton" });
         this.nullObjTab = new NullObjTab(this);
         this.applyEffectsTab = new ApplyEffectsTab(this);
         this.toolsTab = new ToolsTab(this);

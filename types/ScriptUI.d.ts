@@ -922,13 +922,13 @@ declare class IconButton extends _Control {
   /**
    * The image object that defines the image to be drawn.
    */
-  image: ScriptUIImage | string
+  image: ScriptUIImage | string | File
 
   /**
    * The image object that defines the image to be drawn.
    * Same as IconButton.image.
    */
-  icon: ScriptUIImage | string
+  icon: ScriptUIImage | string | File
 
   /**
    * The key sequence that invokes the onShortcutKey() callback for this element (in Windows only).

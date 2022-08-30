@@ -13,6 +13,7 @@ import str from "../languages/strings";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
+import Base64Image from "../temp-file-methods/Base64Image";
 
 export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 
@@ -82,7 +83,7 @@ export default class Portal {
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
 		this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
-		this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"] }, { style: "toolbutton" });
+		this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"], image: Base64Image.settingIcon() }, { style: "toolbutton" });
 		
 		this.nullObjTab = new NullObjTab(this);
 		this.applyEffectsTab = new ApplyEffectsTab(this);

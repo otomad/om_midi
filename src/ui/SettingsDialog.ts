@@ -78,6 +78,9 @@ export default class SettingsDialog {
 		}
 		this.openGithubPageBtn.onClick = () => openUrl("https://github.com/otomad/om_midi");
 		this.openGithubLatestBtn.onClick = () => openUrl("https://github.com/otomad/om_midi/releases/latest");
+		this.importPureQuarterMidiBtn.onClick = () => {
+			confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI");
+		}
 	}
 	
 	show() {
