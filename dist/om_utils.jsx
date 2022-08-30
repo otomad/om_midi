@@ -1,7 +1,7 @@
 /**
  * 使用方法：
  * 将本文件命名为 om_utils.jsx。
- *     1. 放置在 aep 工程相同目录下。
+ *     1. 放置在 aep 工程的相同目录下。
  *     在图层表达式中声明
  *     <pre>{@code $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));}</pre>
  * 

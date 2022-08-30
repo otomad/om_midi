@@ -75,7 +75,7 @@ export default class MidiTrackSelector {
 		}
 	}
 	
-	show() {
+	showDialog() {
 		this.window.center();
 		this.window.show();
 	}

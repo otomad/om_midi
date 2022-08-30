@@ -104,8 +104,17 @@ export class NoteOnEvent extends NoteOnOffEvent {
 	duration?: number; // note-off？尝试将时长赋值给 note-on！
 	interruptDuration?: number; // 单轨音 MAD 特殊用途。当有复音时中断前一个音的音符开。
 	
-	constructor(values: number[]) {
-		super(RegularEventType.NOTE_ON, values);
+	constructor(pitch: number, velocity: number, deltaTime: number, duration: number, sofarTick: number);
+	constructor(values: number[]);
+	constructor(values: number[] | number, velocity?: number, deltaTime?: number, duration?: number, sofarTick?: number) {
+		if (values instanceof Array)
+			super(RegularEventType.NOTE_ON, values);
+		else {
+			super(RegularEventType.NOTE_ON, [values, velocity!])
+			this.deltaTime = deltaTime!;
+			this.duration = duration!;
+			this.sofarTick = sofarTick!;
+		}
 	}
 }
 

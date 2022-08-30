@@ -1,16 +1,21 @@
 export enum NumberType {
 	POSITIVE_INT,
 	POSITIVE_DECIMAL,
+	DECIMAL,
 }
 
 export default function setNumberEditText(editText: EditText, type: NumberType, defaultValue: number): void {
 	editText.onChange = () => {
 		let text = editText.text;
-		const matches = text.match(NumberType.POSITIVE_INT ? /\d+/g : /\d+(\.\d+)?/g);
+		let regex = /\d+/g;
+		if (type === NumberType.POSITIVE_DECIMAL) regex = /\d+(\.\d+)?/g;
+		else if (type === NumberType.DECIMAL) regex = /-?\d+(\.\d+)?/g;
+		const matches = text.match(regex);
 		if (matches) {
 			text = matches[0].replace(/^0+(?!\.)/g, "");
+			text ||= "0";
 			const num = type == NumberType.POSITIVE_INT ? parseInt(text, 10) : parseFloat(text);
-			if (num <= 0 || isNaN(num)) text = String(defaultValue);
+			text = String((type !== NumberType.DECIMAL && num <= 0 || isNaN(num)) ? defaultValue : num);
 		} else text = String(defaultValue);
 		editText.text = text;
 	};

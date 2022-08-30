@@ -2,8 +2,9 @@ import { CannotFindCompositionError, MyError, NoLayerSelectedError, NoMidiError,
 import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
 import Setting from "../module/Setting";
-import { NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
+import { NoteEvent, NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
 import { RegularEventType } from "../midi/MidiFormatType";
+import MidiTrack from "../midi/MidiTrack";
 
 const MIN_INTERVAL = 5e-4;
 const NULL_SOURCE_NAME = "om midi null"
@@ -39,33 +40,39 @@ export default class Core {
 	applyCreateNullObject(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Create Null Object");
 		const nullTab = this.portal.nullObjTab;
-		if (this.portal.selectedTracks.length === 0 || !this.portal.midi) throw new NoMidiError();
+		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
 		const checks = nullTab.getCheckedChecks();
 		if (checks.length === 0) throw new NoOptionsCheckedError();
 		let usingSelectedLayerName = Setting.get("UsingSelectedLayerName", false);
 		const selectedLayer = this.getSelectLayer(comp);
 		if (selectedLayer === null) usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
 		const secondsPerTick = this.getSecondsPerTick();
+		const startTime = this.getStartTime(comp);
 		for (const track of this.portal.selectedTracks) {
-			if (track === undefined) continue;
+			if (track === undefined && !this.portal.midi.isPureQuarter) continue;
 			const nullLayer = this.createNullLayer(comp);
-			nullLayer.name = "[midi]" + (usingSelectedLayerName && selectedLayer !== null ? selectedLayer.name :
-				(track.name ?? `Channel ${track.channel ?? 0}`));
+			if (track !== undefined)
+				nullLayer.name = "[midi]" + (usingSelectedLayerName && selectedLayer !== null ? selectedLayer.name :
+					(track.name ?? `Channel ${track.channel ?? 0}`));
+			else nullLayer.name = "[midi]BPM: " + this.portal.selectBpmTxt.text;
+			nullLayer.inPoint = startTime;
+			nullLayer.outPoint = track !== undefined ? startTime + track.lengthTick * secondsPerTick :
+				startTime + comp.duration;
 			for (const check of checks)
 				this.addSliderControl(nullLayer, check.text); // 限制：只能存储索引值。
 			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType) =>
-				this.setValueAtTime(nullLayer, checks, check, seconds, value, inType, outType);
+				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
 			let noteOnCount = 0,
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
 				lastEventSofarTick = 0;
-			for (const noteEvent of track.events) {
+			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
-					continue; // 跳过同一时间点上的音符。
+					return; // 跳过同一时间点上的音符。
 				const seconds = noteEvent.sofarTick * secondsPerTick;
 				if (noteEvent instanceof NoteOnEvent) {
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
-						noteEvent.duration && noteEvent.duration < 0) continue;
+						noteEvent.duration && noteEvent.duration < 0) return;
 					setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.duration, seconds, noteEvent.duration ?? 0, KeyframeInterpolationType.HOLD);
@@ -94,6 +101,7 @@ export default class Core {
 					lastEventSofarTick = noteEvent.sofarTick;
 				}
 			}
+			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
 		}
 	}
 	
@@ -109,94 +117,163 @@ export default class Core {
 			layer = this.createNullLayer(comp);
 			layer.name = `BPM:${marker.bpmTxt.text} (${marker.beatTxt.text}/4)`;
 		}
-		const startTimePos = this.portal.startTimeCombo.getSelectedIndex();
-		let startTime = startTimePos === 0 ? comp.displayStartTime :
-			(startTimePos === 1 ? comp.time :
-			(startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。
+		let startTime = this.getStartTime(comp);
 		layer.startTime = startTime;
 		let beat = 1;
-		const nextBeat = (): string => {
-			const comment = String(beat);
-			beat = beat % parseInt(marker.beatTxt.text) + 1;
-			return comment;
-		}
+		const unit = marker.unitCombo.getSelectedIndex();
+		if (unit === 1) startTime += parseFloat(marker.beatTxt.text); // 偏移秒数
+		else if (unit === 2) startTime += parseFloat(marker.beatTxt.text) * comp.frameDuration; // 偏移帧数
 		const bpm = parseFloat(marker.bpmTxt.text);
 		while (startTime <= comp.displayStartTime + comp.duration) {
-			layer.marker.setValueAtTime(startTime, new MarkerValue(nextBeat()));
-			startTime += 60 / bpm;
+			layer.marker.setValueAtTime(startTime, new MarkerValue(String(beat)));
+			if (unit === 0) {
+				beat = beat % parseInt(marker.beatTxt.text) + 1;
+				startTime += 60 / bpm; // 周期 BPM
+			} else {
+				beat++;
+				if (unit === 1) startTime += bpm; // 周期秒数
+				else if (unit === 2) startTime += bpm * comp.frameDuration; // 周期帧数
+			}
 		}
 	}
 	
 	applyEffects(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Effects");
 		const effectsTab = this.portal.applyEffectsTab;
-		if (this.portal.selectedTracks.length === 0 || !this.portal.midi) throw new NoMidiError();
+		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
 		if (effectsTab.getCheckedChecks().length === 0) throw new NoOptionsCheckedError();
 		if (this.portal.selectedTracks.length !== 1) throw new NotOneTrackForApplyEffectsOnlyError();
-		const layer = this.getSelectLayer(comp);
-		if (layer === null) throw new NoLayerSelectedError();
+		const isTunningOnly = effectsTab.getCheckedChecks().length === 1 && effectsTab.tunning.value;
+		const _layer = this.getSelectLayer(comp);
+		if (_layer === null) throw new NoLayerSelectedError();
+		let layer = _layer; // 去掉后，所有函数内部截获的 layer 变量可能会为 null。
 		const secondsPerTick = this.getSecondsPerTick();
 		const track = this.portal.selectedTracks[0];
+		let startTime = this.getStartTime(comp);
+		const getLayerStartTime = () => startTime - (layer.inPoint - layer.startTime);
+		const getLayerOutPoint = () => track !== undefined ? startTime + track.lengthTick * secondsPerTick :
+			startTime + comp.duration;
+		if (this.portal.startTimeCombo.getSelectedIndex() === 1)
+			startTime = layer.inPoint;
+		else if (!isTunningOnly)
+			layer.startTime = getLayerStartTime();
 		
+		//#region 预处理效果
 		if (layer.timeRemapEnabled) layer.timeRemapEnabled = false;
 		const source: AVItem = layer.source;
 		const sourceLength = (+(source.duration / source.frameDuration).toFixed(0) - 1) * source.frameDuration;
-		const layerLength = layer.outPoint - layer.startTime - source.frameDuration;
-		let startTime = 0;
-		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.tunning.value) {
-			layer.timeRemapEnabled = true;
-			layer.timeRemap.removeKey(2);
-			startTime = layer.timeRemap.value;
+		const layerLength = layer.outPoint - layer.inPoint - source.frameDuration;
+		const timeRemapRemoveKey = (layer: AVLayer, keyIndex: number) => {
+			try {
+				layer.timeRemap.removeKey(keyIndex);
+			} catch (error) { } // 如果关键帧在合成时间外，会报错。
 		}
+		let curStartTime = 0;
+		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+			layer.timeRemapEnabled = true;
+			curStartTime = layer.timeRemap.valueAtTime(layer.inPoint, false);
+			timeRemapRemoveKey(layer, 2);
+		}
+		if (!isTunningOnly) layer.outPoint = getLayerOutPoint();
+		let audioLayer: AVLayer | undefined;
+		const basePitch = this.getBasePitch();
+		if (effectsTab.tunning.value) {
+			audioLayer = layer.duplicate() as AVLayer;
+			audioLayer.enabled = false;
+			audioLayer.moveAfter(layer);
+			audioLayer.timeRemapEnabled = true;
+			if (!(effectsTab.timeRemap.value || effectsTab.timeRemap2.value))
+				curStartTime = audioLayer.timeRemap.valueAtTime(layer.inPoint, false);
+			timeRemapRemoveKey(audioLayer, 2);
+			audioLayer.startTime = getLayerStartTime();
+			audioLayer.outPoint = getLayerOutPoint();
+		}
+		let invertIndex = 0;
+		const invertProperty = () => this.getEffects(layer).property(invertIndex).property(2) as OneDProperty;
+		if (effectsTab.negative.value) {
+			invertIndex = this.getEffects(layer).addProperty("ADBE Invert").propertyIndex;
+			invertProperty().setValue(100);
+		}
+		const layering = Setting.get("UsingLayering", false);
+		//#endregion
+		
 		let noteOnCount = 0,
 			lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
 			lastEventSofarTick = 0;
-		for (const noteEvent of track.events) {
+		const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 			if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
-				continue; // 跳过同一时间点上的音符。
-			const seconds = noteEvent.sofarTick * secondsPerTick;
+				return; // 跳过同一时间点上的音符。
+			const seconds = noteEvent.sofarTick * secondsPerTick + startTime;
 			if (noteEvent instanceof NoteOnEvent) {
 				if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 					noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
-					noteEvent.duration && noteEvent.duration < 0) continue;
+					noteEvent.duration && noteEvent.duration < 0) return;
 				if (effectsTab.hFlip.value) {
+					layer.scale.expressionEnabled = false;
 					const key = layer.scale.addKey(seconds);
 					layer.scale.setValueAtKey(key, [noteOnCount % 2 ? -100 : 100, 100]);
 					layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
 				if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
+					layer.rotation.expressionEnabled = false;
 					const value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
 					const key = layer.rotation.addKey(seconds);
 					layer.rotation.setValueAtKey(key, value);
 					layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
 				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+					layer.timeRemap.expressionEnabled = false;
 					const key = layer.timeRemap.addKey(seconds);
-					layer.timeRemap.setValueAtKey(key, startTime);
+					layer.timeRemap.setValueAtKey(key, curStartTime);
 					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
 						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
-						const key2 = layer.timeRemap.addKey(noteOffSeconds);
-						const endTime = effectsTab.timeRemap.value ? startTime + layerLength : noteOffSeconds - seconds + startTime;
-						layer.timeRemap.setValueAtKey(key2, endTime);
+						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+						let key2 = layer.timeRemap.addKey(noteOffSeconds);
+						const endTime = effectsTab.timeRemap.value ? curStartTime + layerLength : noteOffSeconds - seconds + curStartTime;
+						if (endTime < (layer.source as AVItem).duration)
+							layer.timeRemap.setValueAtKey(key2, endTime);
+						else {
+							layer.timeRemap.removeKey(key2);
+							key2 = layer.timeRemap.addKey(seconds + sourceLength - curStartTime);
+							layer.timeRemap.setValueAtKey(key2, sourceLength);
+						}
 						// layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
 				}
-				if (effectsTab.tunning.value) { // 已知问题：拉伸（时间重映射截断）长度不能比原素材长；如果素材不在项目开头，前面的内容无法播放
-					const key = layer.timeRemap.addKey(seconds);
-					layer.timeRemap.setValueAtKey(key, startTime);
-					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+				if (effectsTab.negative.value) {
+					const key = invertProperty().addKey(seconds);
+					invertProperty().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
+					invertProperty().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+				}
+				if (effectsTab.tunning.value && audioLayer) { // 已知问题：拉伸（时间重映射截断）长度不能比原素材长
+					audioLayer.timeRemap.expressionEnabled = false;
+					const key = audioLayer.timeRemap.addKey(seconds);
+					audioLayer.timeRemap.setValueAtKey(key, curStartTime);
+					// audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
 						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
-						const key2 = layer.timeRemap.addKey(noteOffSeconds);
+						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+						let key2 = audioLayer.timeRemap.addKey(noteOffSeconds);
 						const duration2 = noteOffSeconds - seconds;
-						const pitch = noteEvent.pitch - 60;
+						const pitch = noteEvent.pitch - basePitch;
 						const stretch = 2 ** (pitch / 12);
-						layer.timeRemap.setValueAtKey(key2, duration2 * stretch + startTime);
-						// layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						let endTime = duration2 * stretch + curStartTime;
+						if (endTime < (layer.source as AVItem).duration)
+							audioLayer.timeRemap.setValueAtKey(key2, endTime);
+						else {
+							audioLayer.timeRemap.removeKey(key2);
+							key2 = audioLayer.timeRemap.addKey(seconds + (sourceLength - curStartTime) / stretch);
+							audioLayer.timeRemap.setValueAtKey(key2, sourceLength);
+						}
+						// audioLayer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
+				}
+				if (layering && noteOnCount !== 0) {
+					if (!isTunningOnly)
+						layer = this.splitLayer(layer, seconds);
+					if (effectsTab.tunning.value && audioLayer)
+						audioLayer = this.splitLayer(audioLayer, seconds);
 				}
 				noteOnCount++;
 				lastEventType = RegularEventType.NOTE_ON;
@@ -208,6 +285,7 @@ export default class Core {
 				// lastEventSofarTick = noteEvent.sofarTick;
 			}
 		}
+		this.dealNoteEvents(track, comp, secondsPerTick, curStartTime, addNoteEvent);
 	}
 	
 	/**
@@ -265,7 +343,7 @@ export default class Core {
 	 * @returns 滑块控制效果序号。
 	 */
 	private addSliderControl(layer: AVLayer, name: string): number {
-		const slider = this.getEffects(layer).addProperty("ADBE Slider Control") as PropertyGroup; // 中文版竟然能正常运行？ADBE 是什么鬼？
+		const slider = this.getEffects(layer).addProperty("ADBE Slider Control") as PropertyGroup; // 中文版竟然能正常运行？ADBE 是什么鬼？ // 后人注：属性的英文名前面加上“ADBE”之后，即可在任何本地化语言使用。
 		slider.name = name;
 		return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
 	}
@@ -303,5 +381,56 @@ export default class Core {
 			secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间
 		}
 		return secondsPerTick;
+	}
+	
+	/**
+	 * 获取开始时间。
+	 * @param comp - 合成。
+	 * @returns 开始时间。
+	 */
+	private getStartTime(comp: CompItem) {
+		const startTimePos = this.portal.startTimeCombo.getSelectedIndex();
+		/* return startTimePos === 0 ? comp.displayStartTime :
+			(startTimePos === 1 ? comp.time :
+			(startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。 */
+		if (startTimePos === 0) return comp.displayStartTime;
+		else if (startTimePos === 1) return comp.time;
+		else if (startTimePos === 2) return comp.workAreaStart;
+		else return 0;
+	}
+	
+	private dealNoteEvents(track: MidiTrack | undefined, comp: CompItem, secondsPerTick: number, startTime: number, addNoteEvent: (noteEvent: NoteEvent) => void) {
+		if (track !== undefined)
+			for (const noteEvent of track.events)
+				addNoteEvent(noteEvent);
+		else {
+			let noteCount = 0;
+			while (noteCount * secondsPerTick <= startTime + comp.duration)
+				addNoteEvent(new NoteOnEvent(60, 100, +!!noteCount, 1, noteCount++));
+		}
+	}
+	
+	/**
+	 * 根据界面中的用户设定获取原始音高。
+	 * @returns 原始音高。
+	 */
+	private getBasePitch(): number {
+		const tab = this.portal.applyEffectsTab;
+		return tab.basePitchOctCombo.getSelectedIndex() * 12 + tab.basePitchKeyCombo.getSelectedIndex();
+	}
+	
+	/**
+	 * 拆分图层。
+	 * @param layer - 图层。
+	 * @param time - 拆分时间点。
+	 * @returns 拆分后的新图层。
+	 */
+	splitLayer<L extends Layer>(layer: L, time: number): L {
+		const outPoint = layer.outPoint; // 备份原出点位置。
+		const newLayer = layer.duplicate() as L;
+		layer.outPoint = time;
+		newLayer.inPoint = time;
+		newLayer.outPoint = outPoint;
+		return newLayer;
 	}
 }

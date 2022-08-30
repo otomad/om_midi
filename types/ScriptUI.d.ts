@@ -1078,7 +1078,7 @@ declare class EditText extends _Control {
    * Sends a notification message, simulating the specified user interaction event.
    * @param eventName The name of the control event handler to call. One of: onClick, onChange, onChanging. By default, simulates the onChange event for an edittext control, an onClick event for controls that support that event.
    */
-  notify(eventName?: string): void
+  notify(eventName?: "onClick" | "onChange" | "onChanging"): void
 
   /**
    * An event-handler callback function, called when the element acquires the keyboard focus.

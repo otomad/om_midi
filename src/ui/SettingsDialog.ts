@@ -5,6 +5,9 @@ import str from "../languages/strings";
 import { CannotFindWindowError } from "../errors";
 import User from "../user";
 import openUrl from "../temp-file-methods/openUrl";
+import ImportOmUtilsDialog from "./ImportOmUtilsDialog";
+import Portal from "./Portal";
+import Midi from "../midi/Midi";
 
 const ABOUT = `读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
 
@@ -13,6 +16,7 @@ const ABOUT = `读取一个 MIDI 序列，并为当前合成添加一个或多�
 
 export default class SettingsDialog {
 	//#region 组件对象
+	portal: Portal;
 	window: Window;
 	group: Group;
 	leftGroup: Group;
@@ -34,7 +38,8 @@ export default class SettingsDialog {
 	importPureQuarterMidiBtn: Button;
 	//#endregion
 	
-	constructor() {
+	constructor(portal: Portal) {
+		this.portal = portal;
 		this.window = new Window("dialog", `${localize(str.settings)} - ${User.scriptName} v${User.version}`, undefined, {
 			resizeable: false,
 		});
@@ -61,7 +66,7 @@ export default class SettingsDialog {
 			this.languageCombo.selection = selectedLanguageIndex;
 		this.usingSelectedLayerName = addControl(this.rightGroup, "checkbox", { text: "空对象：使用选中图层名称而不是 MIDI 轨道名称" });
 		this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
-		this.usingLayering = addControl(this.rightGroup, "checkbox", { text: "应用效果：冰鸠さくの特有图层叠叠乐。" });
+		this.usingLayering = addControl(this.rightGroup, "checkbox", { text: "应用效果：冰鸠さくの特有图层叠叠乐方法。" });
 		this.usingLayering.value = Setting.get("UsingLayering", false);
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
 		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
@@ -79,11 +84,18 @@ export default class SettingsDialog {
 		this.openGithubPageBtn.onClick = () => openUrl("https://github.com/otomad/om_midi");
 		this.openGithubLatestBtn.onClick = () => openUrl("https://github.com/otomad/om_midi/releases/latest");
 		this.importPureQuarterMidiBtn.onClick = () => {
-			confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI");
+			if (!confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI")) return;
+			this.portal.midi = new Midi(true);
+			this.portal.selectedTracks = [undefined];
+			this.portal.selectMidiName.text = "纯四分音符 MIDI";
+			this.portal.selectTrackBtn.text = "";
+			this.portal.selectTrackBtn.enabled = false;
+			this.portal.selectBpmTxt.enabled = true;
 		}
+		this.importOmUtilsBtn.onClick = () => new ImportOmUtilsDialog().showDialog();
 	}
 	
-	show() {
+	showDialog() {
 		this.window.center();
 		this.window.show();
 	}
