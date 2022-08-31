@@ -7,6 +7,7 @@ export enum NumberType {
 export default function setNumberEditText(editText: EditText, type: NumberType, defaultValue: number): void {
 	editText.onChange = () => {
 		let text = editText.text;
+		// TODO: 这部分将会被修改为三元运算符。
 		let regex = /\d+/g;
 		if (type === NumberType.POSITIVE_DECIMAL) regex = /\d+(\.\d+)?/g;
 		else if (type === NumberType.DECIMAL) regex = /-?\d+(\.\d+)?/g;

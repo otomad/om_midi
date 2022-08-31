@@ -393,6 +393,7 @@ export default class Core {
 		/* return startTimePos === 0 ? comp.displayStartTime :
 			(startTimePos === 1 ? comp.time :
 			(startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。 */
+		// TODO: 这部分将会被修改为三元运算符。
 		if (startTimePos === 0) return comp.displayStartTime;
 		else if (startTimePos === 1) return comp.time;
 		else if (startTimePos === 2) return comp.workAreaStart;
