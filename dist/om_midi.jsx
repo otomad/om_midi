@@ -8,7 +8,7 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 部署日期：2022年9月1日星期四中午12点27分
+ * 部署日期：2022年9月1日星期四下午12点30分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Thursday, September 1, 2022 12:27 PM
+ * Building Date: Thursday, September 1, 2022 12:30 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
