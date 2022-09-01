@@ -1,7 +1,7 @@
-import { MidiCustomEventsError } from "../errors";
+import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiReader from "./MidiReader";
-import { CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
+import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
 import str from "../languages/strings";
 
 export default class MidiTrack {
@@ -23,7 +23,7 @@ export default class MidiTrack {
 	}
 
 	name?: string;
-	instrument?: string;
+	instrument?: string; // MIDI 存储的乐器信息在 Program Change 事件中，至于那个 Instrument Name 事件？抱歉没用的。
 	channel?: number;
 	tempo?: number; // 微秒每拍
 	noteCount: number = 0;
@@ -68,7 +68,7 @@ export default class MidiTrack {
 				switch (metaType) {
 					case MetaEventType.END_OF_TRACK:
 						if (this.parent.getPointer() !== endOffset)
-							alert(`轨道结束位置有误。应为 ${endOffset}，实际 ${this.parent.getPointer()}`, localize(str.error), true);
+							new EndOfTrackPositionError(endOffset, this.parent.getPointer());
 					case MetaEventType.END_OF_FILE:
 						return;
 					case MetaEventType.TEXT_EVENT:
@@ -139,8 +139,11 @@ export default class MidiTrack {
 									break;
 								}
 							}
-						} else
+						} else if (regularType == RegularEventType.CONTROLLER) {
+							note = new ControllerEvent(byte2);
+						} else {
 							note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
+						}
 						break;
 					case RegularEventType.PROGRAM_CHANGE:
 					case RegularEventType.CHANNEL_AFTERTOUCH:

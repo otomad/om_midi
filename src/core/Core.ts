@@ -2,12 +2,14 @@ import { CannotFindCompositionError, MyError, NoLayerSelectedError, NoMidiError,
 import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
 import Setting from "../module/Setting";
-import { NoteEvent, NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
-import { RegularEventType } from "../midi/MidiFormatType";
+import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
+import { ControllerType, RegularEventType } from "../midi/MidiFormatType";
 import MidiTrack from "../midi/MidiTrack";
 
 const MIN_INTERVAL = 5e-4;
 const NULL_SOURCE_NAME = "om midi null"
+const ENTER_INCREMENTAL = 15;
+const ROTATION_INCREMENTAL = 15;
 
 export default class Core {
 	portal: Portal;
@@ -99,6 +101,14 @@ export default class Core {
 					setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
 					lastEventType = RegularEventType.NOTE_OFF;
 					lastEventSofarTick = noteEvent.sofarTick;
+				} else if (noteEvent instanceof ControllerEvent) {
+					const controller = noteEvent.controller;
+					if (controller === ControllerType.PAN) {
+						const pan = noteEvent.value - 64; // 64 为中置 0。
+						setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
+					} else if (controller === ControllerType.MAIN_VOLUME) {
+						setValueAtTime(nullTab.volume, seconds, noteEvent.value, KeyframeInterpolationType.HOLD);
+					}
 				}
 			}
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
@@ -195,6 +205,7 @@ export default class Core {
 			invertProperty().setValue(100);
 		}
 		const layering = Setting.get("UsingLayering", false);
+		const optimize = Setting.get("OptimizeApplyEffects", true);
 		//#endregion
 		
 		let noteOnCount = 0,
@@ -208,27 +219,46 @@ export default class Core {
 				if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 					noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
 					noteEvent.duration && noteEvent.duration < 0) return;
+				const hasDuration = noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined;
+				const duration = noteEvent.interruptDuration ?? noteEvent.duration ?? 0;
+				const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
 				if (effectsTab.hFlip.value) {
 					layer.scale.expressionEnabled = false;
 					const key = layer.scale.addKey(seconds);
-					layer.scale.setValueAtKey(key, [noteOnCount % 2 ? -100 : 100, 100]);
-					layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+					const scale = noteOnCount % 2 ? -100 : 100;
+					if (!optimize || !hasDuration) {
+						layer.scale.setValueAtKey(key, [scale, 100]);
+						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+					} else {
+						layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL, 100 + ENTER_INCREMENTAL]);
+						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+						const key2 = layer.scale.addKey(noteOffSeconds);
+						layer.scale.setValueAtKey(key2, [scale, 100]);
+						layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+					}
 				}
 				if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
 					layer.rotation.expressionEnabled = false;
 					const value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
 					const key = layer.rotation.addKey(seconds);
-					layer.rotation.setValueAtKey(key, value);
-					layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+					if (!optimize || !hasDuration) {
+						layer.rotation.setValueAtKey(key, value);
+						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+					} else {
+						const startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
+						layer.rotation.setValueAtKey(key, startValue);
+						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+						const key2 = layer.rotation.addKey(noteOffSeconds);
+						layer.rotation.setValueAtKey(key2, value);
+						layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+					}
 				}
-				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
 					layer.timeRemap.expressionEnabled = false;
 					const key = layer.timeRemap.addKey(seconds);
 					layer.timeRemap.setValueAtKey(key, curStartTime);
 					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
-						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+					if (hasDuration) {
 						let key2 = layer.timeRemap.addKey(noteOffSeconds);
 						const endTime = effectsTab.timeRemap.value ? curStartTime + layerLength : noteOffSeconds - seconds + curStartTime;
 						if (endTime < (layer.source as AVItem).duration)
@@ -246,14 +276,12 @@ export default class Core {
 					invertProperty().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
 					invertProperty().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
-				if (effectsTab.tunning.value && audioLayer) { // 已知问题：拉伸（时间重映射截断）长度不能比原素材长
+				if (effectsTab.tunning.value && audioLayer) {
 					audioLayer.timeRemap.expressionEnabled = false;
 					const key = audioLayer.timeRemap.addKey(seconds);
 					audioLayer.timeRemap.setValueAtKey(key, curStartTime);
 					// audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
-						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+					if (hasDuration) {
 						let key2 = audioLayer.timeRemap.addKey(noteOffSeconds);
 						const duration2 = noteOffSeconds - seconds;
 						const pitch = noteEvent.pitch - basePitch;
@@ -300,7 +328,7 @@ export default class Core {
 			let hasNullSource = false;
 			try {
 				hasNullSource = !!this.nullSource && !!this.nullSource.parentFolder;
-			} catch (error) {
+			} catch (error) { // 执行撤销之后可能会变为“对象无效”，它既不是 undefined 也不是 null，只能用 try catch 捕获。
 				hasNullSource = false;
 			}
 			if (hasNullSource) { // 如果有现有的空对象纯色，不用重新新建一个。
@@ -312,13 +340,13 @@ export default class Core {
 				const nullSource = nullLayer.source as AVItem;
 				for (let i = 1; i <= nullSource.parentFolder.items.length; i++) { // 从 1 起始。
 					const item = nullSource.parentFolder.items[i];
-					if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) {
-						this.nullSource = item;
-						nullSource.remove();
-						continue refindNullSource;
+					if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) { // TODO: 确认其为 SolidSource。
+						this.nullSource = item; // 找到名字相同的空对象了。
+						nullSource.remove(); // 删除刚创建的空对象。
+						continue refindNullSource; // 跳两层循环，回到第一个 if 语句。
 					}
 				}
-				this.nullSource = nullSource;
+				this.nullSource = nullSource; // 没找到，创建一个新的。
 				nullLayer.source.name = NULL_SOURCE_NAME;
 			}
 			break;
@@ -351,6 +379,7 @@ export default class Core {
 	private setValueAtTime(layer: AVLayer, checks: Checkbox[], check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType: KeyframeInterpolationType = inType): void {
 		const index = checks.indexOf(check);
 		if (index === -1) return;
+		// 注：根据说明文档，将创建的效果等属性的引用赋值给变量后，下一次创建新的效果时，之前的引用会变为“对象无效”。只能通过其序号进行访问。
 		const slider = this.getEffects(layer).property(index + 1).property(1) as OneDProperty;
 		const key = slider.addKey(seconds);
 		slider.setValueAtKey(key, value);

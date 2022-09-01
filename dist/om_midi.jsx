@@ -8,7 +8,7 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 部署日期：2022年8月30日星期二下午5点31分
+ * 部署日期：2022年9月1日星期四上午11点19分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Tuesday, August 30, 2022 5:31 PM
+ * Building Date: Thursday, September 1, 2022 11:19 AM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
@@ -213,6 +213,8 @@ var NullObjTab = /** @class */ (function (_super) {
         _this.timeRemap = _this.addCheckbox("时间重映射");
         _this.whirl = _this.addCheckbox("来回");
         _this.noteOn = _this.addCheckbox("音符开");
+        _this.pan = _this.addCheckbox("通道声相");
+        _this.volume = _this.addCheckbox("通道音量");
         return _this;
     }
     return NullObjTab;
@@ -256,6 +258,7 @@ var NumberType;
 function setNumberEditText(editText, type, defaultValue) {
     editText.onChange = function () {
         var text = editText.text;
+        // TODO: 这部分将会被修改为三元运算符。
         var regex = /\d+/g;
         if (type === NumberType.POSITIVE_DECIMAL)
             regex = /\d+(\.\d+)?/g;
@@ -313,7 +316,7 @@ var ToolsTab = /** @class */ (function (_super) {
     function ToolsTab(parent) {
         var _this = _super.call(this, parent, "工具", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] }) || this;
         _this.toolsCombo = addControl(_this.group, "dropdownlist");
-        _this.toolsCombo.add("item", "标记生成");
+        _this.toolsCombo.add("item", "标记指挥者");
         _this.toolsCombo.selection = 0;
         _this.toolsPanel = addControl(_this.group, "group", { alignment: "fill", alignChildren: "fill" });
         _this.marker = new MarkerConductor(_this);
@@ -476,6 +479,13 @@ var NotOneTrackForApplyEffectsOnlyError = /** @class */ (function (_super) {
     }
     return NotOneTrackForApplyEffectsOnlyError;
 }(MyError));
+var EndOfTrackPositionError = /** @class */ (function (_super) {
+    __extends(EndOfTrackPositionError, _super);
+    function EndOfTrackPositionError(endOffset, pointer) {
+        return _super.call(this, "\u8F68\u9053\u7ED3\u675F\u4F4D\u7F6E\u6709\u8BEF\u3002\u5E94\u4E3A " + endOffset + "\uFF0C\u5B9E\u9645 " + pointer) || this;
+    }
+    return EndOfTrackPositionError;
+}(MyError));
 
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 var sectionName = "om_midi";
@@ -508,6 +518,9 @@ var Setting = {
     }
 };
 
+/**
+ * 用于利用临时生成文件来执行操作的函数。
+ */
 var TempFile = /** @class */ (function (_super) {
     __extends(TempFile, _super);
     function TempFile(fileName) {
@@ -533,6 +546,7 @@ function openUrl(url) {
     }
     catch (error) {
         // alert(error);
+        // throw new MyError(error as Error);
     }
 }
 
@@ -642,6 +656,96 @@ var RegularEventType;
     RegularEventType[RegularEventType["CHANNEL_AFTERTOUCH"] = 13] = "CHANNEL_AFTERTOUCH";
     RegularEventType[RegularEventType["END_OF_FILE"] = -1] = "END_OF_FILE";
 })(RegularEventType || (RegularEventType = {}));
+var ControllerType;
+(function (ControllerType) {
+    ControllerType[ControllerType["BANK_SELECT"] = 0] = "BANK_SELECT";
+    ControllerType[ControllerType["MODULATION"] = 1] = "MODULATION";
+    ControllerType[ControllerType["BREATH_CONTROLLER"] = 2] = "BREATH_CONTROLLER";
+    ControllerType[ControllerType["FOOT_CONTROLLER"] = 4] = "FOOT_CONTROLLER";
+    ControllerType[ControllerType["PORTAMENTO_TIME"] = 5] = "PORTAMENTO_TIME";
+    ControllerType[ControllerType["DATA_ENTRY"] = 6] = "DATA_ENTRY";
+    ControllerType[ControllerType["MAIN_VOLUME"] = 7] = "MAIN_VOLUME";
+    ControllerType[ControllerType["BALANCE"] = 8] = "BALANCE";
+    ControllerType[ControllerType["PAN"] = 10] = "PAN";
+    ControllerType[ControllerType["EXPRESSION_CONTROLLER"] = 11] = "EXPRESSION_CONTROLLER";
+    ControllerType[ControllerType["EFFECT_CONTROL_1"] = 12] = "EFFECT_CONTROL_1";
+    ControllerType[ControllerType["EFFECT_CONTROL_2"] = 13] = "EFFECT_CONTROL_2";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_1"] = 16] = "GENERAL_PURPOSE_CONTROLLERS_1";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_2"] = 17] = "GENERAL_PURPOSE_CONTROLLERS_2";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_3"] = 18] = "GENERAL_PURPOSE_CONTROLLERS_3";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_4"] = 19] = "GENERAL_PURPOSE_CONTROLLERS_4";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_0"] = 32] = "LSB_FOR_CONTROLLERS_0";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_1"] = 33] = "LSB_FOR_CONTROLLERS_1";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_2"] = 34] = "LSB_FOR_CONTROLLERS_2";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_3"] = 35] = "LSB_FOR_CONTROLLERS_3";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_4"] = 36] = "LSB_FOR_CONTROLLERS_4";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_5"] = 37] = "LSB_FOR_CONTROLLERS_5";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_6"] = 38] = "LSB_FOR_CONTROLLERS_6";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_7"] = 39] = "LSB_FOR_CONTROLLERS_7";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_8"] = 40] = "LSB_FOR_CONTROLLERS_8";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_9"] = 41] = "LSB_FOR_CONTROLLERS_9";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_10"] = 42] = "LSB_FOR_CONTROLLERS_10";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_11"] = 43] = "LSB_FOR_CONTROLLERS_11";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_12"] = 44] = "LSB_FOR_CONTROLLERS_12";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_13"] = 45] = "LSB_FOR_CONTROLLERS_13";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_14"] = 46] = "LSB_FOR_CONTROLLERS_14";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_15"] = 47] = "LSB_FOR_CONTROLLERS_15";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_16"] = 48] = "LSB_FOR_CONTROLLERS_16";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_17"] = 49] = "LSB_FOR_CONTROLLERS_17";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_18"] = 50] = "LSB_FOR_CONTROLLERS_18";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_19"] = 51] = "LSB_FOR_CONTROLLERS_19";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_20"] = 52] = "LSB_FOR_CONTROLLERS_20";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_21"] = 53] = "LSB_FOR_CONTROLLERS_21";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_22"] = 54] = "LSB_FOR_CONTROLLERS_22";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_23"] = 55] = "LSB_FOR_CONTROLLERS_23";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_24"] = 56] = "LSB_FOR_CONTROLLERS_24";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_25"] = 57] = "LSB_FOR_CONTROLLERS_25";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_26"] = 58] = "LSB_FOR_CONTROLLERS_26";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_27"] = 59] = "LSB_FOR_CONTROLLERS_27";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_28"] = 60] = "LSB_FOR_CONTROLLERS_28";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_29"] = 61] = "LSB_FOR_CONTROLLERS_29";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_30"] = 62] = "LSB_FOR_CONTROLLERS_30";
+    ControllerType[ControllerType["LSB_FOR_CONTROLLERS_31"] = 63] = "LSB_FOR_CONTROLLERS_31";
+    ControllerType[ControllerType["DAMPER_PEDAL"] = 64] = "DAMPER_PEDAL";
+    ControllerType[ControllerType["PORTAMENTO"] = 65] = "PORTAMENTO";
+    ControllerType[ControllerType["SOSTENUTO"] = 66] = "SOSTENUTO";
+    ControllerType[ControllerType["SOFT_PEDAL"] = 67] = "SOFT_PEDAL";
+    ControllerType[ControllerType["LEGATO_FOOTSWITCH"] = 68] = "LEGATO_FOOTSWITCH";
+    ControllerType[ControllerType["HOLD_2"] = 69] = "HOLD_2";
+    ControllerType[ControllerType["SOUND_CONTROLLER_1"] = 70] = "SOUND_CONTROLLER_1";
+    ControllerType[ControllerType["SOUND_CONTROLLER_2"] = 71] = "SOUND_CONTROLLER_2";
+    ControllerType[ControllerType["SOUND_CONTROLLER_3"] = 72] = "SOUND_CONTROLLER_3";
+    ControllerType[ControllerType["SOUND_CONTROLLER_4"] = 73] = "SOUND_CONTROLLER_4";
+    ControllerType[ControllerType["SOUND_CONTROLLER_5"] = 74] = "SOUND_CONTROLLER_5";
+    ControllerType[ControllerType["SOUND_CONTROLLER_6"] = 75] = "SOUND_CONTROLLER_6";
+    ControllerType[ControllerType["SOUND_CONTROLLER_7"] = 76] = "SOUND_CONTROLLER_7";
+    ControllerType[ControllerType["SOUND_CONTROLLER_8"] = 77] = "SOUND_CONTROLLER_8";
+    ControllerType[ControllerType["SOUND_CONTROLLER_9"] = 78] = "SOUND_CONTROLLER_9";
+    ControllerType[ControllerType["SOUND_CONTROLLER_10"] = 79] = "SOUND_CONTROLLER_10";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_5"] = 80] = "GENERAL_PURPOSE_CONTROLLERS_5";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_6"] = 81] = "GENERAL_PURPOSE_CONTROLLERS_6";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_7"] = 82] = "GENERAL_PURPOSE_CONTROLLERS_7";
+    ControllerType[ControllerType["GENERAL_PURPOSE_CONTROLLERS_8"] = 83] = "GENERAL_PURPOSE_CONTROLLERS_8";
+    ControllerType[ControllerType["PORTAMENTO_CONTROL"] = 84] = "PORTAMENTO_CONTROL";
+    ControllerType[ControllerType["EFFECTS_1_DEPTH"] = 91] = "EFFECTS_1_DEPTH";
+    ControllerType[ControllerType["EFFECTS_2_DEPTH"] = 92] = "EFFECTS_2_DEPTH";
+    ControllerType[ControllerType["EFFECTS_3_DEPTH"] = 93] = "EFFECTS_3_DEPTH";
+    ControllerType[ControllerType["EFFECTS_4_DEPTH"] = 94] = "EFFECTS_4_DEPTH";
+    ControllerType[ControllerType["EFFECTS_5_DEPTH"] = 95] = "EFFECTS_5_DEPTH";
+    ControllerType[ControllerType["DATA_INCREMENT"] = 96] = "DATA_INCREMENT";
+    ControllerType[ControllerType["DATA_DECREMENT"] = 97] = "DATA_DECREMENT";
+    ControllerType[ControllerType["NON_REGISTERED_PARAMETER_NUMBER_LSB"] = 98] = "NON_REGISTERED_PARAMETER_NUMBER_LSB";
+    ControllerType[ControllerType["NON_REGISTERED_PARAMETER_NUMBER_MSB"] = 99] = "NON_REGISTERED_PARAMETER_NUMBER_MSB";
+    ControllerType[ControllerType["REGISTERED_PARAMETER_NUMBER_LSB"] = 100] = "REGISTERED_PARAMETER_NUMBER_LSB";
+    ControllerType[ControllerType["REGISTERED_PARAMETER_NUMBER_MSB"] = 101] = "REGISTERED_PARAMETER_NUMBER_MSB";
+    ControllerType[ControllerType["MODE_MESSAGES_1"] = 121] = "MODE_MESSAGES_1";
+    ControllerType[ControllerType["MODE_MESSAGES_2"] = 122] = "MODE_MESSAGES_2";
+    ControllerType[ControllerType["MODE_MESSAGES_3"] = 123] = "MODE_MESSAGES_3";
+    ControllerType[ControllerType["MODE_MESSAGES_4"] = 124] = "MODE_MESSAGES_4";
+    ControllerType[ControllerType["MODE_MESSAGES_5"] = 125] = "MODE_MESSAGES_5";
+    ControllerType[ControllerType["MODE_MESSAGES_6"] = 126] = "MODE_MESSAGES_6";
+    ControllerType[ControllerType["MODE_MESSAGES_7"] = 127] = "MODE_MESSAGES_7";
+})(ControllerType || (ControllerType = {}));
 var MidiFormatType$1 = MidiFormatType;
 
 var IFileReader = /** @class */ (function () {
@@ -786,7 +890,7 @@ var RegularEvent = /** @class */ (function (_super) {
     function RegularEvent(type, values) {
         var _this = _super.call(this) || this;
         _this.type = type;
-        _this.value = values;
+        _this.values = values;
         return _this;
     }
     return RegularEvent;
@@ -830,6 +934,16 @@ var SystemExclusiveEvents = /** @class */ (function (_super) {
         return _super.call(this, RegularEventType.SYSTEM_EXCLUSIVE_EVENTS, values) || this;
     }
     return SystemExclusiveEvents;
+}(RegularEvent));
+var ControllerEvent = /** @class */ (function (_super) {
+    __extends(ControllerEvent, _super);
+    function ControllerEvent(values) {
+        var _this = _super.call(this, RegularEventType.CONTROLLER, values) || this;
+        _this.controller = values[0];
+        _this.value = values[1];
+        return _this;
+    }
+    return ControllerEvent;
 }(RegularEvent));
 
 var MidiTrack = /** @class */ (function () {
@@ -880,7 +994,7 @@ var MidiTrack = /** @class */ (function () {
                 switch (metaType) {
                     case MetaEventType.END_OF_TRACK:
                         if (this.parent.getPointer() !== endOffset)
-                            alert("\u8F68\u9053\u7ED3\u675F\u4F4D\u7F6E\u6709\u8BEF\u3002\u5E94\u4E3A " + endOffset + "\uFF0C\u5B9E\u9645 " + this.parent.getPointer(), localize(str.error), true);
+                            new EndOfTrackPositionError(endOffset, this.parent.getPointer());
                     case MetaEventType.END_OF_FILE:
                         return;
                     case MetaEventType.TEXT_EVENT:
@@ -958,8 +1072,12 @@ var MidiTrack = /** @class */ (function () {
                                 }
                             }
                         }
-                        else
+                        else if (regularType == RegularEventType.CONTROLLER) {
+                            note = new ControllerEvent(byte2);
+                        }
+                        else {
                             note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
+                        }
                         break;
                     case RegularEventType.PROGRAM_CHANGE:
                     case RegularEventType.CHANNEL_AFTERTOUCH:
@@ -1158,6 +1276,8 @@ var SettingsDialog = /** @class */ (function () {
         this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
         this.usingLayering = addControl(this.rightGroup, "checkbox", { text: "应用效果：冰鸠さくの特有图层叠叠乐方法。" });
         this.usingLayering.value = Setting.get("UsingLayering", false);
+        this.optimizeApplyEffects = addControl(this.rightGroup, "checkbox", { text: "应用效果：优化部分效果动画。" });
+        this.optimizeApplyEffects.value = Setting.get("OptimizeApplyEffects", true);
         this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
         this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
         this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
@@ -1166,6 +1286,7 @@ var SettingsDialog = /** @class */ (function () {
         this.okBtn.onClick = function () {
             Setting.set("UsingSelectedLayerName", _this.usingSelectedLayerName.value);
             Setting.set("UsingLayering", _this.usingLayering.value);
+            Setting.set("OptimizeApplyEffects", _this.optimizeApplyEffects.value);
             Setting.set("Language", _this.languageCombo.getSelectedIndex());
             $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
             _this.window.close();
@@ -1304,6 +1425,8 @@ function getComp() {
 
 var MIN_INTERVAL = 5e-4;
 var NULL_SOURCE_NAME = "om midi null";
+var ENTER_INCREMENTAL = 15;
+var ROTATION_INCREMENTAL = 15;
 var Core = /** @class */ (function () {
     function Core(portal) {
         this.portal = portal;
@@ -1403,6 +1526,16 @@ var Core = /** @class */ (function () {
                     setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
                     lastEventType = RegularEventType.NOTE_OFF;
                     lastEventSofarTick = noteEvent.sofarTick;
+                }
+                else if (noteEvent instanceof ControllerEvent) {
+                    var controller = noteEvent.controller;
+                    if (controller === ControllerType.PAN) {
+                        var pan = noteEvent.value - 64; // 64 为中置 0。
+                        setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
+                    }
+                    else if (controller === ControllerType.MAIN_VOLUME) {
+                        setValueAtTime(nullTab.volume, seconds, noteEvent.value, KeyframeInterpolationType.HOLD);
+                    }
                 }
             };
             this_1.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
@@ -1516,6 +1649,7 @@ var Core = /** @class */ (function () {
             invertProperty().setValue(100);
         }
         var layering = Setting.get("UsingLayering", false);
+        var optimize = Setting.get("OptimizeApplyEffects", true);
         //#endregion
         var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventSofarTick = 0;
         var addNoteEvent = function (noteEvent) {
@@ -1528,27 +1662,48 @@ var Core = /** @class */ (function () {
                     noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
                     noteEvent.duration && noteEvent.duration < 0)
                     return;
+                var hasDuration = noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined;
+                var duration = (_b = (_a = noteEvent.interruptDuration) !== null && _a !== void 0 ? _a : noteEvent.duration) !== null && _b !== void 0 ? _b : 0;
+                var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
                 if (effectsTab.hFlip.value) {
                     layer.scale.expressionEnabled = false;
                     var key = layer.scale.addKey(seconds);
-                    layer.scale.setValueAtKey(key, [noteOnCount % 2 ? -100 : 100, 100]);
-                    layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                    var scale = noteOnCount % 2 ? -100 : 100;
+                    if (!optimize || !hasDuration) {
+                        layer.scale.setValueAtKey(key, [scale, 100]);
+                        layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                    }
+                    else {
+                        layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL, 100 + ENTER_INCREMENTAL]);
+                        layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+                        var key2 = layer.scale.addKey(noteOffSeconds);
+                        layer.scale.setValueAtKey(key2, [scale, 100]);
+                        layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+                    }
                 }
                 if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
                     layer.rotation.expressionEnabled = false;
                     var value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
                     var key = layer.rotation.addKey(seconds);
-                    layer.rotation.setValueAtKey(key, value);
-                    layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                    if (!optimize || !hasDuration) {
+                        layer.rotation.setValueAtKey(key, value);
+                        layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+                    }
+                    else {
+                        var startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
+                        layer.rotation.setValueAtKey(key, startValue);
+                        layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+                        var key2 = layer.rotation.addKey(noteOffSeconds);
+                        layer.rotation.setValueAtKey(key2, value);
+                        layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+                    }
                 }
-                if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+                if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
                     layer.timeRemap.expressionEnabled = false;
                     var key = layer.timeRemap.addKey(seconds);
                     layer.timeRemap.setValueAtKey(key, curStartTime);
                     // layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-                    if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
-                        var duration = (_a = noteEvent.interruptDuration) !== null && _a !== void 0 ? _a : noteEvent.duration;
-                        var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+                    if (hasDuration) {
                         var key2 = layer.timeRemap.addKey(noteOffSeconds);
                         var endTime = effectsTab.timeRemap.value ? curStartTime + layerLength : noteOffSeconds - seconds + curStartTime;
                         if (endTime < layer.source.duration)
@@ -1566,14 +1721,12 @@ var Core = /** @class */ (function () {
                     invertProperty().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
                     invertProperty().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
                 }
-                if (effectsTab.tunning.value && audioLayer) { // 已知问题：拉伸（时间重映射截断）长度不能比原素材长
+                if (effectsTab.tunning.value && audioLayer) {
                     audioLayer.timeRemap.expressionEnabled = false;
                     var key = audioLayer.timeRemap.addKey(seconds);
                     audioLayer.timeRemap.setValueAtKey(key, curStartTime);
                     // audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-                    if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
-                        var duration = (_b = noteEvent.interruptDuration) !== null && _b !== void 0 ? _b : noteEvent.duration;
-                        var noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+                    if (hasDuration) {
                         var key2 = audioLayer.timeRemap.addKey(noteOffSeconds);
                         var duration2 = noteOffSeconds - seconds;
                         var pitch = noteEvent.pitch - basePitch;
@@ -1614,7 +1767,7 @@ var Core = /** @class */ (function () {
             try {
                 hasNullSource = !!this.nullSource && !!this.nullSource.parentFolder;
             }
-            catch (error) {
+            catch (error) { // 执行撤销之后可能会变为“对象无效”，它既不是 undefined 也不是 null，只能用 try catch 捕获。
                 hasNullSource = false;
             }
             if (hasNullSource) { // 如果有现有的空对象纯色，不用重新新建一个。
@@ -1627,13 +1780,13 @@ var Core = /** @class */ (function () {
                 var nullSource = nullLayer.source;
                 for (var i = 1; i <= nullSource.parentFolder.items.length; i++) { // 从 1 起始。
                     var item = nullSource.parentFolder.items[i];
-                    if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) {
-                        this.nullSource = item;
-                        nullSource.remove();
-                        continue refindNullSource;
+                    if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) { // TODO: 确认其为 SolidSource。
+                        this.nullSource = item; // 找到名字相同的空对象了。
+                        nullSource.remove(); // 删除刚创建的空对象。
+                        continue refindNullSource; // 跳两层循环，回到第一个 if 语句。
                     }
                 }
-                this.nullSource = nullSource;
+                this.nullSource = nullSource; // 没找到，创建一个新的。
                 nullLayer.source.name = NULL_SOURCE_NAME;
             }
             break;
@@ -1665,6 +1818,7 @@ var Core = /** @class */ (function () {
         var index = checks.indexOf(check);
         if (index === -1)
             return;
+        // 注：根据说明文档，将创建的效果等属性的引用赋值给变量后，下一次创建新的效果时，之前的引用会变为“对象无效”。只能通过其序号进行访问。
         var slider = this.getEffects(layer).property(index + 1).property(1);
         var key = slider.addKey(seconds);
         slider.setValueAtKey(key, value);
@@ -1708,6 +1862,7 @@ var Core = /** @class */ (function () {
         /* return startTimePos === 0 ? comp.displayStartTime :
             (startTimePos === 1 ? comp.time :
             (startTimePos === 2 ? comp.workAreaStart : 0)); // ExtendScript 似乎对三元运算符的优先级有偏见。 */
+        // TODO: 这部分将会被修改为三元运算符。
         if (startTimePos === 0)
             return comp.displayStartTime;
         else if (startTimePos === 1)

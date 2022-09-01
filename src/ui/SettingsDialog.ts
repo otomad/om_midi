@@ -31,6 +31,7 @@ export default class SettingsDialog {
 	languageCombo: DropDownList;
 	usingSelectedLayerName: Checkbox;
 	usingLayering: Checkbox;
+	optimizeApplyEffects: Checkbox;
 	openGithubBtnGroup: Group;
 	openGithubLatestBtn: Button;
 	openGithubPageBtn: Button;
@@ -68,6 +69,8 @@ export default class SettingsDialog {
 		this.usingSelectedLayerName.value = Setting.get("UsingSelectedLayerName", false);
 		this.usingLayering = addControl(this.rightGroup, "checkbox", { text: "应用效果：冰鸠さくの特有图层叠叠乐方法。" });
 		this.usingLayering.value = Setting.get("UsingLayering", false);
+		this.optimizeApplyEffects = addControl(this.rightGroup, "checkbox", { text: "应用效果：优化部分效果动画。" });
+		this.optimizeApplyEffects.value = Setting.get("OptimizeApplyEffects", true);
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
 		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
 		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
@@ -77,6 +80,7 @@ export default class SettingsDialog {
 		this.okBtn.onClick = () => {
 			Setting.set("UsingSelectedLayerName", this.usingSelectedLayerName.value);
 			Setting.set("UsingLayering", this.usingLayering.value);
+			Setting.set("OptimizeApplyEffects", this.optimizeApplyEffects.value);
 			Setting.set("Language", this.languageCombo.getSelectedIndex());
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()]
 			this.window.close();

@@ -14,6 +14,8 @@ export default class NullObjTab extends BaseTab {
 	timeRemap: Checkbox;
 	whirl: Checkbox;
 	noteOn: Checkbox;
+	pan: Checkbox;
+	volume: Checkbox;
 	//#endregion
 
 	constructor(parent: Portal) {
@@ -29,5 +31,7 @@ export default class NullObjTab extends BaseTab {
 		this.timeRemap = this.addCheckbox("时间重映射");
 		this.whirl = this.addCheckbox("来回");
 		this.noteOn = this.addCheckbox("音符开");
+		this.pan = this.addCheckbox("通道声相");
+		this.volume = this.addCheckbox("通道音量");
 	}
 }

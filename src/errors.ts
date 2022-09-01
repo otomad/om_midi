@@ -92,3 +92,9 @@ export class NotOneTrackForApplyEffectsOnlyError extends MyError {
 		super("错误：应用效果只能同时选择一条轨道。");
 	}
 }
+
+export class EndOfTrackPositionError extends MyError {
+	constructor(endOffset: number, pointer: number) {
+		super(`轨道结束位置有误。应为 ${endOffset}，实际 ${pointer}`);
+	}
+}

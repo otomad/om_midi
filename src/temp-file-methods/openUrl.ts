@@ -1,3 +1,4 @@
+import { MyError } from "../errors";
 import TempFile from "./TempFile";
 
 function openUrl_legacy(url: string): void {
@@ -9,6 +10,7 @@ function openUrl_legacy(url: string): void {
 		html.execute();
 	} catch (e) {
 		// alert("Error, Can not open.");
+		// throw new MyError(e as Error);
 	};
 }
 
@@ -27,5 +29,6 @@ export default function openUrl(url: string): void {
 		system.callSystem(cmd);
 	} catch (error) {
 		// alert(error);
+		// throw new MyError(error as Error);
 	}
 }

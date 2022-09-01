@@ -1,4 +1,4 @@
-import { MetaEventType, RegularEventType } from "./MidiFormatType";
+import { ControllerType, MetaEventType, RegularEventType } from "./MidiFormatType";
 
 export class NoteEvent {
 	deltaTime: number = 0; // 与前一项间隔基本时间。
@@ -79,12 +79,12 @@ export class CustomMetaEvent extends MetaEvent {
 
 export class RegularEvent extends NoteEvent {
 	type: RegularEventType;
-	value: number[];
+	values: number[];
 	
 	constructor(type: RegularEventType, values: number[]) {
 		super();
 		this.type = type;
-		this.value = values;
+		this.values = values;
 	}
 }
 
@@ -129,5 +129,16 @@ export class NoteOffEvent extends NoteOnOffEvent {
 export class SystemExclusiveEvents extends RegularEvent {
 	constructor(values: number[]) {
 		super(RegularEventType.SYSTEM_EXCLUSIVE_EVENTS, values);
+	}
+}
+
+export class ControllerEvent extends RegularEvent {
+	controller: ControllerType;
+	value: number;
+	
+	constructor(values: number[]) {
+		super(RegularEventType.CONTROLLER, values);
+		this.controller = values[0];
+		this.value = values[1];
 	}
 }

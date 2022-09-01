@@ -97,7 +97,7 @@ export default class Portal {
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
 			if (file === null) return;
-			let midi: Midi;
+			let midi: Midi | undefined;
 			try {
 				midi = new Midi(file);
 				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
@@ -110,7 +110,7 @@ export default class Portal {
 				this.selectBpmTxt.enabled = true;
 				this.midi = midi;
 			} catch (error) {
-				if (midi!) midi.file?.close();
+				if (midi) midi.file?.close();
 				// throw new MyError(error as Error);
 			}
 		}
