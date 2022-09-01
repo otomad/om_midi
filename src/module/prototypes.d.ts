@@ -32,3 +32,13 @@ interface DropDownList {
 	 */
 	getSelectedIndex(): number;
 }
+
+interface Math {
+	/**
+	 * 输入一个数字，若为正数则返回 1，若为负数则返回 -1，若为 0 则返回 0。
+	 * 注意：对于正负 0 均返回 0。
+	 * @param x - 数字。
+	 * @returns 数字的正负性。
+	 */
+	sign(x: number): number;
+}

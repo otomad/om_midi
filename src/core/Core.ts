@@ -66,7 +66,8 @@ export default class Core {
 				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
 			let noteOnCount = 0,
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
-				lastEventSofarTick = 0;
+				lastEventSofarTick = -1,
+				lastPan = NaN, lastVolume = NaN;
 			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
 					return; // 跳过同一时间点上的音符。
@@ -104,9 +105,13 @@ export default class Core {
 				} else if (noteEvent instanceof ControllerEvent) {
 					const controller = noteEvent.controller;
 					if (controller === ControllerType.PAN) {
+						if (lastPan === noteEvent.value) return;
+						lastPan = noteEvent.value;
 						const pan = noteEvent.value - 64; // 64 为中置 0。
 						setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
 					} else if (controller === ControllerType.MAIN_VOLUME) {
+						if (lastVolume === noteEvent.value) return;
+						lastVolume = noteEvent.value;
 						setValueAtTime(nullTab.volume, seconds, noteEvent.value, KeyframeInterpolationType.HOLD);
 					}
 				}
@@ -230,11 +235,12 @@ export default class Core {
 						layer.scale.setValueAtKey(key, [scale, 100]);
 						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL, 100 + ENTER_INCREMENTAL]);
-						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+						layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL * Math.sign(scale), 100 + ENTER_INCREMENTAL]);
+						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = layer.scale.addKey(noteOffSeconds);
 						layer.scale.setValueAtKey(key2, [scale, 100]);
-						layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+						this.setOutPointKeyEase(layer.scale, key2);
+						layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
 					}
 				}
 				if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
@@ -247,10 +253,11 @@ export default class Core {
 					} else {
 						const startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
 						layer.rotation.setValueAtKey(key, startValue);
-						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = layer.rotation.addKey(noteOffSeconds);
 						layer.rotation.setValueAtKey(key2, value);
-						layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+						this.setOutPointKeyEase(layer.rotation, key2);
+						layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
 					}
 				}
 				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
@@ -340,7 +347,9 @@ export default class Core {
 				const nullSource = nullLayer.source as AVItem;
 				for (let i = 1; i <= nullSource.parentFolder.items.length; i++) { // 从 1 起始。
 					const item = nullSource.parentFolder.items[i];
-					if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) { // TODO: 确认其为 SolidSource。
+					if (item.name === NULL_SOURCE_NAME &&
+						item instanceof FootageItem &&
+						item.mainSource instanceof SolidSource) {
 						this.nullSource = item; // 找到名字相同的空对象了。
 						nullSource.remove(); // 删除刚创建的空对象。
 						continue refindNullSource; // 跳两层循环，回到第一个 if 语句。
@@ -462,5 +471,19 @@ export default class Core {
 		newLayer.inPoint = time;
 		newLayer.outPoint = outPoint;
 		return newLayer;
+	}
+	
+	/**
+	 * 为出点关键帧设置 100% 缓入的缓动曲线。
+	 * @param property - 属性。
+	 * @param keyIndex - 关键帧序号。
+	 */
+	private setOutPointKeyEase(property: Property, keyIndex: number): void {
+		const easeLength = property.keyInTemporalEase(keyIndex).length;
+		const ease: KeyframeEase[] = [];
+		for (let i = 0; i < easeLength; i++)
+			ease.push(new KeyframeEase(0, 100));
+		if (ease.length !== 0)
+			property.setTemporalEaseAtKey(keyIndex, ease as [KeyframeEase]);
 	}
 }

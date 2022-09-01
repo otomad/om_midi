@@ -26,4 +26,10 @@ export default function initPrototypes() {
 				return i;
 		return -1;
 	}
+	
+	Math.sign = function (x: number) {
+		if (x > 0) return 1; // TODO: 这部分将会被修改为三元运算符。
+		else if (x < 0) return -1;
+		else return 0;
+	}
 }

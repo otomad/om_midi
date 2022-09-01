@@ -8,7 +8,7 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 部署日期：2022年9月1日星期四上午11点19分
+ * 部署日期：2022年9月1日星期四中午12点27分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Thursday, September 1, 2022 11:19 AM
+ * Building Date: Thursday, September 1, 2022 12:27 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
@@ -1488,7 +1488,7 @@ var Core = /** @class */ (function () {
             var setValueAtTime = function (check, seconds, value, inType, outType) {
                 return _this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
             };
-            var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventSofarTick = 0;
+            var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventSofarTick = -1, lastPan = NaN, lastVolume = NaN;
             var addNoteEvent = function (noteEvent) {
                 var _a, _b;
                 if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
@@ -1530,10 +1530,16 @@ var Core = /** @class */ (function () {
                 else if (noteEvent instanceof ControllerEvent) {
                     var controller = noteEvent.controller;
                     if (controller === ControllerType.PAN) {
+                        if (lastPan === noteEvent.value)
+                            return;
+                        lastPan = noteEvent.value;
                         var pan = noteEvent.value - 64; // 64 为中置 0。
                         setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
                     }
                     else if (controller === ControllerType.MAIN_VOLUME) {
+                        if (lastVolume === noteEvent.value)
+                            return;
+                        lastVolume = noteEvent.value;
                         setValueAtTime(nullTab.volume, seconds, noteEvent.value, KeyframeInterpolationType.HOLD);
                     }
                 }
@@ -1674,11 +1680,12 @@ var Core = /** @class */ (function () {
                         layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
                     }
                     else {
-                        layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL, 100 + ENTER_INCREMENTAL]);
-                        layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+                        layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL * Math.sign(scale), 100 + ENTER_INCREMENTAL]);
+                        layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
                         var key2 = layer.scale.addKey(noteOffSeconds);
                         layer.scale.setValueAtKey(key2, [scale, 100]);
-                        layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+                        _this.setOutPointKeyEase(layer.scale, key2);
+                        layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
                     }
                 }
                 if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
@@ -1692,10 +1699,11 @@ var Core = /** @class */ (function () {
                     else {
                         var startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
                         layer.rotation.setValueAtKey(key, startValue);
-                        layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.BEZIER);
+                        layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
                         var key2 = layer.rotation.addKey(noteOffSeconds);
                         layer.rotation.setValueAtKey(key2, value);
-                        layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+                        _this.setOutPointKeyEase(layer.rotation, key2);
+                        layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
                     }
                 }
                 if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
@@ -1780,7 +1788,9 @@ var Core = /** @class */ (function () {
                 var nullSource = nullLayer.source;
                 for (var i = 1; i <= nullSource.parentFolder.items.length; i++) { // 从 1 起始。
                     var item = nullSource.parentFolder.items[i];
-                    if (item.name === NULL_SOURCE_NAME && item instanceof FootageItem) { // TODO: 确认其为 SolidSource。
+                    if (item.name === NULL_SOURCE_NAME &&
+                        item instanceof FootageItem &&
+                        item.mainSource instanceof SolidSource) {
                         this.nullSource = item; // 找到名字相同的空对象了。
                         nullSource.remove(); // 删除刚创建的空对象。
                         continue refindNullSource; // 跳两层循环，回到第一个 if 语句。
@@ -1905,6 +1915,19 @@ var Core = /** @class */ (function () {
         newLayer.inPoint = time;
         newLayer.outPoint = outPoint;
         return newLayer;
+    };
+    /**
+     * 为出点关键帧设置 100% 缓入的缓动曲线。
+     * @param property - 属性。
+     * @param keyIndex - 关键帧序号。
+     */
+    Core.prototype.setOutPointKeyEase = function (property, keyIndex) {
+        var easeLength = property.keyInTemporalEase(keyIndex).length;
+        var ease = [];
+        for (var i = 0; i < easeLength; i++)
+            ease.push(new KeyframeEase(0, 100));
+        if (ease.length !== 0)
+            property.setTemporalEaseAtKey(keyIndex, ease);
     };
     return Core;
 }());
@@ -2119,6 +2142,14 @@ function initPrototypes() {
             if (this.items[i].selected)
                 return i;
         return -1;
+    };
+    Math.sign = function (x) {
+        if (x > 0)
+            return 1; // TODO: 这部分将会被修改为三元运算符。
+        else if (x < 0)
+            return -1;
+        else
+            return 0;
     };
 }
 
