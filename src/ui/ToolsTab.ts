@@ -6,7 +6,7 @@ import Separator from "../components/Separator";
 import Ease100Percent from "./Ease100Percent";
 import BaseTool from "./BaseTool";
 import Setting from "../settings/Setting";
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 
 export default class ToolsTab extends BaseTab {
 	//#region 组件对象

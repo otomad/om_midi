@@ -2,7 +2,7 @@ import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 
 export default class MidiTrack {
 	// extends Array<NoteEvent> // 继承后绑定不上对象

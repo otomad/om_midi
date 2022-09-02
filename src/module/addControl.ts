@@ -53,10 +53,10 @@ export default function addControl<C extends ControlTypeName>(parent: ContainerT
 		_control = parent.add(type, undefined, undefined, undefined, properties);
 	else if (type == "scrollbar" || type == "slider")
 		_control = parent.add(type as any, undefined, undefined, undefined, undefined, properties);
-		// 技术难点待解决，联合类型无法被收敛到此重载函数。暂时无解用 any 临时解决。
+		// TODO: 技术难点待解决，联合类型无法被收敛到此重载函数。暂时无解用 any 临时解决。
 	else
 		_control = parent.add(type as any, undefined, undefined, properties);
-		// 技术难点待解决，未知原因，疑同上。
+		// TODO: 技术难点待解决，未知原因，疑同上。
 	const control = _control as ControlType<C>;
 	if (params != undefined)
 		for (const key in params)

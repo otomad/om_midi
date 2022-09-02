@@ -1,4 +1,4 @@
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 

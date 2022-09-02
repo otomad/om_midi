@@ -9,7 +9,7 @@ import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";

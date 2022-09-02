@@ -1,7 +1,7 @@
 import Separator from "../components/Separator";
 import addControl, { addGroup, addItems, ContainerType } from "../module/addControl";
 import Setting from "../settings/Setting";
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 import { CannotFindWindowError } from "../errors";
 import User from "../user";
 import openUrl from "../temp-file-methods/openUrl";

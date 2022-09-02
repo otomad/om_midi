@@ -1,5 +1,5 @@
 import { CannotFindWindowError } from "../errors";
-import uiStr from "../languages/uiStr";
+import uiStr from "../languages/ui-str";
 import MidiTrack from "../midi/MidiTrack";
 import addControl from "../module/addControl";
 import Portal from "./Portal";

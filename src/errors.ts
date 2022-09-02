@@ -1,4 +1,4 @@
-import uiStr from "./languages/uiStr";
+import uiStr from "./languages/ui-str";
 
 export class MyError extends Error {
 	constructor(msg: Error);
