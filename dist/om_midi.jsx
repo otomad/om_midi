@@ -8,11 +8,11 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 构建日期：2022 年 9 月 2 日 星期五 下午 17:30:26
+ * 构建日期：2022年9月2日星期五晚上10点47分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
- * 日期：2011 年 12 月 25 日 星期日 晚上 22:58:10 太平洋时间
+ * 日期：2011年12月25日星期日晚上10点58分 太平洋时间
  * 作者：大卫·范·布林克
  *
  * 此脚本是 omino Adobe 脚本套件的一部分。
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Friday, September 2, 2022 5:30 PM
+ * Building Date: Friday, September 2, 2022 10:47 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
@@ -77,10 +77,10 @@ function addControl(parent, type, params, properties) {
         _control = parent.add(type, undefined, undefined, undefined, properties);
     else if (type == "scrollbar" || type == "slider")
         _control = parent.add(type, undefined, undefined, undefined, undefined, properties);
-    // 技术难点待解决，联合类型无法被收敛到此重载函数。暂时无解用 any 临时解决。
+    // TODO: 技术难点待解决，联合类型无法被收敛到此重载函数。暂时无解用 any 临时解决。
     else
         _control = parent.add(type, undefined, undefined, properties);
-    // 技术难点待解决，未知原因，疑同上。
+    // TODO: 技术难点待解决，未知原因，疑同上。
     var control = _control;
     if (params != undefined)
         for (var key in params)
@@ -163,103 +163,83 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
-var uiStr = {
-    ok: {
-        zh: "确定",
-        en: "OK",
-        ja: "OK",
-    },
-    cancel: {
-        zh: "取消",
-        en: "Cancel",
-        ja: "キャンセル",
-    },
-    channel_abbr: {
-        zh: "通道",
-        en: "CH",
-        ja: "チャネル",
-    },
-    error: {
-        zh: "错误",
-        en: "Error",
-        ja: "エラー",
-    },
-    warning: {
-        zh: "警告",
-        en: "Warning",
-        ja: "警告",
-    },
-    apply: {
-        zh: "应用",
-        en: "Apply",
-        ja: "適用",
-    },
-    settings: {
-        zh: "设置",
-        en: "Settings",
-        ja: "設定",
-    },
-    select_all: {
-        zh: "全选",
-        en: "Select all",
-        ja: "すべて選択",
-    },
-    channel: {
-        zh: "通道",
-        en: "Channel",
-        ja: "チャネル",
-    },
-    name: {
-        zh: "名称",
-        en: "name",
-        ja: "名",
-    },
-    note_count: {
-        zh: "音符数",
-        en: "Note count",
-        ja: "音符の数"
-    },
-    language: {
-        zh: "语言",
-        en: "Langugae",
-        ja: "言語",
-    },
-    general: {
-        zh: "通用",
-        en: "General",
-        ja: "一般",
-    },
-    app_default: {
-        zh: "应用默认值",
-        en: "App Default",
-        ja: "アプリのデフォルト",
-    },
-    tools: {
-        zh: "工具",
-        en: "Tools",
-        ja: "ツール",
-    },
-    create_null_object_short: {
-        zh: "空对象",
-        en: "Null",
-        ja: "ヌル",
-    },
-    create_null_object: {
-        zh: "创建空对象",
-        en: "Create Null Object",
-        ja: "ヌル オブジェクトを作成",
-    },
-    apply_effects_short: {
-        zh: "应用效果",
-        en: "Effects",
-        ja: "効果を適用",
-    },
-    apply_effects: {
-        zh: "应用效果",
-        en: "Apply Effects",
-        ja: "効果を適用",
-    },
+var English = {
+    ok: "OK",
+    cancel: "Cancel",
+    channel_abbr: "CH",
+    error: "Error",
+    warning: "Warning",
+    apply: "Apply",
+    settings: "Settings",
+    select_all: "Select all",
+    channel: "Channel",
+    name: "name",
+    note_count: "Note count",
+    language: "Langugae",
+    general: "General",
+    app_default: "App Default",
+    tools: "Tools",
+    create_null_object_short: "Null",
+    create_null_object: "Create Null Object",
+    apply_effects_short: "Effects",
+    apply_effects: "Apply Effects",
 };
+
+var Japanese = {
+    ok: "OK",
+    cancel: "キャンセル",
+    channel_abbr: "チャネル",
+    error: "エラー",
+    warning: "警告",
+    apply: "適用",
+    settings: "設定",
+    select_all: "すべて選択",
+    channel: "チャネル",
+    name: "名",
+    note_count: "音符の数",
+    language: "言語",
+    general: "一般",
+    app_default: "アプリのデフォルト",
+    tools: "ツール",
+    create_null_object_short: "ヌル",
+    create_null_object: "ヌル オブジェクトを作成",
+    apply_effects_short: "効果を適用",
+    apply_effects: "効果を適用",
+};
+
+var SChinese = {
+    ok: "确定",
+    cancel: "取消",
+    channel_abbr: "通道",
+    error: "错误",
+    warning: "警告",
+    apply: "应用",
+    settings: "设置",
+    select_all: "全选",
+    channel: "通道",
+    name: "名称",
+    note_count: "音符数",
+    language: "语言",
+    general: "通用",
+    app_default: "应用默认值",
+    tools: "工具",
+    create_null_object_short: "空对象",
+    create_null_object: "创建空对象",
+    apply_effects_short: "应用效果",
+    apply_effects: "应用效果",
+};
+
+var uiStr = {};
+for (var _key in SChinese) {
+    if (Object.prototype.hasOwnProperty.call(SChinese, _key)) {
+        var key = _key;
+        uiStr[key] = {
+            zh: SChinese[key],
+            en: English[key],
+            ja: Japanese[key],
+        };
+    }
+}
 
 var SPACING = 2;
 var tabGroupParams = {
@@ -604,64 +584,31 @@ var SettingsHelper = {
 };
 
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
-var tags = {
-    language: "Language",
-    usingSelectedLayerName: "UsingSelectedLayerName",
-    usingLayering: "UsingLayering",
-    optimizeApplyEffects: "OptimizeApplyEffects",
-    normalizePanTo100: "NormalizePanTo100",
-    addToEffectTransform: "AddToEffectTransform",
-    applyEffectsStartTime: "ApplyEffectsStartTime",
-    nullObjectStartTime: "NullObjectStartTime",
-    lastTool: "LastTool",
+var defs = {
+    Language: 0,
+    UsingSelectedLayerName: false,
+    UsingLayering: false,
+    OptimizeApplyEffects: true,
+    NormalizePanTo100: true,
+    AddToEffectTransform: false,
+    ApplyEffectsStartTime: 1,
+    NullObjectStartTime: 0,
+    LastTool: 0,
 };
-var Setting = {
-    getLanguage: function (def) {
-        if (def === void 0) { def = 0; }
-        return SettingsHelper.get(tags.language, def);
-    },
-    setLanguage: function (value) { return SettingsHelper.set(tags.language, value); },
-    getUsingSelectedLayerName: function (def) {
-        if (def === void 0) { def = false; }
-        return SettingsHelper.get(tags.usingSelectedLayerName, def);
-    },
-    setUsingSelectedLayerName: function (value) { return SettingsHelper.set(tags.usingSelectedLayerName, value); },
-    getUsingLayering: function (def) {
-        if (def === void 0) { def = false; }
-        return SettingsHelper.get(tags.usingLayering, def);
-    },
-    setUsingLayering: function (value) { return SettingsHelper.set(tags.usingLayering, value); },
-    getOptimizeApplyEffects: function (def) {
-        if (def === void 0) { def = true; }
-        return SettingsHelper.get(tags.optimizeApplyEffects, def);
-    },
-    setOptimizeApplyEffects: function (value) { return SettingsHelper.set(tags.optimizeApplyEffects, value); },
-    getNormalizePanTo100: function (def) {
-        if (def === void 0) { def = true; }
-        return SettingsHelper.get(tags.normalizePanTo100, def);
-    },
-    setNormalizePanTo100: function (value) { return SettingsHelper.set(tags.normalizePanTo100, value); },
-    getAddToEffectTransform: function (def) {
-        if (def === void 0) { def = false; }
-        return SettingsHelper.get(tags.addToEffectTransform, def);
-    },
-    setAddToEffectTransform: function (value) { return SettingsHelper.set(tags.addToEffectTransform, value); },
-    getApplyEffectsStartTime: function (def) {
-        if (def === void 0) { def = 1; }
-        return SettingsHelper.get(tags.applyEffectsStartTime, def);
-    },
-    setApplyEffectsStartTime: function (value) { return SettingsHelper.set(tags.applyEffectsStartTime, value); },
-    getNullObjectStartTime: function (def) {
-        if (def === void 0) { def = 0; }
-        return SettingsHelper.get(tags.nullObjectStartTime, def);
-    },
-    setNullObjectStartTime: function (value) { return SettingsHelper.set(tags.nullObjectStartTime, value); },
-    getLastTool: function (def) {
-        if (def === void 0) { def = 0; }
-        return SettingsHelper.get(tags.lastTool, def);
-    },
-    setLastTool: function (value) { return SettingsHelper.set(tags.lastTool, value); },
+var Setting = {};
+var _loop_1 = function (_tag) {
+    if (Object.prototype.hasOwnProperty.call(defs, _tag)) {
+        var tag_1 = _tag;
+        Setting["get" + tag_1] = function (def) {
+            if (def === void 0) { def = defs[tag_1]; }
+            return SettingsHelper.get(tag_1, def);
+        };
+        Setting["set" + tag_1] = function (value) { return SettingsHelper.set(tag_1, value); };
+    }
 };
+for (var _tag in defs) {
+    _loop_1(_tag);
+}
 
 /**
  * MIDI 文件格式类型。
