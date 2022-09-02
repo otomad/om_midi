@@ -2,9 +2,7 @@ import { MidiHeaderValidationError, MidiCustomEventsError, MidiTrackHeaderValida
 import BinContentReader from "./BinContentReader";
 import BinFileReader from "./BinFileReader";
 import Midi from "./Midi";
-import MidiFormatType, { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiTrack from "./MidiTrack";
-import { CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
 
 export default class MidiReader extends BinFileReader {
 	midi: Midi;

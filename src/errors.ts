@@ -95,6 +95,18 @@ export class NotOneTrackForApplyEffectsOnlyError extends MyError {
 
 export class EndOfTrackPositionError extends MyError {
 	constructor(endOffset: number, pointer: number) {
-		super(`轨道结束位置有误。应为 ${endOffset}，实际 ${pointer}`);
+		super(`错误：轨道结束位置有误。应为 ${endOffset}，实际 ${pointer}`);
+	}
+}
+
+export class CannotSetTimeRemapError extends MyError {
+	constructor() {
+		super("错误：所选图层不能设置时间重映射。");
+	}
+}
+
+export class CannotTuningError extends MyError {
+	constructor() {
+		super("错误：所选图层不包含音频，不能进行调音。");
 	}
 }

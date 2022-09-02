@@ -1,10 +1,8 @@
-// 取名为 Setting 而不是 Settings 以免和内置对象冲突。
-
 import { UnsupportedSettingTypeError } from "../errors";
 
 const sectionName = "om_midi";
 
-const Setting = {
+const SettingsHelper = {
 	get<T>(key: string, defaultValue: T): T {
 		if (!app.settings.haveSetting(sectionName, key)) return defaultValue;
 		else {
@@ -27,4 +25,4 @@ const Setting = {
 	}
 };
 
-export default Setting;
+export default SettingsHelper;

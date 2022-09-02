@@ -1,12 +1,10 @@
-import addControl, { addGroup, addItems } from "../module/addControl";
+import { addGroup, addItems } from "../module/addControl";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
-import { SPACING } from "./BaseTab";
+import BaseTool from "./BaseTool";
 import ToolsTab from "./ToolsTab";
 
-export default class MarkerConductor {
+export default class MarkerConductor extends BaseTool {
 	//#region 组件对象
-	parent: ToolsTab;
-	group: Group;
 	unitGroup: Group;
 	unitLbl: StaticText;
 	unitCombo: DropDownList;
@@ -22,13 +20,7 @@ export default class MarkerConductor {
 	//#endregion
 	
 	constructor(parent: ToolsTab) {
-		this.parent = parent;
-		this.group = addControl(this.parent.toolsPanel, "group", {
-			orientation: "column",
-			alignment: ["fill", "fill"],
-			alignChildren: "fill",
-			spacing: SPACING,
-		});
+		super(parent);
 		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		({
 			group: this.unitGroup,

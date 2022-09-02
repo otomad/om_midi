@@ -10,7 +10,7 @@ export default class ApplyEffectsTab extends BaseTab {
 	cwRotation: Checkbox;
 	ccwRotation: Checkbox;
 	negative: Checkbox;
-	tunning: Checkbox;
+	tuning: Checkbox;
 	basePitchGroup: Group;
 	basePitchLbl: StaticText;
 	basePitchKeyCombo: DropDownList;
@@ -25,7 +25,7 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.cwRotation = this.addCheckbox("顺时针旋转");
 		this.ccwRotation = this.addCheckbox("逆时针旋转");
 		this.negative = this.addCheckbox("颜色反转");
-		this.tunning = this.addCheckbox("调音");
+		this.tuning = this.addCheckbox("调音");
 		({
 			group: this.basePitchGroup,
 			label: this.basePitchLbl,
@@ -36,7 +36,7 @@ export default class ApplyEffectsTab extends BaseTab {
 		addItems(this.basePitchOctCombo, ..."0,1,2,3,4,5,6,7,8,9,10".split(','));
 		this.basePitchOctCombo.selection = 5;
 		this.basePitchGroup.enabled = false;
-		this.tunning.onClick = () => this.basePitchGroup.enabled = this.tunning.value;
+		this.tuning.onClick = () => this.basePitchGroup.enabled = this.tuning.value;
 		this.cwRotation.onClick = () => this.ccwRotation.value = false;
 		this.ccwRotation.onClick = () => this.cwRotation.value = false;
 		this.timeRemap.onClick = () => this.timeRemap2.value = false;

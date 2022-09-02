@@ -1,9 +1,9 @@
 //#region 类型
-type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
+export type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
 
 export type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
 
-type ControlType<C extends ControlTypeName> =
+export type ControlType<C extends ControlTypeName> =
 	C extends "button" ? Button :
 	C extends "checkbox" ? Checkbox :
 	C extends "dropdownlist" ? DropDownList :
@@ -23,7 +23,7 @@ type ControlType<C extends ControlTypeName> =
 	C extends "tabbedpanel" ? TabbedPanel :
 	C extends "treeview" ? TreeView : never;
 	
-type PropertiesType<C extends ControlTypeName> =
+export type PropertiesType<C extends ControlTypeName> =
 	C extends "dropdownlist" ? _AddControlPropertiesDropDownList :
 	C extends "edittext" ? _AddControlPropertiesEditText :
 	C extends "iconbutton" ? _AddControlPropertiesIconButton :

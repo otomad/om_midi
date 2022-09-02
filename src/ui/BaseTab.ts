@@ -11,9 +11,11 @@ export const tabGroupParams: Partial<Group> = {
 };
 
 export default abstract class BaseTab {
+	//#region 组件对象
 	parent: Portal;
 	tab: Tab;
 	group: Group;
+	//#endregion
 	
 	constructor(parent: Portal, text: string, groupParams: Partial<Group> = tabGroupParams) {
 		this.parent = parent;

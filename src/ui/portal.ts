@@ -14,7 +14,7 @@ import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
 import Base64Image from "../temp-file-methods/Base64Image";
-import Setting from "../module/Setting";
+import Setting from "../settings/Setting";
 
 export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 
@@ -125,16 +125,16 @@ export default class Portal {
 		this.tabs.onChange = () => {
 			const tab = this.getSelectedTab();
 			if (tab === this.applyEffectsTab)
-				this.startTimeCombo.selection = Setting.get("ApplyEffectsStartTime", 1);
+				this.startTimeCombo.selection = Setting.getApplyEffectsStartTime();
 			else
-				this.startTimeCombo.selection = Setting.get("NullObjectStartTime", 0);
+				this.startTimeCombo.selection = Setting.getNullObjectStartTime();
 		}
 		this.startTimeCombo.onChange = () => {
 			const tab = this.getSelectedTab(), value = this.startTimeCombo.getSelectedIndex();
 			if (tab === this.applyEffectsTab)
-				Setting.set("ApplyEffectsStartTime", value);
+				Setting.setApplyEffectsStartTime(value);
 			else
-				Setting.set("NullObjectStartTime", value);
+				Setting.setNullObjectStartTime(value);
 		}
 	}
 	

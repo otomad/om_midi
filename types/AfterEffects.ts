@@ -1938,6 +1938,7 @@ declare interface TwoOrThreeDType extends PropertyClassMembers {
 
 type NoValueProperty = Property<NoValueType>
 type ColorProperty = Property<ColorType>
+type BooleanProperty = Property<BooleanType>
 type OneDProperty = Property<OneDType>
 type TwoDProperty = Property<TwoDType>
 type ThreeDProperty = Property<ThreeDType>

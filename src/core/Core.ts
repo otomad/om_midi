@@ -1,13 +1,14 @@
-import { CannotFindCompositionError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
+import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
 import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
-import Setting from "../module/Setting";
+import Setting from "../settings/Setting";
 import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
 import { ControllerType, RegularEventType } from "../midi/MidiFormatType";
 import MidiTrack from "../midi/MidiTrack";
 
 const MIN_INTERVAL = 5e-4;
-const NULL_SOURCE_NAME = "om midi null"
+const NULL_SOURCE_NAME = "om midi null";
+const TRANSFORM_NAME = "om midi Transform";
 const ENTER_INCREMENTAL = 15;
 const ROTATION_INCREMENTAL = 15;
 
@@ -29,8 +30,11 @@ export default class Core {
 			else if (tab === this.portal.applyEffectsTab)
 				this.applyEffects(comp);
 			else if (tab === this.portal.toolsTab) {
-				if (this.portal.toolsTab.toolsCombo.getSelectedIndex() === 0)
+				const tool = this.portal.toolsTab.getSelectedTool();
+				if (tool === this.portal.toolsTab.marker)
 					this.applyMarkerConductor(comp);
+				else if (tool === this.portal.toolsTab.ease)
+					this.applyEase100Percent(comp);
 			}
 		} catch (error) {
 			throw new MyError(error as Error);
@@ -45,11 +49,17 @@ export default class Core {
 		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
 		const checks = nullTab.getCheckedChecks();
 		if (checks.length === 0) throw new NoOptionsCheckedError();
-		let usingSelectedLayerName = Setting.get("UsingSelectedLayerName", false);
+		
+		//#region 设置
+		let usingSelectedLayerName = Setting.getUsingSelectedLayerName();
 		const selectedLayer = this.getSelectLayer(comp);
 		if (selectedLayer === null) usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
+		const pan100 = Setting.getNormalizePanTo100();
+		//#endregion
+		
 		const secondsPerTick = this.getSecondsPerTick();
 		const startTime = this.getStartTime(comp);
+		
 		for (const track of this.portal.selectedTracks) {
 			if (track === undefined && !this.portal.midi.isPureQuarter) continue;
 			const nullLayer = this.createNullLayer(comp);
@@ -64,6 +74,7 @@ export default class Core {
 				this.addSliderControl(nullLayer, check.text); // 限制：只能存储索引值。
 			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType) =>
 				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
+			
 			let noteOnCount = 0,
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
 				lastEventSofarTick = -1,
@@ -74,8 +85,9 @@ export default class Core {
 				const seconds = noteEvent.sofarTick * secondsPerTick;
 				if (noteEvent instanceof NoteOnEvent) {
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
-						noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
-						noteEvent.duration && noteEvent.duration < 0) return;
+						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
+					// ExtendScript 最新迷惑行为：undefined < 0 为 true！！！
+					// 解决方法：将 undefined 前加一元正号强行转换为数字类型 NaN，即可进行比较。
 					setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.duration, seconds, noteEvent.duration ?? 0, KeyframeInterpolationType.HOLD);
@@ -107,7 +119,11 @@ export default class Core {
 					if (controller === ControllerType.PAN) {
 						if (lastPan === noteEvent.value) return;
 						lastPan = noteEvent.value;
-						const pan = noteEvent.value - 64; // 64 为中置 0。
+						let pan = noteEvent.value - 64; // 64 为中置 0。
+						if (pan100) { // 规范到 -100 ~ 100（小数）。
+							if (pan < 0) pan = pan / 64 * 100;
+							else if (pan > 0) pan = pan / 63 * 100;
+						} // 否则是 -64 ~ 63（整数），两边没对齐。
 						setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
 					} else if (controller === ControllerType.MAIN_VOLUME) {
 						if (lastVolume === noteEvent.value) return;
@@ -158,7 +174,7 @@ export default class Core {
 		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
 		if (effectsTab.getCheckedChecks().length === 0) throw new NoOptionsCheckedError();
 		if (this.portal.selectedTracks.length !== 1) throw new NotOneTrackForApplyEffectsOnlyError();
-		const isTunningOnly = effectsTab.getCheckedChecks().length === 1 && effectsTab.tunning.value;
+		const isTunningOnly = effectsTab.getCheckedChecks().length === 1 && effectsTab.tuning.value;
 		const _layer = this.getSelectLayer(comp);
 		if (_layer === null) throw new NoLayerSelectedError();
 		let layer = _layer; // 去掉后，所有函数内部截获的 layer 变量可能会为 null。
@@ -172,12 +188,36 @@ export default class Core {
 			startTime = layer.inPoint;
 		else if (!isTunningOnly)
 			layer.startTime = getLayerStartTime();
+
+		//#region 设置
+		const layering = Setting.getUsingLayering();
+		const optimize = Setting.getOptimizeApplyEffects();
+		const addToGeometry2 = Setting.getAddToEffectTransform();
+		//#endregion
 		
 		//#region 预处理效果
 		if (layer.timeRemapEnabled) layer.timeRemapEnabled = false;
 		const source: AVItem = layer.source;
 		const sourceLength = (+(source.duration / source.frameDuration).toFixed(0) - 1) * source.frameDuration;
 		const layerLength = layer.outPoint - layer.inPoint - source.frameDuration;
+		let geometry2Index = 0;
+		const geometry2 = {
+			prop: () => Core.getEffects(layer).property(geometry2Index) as PropertyBase,
+			scaleTogether() { return this.prop().property(3) as BooleanProperty; },
+			scaleHeight() { return this.prop().property(4) as OneDProperty; },
+			scaleWidth() { return this.prop().property(5) as OneDProperty; },
+			rotation() { return this.prop().property(8) as OneDProperty; },
+		};
+		if (effectsTab.hFlip.value || effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
+			if (effectsTab.hFlip.value)
+				layer.scale.expressionEnabled = false;
+			else if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value)
+				layer.rotation.expressionEnabled = false;
+			if (addToGeometry2) {
+				geometry2Index = this.getGeometry2Effect(layer).propertyIndex;
+				geometry2.scaleTogether().setValue(false);
+			}
+		}
 		const timeRemapRemoveKey = (layer: AVLayer, keyIndex: number) => {
 			try {
 				layer.timeRemap.removeKey(keyIndex);
@@ -185,14 +225,17 @@ export default class Core {
 		}
 		let curStartTime = 0;
 		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+			if (!layer.canSetTimeRemapEnabled) throw new CannotSetTimeRemapError();
 			layer.timeRemapEnabled = true;
 			curStartTime = layer.timeRemap.valueAtTime(layer.inPoint, false);
 			timeRemapRemoveKey(layer, 2);
+			layer.timeRemap.expressionEnabled = false;
 		}
 		if (!isTunningOnly) layer.outPoint = getLayerOutPoint();
 		let audioLayer: AVLayer | undefined;
 		const basePitch = this.getBasePitch();
-		if (effectsTab.tunning.value) {
+		if (effectsTab.tuning.value) {
+			if (!layer.hasAudio) throw new CannotTuningError();
 			audioLayer = layer.duplicate() as AVLayer;
 			audioLayer.enabled = false;
 			audioLayer.moveAfter(layer);
@@ -202,66 +245,86 @@ export default class Core {
 			timeRemapRemoveKey(audioLayer, 2);
 			audioLayer.startTime = getLayerStartTime();
 			audioLayer.outPoint = getLayerOutPoint();
+			audioLayer.timeRemap.expressionEnabled = false;
 		}
 		let invertIndex = 0;
-		const invertProperty = () => this.getEffects(layer).property(invertIndex).property(2) as OneDProperty;
+		const invertProp = () => Core.getEffects(layer).property(invertIndex).property(2) as OneDProperty;
 		if (effectsTab.negative.value) {
-			invertIndex = this.getEffects(layer).addProperty("ADBE Invert").propertyIndex;
-			invertProperty().setValue(100);
+			invertIndex = Core.getEffects(layer).addProperty("ADBE Invert").propertyIndex;
+			invertProp().setValue(100);
 		}
-		const layering = Setting.get("UsingLayering", false);
-		const optimize = Setting.get("OptimizeApplyEffects", true);
 		//#endregion
 		
 		let noteOnCount = 0,
 			lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
-			lastEventSofarTick = 0;
+			lastEventSofarTick = -1;
 		const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 			if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
 				return; // 跳过同一时间点上的音符。
 			const seconds = noteEvent.sofarTick * secondsPerTick + startTime;
 			if (noteEvent instanceof NoteOnEvent) {
 				if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
-					noteEvent.interruptDuration && noteEvent.interruptDuration < 0 ||
-					noteEvent.duration && noteEvent.duration < 0) return;
+					+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 				const hasDuration = noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined;
 				const duration = noteEvent.interruptDuration ?? noteEvent.duration ?? 0;
 				const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
 				if (effectsTab.hFlip.value) {
-					layer.scale.expressionEnabled = false;
-					const key = layer.scale.addKey(seconds);
+					const addKey = (seconds: number) => !addToGeometry2 ? layer.scale.addKey(seconds) :
+						(geometry2.scaleHeight().addKey(seconds), geometry2.scaleWidth().addKey(seconds));
+					const setValueAtKey = (keyIndex: number, value: TwoDPoint) =>
+						!addToGeometry2 ? layer.scale.setValueAtKey(keyIndex, value) :
+						(geometry2.scaleHeight().setValueAtKey(keyIndex, value[1]),
+						geometry2.scaleWidth().setValueAtKey(keyIndex, value[0]));
+					const setInterpolationTypeAtKey = (keyIndex: number, inType: KeyframeInterpolationType) =>
+						!addToGeometry2 ? layer.scale.setInterpolationTypeAtKey(keyIndex, inType) :
+						(geometry2.scaleHeight().setInterpolationTypeAtKey(keyIndex, inType),
+						geometry2.scaleWidth().setInterpolationTypeAtKey(keyIndex, inType));
+					const setPointKeyEase = (keyIndex: number, easeType: EaseType, isHold: boolean) =>
+						!addToGeometry2 ? this.setPointKeyEase(layer.scale, keyIndex, easeType, isHold) :
+						(this.setPointKeyEase(geometry2.scaleHeight(), keyIndex, easeType, isHold),
+						this.setPointKeyEase(geometry2.scaleWidth(), keyIndex, easeType, isHold));
+					
+					const key = addKey(seconds);
 					const scale = noteOnCount % 2 ? -100 : 100;
 					if (!optimize || !hasDuration) {
-						layer.scale.setValueAtKey(key, [scale, 100]);
-						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+						setValueAtKey(key, [scale, 100]);
+						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						layer.scale.setValueAtKey(key, [scale + ENTER_INCREMENTAL * Math.sign(scale), 100 + ENTER_INCREMENTAL]);
-						layer.scale.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-						const key2 = layer.scale.addKey(noteOffSeconds);
-						layer.scale.setValueAtKey(key2, [scale, 100]);
-						this.setOutPointKeyEase(layer.scale, key2);
-						layer.scale.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
+						setValueAtKey(key, [scale + ENTER_INCREMENTAL * Math.sign(scale), 100 + ENTER_INCREMENTAL]);
+						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+						const key2 = addKey(noteOffSeconds);
+						setValueAtKey(key2, [scale, 100]);
+						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
 				if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
-					layer.rotation.expressionEnabled = false;
+					const addKey = (seconds: number) => !addToGeometry2 ? layer.rotation.addKey(seconds) :
+						geometry2.rotation().addKey(seconds);
+					const setValueAtKey = (keyIndex: number, value: number) =>
+						!addToGeometry2 ? layer.rotation.setValueAtKey(keyIndex, value) :
+						geometry2.rotation().setValueAtKey(keyIndex, value);
+					const setInterpolationTypeAtKey = (keyIndex: number, inType: KeyframeInterpolationType) =>
+						!addToGeometry2 ? layer.rotation.setInterpolationTypeAtKey(keyIndex, inType) :
+						geometry2.rotation().setInterpolationTypeAtKey(keyIndex, inType);
+					const setPointKeyEase = (keyIndex: number, easeType: EaseType, isHold: boolean) =>
+						!addToGeometry2 ? this.setPointKeyEase(layer.rotation, keyIndex, easeType, isHold) :
+						this.setPointKeyEase(geometry2.rotation(), keyIndex, easeType, isHold);
+					
 					const value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
-					const key = layer.rotation.addKey(seconds);
+					const key = addKey(seconds);
 					if (!optimize || !hasDuration) {
-						layer.rotation.setValueAtKey(key, value);
-						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+						setValueAtKey(key, value);
+						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
 						const startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
-						layer.rotation.setValueAtKey(key, startValue);
-						layer.rotation.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
-						const key2 = layer.rotation.addKey(noteOffSeconds);
-						layer.rotation.setValueAtKey(key2, value);
-						this.setOutPointKeyEase(layer.rotation, key2);
-						layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.HOLD);
+						setValueAtKey(key, startValue);
+						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+						const key2 = addKey(noteOffSeconds);
+						setValueAtKey(key2, value);
+						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
 				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
-					layer.timeRemap.expressionEnabled = false;
 					const key = layer.timeRemap.addKey(seconds);
 					layer.timeRemap.setValueAtKey(key, curStartTime);
 					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
@@ -279,12 +342,11 @@ export default class Core {
 					}
 				}
 				if (effectsTab.negative.value) {
-					const key = invertProperty().addKey(seconds);
-					invertProperty().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
-					invertProperty().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+					const key = invertProp().addKey(seconds);
+					invertProp().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
+					invertProp().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
-				if (effectsTab.tunning.value && audioLayer) {
-					audioLayer.timeRemap.expressionEnabled = false;
+				if (effectsTab.tuning.value && audioLayer) {
 					const key = audioLayer.timeRemap.addKey(seconds);
 					audioLayer.timeRemap.setValueAtKey(key, curStartTime);
 					// audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
@@ -307,7 +369,7 @@ export default class Core {
 				if (layering && noteOnCount !== 0) {
 					if (!isTunningOnly)
 						layer = this.splitLayer(layer, seconds);
-					if (effectsTab.tunning.value && audioLayer)
+					if (effectsTab.tuning.value && audioLayer)
 						audioLayer = this.splitLayer(audioLayer, seconds);
 				}
 				noteOnCount++;
@@ -323,6 +385,23 @@ export default class Core {
 		this.dealNoteEvents(track, comp, secondsPerTick, curStartTime, addNoteEvent);
 	}
 	
+	applyEase100Percent(comp: CompItem) {
+		app.beginUndoGroup("om midi - Apply Easing 100%");
+		const easeType = this.portal.toolsTab.ease.getValue();
+		const layers = comp.selectedLayers;
+		for (const layer of layers) {
+			if (layer === undefined) continue;
+			for (const property of layer.selectedProperties as Property[]) {
+				if (property === undefined) continue;
+				for (const keyIndex of property.selectedKeys) {
+					if (keyIndex === undefined) continue;
+					this.setPointKeyEase(property, keyIndex, easeType, false);
+				}
+			}
+		}
+	}
+	
+	//#region 辅助方法
 	/**
 	 * 创建一个空对象图层。
 	 * @param comp - 合成。
@@ -369,7 +448,7 @@ export default class Core {
 	 * @param layer - 图层。
 	 * @returns 效果组。
 	 */
-	private getEffects(layer: AVLayer): PropertyGroup {
+	private static getEffects(layer: AVLayer): PropertyGroup {
 		return layer("Effects") as PropertyGroup;
 	}
 	
@@ -380,7 +459,7 @@ export default class Core {
 	 * @returns 滑块控制效果序号。
 	 */
 	private addSliderControl(layer: AVLayer, name: string): number {
-		const slider = this.getEffects(layer).addProperty("ADBE Slider Control") as PropertyGroup; // 中文版竟然能正常运行？ADBE 是什么鬼？ // 后人注：属性的英文名前面加上“ADBE”之后，即可在任何本地化语言使用。
+		const slider = Core.getEffects(layer).addProperty("ADBE Slider Control") as PropertyGroup; // 中文版竟然能正常运行？ADBE 是什么鬼？ // 后人注：属性的英文名前面加上“ADBE”之后，即可在任何本地化语言使用。
 		slider.name = name;
 		return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
 	}
@@ -389,7 +468,7 @@ export default class Core {
 		const index = checks.indexOf(check);
 		if (index === -1) return;
 		// 注：根据说明文档，将创建的效果等属性的引用赋值给变量后，下一次创建新的效果时，之前的引用会变为“对象无效”。只能通过其序号进行访问。
-		const slider = this.getEffects(layer).property(index + 1).property(1) as OneDProperty;
+		const slider = Core.getEffects(layer).property(index + 1).property(1) as OneDProperty;
 		const key = slider.addKey(seconds);
 		slider.setValueAtKey(key, value);
 		slider.setInterpolationTypeAtKey(key, inType, outType);
@@ -474,16 +553,60 @@ export default class Core {
 	}
 	
 	/**
-	 * 为出点关键帧设置 100% 缓入的缓动曲线。
+	 * 为关键帧设置 100% 的缓动曲线。
 	 * @param property - 属性。
 	 * @param keyIndex - 关键帧序号。
+	 * @param easeType - 缓动类型。
+	 * @param isHold - 在不缓动的另一侧是否为定格类型？否则为线性。
 	 */
-	private setOutPointKeyEase(property: Property, keyIndex: number): void {
+	private setPointKeyEase(property: Property, keyIndex: number, easeType: EaseType, isHold: boolean): void {
 		const easeLength = property.keyInTemporalEase(keyIndex).length;
 		const ease: KeyframeEase[] = [];
 		for (let i = 0; i < easeLength; i++)
 			ease.push(new KeyframeEase(0, 100));
 		if (ease.length !== 0)
 			property.setTemporalEaseAtKey(keyIndex, ease as [KeyframeEase]);
+		const anotherSide = isHold ? KeyframeInterpolationType.HOLD : KeyframeInterpolationType.LINEAR;
+		if (easeType === EaseType.EASE_IN)
+			property.setInterpolationTypeAtKey(keyIndex, KeyframeInterpolationType.BEZIER, anotherSide);
+		else if (easeType === EaseType.EASE_OUT)
+			property.setInterpolationTypeAtKey(keyIndex, anotherSide, KeyframeInterpolationType.BEZIER);
 	}
+	//#endregion
+	
+	/**
+	 * 获取一个效果中的变换。如果有现成的就不用再次创建了。
+	 * @param layer - 图层。
+	 * @returns 变换效果。
+	 */
+	private getGeometry2Effect(layer: AVLayer): PropertyGroup {
+		const GEOMETRY2_MATCH_NAME = "ADBE Geometry2";
+		const effects = Core.getEffects(layer);
+		for (let i = 1; i <= effects.numProperties; i++) {
+			const property = effects.property(i) as PropertyGroup;
+			if (property.name === TRANSFORM_NAME && property.matchName === GEOMETRY2_MATCH_NAME)
+				return property;
+		}
+		const property = effects.addProperty(GEOMETRY2_MATCH_NAME) as PropertyGroup;
+		property.name = TRANSFORM_NAME;
+		return property;
+	}
+}
+
+/**
+ * 缓动类型。
+ */
+export enum EaseType {
+	/**
+	 * 缓入。
+	 */
+	EASE_IN,
+	/**
+	 * 缓出。
+	 */
+	EASE_OUT,
+	/**
+	 * 缓入缓出。
+	 */
+	EASE_IN_OUT,
 }
