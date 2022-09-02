@@ -9,7 +9,7 @@ import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
@@ -83,7 +83,7 @@ export default class Portal {
 		addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
-		this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
+		this.applyBtn = addControl(this.buttonGroup, "button", { alignment: "left" });
 		const settingIcon = Base64Image.settingIcon();
 		this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"], image: settingIcon }, { style: "toolbutton" });
 		settingIcon.remove(); // 把缓存图标删了。
@@ -91,6 +91,7 @@ export default class Portal {
 		this.nullObjTab = new NullObjTab(this);
 		this.applyEffectsTab = new ApplyEffectsTab(this);
 		this.toolsTab = new ToolsTab(this);
+		this.translate();
 		
 		this.core = new Core(this);
 		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
@@ -118,6 +119,7 @@ export default class Portal {
 		this.settingBtn.onClick = () => {
 			new SettingsDialog(this).showDialog();
 			if (this.midi?.isPureQuarter) this.selectTrackBtn.enabled = false;
+			this.translate();
 		}
 		this.selectTrackBtn.onClick = () => {
 			new MidiTrackSelector(this).showDialog();
@@ -129,6 +131,7 @@ export default class Portal {
 			else
 				this.startTimeCombo.selection = Setting.getNullObjectStartTime();
 		}
+		this.tabs.onChange();
 		this.startTimeCombo.onChange = () => {
 			const tab = this.getSelectedTab(), value = this.startTimeCombo.getSelectedIndex();
 			if (tab === this.applyEffectsTab)
@@ -169,22 +172,11 @@ export default class Portal {
 				return null;
 		}
 	}
+	
+	translate() {
+		this.applyBtn.text = localize(uiStr.apply);
+		this.nullObjTab.translate();
+		this.applyEffectsTab.translate();
+		this.toolsTab.translate();
+	}
 }
-
-/* function initPortal(window: Window | Panel) {
-	const group = window.add("group");
-	group.orientation = "column";
-	group.add("statictext", undefined, "Name:");
-	const nameTxt = group.add("edittext", undefined, "John");
-	nameTxt.characters = 30;
-	nameTxt.active = true;
-	const myButtonGroup = window.add("group");
-	myButtonGroup.alignment = "right";
-	myButtonGroup.orientation = "row";
-	myButtonGroup.add("button", undefined, "OK").helpTip = "第一个按钮";
-	myButtonGroup.add("button", undefined, "Cancel").helpTip = "第二个按钮";
-	addControl(group, "statictext", {
-		text: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，" +
-		"其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。",
-	}, { multiline: true }).minimumSize = [380, 0];
-} */

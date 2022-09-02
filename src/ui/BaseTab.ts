@@ -17,7 +17,7 @@ export default abstract class BaseTab {
 	group: Group;
 	//#endregion
 	
-	constructor(parent: Portal, text: string, groupParams: Partial<Group> = tabGroupParams) {
+	constructor(parent: Portal, text?: string, groupParams: Partial<Group> = tabGroupParams) {
 		this.parent = parent;
 		this.tab = addControl(this.parent.tabs, "tab", { text });
 		this.group = addControl(this.tab, "group", groupParams);
@@ -38,4 +38,6 @@ export default abstract class BaseTab {
 	addCheckbox(text: string): Checkbox {
 		return addControl(this.group, "checkbox", { text });
 	}
+	
+	abstract translate(): void;
 }

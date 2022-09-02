@@ -2,7 +2,7 @@ import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiReader from "./MidiReader";
 import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 
 export default class MidiTrack {
 	// extends Array<NoteEvent> // 继承后绑定不上对象
@@ -174,7 +174,7 @@ export default class MidiTrack {
 	 * @returns 标识当前轨道的名称。
 	 */
 	toString(): string {
-		let description = `${localize(str.channel_abbr)} ${this.channel ?? 0}`;
+		let description = `${localize(uiStr.channel_abbr)} ${this.channel ?? 0}`;
 		if (this.name) description += ": " + this.name;
 		description += ` (${this.noteCount})`;
 		return description;

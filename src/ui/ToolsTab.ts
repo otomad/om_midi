@@ -6,6 +6,7 @@ import Separator from "../components/Separator";
 import Ease100Percent from "./Ease100Percent";
 import BaseTool from "./BaseTool";
 import Setting from "../settings/Setting";
+import uiStr from "../languages/uiStr";
 
 export default class ToolsTab extends BaseTab {
 	//#region 组件对象
@@ -17,7 +18,7 @@ export default class ToolsTab extends BaseTab {
 	//#endregion
 	
 	constructor(parent: Portal) {
-		super(parent, "工具", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
+		super(parent, undefined, { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
 		this.toolsCombo = addControl(this.group, "dropdownlist");
 		addItems(this.toolsCombo, "标记指挥官", "缓动百分百");
 		this.toolsCombo.selection = Setting.getLastTool();
@@ -43,5 +44,9 @@ export default class ToolsTab extends BaseTab {
 			case 1: return this.ease;
 			default: return null;
 		}
+	}
+	
+	translate(): void {
+		this.tab.text = localize(uiStr.tools);
 	}
 }

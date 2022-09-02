@@ -1,4 +1,4 @@
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 
 export default class ProgressPalette {
 	private running = true;
@@ -18,7 +18,7 @@ export default class ProgressPalette {
 		this.title2 = this.palette.add("statictext", undefined, title2);
 		
 		this.progressBar = this.palette.add("progressbar");
-		this.cancelBtn = this.palette.add("button", undefined, localize(str.cancel));
+		this.cancelBtn = this.palette.add("button", undefined, localize(uiStr.cancel));
 		this.cancelBtn.alignment = "right";
 		this.palette.cancelElement = this.cancelBtn;
 	}

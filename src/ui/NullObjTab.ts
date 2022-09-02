@@ -1,3 +1,4 @@
+import uiStr from "../languages/uiStr";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 
@@ -19,7 +20,7 @@ export default class NullObjTab extends BaseTab {
 	//#endregion
 
 	constructor(parent: Portal) {
-		super(parent, "空对象");
+		super(parent);
 		this.pitch = this.addCheckbox("音高");
 		this.velocity = this.addCheckbox("力度");
 		this.duration = this.addCheckbox("持续时间");
@@ -33,5 +34,9 @@ export default class NullObjTab extends BaseTab {
 		this.noteOn = this.addCheckbox("音符开");
 		this.pan = this.addCheckbox("通道声相");
 		this.volume = this.addCheckbox("通道音量");
+	}
+	
+	translate(): void {
+		this.tab.text = localize(uiStr.create_null_object_short);
 	}
 }

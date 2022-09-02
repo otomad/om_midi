@@ -1,5 +1,5 @@
 import { CannotFindWindowError } from "../errors";
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 import MidiTrack from "../midi/MidiTrack";
 import addControl from "../module/addControl";
 import Portal from "./Portal";
@@ -23,16 +23,16 @@ export default class MidiTrackSelector {
 		this.window.onResizing = this.window.onResize = () => this.window.layout.resize();
 		
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"] });
-		this.selectAllCheck = addControl(this.group, "checkbox", { text: "全选" });
+		this.selectAllCheck = addControl(this.group, "checkbox", { text: localize(uiStr.select_all) });
 		this.trackList = addControl(this.group, "listbox", { alignment: ["fill", "fill"] }, {
 			multiselect: true, numberOfColumns: 4, showHeaders: true,
-			columnTitles: ["通道", "名称", "音符数"],
+			columnTitles: [localize(uiStr.channel), localize(uiStr.name), localize(uiStr.note_count)],
 			columnWidths: [50, 225, 75],
 		});
 		this.trackList.size = [400, 400];
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
-		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
-		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
+		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
+		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
 		this.window.defaultElement = this.okBtn;
 		this.window.cancelElement = this.cancelBtn;
 		this.initMidiTracks();
@@ -56,7 +56,7 @@ export default class MidiTrackSelector {
 			}
 			let text = "";
 			if (checks.length === 0) {
-				alert("请至少选择一条轨道。", localize(str.warning));
+				alert("请至少选择一条轨道。", localize(uiStr.warning));
 				return;
 			} else if (checks.length === 1)
 				text = checks[0].toString();

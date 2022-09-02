@@ -8,11 +8,11 @@
  * 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
  * 脚本作者：兰音
  *
- * 构建日期：2022年9月2日星期五下午4点41分
+ * 构建日期：2022 年 9 月 2 日 星期五 下午 17:30:26
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
- * 日期：2011年12月25日星期日晚上10点58分 太平洋时间
+ * 日期：2011 年 12 月 25 日 星期日 晚上 22:58:10 太平洋时间
  * 作者：大卫·范·布林克
  *
  * 此脚本是 omino Adobe 脚本套件的一部分。
@@ -34,7 +34,7 @@
  * Script Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD
  * Script Author: Ranne
  *
- * Building Date: Friday, September 2, 2022 4:41 PM
+ * Building Date: Friday, September 2, 2022 5:30 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction of the Original Author:
@@ -163,6 +163,104 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
+var uiStr = {
+    ok: {
+        zh: "确定",
+        en: "OK",
+        ja: "OK",
+    },
+    cancel: {
+        zh: "取消",
+        en: "Cancel",
+        ja: "キャンセル",
+    },
+    channel_abbr: {
+        zh: "通道",
+        en: "CH",
+        ja: "チャネル",
+    },
+    error: {
+        zh: "错误",
+        en: "Error",
+        ja: "エラー",
+    },
+    warning: {
+        zh: "警告",
+        en: "Warning",
+        ja: "警告",
+    },
+    apply: {
+        zh: "应用",
+        en: "Apply",
+        ja: "適用",
+    },
+    settings: {
+        zh: "设置",
+        en: "Settings",
+        ja: "設定",
+    },
+    select_all: {
+        zh: "全选",
+        en: "Select all",
+        ja: "すべて選択",
+    },
+    channel: {
+        zh: "通道",
+        en: "Channel",
+        ja: "チャネル",
+    },
+    name: {
+        zh: "名称",
+        en: "name",
+        ja: "名",
+    },
+    note_count: {
+        zh: "音符数",
+        en: "Note count",
+        ja: "音符の数"
+    },
+    language: {
+        zh: "语言",
+        en: "Langugae",
+        ja: "言語",
+    },
+    general: {
+        zh: "通用",
+        en: "General",
+        ja: "一般",
+    },
+    app_default: {
+        zh: "应用默认值",
+        en: "App Default",
+        ja: "アプリのデフォルト",
+    },
+    tools: {
+        zh: "工具",
+        en: "Tools",
+        ja: "ツール",
+    },
+    create_null_object_short: {
+        zh: "空对象",
+        en: "Null",
+        ja: "ヌル",
+    },
+    create_null_object: {
+        zh: "创建空对象",
+        en: "Create Null Object",
+        ja: "ヌル オブジェクトを作成",
+    },
+    apply_effects_short: {
+        zh: "应用效果",
+        en: "Effects",
+        ja: "効果を適用",
+    },
+    apply_effects: {
+        zh: "应用效果",
+        en: "Apply Effects",
+        ja: "効果を適用",
+    },
+};
+
 var SPACING = 2;
 var tabGroupParams = {
     orientation: "column",
@@ -202,7 +300,7 @@ var NullObjTab = /** @class */ (function (_super) {
     __extends(NullObjTab, _super);
     //#endregion
     function NullObjTab(parent) {
-        var _this = _super.call(this, parent, "空对象") || this;
+        var _this = _super.call(this, parent) || this;
         _this.pitch = _this.addCheckbox("音高");
         _this.velocity = _this.addCheckbox("力度");
         _this.duration = _this.addCheckbox("持续时间");
@@ -218,6 +316,9 @@ var NullObjTab = /** @class */ (function (_super) {
         _this.volume = _this.addCheckbox("通道音量");
         return _this;
     }
+    NullObjTab.prototype.translate = function () {
+        this.tab.text = localize(uiStr.create_null_object_short);
+    };
     return NullObjTab;
 }(BaseTab));
 
@@ -226,7 +327,7 @@ var ApplyEffectsTab = /** @class */ (function (_super) {
     //#endregion
     function ApplyEffectsTab(parent) {
         var _a;
-        var _this = _super.call(this, parent, "应用效果") || this;
+        var _this = _super.call(this, parent) || this;
         _this.timeRemap = _this.addCheckbox("时间重映射（拉伸）");
         _this.timeRemap2 = _this.addCheckbox("时间重映射（截断）");
         _this.hFlip = _this.addCheckbox("水平翻转");
@@ -247,6 +348,9 @@ var ApplyEffectsTab = /** @class */ (function (_super) {
         _this.timeRemap2.onClick = function () { return _this.timeRemap.value = false; };
         return _this;
     }
+    ApplyEffectsTab.prototype.translate = function () {
+        this.tab.text = localize(uiStr.apply_effects_short);
+    };
     return ApplyEffectsTab;
 }(BaseTab));
 
@@ -328,49 +432,11 @@ var Separator = /** @class */ (function () {
     return Separator;
 }());
 
-var str = {
-    ok: {
-        zh: "确定",
-        en: "OK",
-        ja: "OK",
-    },
-    cancel: {
-        zh: "取消",
-        en: "Cancel",
-        ja: "キャンセル",
-    },
-    channel_abbr: {
-        zh: "通道",
-        en: "CH",
-        ja: "チャネル",
-    },
-    error: {
-        zh: "错误",
-        en: "Error",
-        ja: "エラー",
-    },
-    warning: {
-        zh: "警告",
-        en: "Warning",
-        ja: "警告",
-    },
-    apply: {
-        zh: "应用",
-        en: "Apply",
-        ja: "適用",
-    },
-    settings: {
-        zh: "设置",
-        en: "Settings",
-        ja: "設定",
-    },
-};
-
 var MyError = /** @class */ (function (_super) {
     __extends(MyError, _super);
     function MyError(msg) {
         var _this = this;
-        alert(msg.toString(), localize(str.error), true);
+        alert(msg.toString(), localize(uiStr.error), true);
         _this = _super.call(this, msg.toString()) || this;
         return _this;
     }
@@ -1538,7 +1604,7 @@ var ToolsTab = /** @class */ (function (_super) {
     __extends(ToolsTab, _super);
     //#endregion
     function ToolsTab(parent) {
-        var _this = _super.call(this, parent, "工具", { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] }) || this;
+        var _this = _super.call(this, parent, undefined, { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] }) || this;
         _this.toolsCombo = addControl(_this.group, "dropdownlist");
         addItems(_this.toolsCombo, "标记指挥官", "缓动百分百");
         _this.toolsCombo.selection = Setting.getLastTool();
@@ -1563,6 +1629,9 @@ var ToolsTab = /** @class */ (function (_super) {
             case 1: return this.ease;
             default: return null;
         }
+    };
+    ToolsTab.prototype.translate = function () {
+        this.tab.text = localize(uiStr.tools);
     };
     return ToolsTab;
 }(BaseTab));
@@ -1611,7 +1680,7 @@ var ImportOmUtilsDialog = /** @class */ (function () {
         addControl(this.group, "edittext", { text: '$.evalFile(thisProject.fullPath.replace(/\\\\[^\\\\]*$/, "/om_utils.jsx"));' }, { readonly: true });
         addControl(this.group, "statictext", { text: "若放置在任意位置，然后添加到 AE 项目中" });
         addControl(this.group, "edittext", { text: 'footage("om_utils.jsx").sourceData;' }, { readonly: true });
-        this.okBtn = addControl(this.group, "button", { text: localize(str.ok), alignment: "right" });
+        this.okBtn = addControl(this.group, "button", { text: localize(uiStr.ok), alignment: "right" });
         this.window.defaultElement = this.okBtn;
     }
     ImportOmUtilsDialog.prototype.showDialog = function () {
@@ -1880,7 +1949,7 @@ var MidiTrack = /** @class */ (function () {
      */
     MidiTrack.prototype.toString = function () {
         var _a;
-        var description = localize(str.channel_abbr) + " " + ((_a = this.channel) !== null && _a !== void 0 ? _a : 0);
+        var description = localize(uiStr.channel_abbr) + " " + ((_a = this.channel) !== null && _a !== void 0 ? _a : 0);
         if (this.name)
             description += ": " + this.name;
         description += " (" + this.noteCount + ")";
@@ -2045,7 +2114,7 @@ var SettingsDialog = /** @class */ (function () {
         var _a;
         var _this = this;
         this.portal = portal;
-        this.window = new Window("dialog", localize(str.settings) + " - " + User.scriptName + " v" + User.version, undefined, {
+        this.window = new Window("dialog", localize(uiStr.settings) + " - " + User.scriptName + " v" + User.version, undefined, {
             resizeable: false,
         });
         if (this.window === null)
@@ -2061,18 +2130,18 @@ var SettingsDialog = /** @class */ (function () {
         this.extendScriptEngineAboutBtn = this.openGithubBtnGroup.add("button", { text: "关于脚本引擎" });
         this.importOmUtilsBtn = this.openGithubBtnGroup.add("button", { text: "导入 om utils" });
         this.importPureQuarterMidiBtn = this.openGithubBtnGroup.add("button", { text: "导入纯四分 MIDI" });
-        this.generalPanel = this.addPanel(this.rightGroup, "通用", [10, 10, 10, 7]);
-        (_a = addGroup(this.generalPanel, "语言", "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
-        addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
+        this.generalPanel = this.addPanel(this.rightGroup, localize(uiStr.general), [10, 10, 10, 7]);
+        (_a = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
+        addItems(this.languageCombo, localize(uiStr.app_default), "简体中文", "English", "日本語");
         var selectedLanguageIndex = Setting.getLanguage();
         if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
             this.languageCombo.selection = selectedLanguageIndex;
-        this.nullObjPanel = this.addPanel(this.rightGroup, "创建空对象");
+        this.nullObjPanel = this.addPanel(this.rightGroup, localize(uiStr.create_null_object));
         this.usingSelectedLayerName = addControl(this.nullObjPanel, "checkbox", { text: "使用选中图层名称而不是 MIDI 轨道名称" });
         this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
         this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: "声相标准化到 -100 ~ 100。" });
         this.normalizePanTo100.value = Setting.getNormalizePanTo100();
-        this.applyEffectsPanel = this.addPanel(this.rightGroup, "应用效果");
+        this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
         this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: "冰鸠さくの特有图层叠叠乐方法。" });
         this.usingLayering.value = Setting.getUsingLayering();
         this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: "优化部分效果动画。" });
@@ -2080,8 +2149,8 @@ var SettingsDialog = /** @class */ (function () {
         this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: "将属性添加到效果中的变换中。" });
         this.addToEffectTransform.value = Setting.getAddToEffectTransform();
         this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
-        this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
-        this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
+        this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
+        this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
         this.window.defaultElement = this.okBtn;
         this.window.cancelElement = this.cancelBtn;
         this.okBtn.onClick = function () {
@@ -2139,16 +2208,16 @@ var MidiTrackSelector = /** @class */ (function () {
             throw new CannotFindWindowError();
         this.window.onResizing = this.window.onResize = function () { return _this.window.layout.resize(); };
         this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"] });
-        this.selectAllCheck = addControl(this.group, "checkbox", { text: "全选" });
+        this.selectAllCheck = addControl(this.group, "checkbox", { text: localize(uiStr.select_all) });
         this.trackList = addControl(this.group, "listbox", { alignment: ["fill", "fill"] }, {
             multiselect: true, numberOfColumns: 4, showHeaders: true,
-            columnTitles: ["通道", "名称", "音符数"],
+            columnTitles: [localize(uiStr.channel), localize(uiStr.name), localize(uiStr.note_count)],
             columnWidths: [50, 225, 75],
         });
         this.trackList.size = [400, 400];
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
-        this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
-        this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
+        this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
+        this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
         this.window.defaultElement = this.okBtn;
         this.window.cancelElement = this.cancelBtn;
         this.initMidiTracks();
@@ -2175,7 +2244,7 @@ var MidiTrackSelector = /** @class */ (function () {
             }
             var text = "";
             if (checks.length === 0) {
-                alert("请至少选择一条轨道。", localize(str.warning));
+                alert("请至少选择一条轨道。", localize(uiStr.warning));
                 return;
             }
             else if (checks.length === 1)
@@ -2303,13 +2372,14 @@ var Portal = /** @class */ (function () {
         addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
         this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
         this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
-        this.applyBtn = addControl(this.buttonGroup, "button", { text: localize(str.apply), alignment: "left" });
+        this.applyBtn = addControl(this.buttonGroup, "button", { alignment: "left" });
         var settingIcon = Base64Image.settingIcon();
         this.settingBtn = addControl(this.buttonGroup, "iconbutton", { alignment: ["right", "center"], image: settingIcon }, { style: "toolbutton" });
         settingIcon.remove(); // 把缓存图标删了。
         this.nullObjTab = new NullObjTab(this);
         this.applyEffectsTab = new ApplyEffectsTab(this);
         this.toolsTab = new ToolsTab(this);
+        this.translate();
         this.core = new Core(this);
         setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
         this.selectMidiBtn.onClick = function () {
@@ -2344,6 +2414,7 @@ var Portal = /** @class */ (function () {
             new SettingsDialog(_this).showDialog();
             if ((_a = _this.midi) === null || _a === void 0 ? void 0 : _a.isPureQuarter)
                 _this.selectTrackBtn.enabled = false;
+            _this.translate();
         };
         this.selectTrackBtn.onClick = function () {
             new MidiTrackSelector(_this).showDialog();
@@ -2355,6 +2426,7 @@ var Portal = /** @class */ (function () {
             else
                 _this.startTimeCombo.selection = Setting.getNullObjectStartTime();
         };
+        this.tabs.onChange();
         this.startTimeCombo.onChange = function () {
             var tab = _this.getSelectedTab(), value = _this.startTimeCombo.getSelectedIndex();
             if (tab === _this.applyEffectsTab)
@@ -2395,25 +2467,14 @@ var Portal = /** @class */ (function () {
                 return null;
         }
     };
+    Portal.prototype.translate = function () {
+        this.applyBtn.text = localize(uiStr.apply);
+        this.nullObjTab.translate();
+        this.applyEffectsTab.translate();
+        this.toolsTab.translate();
+    };
     return Portal;
 }());
-/* function initPortal(window: Window | Panel) {
-    const group = window.add("group");
-    group.orientation = "column";
-    group.add("statictext", undefined, "Name:");
-    const nameTxt = group.add("edittext", undefined, "John");
-    nameTxt.characters = 30;
-    nameTxt.active = true;
-    const myButtonGroup = window.add("group");
-    myButtonGroup.alignment = "right";
-    myButtonGroup.orientation = "row";
-    myButtonGroup.add("button", undefined, "OK").helpTip = "第一个按钮";
-    myButtonGroup.add("button", undefined, "Cancel").helpTip = "第二个按钮";
-    addControl(group, "statictext", {
-        text: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，" +
-        "其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。",
-    }, { multiline: true }).minimumSize = [380, 0];
-} */
 
 /// <reference path="prototypes.d.ts" />
 /**

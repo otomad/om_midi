@@ -1,3 +1,4 @@
+import uiStr from "../languages/uiStr";
 import addControl, { addGroup, addItems } from "../module/addControl";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
@@ -18,7 +19,7 @@ export default class ApplyEffectsTab extends BaseTab {
 	//#endregion
 
 	constructor(parent: Portal) {
-		super(parent, "应用效果");
+		super(parent);
 		this.timeRemap = this.addCheckbox("时间重映射（拉伸）");
 		this.timeRemap2 = this.addCheckbox("时间重映射（截断）");
 		this.hFlip = this.addCheckbox("水平翻转");
@@ -41,5 +42,9 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.ccwRotation.onClick = () => this.cwRotation.value = false;
 		this.timeRemap.onClick = () => this.timeRemap2.value = false;
 		this.timeRemap2.onClick = () => this.timeRemap.value = false;
+	}
+	
+	translate(): void {
+		this.tab.text = localize(uiStr.apply_effects_short);
 	}
 }

@@ -1,7 +1,7 @@
 import Separator from "../components/Separator";
 import addControl, { addGroup, addItems, ContainerType } from "../module/addControl";
 import Setting from "../settings/Setting";
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 import { CannotFindWindowError } from "../errors";
 import User from "../user";
 import openUrl from "../temp-file-methods/openUrl";
@@ -48,7 +48,7 @@ export default class SettingsDialog {
 	
 	constructor(portal: Portal) {
 		this.portal = portal;
-		this.window = new Window("dialog", `${localize(str.settings)} - ${User.scriptName} v${User.version}`, undefined, {
+		this.window = new Window("dialog", `${localize(uiStr.settings)} - ${User.scriptName} v${User.version}`, undefined, {
 			resizeable: false,
 		});
 		if (this.window === null) throw new CannotFindWindowError();
@@ -64,22 +64,22 @@ export default class SettingsDialog {
 		this.extendScriptEngineAboutBtn = this.openGithubBtnGroup.add("button", { text: "关于脚本引擎" });
 		this.importOmUtilsBtn = this.openGithubBtnGroup.add("button", { text: "导入 om utils" });
 		this.importPureQuarterMidiBtn = this.openGithubBtnGroup.add("button", { text: "导入纯四分 MIDI" });
-		this.generalPanel = this.addPanel(this.rightGroup, "通用", [10, 10, 10, 7]);
+		this.generalPanel = this.addPanel(this.rightGroup, localize(uiStr.general), [10, 10, 10, 7]);
 		({
 			group: this.languageGroup,
 			label: this.languageLbl,
 			control: this.languageCombo,
-		} = addGroup(this.generalPanel, "语言", "dropdownlist"));
-		addItems(this.languageCombo, "应用默认值", "简体中文", "English", "日本語");
+		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"));
+		addItems(this.languageCombo, localize(uiStr.app_default), "简体中文", "English", "日本語");
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
-		this.nullObjPanel = this.addPanel(this.rightGroup, "创建空对象");
+		this.nullObjPanel = this.addPanel(this.rightGroup, localize(uiStr.create_null_object));
 		this.usingSelectedLayerName = addControl(this.nullObjPanel, "checkbox", { text: "使用选中图层名称而不是 MIDI 轨道名称" });
 		this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
 		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: "声相标准化到 -100 ~ 100。" });
 		this.normalizePanTo100.value = Setting.getNormalizePanTo100();
-		this.applyEffectsPanel = this.addPanel(this.rightGroup, "应用效果");
+		this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
 		this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: "冰鸠さくの特有图层叠叠乐方法。" });
 		this.usingLayering.value = Setting.getUsingLayering();
 		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: "优化部分效果动画。" });
@@ -87,8 +87,8 @@ export default class SettingsDialog {
 		this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: "将属性添加到效果中的变换中。" });
 		this.addToEffectTransform.value = Setting.getAddToEffectTransform();
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
-		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(str.ok) });
-		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(str.cancel) });
+		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
+		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
 		this.window.defaultElement = this.okBtn;
 		this.window.cancelElement = this.cancelBtn;
 		

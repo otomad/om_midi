@@ -1,10 +1,10 @@
-import str from "./languages/strings";
+import uiStr from "./languages/uiStr";
 
 export class MyError extends Error {
 	constructor(msg: Error);
 	constructor(msg: string);
 	constructor(msg: string | Error) {
-		alert(msg.toString(), localize(str.error), true);
+		alert(msg.toString(), localize(uiStr.error), true);
 		super(msg.toString());
 	}
 }

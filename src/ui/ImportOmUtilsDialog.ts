@@ -1,6 +1,6 @@
 import { CannotFindWindowError } from "../errors";
 import addControl from "../module/addControl";
-import str from "../languages/strings";
+import uiStr from "../languages/uiStr";
 
 export default class ImportOmUtilsDialog {
 	window: Window;
@@ -18,7 +18,7 @@ export default class ImportOmUtilsDialog {
 		addControl(this.group, "edittext", { text: '$.evalFile(thisProject.fullPath.replace(/\\\\[^\\\\]*$/, "/om_utils.jsx"));' }, { readonly: true });
 		addControl(this.group, "statictext", { text: "若放置在任意位置，然后添加到 AE 项目中" });
 		addControl(this.group, "edittext", { text: 'footage("om_utils.jsx").sourceData;' }, { readonly: true });
-		this.okBtn = addControl(this.group, "button", { text: localize(str.ok), alignment: "right" });
+		this.okBtn = addControl(this.group, "button", { text: localize(uiStr.ok), alignment: "right" });
 		this.window.defaultElement = this.okBtn;
 	}
 	
