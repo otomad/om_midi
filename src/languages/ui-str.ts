@@ -1,6 +1,7 @@
 import English from "./English";
 import Japanese from "./Japanese";
 import SChinese from "./SChinese";
+import hasOwn from "../module/hasOwn";
 
 type LangTag = "zh" | "en" | "ja";
 
@@ -13,9 +14,8 @@ type Localizes = {
 };
 
 const uiStr = {} as Localizes;
-for (const _key in SChinese) {
-	if (Object.prototype.hasOwnProperty.call(SChinese, _key)) {
-		const key = _key as keyof typeof SChinese;
+for (const key in SChinese) {
+	if (hasOwn(SChinese, key)) {
 		uiStr[key] = {
 			zh: SChinese[key],
 			en: English[key],

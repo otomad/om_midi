@@ -1,3 +1,5 @@
+import hasOwn from "./hasOwn";
+
 //#region 类型
 export type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
 
@@ -60,8 +62,8 @@ export default function addControl<C extends ControlTypeName>(parent: ContainerT
 	const control = _control as ControlType<C>;
 	if (params != undefined)
 		for (const key in params)
-			if (Object.prototype.hasOwnProperty.call(params, key))
-				(control as any)[key] = (params as any)[key];
+			if (hasOwn(params, key))
+				control[key] = (params as ControlType<C>)[key];
 	return control;
 }
 

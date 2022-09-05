@@ -13,7 +13,8 @@ import FlowGroup from "../containers/FlowGroup";
 const ABOUT = `读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
 
 脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
-脚本作者：兰音`;
+脚本作者：兰音
+仓库地址：`;
 
 export default class SettingsDialog {
 	//#region 组件对象
@@ -77,7 +78,7 @@ export default class SettingsDialog {
 		this.nullObjPanel = this.addPanel(this.rightGroup, localize(uiStr.create_null_object));
 		this.usingSelectedLayerName = addControl(this.nullObjPanel, "checkbox", { text: "使用选中图层名称而不是 MIDI 轨道名称" });
 		this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
-		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: "声相标准化到 -100 ~ 100。" });
+		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: "声像标准化到 -100 ~ 100。" });
 		this.normalizePanTo100.value = Setting.getNormalizePanTo100();
 		this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
 		this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: "冰鸠さくの特有图层叠叠乐方法。" });
@@ -102,8 +103,8 @@ export default class SettingsDialog {
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()]
 			this.window.close();
 		}
-		this.openGithubPageBtn.onClick = () => openUrl("https://github.com/otomad/om_midi");
-		this.openGithubLatestBtn.onClick = () => openUrl("https://github.com/otomad/om_midi/releases/latest");
+		this.openGithubPageBtn.onClick = () => openUrl(User.githubPage);
+		this.openGithubLatestBtn.onClick = () => openUrl(User.githubLatest);
 		this.importPureQuarterMidiBtn.onClick = () => {
 			if (!confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI")) return;
 			this.portal.midi = new Midi(true);

@@ -42,3 +42,14 @@ interface Math {
 	 */
 	sign(x: number): number;
 }
+
+interface Object {
+	/**
+	 * 检查对象是否包含某一属性参数。
+	 * @param obj - 要测试的 JavaScript 对象实例。
+	 * @param prop - 要测试的属性的字符串名称。
+	 * @returns 指定的对象已直接定义了指定的属性？
+	 */
+	//@ts-ignore
+	hasOwn<T extends object, K extends string>(obj: T, prop: K): prop is keyof T;
+}

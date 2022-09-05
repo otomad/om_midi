@@ -1,5 +1,6 @@
 // 取名为 Setting 而不是 Settings 以免和内置对象冲突。
 
+import hasOwn from "../module/hasOwn";
 import SettingsHelper from "./SettingsHelper";
 
 const defs = {
@@ -24,9 +25,8 @@ type SettingType<T extends SettingTag> =
 	{ [getter in GetterSettings<T>]: (def?: SettingValue<getter>) => SettingValue<getter> } &
 	{ [setter in SetterSettings<T>]: (value: SettingValue<setter>) => void };
 const Setting = {} as SettingType<SettingTag>;
-for (const _tag in defs) {
-	if (Object.prototype.hasOwnProperty.call(defs, _tag)) {
-		const tag = _tag as SettingTag;
+for (const tag in defs) {
+	if (hasOwn(defs, tag)) {
 		type _GetLoose = { [getter in GetterSettings<SettingTag>]: (def?: SettingValues) => SettingValues };
 		(Setting as _GetLoose)[`get${tag}`] = (def = defs[tag]) => SettingsHelper.get(tag, def);
 		Setting[`set${tag}`] = value => SettingsHelper.set(tag, value);

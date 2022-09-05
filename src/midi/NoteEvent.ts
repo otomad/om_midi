@@ -126,7 +126,7 @@ export class NoteOffEvent extends NoteOnOffEvent {
 	}
 }
 
-export class SystemExclusiveEvents extends RegularEvent {
+export class SystemExclusiveEvent extends RegularEvent {
 	constructor(values: number[]) {
 		super(RegularEventType.SYSTEM_EXCLUSIVE_EVENTS, values);
 	}
@@ -140,5 +140,23 @@ export class ControllerEvent extends RegularEvent {
 		super(RegularEventType.CONTROLLER, values);
 		this.controller = values[0];
 		this.value = values[1];
+	}
+}
+
+export class PitchBendEvent extends RegularEvent {
+	value: number;
+	
+	constructor(values: number[]) {
+		super(RegularEventType.PITCH_BEND_EVENT, values);
+		this.value = PitchBendEvent.take7Bit(values[1]) << 7 | PitchBendEvent.take7Bit(values[0]);
+	}
+	
+	/**
+	 * 取后 7 位。
+	 * @param b - 1 个字节。
+	 * @returns 后 7 位。
+	 */
+	private static take7Bit(b: number) {
+		return b & 0b0111_1111;
 	}
 }

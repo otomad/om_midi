@@ -1,7 +1,7 @@
 import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
 import { MetaEventType, RegularEventType } from "./MidiFormatType";
 import MidiReader from "./MidiReader";
-import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvents, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
+import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
 import uiStr from "../languages/ui-str";
 
 export default class MidiTrack {
@@ -117,32 +117,41 @@ export default class MidiTrack {
 					case RegularEventType.NOTE_OFF:
 					case RegularEventType.NOTE_ON:
 						const byte2 = this.parent.readByteArray(2); // 读两位
-						if (regularType == RegularEventType.NOTE_ON) {
-							note = new NoteOnEvent(byte2);
-							const noteOn = note as NoteOnEvent;
-							this.noteCount++;
-							for (const prevNoteOn of noteOnStack)
-								if (prevNoteOn.interruptDuration === undefined)
-									if (sofarTick <= prevNoteOn.sofarTick) noteOn.interruptDuration = 0;
-									else prevNoteOn.interruptDuration = sofarTick - prevNoteOn.sofarTick; // 中断复音上的其它音符开。
-							noteOnStack.push(noteOn);
-						} else if (regularType == RegularEventType.NOTE_OFF) {
-							note = new NoteOffEvent(byte2);
-							const noteOff = note as NoteOffEvent;
-							for (let i = noteOnStack.length - 1; i >= 0; i--) {
-								const noteOn = noteOnStack[i];
-								if (noteOn.pitch === noteOff.pitch) {
-									noteOn.duration = sofarTick - noteOn.sofarTick; // 计算音符时长。
-									noteOn.noteOff = noteOff;
-									noteOff.noteOn = noteOn; // 将两个音符关联在一起。
-									noteOnStack.splice(i, 1); // 移出栈。
-									break;
+						switch (regularType) {
+							case RegularEventType.NOTE_ON:
+								note = new NoteOnEvent(byte2);
+								const noteOn = note as NoteOnEvent;
+								this.noteCount++;
+								for (const prevNoteOn of noteOnStack)
+									if (prevNoteOn.interruptDuration === undefined)
+										if (sofarTick <= prevNoteOn.sofarTick) noteOn.interruptDuration = 0;
+										else prevNoteOn.interruptDuration = sofarTick - prevNoteOn.sofarTick; // 中断复音上的其它音符开。
+								noteOnStack.push(noteOn);
+								break;
+							case RegularEventType.NOTE_OFF:
+								note = new NoteOffEvent(byte2);
+								const noteOff = note as NoteOffEvent;
+								for (let i = noteOnStack.length - 1; i >= 0; i--) {
+									const noteOn = noteOnStack[i];
+									if (noteOn.pitch === noteOff.pitch) {
+										noteOn.duration = sofarTick - noteOn.sofarTick; // 计算音符时长。
+										noteOn.noteOff = noteOff;
+										noteOff.noteOn = noteOn; // 将两个音符关联在一起。
+										noteOnStack.splice(i, 1); // 移出栈。
+										break;
+									}
 								}
-							}
-						} else if (regularType == RegularEventType.CONTROLLER) {
-							note = new ControllerEvent(byte2);
-						} else {
-							note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
+								break;
+							case RegularEventType.CONTROLLER:
+								note = new ControllerEvent(byte2);
+								break;
+							case RegularEventType.PITCH_BEND_EVENT:
+								note = new PitchBendEvent(byte2);
+								break;
+							case RegularEventType.NOTE_AFTERTOUCH:
+							default:
+								note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
+								break;
 						}
 						break;
 					case RegularEventType.PROGRAM_CHANGE:
@@ -154,7 +163,7 @@ export default class MidiTrack {
 						return;
 					case RegularEventType.SYSTEM_EXCLUSIVE_EVENTS:
 						const systemExclusiveEventLength = this.parent.readDeltaTime();
-						note = new SystemExclusiveEvents(this.parent.readByteArray(systemExclusiveEventLength));
+						note = new SystemExclusiveEvent(this.parent.readByteArray(systemExclusiveEventLength));
 						break;
 					default: // 自定义事件，不知道怎么读。
 						throw new MidiCustomEventsError();

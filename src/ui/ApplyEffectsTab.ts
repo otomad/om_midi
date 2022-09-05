@@ -7,6 +7,7 @@ export default class ApplyEffectsTab extends BaseTab {
 	//#region 组件对象
 	timeRemap: Checkbox;
 	timeRemap2: Checkbox;
+	pingpong: Checkbox;
 	hFlip: Checkbox;
 	cwRotation: Checkbox;
 	ccwRotation: Checkbox;
@@ -22,6 +23,7 @@ export default class ApplyEffectsTab extends BaseTab {
 		super(parent);
 		this.timeRemap = this.addCheckbox("时间重映射（拉伸）");
 		this.timeRemap2 = this.addCheckbox("时间重映射（截断）");
+		this.pingpong = this.addCheckbox("来回");
 		this.hFlip = this.addCheckbox("水平翻转");
 		this.cwRotation = this.addCheckbox("顺时针旋转");
 		this.ccwRotation = this.addCheckbox("逆时针旋转");
@@ -40,8 +42,9 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.tuning.onClick = () => this.basePitchGroup.enabled = this.tuning.value;
 		this.cwRotation.onClick = () => this.ccwRotation.value = false;
 		this.ccwRotation.onClick = () => this.cwRotation.value = false;
-		this.timeRemap.onClick = () => this.timeRemap2.value = false;
-		this.timeRemap2.onClick = () => this.timeRemap.value = false;
+		this.timeRemap.onClick = () => this.timeRemap2.value = this.pingpong.value = false;
+		this.timeRemap2.onClick = () => this.timeRemap.value = this.pingpong.value = false;
+		this.pingpong.onClick = () => this.timeRemap.value = this.timeRemap2.value = false;
 	}
 	
 	translate(): void {

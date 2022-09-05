@@ -32,4 +32,9 @@ export default function initPrototypes() {
 		else if (x < 0) return -1;
 		else return 0;
 	}
+	
+	/* //@ts-ignore
+	Object.hasOwn = function <T extends object, K extends string>(obj: T, prop: K): prop is keyof T {
+		return Object.prototype.hasOwnProperty.call(obj, prop);
+	} */
 }

@@ -4,7 +4,8 @@ export class MyError extends Error {
 	constructor(msg: Error);
 	constructor(msg: string);
 	constructor(msg: string | Error) {
-		alert(msg.toString(), localize(uiStr.error), true);
+		if (!(msg instanceof MyError))
+			alert(msg.toString(), localize(uiStr.error), true);
 		super(msg.toString());
 	}
 }

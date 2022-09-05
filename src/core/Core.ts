@@ -2,7 +2,7 @@ import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError,
 import Portal from "../ui/Portal";
 import getComp from "../module/getComp";
 import Setting from "../settings/Setting";
-import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent } from "../midi/NoteEvent";
+import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/NoteEvent";
 import { ControllerType, RegularEventType } from "../midi/MidiFormatType";
 import MidiTrack from "../midi/MidiTrack";
 
@@ -75,15 +75,15 @@ export default class Core {
 			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType) =>
 				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
 			
-			let noteOnCount = 0,
-				lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
-				lastEventSofarTick = -1,
-				lastPan = NaN, lastVolume = NaN;
+			let noteOnCount = 0, // 音符开计数。
+				lastEventType: RegularEventType = RegularEventType.NOTE_OFF, // 上一次音符事件类型。
+				lastEventSofarTick = -1, // 上一次迄今基本时间。
+				lastPan = NaN, lastVolume = NaN, lastGlide = NaN; // 上一次声像、音量、弯音。
 			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
-				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
+				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
 					return; // 跳过同一时间点上的音符。
 				const seconds = noteEvent.sofarTick * secondsPerTick;
-				if (noteEvent instanceof NoteOnEvent) {
+				if (noteEvent instanceof NoteOnEvent) { // 音符开。
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 					// ExtendScript 最新迷惑行为：undefined < 0 为 true！！！
@@ -98,25 +98,25 @@ export default class Core {
 					setValueAtTime(nullTab.ccwRotation, seconds, ((4 - noteOnCount % 4) % 4) * 90, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.timeRemap, seconds, 0, KeyframeInterpolationType.LINEAR);
-					setValueAtTime(nullTab.whirl, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR);
+					setValueAtTime(nullTab.pingpong, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
 						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
 						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
 						setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
-						setValueAtTime(nullTab.whirl, noteOffSeconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						setValueAtTime(nullTab.pingpong, noteOffSeconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
 					noteOnCount++;
 					lastEventType = RegularEventType.NOTE_ON;
 					lastEventSofarTick = noteEvent.sofarTick;
-				} else if (noteEvent instanceof NoteOffEvent) {
+				} else if (noteEvent instanceof NoteOffEvent) { // 音符关。
 					const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
 					setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD); // 新增松键力度。
 					setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
 					lastEventType = RegularEventType.NOTE_OFF;
 					lastEventSofarTick = noteEvent.sofarTick;
-				} else if (noteEvent instanceof ControllerEvent) {
+				} else if (noteEvent instanceof ControllerEvent) { // 控制器事件。
 					const controller = noteEvent.controller;
-					if (controller === ControllerType.PAN) {
+					if (controller === ControllerType.PAN) { // 声像。
 						if (lastPan === noteEvent.value) return;
 						lastPan = noteEvent.value;
 						let pan = noteEvent.value - 64; // 64 为中置 0。
@@ -125,11 +125,18 @@ export default class Core {
 							else if (pan > 0) pan = pan / 63 * 100;
 						} // 否则是 -64 ~ 63（整数），两边没对齐。
 						setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
-					} else if (controller === ControllerType.MAIN_VOLUME) {
+					} else if (controller === ControllerType.MAIN_VOLUME) { // 主音量。
 						if (lastVolume === noteEvent.value) return;
 						lastVolume = noteEvent.value;
 						setValueAtTime(nullTab.volume, seconds, noteEvent.value, KeyframeInterpolationType.HOLD);
 					}
+					// lastEventType = RegularEventType.CONTROLLER;
+				} else if (noteEvent instanceof PitchBendEvent) { // 弯音事件。
+					if (lastGlide === noteEvent.value) return;
+					lastGlide = noteEvent.value;
+					const glide = noteEvent.value - 0x2000; // 8192 为中央 0。
+					setValueAtTime(nullTab.glide, seconds, glide, KeyframeInterpolationType.HOLD);
+					// lastEventType = RegularEventType.PITCH_BEND_EVENT;
 				}
 			}
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
@@ -224,7 +231,7 @@ export default class Core {
 			} catch (error) { } // 如果关键帧在合成时间外，会报错。
 		}
 		let curStartTime = 0;
-		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) {
+		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) {
 			if (!layer.canSetTimeRemapEnabled) throw new CannotSetTimeRemapError();
 			layer.timeRemapEnabled = true;
 			curStartTime = layer.timeRemap.valueAtTime(layer.inPoint, false);
@@ -240,12 +247,13 @@ export default class Core {
 			audioLayer.enabled = false;
 			audioLayer.moveAfter(layer);
 			audioLayer.timeRemapEnabled = true;
-			if (!(effectsTab.timeRemap.value || effectsTab.timeRemap2.value))
+			if (!(effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value))
 				curStartTime = audioLayer.timeRemap.valueAtTime(layer.inPoint, false);
 			timeRemapRemoveKey(audioLayer, 2);
 			audioLayer.startTime = getLayerStartTime();
 			audioLayer.outPoint = getLayerOutPoint();
 			audioLayer.timeRemap.expressionEnabled = false;
+			layer.audioEnabled = false;
 		}
 		let invertIndex = 0;
 		const invertProp = () => Core.getEffects(layer).property(invertIndex).property(2) as OneDProperty;
@@ -324,15 +332,19 @@ export default class Core {
 						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
-				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
+				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
 					const key = layer.timeRemap.addKey(seconds);
+					const direction = !(noteOnCount % 2);
 					layer.timeRemap.setValueAtKey(key, curStartTime);
 					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 					if (hasDuration) {
 						let key2 = layer.timeRemap.addKey(noteOffSeconds);
-						const endTime = effectsTab.timeRemap.value ? curStartTime + layerLength : noteOffSeconds - seconds + curStartTime;
+						const endTime = (effectsTab.timeRemap.value || effectsTab.pingpong.value) ?
+							curStartTime + layerLength : noteOffSeconds - seconds + curStartTime;
+						const reversed = effectsTab.pingpong.value && !direction;
+						if (reversed) layer.timeRemap.setValueAtKey(key, endTime);
 						if (endTime < (layer.source as AVItem).duration)
-							layer.timeRemap.setValueAtKey(key2, endTime);
+							layer.timeRemap.setValueAtKey(key2, !reversed ? endTime : curStartTime);
 						else {
 							layer.timeRemap.removeKey(key2);
 							key2 = layer.timeRemap.addKey(seconds + sourceLength - curStartTime);

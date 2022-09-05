@@ -1,4 +1,4 @@
-import { IUser } from "../user";
+import User from "../user";
 import addControl, { addGroup, addItems } from "../module/addControl";
 import NullObjTab from "./NullObjTab";
 import ApplyEffectsTab from "./ApplyEffectsTab";
@@ -141,10 +141,10 @@ export default class Portal {
 		}
 	}
 	
-	public static build(thisObj: Panel, User: IUser): Portal {
+	public static build(thisObj: Panel, user: typeof User): Portal {
 		$.strict = true;
 		const window = thisObj instanceof Panel ? thisObj :
-			new Window("palette", User.scriptName + " v" + User.version, undefined, {
+			new Window("palette", user.scriptName + " v" + user.version, undefined, {
 				resizeable: true,
 			});
 		if (window === null) throw new CannotFindWindowError();
@@ -161,6 +161,7 @@ export default class Portal {
 	}
 	
 	getSelectedTab(): BaseTab | null {
+		if (this.tabs.selection === null) return null;
 		switch ((this.tabs.selection as Tab).text) {
 			case this.nullObjTab.tab.text:
 				return this.nullObjTab;

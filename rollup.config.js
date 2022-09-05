@@ -4,14 +4,11 @@ import replace from "@rollup/plugin-replace";
 import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
 import license from "rollup-plugin-license";
-import User from "./src/user";
+import User from "./src/user.ts";
 import path from "path";
 import selfExecute from "./custom_modules/rollup-plugin-self-execute";
-import initMomentLocaleZhCn from "./custom_modules/moment-locale-zh-cn";
 
-const enableTerser = false;
-
-initMomentLocaleZhCn();
+const enableTerser = true;
 
 export default [{
 	input: "src/index.ts",
@@ -53,10 +50,7 @@ export default [{
 				content: {
 					file: path.join(__dirname, "banner.template.ejs"),
 				},
-				data: {
-					scriptName: User.scriptName,
-					version: User.version,
-				},
+				data: User,
 			}
 		}),
 	],
