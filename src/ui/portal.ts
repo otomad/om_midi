@@ -149,8 +149,8 @@ export default class Portal {
 			});
 		if (window === null) throw new CannotFindWindowError();
 		const portal = new Portal(window);
+		window.onShow = window.onResizing = window.onResize = () => window.layout.resize();
 		if (window instanceof Window) {
-			window.onResizing = window.onResize = () => window.layout.resize();
 			window.center();
 			window.show();
 		} else {

@@ -2112,6 +2112,23 @@ declare class Panel extends _Control {
    * @param what The child control to remove, specified by 0-based index, text property value, or as a control object.
    */
   remove(what: any): void
+
+  /**
+   * An event-handler callback function, called after the window has been resized
+   */
+  onResize(): void
+
+  /**
+   * An event-handler callback function, called while a window is being resized
+   * Called while a window is being resized, each time the height or width changes. A handler can monitor the resize operation.
+   */
+  onResizing(): void
+  
+  /**
+   * An event-handler callback function, called just before the window is displayed
+   * Called when a request is made to open the window using the show() method, before the window is made visible, but after automatic layout is complete. A handler can modify the results of the automatic layout.
+   */
+  onShow(): void
 }
 
 /**
