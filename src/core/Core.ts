@@ -159,11 +159,12 @@ export default class Core {
 		layer.startTime = startTime;
 		let beat = 1;
 		const unit = marker.unitCombo.getSelectedIndex();
-		if (unit === 1) startTime += parseFloat(marker.beatTxt.text); // 偏移秒数
-		else if (unit === 2) startTime += parseFloat(marker.beatTxt.text) * comp.frameDuration; // 偏移帧数
+		if (unit === 1) startTime -= parseFloat(marker.beatTxt.text); // 偏移秒数
+		else if (unit === 2) startTime -= parseFloat(marker.beatTxt.text) * comp.frameDuration; // 偏移帧数
 		const bpm = parseFloat(marker.bpmTxt.text);
 		while (startTime <= comp.displayStartTime + comp.duration) {
-			layer.marker.setValueAtTime(startTime, new MarkerValue(String(beat)));
+			if (startTime >= comp.displayStartTime)
+				layer.marker.setValueAtTime(startTime, new MarkerValue(String(beat)));
 			if (unit === 0) {
 				beat = beat % parseInt(marker.beatTxt.text) + 1;
 				startTime += 60 / bpm; // 周期 BPM

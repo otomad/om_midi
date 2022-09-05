@@ -24,5 +24,6 @@ for (const key in SChinese) {
 	}
 }
 
+export const DIALOG_SIGN = "...";
 
 export default uiStr;

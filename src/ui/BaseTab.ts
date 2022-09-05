@@ -4,8 +4,8 @@ import Portal from "./Portal";
 export const SPACING = 2;
 export const tabGroupParams: Partial<Group> = {
 	orientation: "column",
-	alignment: "left",
-	alignChildren: "left",
+	alignment: ["fill", "top"],
+	alignChildren: "fill",
 	spacing: SPACING,
 	margins: [10, 5, 10, 0],
 };
@@ -35,8 +35,8 @@ export default abstract class BaseTab {
 		return checks;
 	}
 	
-	addCheckbox(text: string): Checkbox {
-		return addControl(this.group, "checkbox", { text });
+	addCheckbox(text?: string): Checkbox {
+		return addControl(this.group, "checkbox", { text, alignment: ["fill", "fill"] });
 	}
 	
 	abstract translate(): void;

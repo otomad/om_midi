@@ -1,7 +1,7 @@
 import Separator from "../components/Separator";
 import addControl, { addGroup, addItems, ContainerType } from "../module/addControl";
 import Setting from "../settings/Setting";
-import uiStr from "../languages/ui-str";
+import uiStr, { DIALOG_SIGN } from "../languages/ui-str";
 import { CannotFindWindowError } from "../errors";
 import User from "../user";
 import openUrl from "../temp-file-methods/openUrl";
@@ -9,12 +9,6 @@ import ImportOmUtilsDialog from "./ImportOmUtilsDialog";
 import Portal from "./Portal";
 import Midi from "../midi/Midi";
 import FlowGroup from "../containers/FlowGroup";
-
-const ABOUT = `读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
-
-脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝
-脚本作者：兰音
-仓库地址：`;
 
 export default class SettingsDialog {
 	//#region 组件对象
@@ -58,13 +52,13 @@ export default class SettingsDialog {
 		this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.separator = new Separator(this.group, "vertical");
 		this.rightGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
-		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: ABOUT }, { multiline: true, scrolling: true });
+		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage) }, { multiline: true, scrolling: true });
 		this.openGithubBtnGroup = new FlowGroup(this.leftGroup, 3, ["fill", "bottom"]);
-		this.openGithubLatestBtn = this.openGithubBtnGroup.add("button", { text: "检查更新" });
-		this.openGithubPageBtn = this.openGithubBtnGroup.add("button", { text: "仓库地址" });
-		this.extendScriptEngineAboutBtn = this.openGithubBtnGroup.add("button", { text: "关于脚本引擎" });
-		this.importOmUtilsBtn = this.openGithubBtnGroup.add("button", { text: "导入 om utils" });
-		this.importPureQuarterMidiBtn = this.openGithubBtnGroup.add("button", { text: "导入纯四分 MIDI" });
+		this.openGithubLatestBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.check_update) + DIALOG_SIGN });
+		this.openGithubPageBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.repository_link) });
+		this.extendScriptEngineAboutBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.about_script_engine) });
+		this.importOmUtilsBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.import_om_utils) + DIALOG_SIGN });
+		this.importPureQuarterMidiBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.import_pure_quarter_midi) + DIALOG_SIGN });
 		this.generalPanel = this.addPanel(this.rightGroup, localize(uiStr.general), [10, 10, 10, 7]);
 		({
 			group: this.languageGroup,
@@ -76,16 +70,16 @@ export default class SettingsDialog {
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
 		this.nullObjPanel = this.addPanel(this.rightGroup, localize(uiStr.create_null_object));
-		this.usingSelectedLayerName = addControl(this.nullObjPanel, "checkbox", { text: "使用选中图层名称而不是 MIDI 轨道名称" });
+		this.usingSelectedLayerName = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.using_selected_layer_name) });
 		this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
-		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: "声像标准化到 -100 ~ 100。" });
+		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.normalize_pan_to_100) });
 		this.normalizePanTo100.value = Setting.getNormalizePanTo100();
 		this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
-		this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: "冰鸠さくの特有图层叠叠乐方法。" });
+		this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.using_layering) });
 		this.usingLayering.value = Setting.getUsingLayering();
-		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: "优化部分效果动画。" });
+		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
 		this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
-		this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: "将属性添加到效果中的变换中。" });
+		this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.add_to_effect_transform) });
 		this.addToEffectTransform.value = Setting.getAddToEffectTransform();
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
 		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
@@ -106,10 +100,10 @@ export default class SettingsDialog {
 		this.openGithubPageBtn.onClick = () => openUrl(User.githubPage);
 		this.openGithubLatestBtn.onClick = () => openUrl(User.githubLatest);
 		this.importPureQuarterMidiBtn.onClick = () => {
-			if (!confirm("确定要导入纯四分音符 MIDI 文件吗？", true, "导入纯四分 MIDI")) return;
+			if (!confirm(localize(uiStr.sure_to_import_pure_quarter_midi), true, localize(uiStr.import_pure_quarter_midi))) return;
 			this.portal.midi = new Midi(true);
 			this.portal.selectedTracks = [undefined];
-			this.portal.selectMidiName.text = "纯四分音符 MIDI";
+			this.portal.selectMidiName.text = localize(uiStr.pure_quarter_midi);
 			this.portal.selectTrackBtn.text = "";
 			this.portal.selectTrackBtn.enabled = false;
 			this.portal.selectBpmTxt.enabled = true;

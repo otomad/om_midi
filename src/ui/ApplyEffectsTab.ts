@@ -5,14 +5,14 @@ import Portal from "./Portal";
 
 export default class ApplyEffectsTab extends BaseTab {
 	//#region 组件对象
-	timeRemap: Checkbox;
-	timeRemap2: Checkbox;
-	pingpong: Checkbox;
-	hFlip: Checkbox;
-	cwRotation: Checkbox;
-	ccwRotation: Checkbox;
-	negative: Checkbox;
-	tuning: Checkbox;
+	timeRemap: Checkbox = this.addCheckbox();
+	timeRemap2: Checkbox = this.addCheckbox();
+	pingpong: Checkbox = this.addCheckbox();
+	hFlip: Checkbox = this.addCheckbox();
+	cwRotation: Checkbox = this.addCheckbox();
+	ccwRotation: Checkbox = this.addCheckbox();
+	negative: Checkbox = this.addCheckbox();
+	tuning: Checkbox = this.addCheckbox();
 	basePitchGroup: Group;
 	basePitchLbl: StaticText;
 	basePitchKeyCombo: DropDownList;
@@ -21,19 +21,11 @@ export default class ApplyEffectsTab extends BaseTab {
 
 	constructor(parent: Portal) {
 		super(parent);
-		this.timeRemap = this.addCheckbox("时间重映射（拉伸）");
-		this.timeRemap2 = this.addCheckbox("时间重映射（截断）");
-		this.pingpong = this.addCheckbox("来回");
-		this.hFlip = this.addCheckbox("水平翻转");
-		this.cwRotation = this.addCheckbox("顺时针旋转");
-		this.ccwRotation = this.addCheckbox("逆时针旋转");
-		this.negative = this.addCheckbox("颜色反转");
-		this.tuning = this.addCheckbox("调音");
 		({
 			group: this.basePitchGroup,
 			label: this.basePitchLbl,
 			control: this.basePitchKeyCombo,
-		} = addGroup(this.group, "原始音高", "dropdownlist"));
+		} = addGroup(this.group, "", "dropdownlist"));
 		this.basePitchOctCombo = addControl(this.basePitchGroup, "dropdownlist")
 		addItems(this.basePitchKeyCombo, ..."C,C#,D,D#,E,F,F#,G,G#,A,A#,B".split(','));
 		addItems(this.basePitchOctCombo, ..."0,1,2,3,4,5,6,7,8,9,10".split(','));
@@ -49,5 +41,14 @@ export default class ApplyEffectsTab extends BaseTab {
 	
 	translate(): void {
 		this.tab.text = localize(uiStr.apply_effects_short);
+		this.basePitchLbl.text = localize(uiStr.base_pitch);
+		this.timeRemap.text = localize(uiStr.time_remap) + localize(uiStr.paren_stretched);
+		this.timeRemap2.text = localize(uiStr.time_remap) + localize(uiStr.paren_truncated);
+		this.pingpong.text = localize(uiStr.pingpong);
+		this.hFlip.text = localize(uiStr.horizontal_flip);
+		this.cwRotation.text = localize(uiStr.cw_rotation);
+		this.ccwRotation.text = localize(uiStr.ccw_ratation);
+		this.negative.text = localize(uiStr.invert_color);
+		this.tuning.text = localize(uiStr.tuning);
 	}
 }

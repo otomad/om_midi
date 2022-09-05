@@ -58,13 +58,13 @@ export default class Portal {
 			group: this.selectMidiGroup,
 			label: this.selectMidiLbl,
 			control: this.selectMidiBtn,
-		} = addGroup(this.group, "MIDI 文件", "button", { text: "...", size: [15, MidiButtonHeight] }));
-		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { text: "未选择", alignment: FILL_CENTER });
+		} = addGroup(this.group, "", "button", { text: "...", size: [15, MidiButtonHeight] }));
+		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { alignment: FILL_CENTER });
 		({
 			group: this.selectTrackGroup,
 			label: this.selectTrackLbl,
 			control: this.selectTrackBtn,
-		} = addGroup(this.group, "选择轨道", "button", {
+		} = addGroup(this.group, "", "button", {
 			text: "",
 			alignment: FILL_CENTER,
 			maximumSize: [LARGE_NUMBER, MidiButtonHeight],
@@ -74,13 +74,12 @@ export default class Portal {
 			group: this.selectBpmGroup,
 			label: this.selectBpmLbl,
 			control: this.selectBpmTxt,
-		} = addGroup(this.group, "设定 BPM", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }));
+		} = addGroup(this.group, "", "edittext", { text: "120", alignment: FILL_CENTER, enabled: false }));
 		({
 			group: this.startTimeGroup,
 			label: this.startTimeLbl,
 			control: this.startTimeCombo,
-		} = addGroup(this.group, "开始位置", "dropdownlist", { alignment: FILL_CENTER }));
-		addItems(this.startTimeCombo, "显示开始时间", "当前时间", "工作区域", "0");
+		} = addGroup(this.group, "", "dropdownlist", { alignment: FILL_CENTER }));
 		this.tabs = addControl(this.group, "tabbedpanel", { alignment: ["fill", "fill"] });
 		this.buttonGroup = addControl(this.group, "group", { orientation: "row", alignment: ["fill", "bottom"] });
 		this.applyBtn = addControl(this.buttonGroup, "button", { alignment: "left" });
@@ -96,7 +95,8 @@ export default class Portal {
 		this.core = new Core(this);
 		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.selectMidiBtn.onClick = () => {
-			const file = File.openDialog("选择一个 MIDI 序列", "MIDI 序列:*.mid;*.midi,所有文件:*.*");
+			const file = File.openDialog(localize(uiStr.select_a_midi_file),
+				`${localize(uiStr.midi_files)}:*.mid;*.midi,${localize(uiStr.all_files)}:*.*`);
 			if (file === null) return;
 			let midi: Midi | undefined;
 			try {
@@ -179,5 +179,12 @@ export default class Portal {
 		this.nullObjTab.translate();
 		this.applyEffectsTab.translate();
 		this.toolsTab.translate();
+		if (!this.midi || !this.selectedTracks.length)
+			this.selectMidiName.text = localize(uiStr.no_midi_file_selected);
+		this.selectMidiLbl.text = localize(uiStr.select_midi_file);
+		this.selectTrackLbl.text = localize(uiStr.select_midi_track);
+		this.selectBpmLbl.text = localize(uiStr.set_midi_bpm);
+		this.startTimeLbl.text = localize(uiStr.start_time);
+		addItems(this.startTimeCombo, localize(uiStr.display_start_time), localize(uiStr.current_time), localize(uiStr.work_area), "0");
 	}
 }

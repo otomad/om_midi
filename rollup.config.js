@@ -1,6 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import replace from "@rollup/plugin-replace";
-// import afterEffectJsx from "rollup-plugin-ae-jsx";
+import afterEffectJsx from "rollup-plugin-ae-jsx";
 import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
 import license from "rollup-plugin-license";
@@ -54,4 +54,31 @@ export default [{
 			}
 		}),
 	],
-}];
+}/* , {
+	input: "src/utils.ts",
+	output: {
+		file: "dist/om_utils.jsx",
+		format: "cjs",
+		format: "es",
+	},
+	onwarn: function (warning) {
+		console.warn(warning.message);
+	},
+	external: Object.keys(pkg.dependencies),
+	plugins: [
+		replace({
+			preventAssignment: true,
+			values: {
+				_npmVersion: pkg.version,
+			},
+		}),
+		typescript({
+			module: "esnext",
+			target: "es5",
+			noImplicitAny: true,
+			moduleResolution: "node",
+			strict: true,
+		}),
+		afterEffectJsx(),
+	],
+} */];

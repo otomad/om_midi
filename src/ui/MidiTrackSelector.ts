@@ -16,7 +16,7 @@ export default class MidiTrackSelector {
 	
 	constructor(parent: Portal) {
 		this.parent = parent;
-		this.window = new Window("dialog", "选择 MIDI 轨道", undefined, {
+		this.window = new Window("dialog", localize(uiStr.midi_track_selector_title), undefined, {
 			resizeable: true,
 		});
 		if (this.window === null) throw new CannotFindWindowError();
@@ -56,7 +56,7 @@ export default class MidiTrackSelector {
 			}
 			let text = "";
 			if (checks.length === 0) {
-				alert("请至少选择一条轨道。", localize(uiStr.warning));
+				alert(localize(uiStr.select_at_least_one_track), localize(uiStr.warning));
 				return;
 			} else if (checks.length === 1)
 				text = checks[0].toString();

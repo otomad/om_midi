@@ -1,10 +1,14 @@
 import uiStr from "./languages/ui-str";
 
 export class MyError extends Error {
+	isMyError = true;
+	
 	constructor(msg: Error);
 	constructor(msg: string);
 	constructor(msg: string | Error) {
-		if (!(msg instanceof MyError))
+		// 如果参数就是一个 MyError，就不用再警告了。
+		// 注意：ExtendScript 等老旧的 JavaScript 不能继承自 Error。
+		if (typeof msg === "string" || !("isMyError" in msg)) 
 			alert(msg.toString(), localize(uiStr.error), true);
 		super(msg.toString());
 	}
@@ -12,102 +16,102 @@ export class MyError extends Error {
 
 export class CannotFindWindowError extends MyError {
 	constructor() {
-		super("错误：无法找到或创建窗口。");
+		super(localize(uiStr.cannot_find_window_error));
 	}
 }
 
 export class UnsupportedSettingTypeError extends MyError {
 	constructor() {
-		super("错误：不支持的设置数据类型。");
+		super(localize(uiStr.unsupported_setting_type_error));
 	}
 }
 
 export class FileUnreadableError extends MyError {
 	constructor() {
-		super("错误：无法读取 MIDI 文件。该文件可能已占用或不存在。");
+		super(localize(uiStr.file_unreadable_error));
 	}
 }
 
 export class MidiHeaderValidationError extends MyError {
 	constructor() {
-		super("错误：MIDI 文件头验证失败（不是标准 MIDI 文件或文件已损坏）。");
+		super(localize(uiStr.midi_header_validation_error));
 	}
 }
 
 export class MidiTrackHeaderValidationError extends MyError {
 	constructor() {
-		super("错误：MIDI 轨道块标头验证失败。");
+		super(localize(uiStr.midi_track_header_validation_error));
 	}
 }
 
 export class MidiCustomEventsError extends MyError {
 	constructor() {
-		super("错误：自定义 MIDI 事件无法读取。");
+		super(localize(uiStr.midi_custom_events_error));
 	}
 }
 
 export class MidiNoTrackError extends MyError {
 	constructor() {
-		super("错误：该 MIDI 文件不包含任何有效轨道。");
+		super(localize(uiStr.midi_no_track_error));
 	}
 }
 
 export class NotAfterEffectsError extends MyError {
 	constructor() {
-		super("错误：请在 Adobe After Effects 上使用此脚本。");
+		super(localize(uiStr.not_after_effects_error));
 	}
 }
 
 export class CannotCreateFileError extends MyError {
 	constructor() {
-		super("错误：无法创建文件。");
+		super(localize(uiStr.cannot_create_file_error));
 	}
 }
 
 export class CannotFindCompositionError extends MyError {
 	constructor() {
-		super("错误：无法找到活动合成。请先激活一个合成。");
+		super(localize(uiStr.cannot_find_composition_error));
 	}
 }
 
 export class NoMidiError extends MyError {
 	constructor() {
-		super("错误：请先打开一个有效的 MIDI 文件。")
+		super(localize(uiStr.no_midi_error))
 	}
 }
 
 export class NoOptionsCheckedError extends MyError {
 	constructor() {
-		super("错误：请至少勾选一个项目。");
+		super(localize(uiStr.no_options_checked_error));
 	}
 }
 
 export class NoLayerSelectedError extends MyError {
 	constructor() {
-		super("错误：在当前合成中未选中任何图层。");
+		super(localize(uiStr.no_layer_selected_error));
 	}
 }
 
 export class NotOneTrackForApplyEffectsOnlyError extends MyError {
 	constructor() {
-		super("错误：应用效果只能同时选择一条轨道。");
+		super(localize(uiStr.not_one_track_for_apply_effects_only_error));
 	}
 }
 
 export class EndOfTrackPositionError extends MyError {
 	constructor(endOffset: number, pointer: number) {
-		super(`错误：轨道结束位置有误。应为 ${endOffset}，实际 ${pointer}`);
+		super(localize(uiStr.end_of_track_position_error, endOffset, pointer));
 	}
 }
 
 export class CannotSetTimeRemapError extends MyError {
 	constructor() {
-		super("错误：所选图层不能设置时间重映射。");
+		super(localize(uiStr.cannot_set_time_remap_error));
 	}
 }
 
 export class CannotTuningError extends MyError {
 	constructor() {
-		super("错误：所选图层不包含音频，不能进行调音。");
+		super(localize(uiStr.cannot_tuning_error));
 	}
 }

@@ -68,9 +68,11 @@ export default function addControl<C extends ControlTypeName>(parent: ContainerT
 }
 
 export function addItems(dropDownList: DropDownList, ...items: string[]): DropDownList {
+	const selection = dropDownList.items.length ? dropDownList.getSelectedIndex() : 0;
+	dropDownList.removeAll();
 	for (const item of items)
 		dropDownList.add("item", item);
-	dropDownList.selection = 0;
+	dropDownList.selection = selection;
 	return dropDownList;
 }
 

@@ -1,3 +1,4 @@
+import uiStr from "../languages/ui-str";
 import { addGroup, addItems } from "../module/addControl";
 import setNumberEditText, { NumberType } from "../module/setNumberEditText";
 import BaseTool from "./BaseTool";
@@ -26,8 +27,7 @@ export default class MarkerConductor extends BaseTool {
 			group: this.unitGroup,
 			label: this.unitLbl,
 			control: this.unitCombo,
-		} = addGroup(this.group, "单位", "dropdownlist", { alignment: FILL_CENTER }));
-		addItems(this.unitCombo, "BPM", "时间", "帧数");
+		} = addGroup(this.group, "", "dropdownlist", { alignment: FILL_CENTER }));
 		({
 			group: this.bpmGroup,
 			label: this.bpmLbl,
@@ -37,23 +37,30 @@ export default class MarkerConductor extends BaseTool {
 			group: this.beatGroup,
 			label: this.beatLbl,
 			control: this.beatTxt,
-		} = addGroup(this.group, "节拍", "edittext", { text: "4", alignment: FILL_CENTER }));
+		} = addGroup(this.group, "", "edittext", { text: "4", alignment: FILL_CENTER }));
 		({
 			group: this.markOnGroup,
 			label: this.markOnLbl,
 			control: this.markOnCombo,
-		} = addGroup(this.group, "标记在", "dropdownlist", { alignment: FILL_CENTER }));
-		addItems(this.markOnCombo, "新建空对象图层", "当前图层");
+		} = addGroup(this.group, "", "dropdownlist", { alignment: FILL_CENTER }));
 		
+		this.translate();
 		setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.unitCombo.onChange = () => {
 			const unitIndex = this.unitCombo.getSelectedIndex();
-			this.beatLbl.text = unitIndex === 0 ? "节拍" : "偏移";
+			this.beatLbl.text = unitIndex === 0 ? localize(uiStr.beat) : localize(uiStr.shift_seconds_and_frames);
 			this.bpmLbl.text = unitIndex === 0 ? "BPM" :
-				(unitIndex === 1 ? "秒数" : "帧数");
+				(unitIndex === 1 ? localize(uiStr.seconds) : localize(uiStr.frames));
 			setNumberEditText(this.beatTxt, unitIndex === 0 ? NumberType.POSITIVE_INT : NumberType.DECIMAL, 4);
 			this.beatTxt.notify("onChange");
 		};
 		this.unitCombo.notify("onChange");
+	}
+	
+	translate(): void {
+		this.unitLbl.text = localize(uiStr.unit);
+		this.markOnLbl.text = localize(uiStr.mark_on);
+		addItems(this.unitCombo, "BPM", localize(uiStr.time), localize(uiStr.frames));
+		addItems(this.markOnCombo, localize(uiStr.add_null_layer), localize(uiStr.current_layer));
 	}
 }

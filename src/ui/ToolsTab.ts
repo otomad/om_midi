@@ -20,7 +20,6 @@ export default class ToolsTab extends BaseTab {
 	constructor(parent: Portal) {
 		super(parent, undefined, { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
 		this.toolsCombo = addControl(this.group, "dropdownlist");
-		addItems(this.toolsCombo, "标记指挥官", "缓动百分百");
 		this.toolsCombo.selection = Setting.getLastTool();
 		this.separator = new Separator(this.group, "horizontal");
 		this.toolsPanel = addControl(this.group, "group", { orientation: "stack", alignment: "fill", alignChildren: "fill" });
@@ -48,5 +47,8 @@ export default class ToolsTab extends BaseTab {
 	
 	translate(): void {
 		this.tab.text = localize(uiStr.tools);
+		addItems(this.toolsCombo, localize(uiStr.marker_conductor), localize(uiStr.easing_100_percent));
+		this.marker.translate();
+		this.ease.translate();
 	}
 }

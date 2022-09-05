@@ -4,41 +4,41 @@ import Portal from "./Portal";
 
 export default class NullObjTab extends BaseTab {
 	//#region 组件对象
-	pitch: Checkbox;
-	velocity: Checkbox;
-	duration: Checkbox;
-	scale: Checkbox;
-	cwRotation: Checkbox;
-	ccwRotation: Checkbox;
-	count: Checkbox;
-	bool: Checkbox;
-	timeRemap: Checkbox;
-	pingpong: Checkbox;
-	noteOn: Checkbox;
-	pan: Checkbox;
-	volume: Checkbox;
-	glide: Checkbox;
+	pitch: Checkbox = this.addCheckbox();
+	velocity: Checkbox = this.addCheckbox(); // 致前辈：Velocity 就是力度，不是速度。
+	duration: Checkbox = this.addCheckbox();
+	scale: Checkbox = this.addCheckbox();
+	cwRotation: Checkbox = this.addCheckbox();
+	ccwRotation: Checkbox = this.addCheckbox();
+	count: Checkbox = this.addCheckbox();
+	bool: Checkbox = this.addCheckbox();
+	timeRemap: Checkbox = this.addCheckbox();
+	pingpong: Checkbox = this.addCheckbox();
+	noteOn: Checkbox = this.addCheckbox();
+	pan: Checkbox = this.addCheckbox();
+	volume: Checkbox = this.addCheckbox();
+	glide: Checkbox = this.addCheckbox();
 	//#endregion
 
 	constructor(parent: Portal) {
 		super(parent);
-		this.pitch = this.addCheckbox("音高");
-		this.velocity = this.addCheckbox("力度"); // 致前辈：Velocity 就是力度，不是速度。
-		this.duration = this.addCheckbox("持续时间");
-		this.scale = this.addCheckbox("缩放");
-		this.cwRotation = this.addCheckbox("顺时针旋转");
-		this.ccwRotation = this.addCheckbox("逆时针旋转");
-		this.count = this.addCheckbox("计数");
-		this.bool = this.addCheckbox("布尔");
-		this.timeRemap = this.addCheckbox("时间重映射");
-		this.pingpong = this.addCheckbox("来回");
-		this.noteOn = this.addCheckbox("音符开");
-		this.pan = this.addCheckbox("通道声像");
-		this.volume = this.addCheckbox("通道音量");
-		this.glide = this.addCheckbox("通道弯音");
 	}
 	
 	translate(): void {
 		this.tab.text = localize(uiStr.create_null_object_short);
+		this.pitch.text = localize(uiStr.pitch);
+		this.velocity.text = localize(uiStr.velocity);
+		this.duration.text = localize(uiStr.duration);
+		this.scale.text = localize(uiStr.scale);
+		this.cwRotation.text = localize(uiStr.cw_rotation);
+		this.ccwRotation.text = localize(uiStr.ccw_ratation);
+		this.count.text = localize(uiStr.count);
+		this.bool.text = localize(uiStr.bool);
+		this.timeRemap.text = localize(uiStr.time_remap);
+		this.pingpong.text = localize(uiStr.pingpong);
+		this.noteOn.text = localize(uiStr.note_on);
+		this.pan.text = localize(uiStr.channel_pan);
+		this.volume.text = localize(uiStr.channel_volume);
+		this.glide.text = localize(uiStr.channel_glide);
 	}
 }

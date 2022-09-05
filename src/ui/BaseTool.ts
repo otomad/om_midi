@@ -17,4 +17,6 @@ export default abstract class BaseTool {
 			spacing: SPACING,
 		});
 	}
+	
+	abstract translate(): void;
 }
