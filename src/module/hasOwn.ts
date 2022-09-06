@@ -1,4 +1,5 @@
 export default
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 function hasOwn<T extends object, K extends string>(obj: T, prop: K): prop is keyof T {
 	return Object.prototype.hasOwnProperty.call(obj, prop);

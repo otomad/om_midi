@@ -22,7 +22,7 @@ const SettingsHelper = {
 	},
 	has(key: string): boolean {
 		return app.settings.haveSetting(sectionName, key);
-	}
+	},
 };
 
 export default SettingsHelper;

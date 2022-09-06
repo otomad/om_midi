@@ -76,7 +76,7 @@ export class CannotFindCompositionError extends MyError {
 
 export class NoMidiError extends MyError {
 	constructor() {
-		super(localize(uiStr.no_midi_error))
+		super(localize(uiStr.no_midi_error));
 	}
 }
 

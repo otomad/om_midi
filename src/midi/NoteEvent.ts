@@ -110,7 +110,7 @@ export class NoteOnEvent extends NoteOnOffEvent {
 		if (values instanceof Array)
 			super(RegularEventType.NOTE_ON, values);
 		else {
-			super(RegularEventType.NOTE_ON, [values, velocity!])
+			super(RegularEventType.NOTE_ON, [values, velocity!]);
 			this.deltaTime = deltaTime!;
 			this.duration = duration!;
 			this.sofarTick = sofarTick!;

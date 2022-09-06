@@ -8,6 +8,7 @@ export default class NullObjTab extends BaseTab {
 	velocity: Checkbox = this.addCheckbox(); // 致前辈：Velocity 就是力度，不是速度。
 	duration: Checkbox = this.addCheckbox();
 	scale: Checkbox = this.addCheckbox();
+	advancedScale: Checkbox = this.addCheckbox();
 	cwRotation: Checkbox = this.addCheckbox();
 	ccwRotation: Checkbox = this.addCheckbox();
 	count: Checkbox = this.addCheckbox();
@@ -30,6 +31,7 @@ export default class NullObjTab extends BaseTab {
 		this.velocity.text = localize(uiStr.velocity);
 		this.duration.text = localize(uiStr.duration);
 		this.scale.text = localize(uiStr.scale);
+		this.advancedScale.text = localize(uiStr.advanced_scale);
 		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.ccwRotation.text = localize(uiStr.ccw_ratation);
 		this.count.text = localize(uiStr.count);

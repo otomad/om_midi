@@ -9,6 +9,7 @@ export default class ApplyEffectsTab extends BaseTab {
 	timeRemap2: Checkbox = this.addCheckbox();
 	pingpong: Checkbox = this.addCheckbox();
 	hFlip: Checkbox = this.addCheckbox();
+	hMirror: Checkbox = this.addCheckbox();
 	cwRotation: Checkbox = this.addCheckbox();
 	ccwRotation: Checkbox = this.addCheckbox();
 	negative: Checkbox = this.addCheckbox();
@@ -26,9 +27,9 @@ export default class ApplyEffectsTab extends BaseTab {
 			label: this.basePitchLbl,
 			control: this.basePitchKeyCombo,
 		} = addGroup(this.group, "", "dropdownlist"));
-		this.basePitchOctCombo = addControl(this.basePitchGroup, "dropdownlist")
-		addItems(this.basePitchKeyCombo, ..."C,C#,D,D#,E,F,F#,G,G#,A,A#,B".split(','));
-		addItems(this.basePitchOctCombo, ..."0,1,2,3,4,5,6,7,8,9,10".split(','));
+		this.basePitchOctCombo = addControl(this.basePitchGroup, "dropdownlist");
+		addItems(this.basePitchKeyCombo, ..."C,C#,D,D#,E,F,F#,G,G#,A,A#,B".split(","));
+		addItems(this.basePitchOctCombo, ..."0,1,2,3,4,5,6,7,8,9,10".split(","));
 		this.basePitchOctCombo.selection = 5;
 		this.basePitchGroup.enabled = false;
 		this.tuning.onClick = () => this.basePitchGroup.enabled = this.tuning.value;
@@ -46,6 +47,7 @@ export default class ApplyEffectsTab extends BaseTab {
 		this.timeRemap2.text = localize(uiStr.time_remap) + localize(uiStr.paren_truncated);
 		this.pingpong.text = localize(uiStr.pingpong);
 		this.hFlip.text = localize(uiStr.horizontal_flip);
+		this.hMirror.text = localize(uiStr.horizontal_mirror);
 		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.ccwRotation.text = localize(uiStr.ccw_ratation);
 		this.negative.text = localize(uiStr.invert_color);

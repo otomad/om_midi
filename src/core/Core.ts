@@ -138,7 +138,7 @@ export default class Core {
 					setValueAtTime(nullTab.glide, seconds, glide, KeyframeInterpolationType.HOLD);
 					// lastEventType = RegularEventType.PITCH_BEND_EVENT;
 				}
-			}
+			};
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
 		}
 	}
@@ -230,7 +230,7 @@ export default class Core {
 			try {
 				layer.timeRemap.removeKey(keyIndex);
 			} catch (error) { } // 如果关键帧在合成时间外，会报错。
-		}
+		};
 		let curStartTime = 0;
 		if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) {
 			if (!layer.canSetTimeRemapEnabled) throw new CannotSetTimeRemapError();
@@ -368,7 +368,7 @@ export default class Core {
 						const duration2 = noteOffSeconds - seconds;
 						const pitch = noteEvent.pitch - basePitch;
 						const stretch = 2 ** (pitch / 12);
-						let endTime = duration2 * stretch + curStartTime;
+						const endTime = duration2 * stretch + curStartTime;
 						if (endTime < (layer.source as AVItem).duration)
 							audioLayer.timeRemap.setValueAtKey(key2, endTime);
 						else {
@@ -394,7 +394,7 @@ export default class Core {
 				// lastEventType = RegularEventType.NOTE_OFF;
 				// lastEventSofarTick = noteEvent.sofarTick;
 			}
-		}
+		};
 		this.dealNoteEvents(track, comp, secondsPerTick, curStartTime, addNoteEvent);
 	}
 	
@@ -422,8 +422,7 @@ export default class Core {
 	 */
 	private createNullLayer(comp: CompItem): AVLayer {
 		let nullLayer: AVLayer;
-	refindNullSource:
-		while (true) {
+		refindNullSource: while (true) {
 			let hasNullSource = false;
 			try {
 				hasNullSource = !!this.nullSource && !!this.nullSource.parentFolder;

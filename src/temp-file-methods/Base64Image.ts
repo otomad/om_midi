@@ -18,7 +18,7 @@ export default class Base64Image extends TempFile {
 
 		const cache = {
 			RE_NON_ALPHA: new RegExp(`[^${ALPHA}]`),
-			RE_BAD_EQUALS: /\=([^=]|\=\=)/
+			RE_BAD_EQUALS: /=([^=]|==)/,
 		};
 		const n = s.length >>> 0,
 			a = [];
@@ -46,7 +46,7 @@ export default class Base64Image extends TempFile {
 		s = a.join("");
 		a.length = 0;
 		return s;
-	};
+	}
 	
 	static settingIcon() { return new Base64Image(images.SETTINGS_ICON, "settings_icon.png"); }
 }

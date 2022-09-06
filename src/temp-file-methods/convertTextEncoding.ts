@@ -6,7 +6,7 @@ import TempFile from "./TempFile";
 export default function convertTextEncoding(texts: string[] | string): string[] {
 	if (typeof texts === "string") texts = [texts];
 	if (texts.length === 0) return [];
-	const file = new TempFile(`tmp${new Date().valueOf()}.txt`);
+	const file = new TempFile("tmp.txt");
 	let defaultEncoding: string; // 系统默认编码
 	if (file && file.open("w")) {
 		defaultEncoding = file.encoding;

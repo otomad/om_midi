@@ -98,6 +98,8 @@ const SChinese = {
 	cannot_set_time_remap_error: "错误：所选图层不能设置时间重映射。",
 	cannot_tuning_error: "错误：所选图层不包含音频，不能进行调音。",
 	about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝\n脚本作者：兰音\n仓库地址：%1",
+	horizontal_mirror: "水平镜像",
+	advanced_scale: "高级缩放",
 };
 
 export default SChinese;

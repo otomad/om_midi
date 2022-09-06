@@ -1,12 +1,19 @@
 /**
  * 使用方法：
- * 将本文件命名为 utils.jsx 并放置在 aep 工程相同目录下。
- * 在图层表达式中声明
- * <pre>{@code
- * 	$.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\utils.jsx"));
- * }</pre>
+ * 将本文件命名为 om_utils.jsx。
+ *     1. 放置在 aep 工程的相同目录下。
+ *     在图层表达式中声明
+ *     <pre>{@code $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));}</pre>
+ * 
+ *     2. 放置在任意位置，然后添加到 AE 项目中。
+ *     在图层表达式中声明
+ *     <pre>{@code footage("om_utils.jsx").sourceData;}</pre>
  * 即可使用此处定义的函数。
  */
+
+declare const thisLayer: AVLayer;
+declare const thisComp: CompItem;
+declare const thisProperty: Property;
 
 /**
  * 将 om_midi 生成的时间重映射 [0 ~ 1] 值映射到素材源的实际时间值。
@@ -19,11 +26,11 @@
 export function timeRemap(midiName: string, stretchOnly: boolean = false, rate: number = 1): number {
 	const midi = thisComp.layer(midiName || _getMidiName());
 	const progress = midi.effect("时间重映射1")("滑块");
-	const maxDuration = ((thisLayer.source.duration / thisLayer.source.frameDuration).toFixed(0) - 1) * thisLayer.source.frameDuration;
+	const maxDuration = (+(thisLayer.source.duration / thisLayer.source.frameDuration).toFixed(0) - 1) * thisLayer.source.frameDuration;
 	if (stretchOnly)
 		return progress * maxDuration; // 取消注释此行即可强制使用伸缩素材。
 	let currentKey, nextKey = currentKey = progress.nearestKey(thisLayer.time);
-	let _time = thisLayer.clamp(thisLayer.time, progress.key(1).time, progress.key(progress.numKeys).time);
+	const _time = thisLayer.clamp(thisLayer.time, progress.key(1).time, progress.key(progress.numKeys).time);
 	if (_time > currentKey.time && currentKey.index < progress.numKeys)
 		nextKey = progress.key(currentKey.index + 1);
 	else if (currentKey.index !== 1)
@@ -32,11 +39,11 @@ export function timeRemap(midiName: string, stretchOnly: boolean = false, rate: 
 	return progress.value * Math.min(noteDuration * rate, maxDuration);
 }
 
-function _identifyKeyContainerType(object) {
+function _identifyKeyContainerType(object: unknown) {
 	if (typeof object === "string") // 如果是字符串，则返回该字符串对应的图层。
-		return thisComp.layer(object).marker
+		return thisComp.layer(object).marker;
 	else if (object.marker !== undefined) // 这是一个图层。
-		return object.marker
+		return object.marker;
 	else if (object.nearestKey !== undefined) // 这是一个属性。
 		return object;
 	else throw new TypeError("你特喵的扔了啥进去？");
@@ -46,12 +53,12 @@ function _identifyKeyContainerType(object) {
  * 获取指定属性/图层的前一个或当前关键帧/标记。
  * @param {Property} property - 指定的属性/图层/图层名称。留空表示当前属性。
  * @param {number} time - 时间。留空表示当前时间。
- * @returns {Key} 前一个或当前关键帧/标记。如果在此之前且当前没有任何关键帧/标记，返回 null。
+ * @returns {number} 前一个或当前关键帧/标记。如果在此之前且当前没有任何关键帧/标记，返回 null。
  * @throws {Error} 若指定的属性没有关键帧/标记，则会报错。
  */
-export function getPreviousKey(property: Property = thisProperty, time: number = thisLayer.time): Key {
+export function getPreviousKey(property: Property = thisProperty, time: number = thisLayer.time): number | null {
 	property = _identifyKeyContainerType(property);
-	let key = property.nearestKey(time);
+	const key = property.nearestKey(time);
 	if (key.time <= time) return key;
 	else if (key.index <= 1) return null;
 	else return property.key(key.index - 1);
@@ -61,12 +68,12 @@ export function getPreviousKey(property: Property = thisProperty, time: number =
  * 获取指定属性/图层的后一个关键帧/标记。
  * @param {Property} property - 指定的属性/图层/图层名称。留空表示当前属性。
  * @param {number} time - 时间。留空表示当前时间。
- * @returns {Key} 后一个关键帧/标记。如果在此之后没有任何关键帧/标记，返回 null。
+ * @returns {number} 后一个关键帧/标记。如果在此之后没有任何关键帧/标记，返回 null。
  * @throws {Error} 若指定的属性没有关键帧/标记，则会报错。
  */
-export function getNextKey(property: Property = thisProperty, time: number = thisLayer.time): Key {
+export function getNextKey(property: Property = thisProperty, time: number = thisLayer.time): number | null {
 	property = _identifyKeyContainerType(property);
-	let key = property.nearestKey(time);
+	const key = property.nearestKey(time);
 	if (key.time > time) return key;
 	else if (key.index >= property.numKeys) return null;
 	else return property.key(key.index + 1);
@@ -132,7 +139,7 @@ export function byRawText(centerValue: number, startValue: number, endValue: num
 				bpm = thisComp.layer(i);
 				break;
 			}
-		if (bpm === null) throw new ReferenceError("未指定过渡动画持续时间或合成中不包含 BPM 轨道。")
+		if (bpm === null) throw new ReferenceError("未指定过渡动画持续时间或合成中不包含 BPM 轨道。");
 		beatDuration = bpm.marker.key(2).time - bpm.marker.key(1).time;
 	}
 	let ret = (thisLayer.text.sourceText.nearestKey(thisLayer.time).time - thisLayer.time) / beatDuration / 2;

@@ -80,7 +80,7 @@ export default class BinContentReader extends IFileReader {
 	
 	readByteArray(bytes: number): number[] {
 		bytes = Math.min(bytes, this.length() - this.pointer);
-		let array: number[] = [];
+		const array: number[] = [];
 		if (bytes < 1) return array;
 		for (let i = 0; i < bytes; i++) {
 			array.push(this.getByte());

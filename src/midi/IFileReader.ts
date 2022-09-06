@@ -46,4 +46,4 @@ export default abstract class IFileReader {
 	 * @param bytes - 移动字节数。
 	 */
 	protected abstract movePointer(bytes: number): number | void;
-};
+}

@@ -14,7 +14,7 @@ enum MidiFormatType {
 	 * MIDI 文件有多个音轨，不同步。
 	 */
 	ASYNC_MULTI_TRACK,
-};
+}
 
 export enum MetaEventType {
 	// 结束

@@ -100,6 +100,8 @@ const Japanese: typeof SChinese = {
 	cannot_set_time_remap_error: "エラー: 選択したレイヤーにタイム リマップを設定できません。",
 	cannot_tuning_error: "エラー: 選択したレイヤーにはオーディオが含まれていないため、調整できません。",
 	about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\n脚本原作者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、韓琦、家鼈大帝\n脚本作者：蘭音\nリポジトリ リンク：%1",
+	horizontal_mirror: "水平方向のミラー",
+	advanced_scale: "高度なスケール",
 };
 
 export default Japanese;

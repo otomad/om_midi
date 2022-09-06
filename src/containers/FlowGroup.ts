@@ -17,7 +17,7 @@ export default class FlowGroup {
 			this.addRow();
 		rows = this.outerGroup.children as Group[];
 		const lastRow = rows[rows.length - 1];
-			return addControl(lastRow, type, params, properties);
+		return addControl(lastRow, type, params, properties);
 	}
 	
 	private addRow() {

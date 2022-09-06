@@ -50,6 +50,7 @@ interface Object {
 	 * @param prop - 要测试的属性的字符串名称。
 	 * @returns 指定的对象已直接定义了指定的属性？
 	 */
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	//@ts-ignore
 	hasOwn<T extends object, K extends string>(obj: T, prop: K): prop is keyof T;
 }

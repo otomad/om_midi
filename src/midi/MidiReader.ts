@@ -1,4 +1,4 @@
-import { MidiHeaderValidationError, MidiCustomEventsError, MidiTrackHeaderValidationError } from "../errors";
+import { MidiHeaderValidationError, MidiTrackHeaderValidationError } from "../errors";
 import BinContentReader from "./BinContentReader";
 import BinFileReader from "./BinFileReader";
 import Midi from "./Midi";
@@ -21,7 +21,7 @@ export default class MidiReader extends BinFileReader {
 		this.readByte(4); // 文件头字节长度（舍弃）
 		this.midi.formatType = this.readByte(2); // MIDI 文件格式类型
 		this.midi.trackCount = this.readByte(2); // 轨道数目
-		let timeDivisionByte1 = this.readByte(1), timeDivisionByte2 = this.readByte(1); // 时分数据。
+		const timeDivisionByte1 = this.readByte(1), timeDivisionByte2 = this.readByte(1); // 时分数据。
 		if (timeDivisionByte1 & 0b1000_0000) // 基本时间格式 (fps 或 tpf)
 			this.midi.timeDivision = [
 				timeDivisionByte1 & 0b0111_1111, // 帧每秒 (frames per second) 模式 (第 1 字节)
@@ -32,7 +32,7 @@ export default class MidiReader extends BinFileReader {
 	
 	private readTracks(): void {
 		while (!this.isReadOver()) {
-			let headerValidation = this.readByte(4);
+			const headerValidation = this.readByte(4);
 			if (headerValidation === -1) break; // 读完了。
 			if (headerValidation !== 0x4D54726B) { // MTrk - Midi Track
 				throw new MidiTrackHeaderValidationError();

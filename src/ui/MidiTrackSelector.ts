@@ -41,7 +41,7 @@ export default class MidiTrackSelector {
 			const checked = this.selectAllCheck.value;
 			for (const item of this.trackList.items)
 				item.checked = item.selected = checked;
-		}
+		};
 		this.trackList.onChange = () => this.trackList_onChange();
 		this.okBtn.onClick = () => {
 			if (!this.parent.midi) {
@@ -72,7 +72,7 @@ export default class MidiTrackSelector {
 			this.parent.selectedTracks = checks;
 			this.parent.selectTrackBtn.text = text;
 			this.window.close();
-		}
+		};
 	}
 	
 	showDialog() {
@@ -83,7 +83,7 @@ export default class MidiTrackSelector {
 	private initMidiTracks() {
 		if (this.parent.midi)
 			for (const track of this.parent.midi.tracks) {
-				const item = this.trackList.add("item", String(track.channel ?? 0))
+				const item = this.trackList.add("item", String(track.channel ?? 0));
 				item.checked = this.parent.selectedTracks.includes(track);
 				item.subItems[0].text = track.name ?? "";
 				item.subItems[1].text = track.noteCount;

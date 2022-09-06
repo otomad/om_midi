@@ -3,6 +3,6 @@
  */
 export default class TempFile extends File {
 	constructor(fileName: string) {
-		super(Folder.temp.fsName + '/' + fileName);
+		super(`${Folder.temp.fsName}/${new Date().valueOf()}_${fileName}`);
 	}
 }

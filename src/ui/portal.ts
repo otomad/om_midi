@@ -42,7 +42,7 @@ export default class Portal {
 	
 	nullObjTab: NullObjTab;
 	applyEffectsTab: ApplyEffectsTab;
-	toolsTab: ToolsTab
+	toolsTab: ToolsTab;
 	
 	midi?: Midi;
 	selectedTracks: (MidiTrack | undefined)[] = [];
@@ -112,25 +112,25 @@ export default class Portal {
 				this.midi = midi;
 			} catch (error) {
 				if (midi) midi.file?.close();
-				// throw new MyError(error as Error);
+				throw new MyError(error as Error);
 			}
-		}
+		};
 		this.applyBtn.onClick = () => this.core.apply();
 		this.settingBtn.onClick = () => {
 			new SettingsDialog(this).showDialog();
 			if (this.midi?.isPureQuarter) this.selectTrackBtn.enabled = false;
 			this.translate();
-		}
+		};
 		this.selectTrackBtn.onClick = () => {
 			new MidiTrackSelector(this).showDialog();
-		}
+		};
 		this.tabs.onChange = () => {
 			const tab = this.getSelectedTab();
 			if (tab === this.applyEffectsTab)
 				this.startTimeCombo.selection = Setting.getApplyEffectsStartTime();
 			else
 				this.startTimeCombo.selection = Setting.getNullObjectStartTime();
-		}
+		};
 		this.tabs.onChange();
 		this.startTimeCombo.onChange = () => {
 			const tab = this.getSelectedTab(), value = this.startTimeCombo.getSelectedIndex();
@@ -138,7 +138,7 @@ export default class Portal {
 				Setting.setApplyEffectsStartTime(value);
 			else
 				Setting.setNullObjectStartTime(value);
-		}
+		};
 	}
 	
 	public static build(thisObj: Panel, user: typeof User): Portal {
