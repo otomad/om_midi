@@ -89,7 +89,7 @@ const Japanese: typeof SChinese = {
 	midi_track_header_validation_error: "エラー: MIDI トラック ブロック ヘッダーの検証に失敗しました。",
 	midi_custom_events_error: "エラー: カスタム MIDI イベントを読み取れませんでした。",
 	midi_no_track_error: "エラー: MIDI ファイルに有効なトラックが含まれていません。",
-	not_after_effects_error: "エラー: Adob​​e After Effects でこのスクリプトを使用してください。",
+	not_after_effects_error: "エラー: Adobe After Effects でこのスクリプトを使用してください。",
 	cannot_create_file_error: "エラー: ファイルを作成できませんでした。",
 	cannot_find_composition_error: "エラー: アクティブな構成が見つかりません。 最初にコンポジションをアクティブにしてください。",
 	no_midi_error: "エラー: 最初に有効な MIDI ファイルを開いてください。",

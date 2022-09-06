@@ -46,7 +46,7 @@ v3.0 | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 * [David Van Brink (omino)'s Original Edition](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398)
 * [HanceyMica's Presets](https://www.bilibili.com/video/av29649969)
-* [Z4HD's Chinese Version](https://github.com/Z4HD/om_midi_NGDXW_zh)
+* [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487)
 #### Introduction Videos
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)

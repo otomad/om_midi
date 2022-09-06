@@ -94,6 +94,7 @@ export default class Core {
 					setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.bool, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
 					setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? -100 : 100, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.advancedScale, seconds, noteOnCount % 2 ? -1 : 1, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.cwRotation, seconds, (noteOnCount % 4) * 90, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.ccwRotation, seconds, ((4 - noteOnCount % 4) % 4) * 90, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD);
@@ -135,10 +136,19 @@ export default class Core {
 					if (lastGlide === noteEvent.value) return;
 					lastGlide = noteEvent.value;
 					const glide = noteEvent.value - 0x2000; // 8192 为中央 0。
+					// 取值范围：-8192 ~ 8191（整数）。
 					setValueAtTime(nullTab.glide, seconds, glide, KeyframeInterpolationType.HOLD);
 					// lastEventType = RegularEventType.PITCH_BEND_EVENT;
 				}
 			};
+			//#region 在轨道起始处添加
+			// 这些内容以保持和 v0.1 原版一致。
+			// 从零开始“力度”，因此您可以根据需要绘制它。事实上在 0 时不会有任何音符（后人注：才怪）...
+			setValueAtTime(nullTab.velocity, 0, 0, KeyframeInterpolationType.HOLD);
+			setValueAtTime(nullTab.noteOn, 0, 0, KeyframeInterpolationType.HOLD);
+			// 由于“计数”从 0 开始，因此为了表示一开始如果没有音符的话只能用 -1 了。
+			setValueAtTime(nullTab.count, 0, -1, KeyframeInterpolationType.HOLD);
+			//#endregion
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
 		}
 	}
@@ -208,6 +218,12 @@ export default class Core {
 		const source: AVItem = layer.source;
 		const sourceLength = (+(source.duration / source.frameDuration).toFixed(0) - 1) * source.frameDuration;
 		const layerLength = layer.outPoint - layer.inPoint - source.frameDuration;
+		let mirrorIndex = 0;
+		const mirrorProp = () => Core.getEffects(layer).property(mirrorIndex).property(2) as OneDProperty;
+		if (effectsTab.hMirror.value) {
+			mirrorIndex = Core.getEffects(layer).addProperty("ADBE Mirror").propertyIndex;
+			(Core.getEffects(layer).property(mirrorIndex).property(1) as TwoDProperty).setValue([source.width / 2, source.height / 2]);
+		}
 		let geometry2Index = 0;
 		const geometry2 = {
 			prop: () => Core.getEffects(layer).property(geometry2Index) as PropertyBase,
@@ -358,6 +374,11 @@ export default class Core {
 					const key = invertProp().addKey(seconds);
 					invertProp().setValueAtKey(key, noteOnCount % 2 ? 0 : 100);
 					invertProp().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+				}
+				if (effectsTab.hMirror.value) {
+					const key = mirrorProp().addKey(seconds);
+					mirrorProp().setValueAtKey(key, noteOnCount % 2 ? 0 : 180);
+					mirrorProp().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
 				if (effectsTab.tuning.value && audioLayer) {
 					const key = audioLayer.timeRemap.addKey(seconds);

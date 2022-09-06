@@ -18,7 +18,9 @@ export default class Base64Image extends TempFile {
 
 		const cache = {
 			RE_NON_ALPHA: new RegExp(`[^${ALPHA}]`),
-			RE_BAD_EQUALS: /=([^=]|==)/,
+			// 移除转义号后会不能正常识别。
+			// eslint-disable-next-line no-useless-escape
+			RE_BAD_EQUALS: /\=([^=]|\=\=)/,
 		};
 		const n = s.length >>> 0,
 			a = [];
