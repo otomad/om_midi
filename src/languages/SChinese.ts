@@ -89,7 +89,7 @@ const SChinese = {
 	midi_no_track_error: "错误：该 MIDI 文件不包含任何有效轨道。",
 	not_after_effects_error: "错误：请在 Adobe After Effects 上使用此脚本。",
 	cannot_create_file_error: "错误：无法创建文件。",
-	cannot_find_composition_error: "错误：无法找到活动合成。请先激活一个合成。",
+	cannot_find_composition_error: "错误：无法找到活动合成。请先激活一个合成。\n\n解决方法：请先打开一个合成，然后点击一下该合成的预览画面或轨道的窗口使之处于活跃状态即可。",
 	no_midi_error: "错误：请先打开一个有效的 MIDI 文件。",
 	no_options_checked_error: "错误：请至少勾选一个项目。",
 	no_layer_selected_error: "错误：在当前合成中未选中任何图层。",

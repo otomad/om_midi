@@ -83,33 +83,33 @@ export default class Core {
 				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
 					return; // 跳过同一时间点上的音符。
 				const seconds = noteEvent.sofarTick * secondsPerTick;
-				if (noteEvent instanceof NoteOnEvent) { // 音符开。
+				if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 					// ExtendScript 最新迷惑行为：undefined < 0 为 true！！！
 					// 解决方法：将 undefined 前加一元正号强行转换为数字类型 NaN，即可进行比较。
+					noteOnCount++;
 					setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.duration, seconds, noteEvent.duration ?? 0, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
-					setValueAtTime(nullTab.bool, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
-					setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? -100 : 100, KeyframeInterpolationType.HOLD);
-					setValueAtTime(nullTab.advancedScale, seconds, noteOnCount % 2 ? -1 : 1, KeyframeInterpolationType.HOLD);
-					setValueAtTime(nullTab.cwRotation, seconds, (noteOnCount % 4) * 90, KeyframeInterpolationType.HOLD);
-					setValueAtTime(nullTab.ccwRotation, seconds, ((4 - noteOnCount % 4) % 4) * 90, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.bool, seconds, noteOnCount % 2, KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
+					setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? 100 : -100, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.advancedScale, seconds, noteOnCount % 2 ? 1 : -1, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.cwRotation, seconds, ((noteOnCount - 1) % 4) * 90, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.ccwRotation, seconds, ((4 - (noteOnCount - 1) % 4) % 4) * 90, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.timeRemap, seconds, 0, KeyframeInterpolationType.LINEAR);
-					setValueAtTime(nullTab.pingpong, seconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR);
+					setValueAtTime(nullTab.pingpong, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
 						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
 						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
 						setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
-						setValueAtTime(nullTab.pingpong, noteOffSeconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						setValueAtTime(nullTab.pingpong, noteOffSeconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
-					noteOnCount++;
 					lastEventType = RegularEventType.NOTE_ON;
 					lastEventSofarTick = noteEvent.sofarTick;
-				} else if (noteEvent instanceof NoteOffEvent) { // 音符关。
+				} else if (noteEvent instanceof NoteOnEvent && noteEvent.velocity === 0 || noteEvent instanceof NoteOffEvent) { // 音符关。力度为 0 的音符开视为音符关。
 					const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
 					setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD); // 新增松键力度。
 					setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
@@ -143,11 +143,11 @@ export default class Core {
 			};
 			//#region 在轨道起始处添加
 			// 这些内容以保持和 v0.1 原版一致。
-			// 从零开始“力度”，因此您可以根据需要绘制它。事实上在 0 时不会有任何音符（后人注：才怪）...
+			// 从零开始“力度”，因此您可以根据需要绘制它。事实上在 0 时不会有任何音符（后人注：才怪）……
 			setValueAtTime(nullTab.velocity, 0, 0, KeyframeInterpolationType.HOLD);
 			setValueAtTime(nullTab.noteOn, 0, 0, KeyframeInterpolationType.HOLD);
-			// 由于“计数”从 0 开始，因此为了表示一开始如果没有音符的话只能用 -1 了。
-			setValueAtTime(nullTab.count, 0, -1, KeyframeInterpolationType.HOLD);
+			// “计数”从 1 开始，为了表示一开始如果没有音符的话用 0 了。
+			setValueAtTime(nullTab.count, 0, 0, KeyframeInterpolationType.HOLD);
 			//#endregion
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
 		}
@@ -387,7 +387,7 @@ export default class Core {
 					if (hasDuration) {
 						let key2 = audioLayer.timeRemap.addKey(noteOffSeconds);
 						const duration2 = noteOffSeconds - seconds;
-						const pitch = noteEvent.pitch - basePitch;
+						const pitch = noteEvent.pitch - basePitch; // C5 == 60
 						const stretch = 2 ** (pitch / 12);
 						const endTime = duration2 * stretch + curStartTime;
 						if (endTime < (layer.source as AVItem).duration)

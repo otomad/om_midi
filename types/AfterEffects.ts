@@ -1,5 +1,5 @@
-/// <reference path="../../shared/global.d.ts" />
-/// <reference path="../../shared/ScriptUI.d.ts" />
+/// <reference path="./global.d.ts" />
+/// <reference path="./ScriptUI.d.ts" />
 
 /**
  * The global System object.
