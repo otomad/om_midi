@@ -50,7 +50,7 @@ v3.0 | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### 其它依赖
 * [动感开发的 Rollup TypeScript 脚手架](https://github.com/motiondeveloper/expression-globals-typescript)
 * [犀利 V](https://github.com/Silly-V/Adobe-TS-ExtendScript) 和 [AE 增强剂](https://github.com/aenhancers/Types-for-Adobe)的 Adobe 类型注解
-* [塞尔吉·古兹曼（科尔西）的 MIDI 解析 JS - MIDI 文件格式规范](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
+* [塞尔吉·古兹曼（科尔西）的 MIDI 解析器 JS - MIDI 文件格式规范](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>
 
