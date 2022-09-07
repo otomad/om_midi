@@ -80,8 +80,8 @@ const English: typeof SChinese = {
 	invert_color: "Invert Color",
 	tuning: "Tuning",
 	base_pitch: "Base pitch",
-	paren_stretched: "(Stretched)",
-	paren_truncated: "(Truncated)",
+	paren_stretched: " (Stretched)",
+	paren_truncated: " (Truncated)",
 	cannot_find_window_error: "Error: Unable to find or create window.",
 	unsupported_setting_type_error: "Error: Unsupported setting data type.",
 	file_unreadable_error: "Error: Could not read the MIDI file. The file may already be occupied or not exist.",
@@ -102,6 +102,7 @@ const English: typeof SChinese = {
 	about: "It reads a Standard MIDI sequence file and creates layers and keyframes corresponding to the notes and controllers in that MIDI sequence file.\n\nScript Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD\nScript Author: Ranne\nRepository Link: %1",
 	horizontal_mirror: "Horizontal Mirror",
 	advanced_scale: "Advanced Scale",
+	loading_midi: "Loading %1 ...",
 };
 
 export default English;

@@ -4,17 +4,15 @@ import MidiReader from "./MidiReader";
 import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
 import uiStr from "../languages/ui-str";
 
-export default class MidiTrack {
-	// extends Array<NoteEvent> // 继承后绑定不上对象
-	
+export default class MidiTrack extends Array<NoteEvent> {
 	private parent: MidiReader;
 	private offset: number;
 	private size: number;
 	
-	events: NoteEvent[] = [];
-	length(): number { return this.events.length; }
-	
 	constructor(parent: MidiReader, offset: number, size: number) {
+		super();
+		this.__proto__ = new.target.prototype;
+		
 		this.parent = parent;
 		this.offset = offset;
 		this.size = size;
@@ -40,12 +38,6 @@ export default class MidiTrack {
 		const bpm = 6e7 / this.tempo;
 		return parseFloat(bpm.toFixed(2));
 	}
-
-	push(item: NoteEvent) {
-		this.events.push(item);
-	}
-
-	private splice = [].splice;
 	
 	private readNotes(): void {
 		const endOffset = this.offset + this.size;

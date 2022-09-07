@@ -102,6 +102,7 @@ const Japanese: typeof SChinese = {
 	about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\n脚本原作者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、韓琦、家鼈大帝\n脚本作者：蘭音\nリポジトリ リンク：%1",
 	horizontal_mirror: "水平方向のミラー",
 	advanced_scale: "高度なスケール",
+	loading_midi: "%1 を読み込んでいます...",
 };
 
 export default Japanese;

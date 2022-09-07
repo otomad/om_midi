@@ -26,7 +26,7 @@ interface Array<T> {
 interface DropDownList {
 	/**
 	 * 返回给定的下拉菜单的选中项序号。<br />
-	 * 下拉菜单自身的属性 selection 只能返回选中项内容。<br />
+	 * 下拉菜单自身的属性 `selection` 只能返回选中项内容。<br />
 	 * 如果未选中项，则返回 -1。
 	 * @returns 下拉菜单的选中项序号。
 	 */

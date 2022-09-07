@@ -279,6 +279,12 @@ interface Object {
    * @param func The function to be called when the value of this property changes. This function must three arguments, and return as its result the value to be stored in the property. The arguments are: name: the name of the property that changes. oldValue: The old property value. newValue: The new property value that was specified.
    */
   watch(name: string, func: Function): void
+  
+  /**
+   * The `__proto__` property of `Object.prototype` is an accessor property (a getter function and a setter function)
+   * that exposes the internal `[[Prototype]]` (either an object or `null`) of the object through which it is accessed.
+   */
+  __proto__: any;
 }
 
 interface ArrayConstructor {

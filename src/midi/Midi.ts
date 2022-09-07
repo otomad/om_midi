@@ -1,4 +1,5 @@
 import { FileUnreadableError } from "../errors";
+import uiStr from "../languages/ui-str";
 import convertTextEncoding from "../temp-file-methods/convertTextEncoding";
 import MidiFormatType from "./MidiFormatType";
 import MidiReader from "./MidiReader";
@@ -10,6 +11,7 @@ export default class Midi {
 	private length?: number;
 	private midiReader?: MidiReader;
 	
+	fileName: string;
 	formatType: MidiFormatType = MidiFormatType.SYNC_MULTI_TRACK;
 	trackCount: number = 0;
 	timeDivision: number | [number, number] = 0;
@@ -30,6 +32,7 @@ export default class Midi {
 	constructor(isPureQuarter: true);
 	constructor(file: File | true) {
 		if (file === true) {
+			this.fileName = localize(uiStr.pure_quarter_midi);
 			this.isPureQuarter = true;
 			this.formatType = MidiFormatType.SINGLE_TRACK;
 			this.trackCount = 1;
@@ -37,6 +40,7 @@ export default class Midi {
 			return;
 		}
 		this.file = file;
+		this.fileName = file.displayName;
 		if (file && file.open("r")) {
 			file.encoding = "binary"; // 读取为二进制编码。
 			this.length = file.length;

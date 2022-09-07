@@ -5,12 +5,15 @@ import Setting from "../settings/Setting";
 import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/NoteEvent";
 import { ControllerType, RegularEventType } from "../midi/MidiFormatType";
 import MidiTrack from "../midi/MidiTrack";
+import ProgressPalette from "../ui/ProgressPalette";
+import uiStr from "../languages/ui-str";
 
-const MIN_INTERVAL = 5e-4;
-const NULL_SOURCE_NAME = "om midi null";
-const TRANSFORM_NAME = "om midi Transform";
-const ENTER_INCREMENTAL = 15;
-const ROTATION_INCREMENTAL = 15;
+const MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
+const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
+const TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
+const ENTER_INCREMENTAL = 15; // 水平翻转的优化效果变换值，单位百分比。
+const ROTATION_INCREMENTAL = 15; // 顺时针和逆时针旋转的优化效果变换值，单位角度。
+const SHOW_PROGRESSBAR = true; // 是否显示进度条调色板。
 
 export default class Core {
 	portal: Portal;
@@ -23,8 +26,14 @@ export default class Core {
 	apply() {
 		const comp = getComp();
 		if (comp === null) throw new CannotFindCompositionError();
+		let progressBar: ProgressPalette | undefined;
 		try {
 			const tab = this.portal.getSelectedTab();
+			if (tab !== this.portal.toolsTab && this.portal.midi && SHOW_PROGRESSBAR) {
+				progressBar = new ProgressPalette(localize(uiStr.loading_midi, this.portal.midi.fileName)); // 进度条调色板。
+				progressBar.show();
+				progressBar.setValue(0.6);
+			}
 			if (tab === this.portal.nullObjTab)
 				this.applyCreateNullObject(comp);
 			else if (tab === this.portal.applyEffectsTab)
@@ -39,6 +48,7 @@ export default class Core {
 		} catch (error) {
 			throw new MyError(error as Error);
 		} finally {
+			if (progressBar) progressBar.close();
 			app.endUndoGroup();
 		}
 	}
@@ -349,11 +359,16 @@ export default class Core {
 						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
-				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) { // TODO: 时间重映射插值类型暂时无法使用定格关键帧。下方调音部分也是一样。
+				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) {
+					if (noteOnCount === 0 && noteEvent.sofarTick !== 0) { // 如果第一个音符不在乐曲最开始。
+						const inPointValue = layer.timeRemap.keyValue(1);
+						const inPointTime = layer.timeRemap.keyTime(1);
+						layer.timeRemap.setValueAtTime(inPointTime + seconds - startTime, inPointValue);
+					}
 					const key = layer.timeRemap.addKey(seconds);
 					const direction = !(noteOnCount % 2);
 					layer.timeRemap.setValueAtKey(key, curStartTime);
-					// layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+					layer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 					if (hasDuration) {
 						let key2 = layer.timeRemap.addKey(noteOffSeconds);
 						const endTime = (effectsTab.timeRemap.value || effectsTab.pingpong.value) ?
@@ -367,7 +382,7 @@ export default class Core {
 							key2 = layer.timeRemap.addKey(seconds + sourceLength - curStartTime);
 							layer.timeRemap.setValueAtKey(key2, sourceLength);
 						}
-						// layer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						layer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
 				}
 				if (effectsTab.negative.value) {
@@ -380,10 +395,10 @@ export default class Core {
 					mirrorProp().setValueAtKey(key, noteOnCount % 2 ? 0 : 180);
 					mirrorProp().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
-				if (effectsTab.tuning.value && audioLayer) {
+				if (effectsTab.tuning.value && audioLayer) { // TODO: 根据音符事件力度来控制音频电平。
 					const key = audioLayer.timeRemap.addKey(seconds);
 					audioLayer.timeRemap.setValueAtKey(key, curStartTime);
-					// audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+					audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 					if (hasDuration) {
 						let key2 = audioLayer.timeRemap.addKey(noteOffSeconds);
 						const duration2 = noteOffSeconds - seconds;
@@ -397,7 +412,7 @@ export default class Core {
 							key2 = audioLayer.timeRemap.addKey(seconds + (sourceLength - curStartTime) / stretch);
 							audioLayer.timeRemap.setValueAtKey(key2, sourceLength);
 						}
-						// audioLayer.rotation.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						audioLayer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
 				}
 				if (layering && noteOnCount !== 0) {
@@ -552,7 +567,7 @@ export default class Core {
 	
 	private dealNoteEvents(track: MidiTrack | undefined, comp: CompItem, secondsPerTick: number, startTime: number, addNoteEvent: (noteEvent: NoteEvent) => void) {
 		if (track !== undefined)
-			for (const noteEvent of track.events)
+			for (const noteEvent of track)
 				addNoteEvent(noteEvent);
 		else {
 			let noteCount = 0;

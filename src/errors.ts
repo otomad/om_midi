@@ -7,10 +7,10 @@ export class MyError extends Error {
 	constructor(msg: string);
 	constructor(msg: string | Error) {
 		// 如果参数就是一个 MyError，就不用再警告了。
-		// 注意：ExtendScript 等老旧的 JavaScript 不能继承自 Error。
-		if (typeof msg === "string" || !("isMyError" in msg)) 
+		if (typeof msg === "string" || !(msg instanceof MyError)) 
 			alert(msg.toString(), localize(uiStr.error), true);
 		super(msg.toString());
+		this.__proto__ = new.target.prototype;
 	}
 }
 
