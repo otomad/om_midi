@@ -16,6 +16,9 @@ enum MidiFormatType {
 	ASYNC_MULTI_TRACK,
 }
 
+/**
+ * 元数据事件类型。
+ */
 export enum MetaEventType {
 	// 结束
 	END_OF_TRACK = 0x2F,
@@ -41,6 +44,9 @@ export enum MetaEventType {
 	SEQUENCER_SPECIFIC = 0x7F,
 }
 
+/**
+ * 常规事件类型。
+ */
 export enum RegularEventType {
 	SYSTEM_EXCLUSIVE_EVENTS = 0xF,
 	NOTE_AFTERTOUCH = 0xA,
@@ -53,6 +59,9 @@ export enum RegularEventType {
 	END_OF_FILE = -1,
 }
 
+/**
+ * 控制器事件类型。
+ */
 export enum ControllerType {
 	BANK_SELECT = 0x00,
 	MODULATION = 0x01,
