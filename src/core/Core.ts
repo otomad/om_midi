@@ -13,7 +13,7 @@ const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为
 const TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
 const ENTER_INCREMENTAL = 15; // 水平翻转的优化效果变换值，单位百分比。
 const ROTATION_INCREMENTAL = 15; // 顺时针和逆时针旋转的优化效果变换值，单位角度。
-const SHOW_PROGRESSBAR = true; // 是否显示进度条调色板。
+const SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
 
 export default class Core {
 	portal: Portal;
