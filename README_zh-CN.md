@@ -7,8 +7,6 @@
 [EN](README.md) | **简中**
 </div>
 
-> *项目还在开发中，请耐心等待发布……*
-
 **om midi**，简称 **OMM**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
 感谢脚本原作者们 [大卫·范·布林克 (omino)](http://omino.com/)、[Dora (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
@@ -24,8 +22,8 @@
 理论上支持 `CS5` 及以后的版本。并且理论上 Windows 和 macOS 都能支持。
 
 ### 安装
-下载脚本文件并将其移动至位于 After Effects 安装目录的 `Script` 或 `Script\ScriptUI` 文件夹中。
-> (例如：C:\\Program Files\\Adobe\\Adobe After Effects 2022)
+下载脚本文件并将其移动至位于 After Effects 安装目录的 `Scripts\ScriptUI Panels` 文件夹中。
+> (例如：C:\\Program Files\\Adobe\\Adobe After Effects 2022\\Scripts\\ScriptUI Panels)
 
 ### 版本对比
 > 除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。
@@ -52,6 +50,7 @@ v3.0 | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### 其它依赖
 * [动感开发的 Rollup TypeScript 脚手架](https://github.com/motiondeveloper/expression-globals-typescript)
 * [犀利 V](https://github.com/Silly-V/Adobe-TS-ExtendScript) 和 [AE 增强剂](https://github.com/aenhancers/Types-for-Adobe)的 Adobe 类型注解
+* [塞尔吉·古兹曼（科尔西）的 MIDI 解析 JS - MIDI 文件格式规范](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>
 

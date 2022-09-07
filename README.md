@@ -3,13 +3,11 @@
 [![Cover](cover.png)](#om_midi)
 <div align="center">
 	<h2 id="om_midi">om midi</h2>
-	<img src="https://img.shields.io/badge/STATE-UNDER%20DEVELOPMENT-red?style=flat-square" alt="Badge" />
-	<img src="https://img.shields.io/badge/VERSION-3.0‐BETA-orange?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/STATE-AWAITING%20RELEASE-yellow?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/VERSION-3.0.1‐BETA-orange?style=flat-square" alt="Badge" />
 
 **EN** | [简中](README_zh-CN.md)
 </div>
-
-> *The project is still under development, please wait patiently for the release...*
 
 **om midi**, or **OMM** for short, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
 
@@ -26,8 +24,8 @@ The current project is rewritten using new technologies like TypeScript based on
 `CS5` and later versions are theoretically supported. And both Windows and macOS are theoretically supported.
 
 ### Install
-Download the latest script file and move it to the `Script` or `Script\ScriptUI` folder located in the After Effects installation directory.
-> (ie. C:\\Program Files\\Adobe\\Adobe After Effects 2022)
+Download the latest script file and move it to the `Scripts\ScriptUI Panels` folder located in the After Effects installation directory.
+> (ie. C:\\Program Files\\Adobe\\Adobe After Effects 2022\\Scripts\\ScriptUI Panels)
 
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
@@ -54,5 +52,6 @@ v3.0 | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### Other Dependencies
 * [Motion Developer's Rollup TypeScript Scaffolding](https://github.com/motiondeveloper/expression-globals-typescript)
 * [Silly-V's](https://github.com/Silly-V/Adobe-TS-ExtendScript) and [aenhancers's](https://github.com/aenhancers/Types-for-Adobe) Adobe Types
+* [Sergi Guzman (colxi)'s midi-parser-js - MIDI File Format Specifications](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>
