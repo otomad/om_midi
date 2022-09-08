@@ -3,8 +3,9 @@
 [![Cover](cover.png)](#om_midi)
 <div align="center">
 	<h2 id="om_midi">om midi</h2>
-	<img src="https://img.shields.io/badge/STATE-AWAITING%20RELEASE-yellow?style=flat-square" alt="Badge" />
-	<img src="https://img.shields.io/badge/VERSION-3.0.1‐BETA-orange?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/STATE-STABLE-green?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/VERSION-3.9.8.0-orange?style=flat-square" alt="Badge" />
+	<!-- <img src="https://img.shields.io/github/downloads/otomad/om_midi/total.svg?style=flat-square&label=DOWNLOADS" alt="Downloads"> -->
 
 **EN** | [简中](README_zh-CN.md)
 </div>
