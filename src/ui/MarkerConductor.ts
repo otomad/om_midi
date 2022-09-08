@@ -1,6 +1,6 @@
 import uiStr from "../languages/ui-str";
-import { addGroup, addItems } from "../module/addControl";
-import setNumberEditText, { NumberType } from "../module/setNumberEditText";
+import { addGroup, addItems } from "../modules/addControl";
+import setNumberEditText, { NumberType } from "../modules/setNumberEditText";
 import BaseTool from "./BaseTool";
 import ToolsTab from "./ToolsTab";
 

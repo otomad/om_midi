@@ -1,4 +1,4 @@
-import addControl from "../module/addControl";
+import addControl from "../modules/addControl";
 import { SPACING } from "./BaseTab";
 import ToolsTab from "./ToolsTab";
 

@@ -1,7 +1,7 @@
 import English from "./English";
 import Japanese from "./Japanese";
 import SChinese from "./SChinese";
-import hasOwn from "../module/hasOwn";
+import hasOwn from "../modules/hasOwn";
 
 type LangTag = "zh" | "en" | "ja";
 

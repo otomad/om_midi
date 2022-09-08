@@ -1,7 +1,7 @@
 import user from "./user";
 import Portal from "./ui/Portal";
 import { NotAfterEffectsError } from "./errors";
-import initPrototypes from "./module/prototypes";
+import initPrototypes from "./modules/prototypes";
 
 declare const thisObj: Panel;
 

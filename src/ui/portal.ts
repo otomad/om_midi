@@ -1,10 +1,10 @@
 import User from "../user";
-import addControl, { addGroup, addItems } from "../module/addControl";
+import addControl, { addGroup, addItems } from "../modules/addControl";
 import NullObjTab from "./NullObjTab";
 import ApplyEffectsTab from "./ApplyEffectsTab";
 import ToolsTab from "./ToolsTab";
 import SettingsDialog from "./SettingsDialog";
-import setNumberEditText, { NumberType } from "../module/setNumberEditText";
+import setNumberEditText, { NumberType } from "../modules/setNumberEditText";
 import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";

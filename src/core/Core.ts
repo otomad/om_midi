@@ -1,6 +1,6 @@
 import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
 import Portal from "../ui/Portal";
-import getComp from "../module/getComp";
+import getComp from "../modules/getComp";
 import Setting from "../settings/Setting";
 import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/NoteEvent";
 import { ControllerType, RegularEventType } from "../midi/MidiFormatType";

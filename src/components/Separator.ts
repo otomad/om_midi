@@ -1,4 +1,4 @@
-import { ContainerType } from "../module/addControl";
+import { ContainerType } from "../modules/addControl";
 
 export default class Separator {
 	control: Panel;

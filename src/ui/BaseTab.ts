@@ -1,4 +1,4 @@
-import addControl from "../module/addControl";
+import addControl from "../modules/addControl";
 import Portal from "./Portal";
 
 export const SPACING = 2;

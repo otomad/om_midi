@@ -1,5 +1,5 @@
 import uiStr from "../languages/ui-str";
-import addControl, { addGroup, addItems } from "../module/addControl";
+import addControl, { addGroup, addItems } from "../modules/addControl";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 

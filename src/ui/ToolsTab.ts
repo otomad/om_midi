@@ -1,4 +1,4 @@
-import addControl, { addItems } from "../module/addControl";
+import addControl, { addItems } from "../modules/addControl";
 import Portal from "./Portal";
 import MarkerConductor from "./MarkerConductor";
 import BaseTab from "./BaseTab";

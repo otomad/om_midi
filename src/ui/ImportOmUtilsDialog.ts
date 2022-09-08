@@ -1,5 +1,5 @@
 import { CannotFindWindowError } from "../errors";
-import addControl from "../module/addControl";
+import addControl from "../modules/addControl";
 import uiStr from "../languages/ui-str";
 
 export default class ImportOmUtilsDialog {
