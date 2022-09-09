@@ -35,7 +35,7 @@ v1.0 | [Dora (NGDXW) 的修改版](https://www.bilibili.com/read/cv170398) | ✔
 v1.0 Plus | [韩琦的预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌
 v1.2 | [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
 v2.0 | [Dora (NGDXW) 的二次修改版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️ | ❌ | ❌
-v3.0 | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### 参考
 #### 之前版本

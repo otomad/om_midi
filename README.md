@@ -38,7 +38,7 @@ v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔�
 v1.0 Plus | [HanceyMica's Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
 v1.2 | [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
 v2.0 | [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌
-v3.0 | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### References
 #### Previous Versions
