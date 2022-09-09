@@ -1,6 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import replace from "@rollup/plugin-replace";
-import afterEffectJsx from "rollup-plugin-ae-jsx";
+// import afterEffectJsx from "rollup-plugin-ae-jsx";
 import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
 import license from "rollup-plugin-license";
@@ -42,7 +42,9 @@ export default [{
 		}),
 		enableTerser ? terser({
 			compress: {
-				conditionals: false, // ExtendScript 对三元运算符的运算顺序有偏见。
+				// conditionals: false, // ExtendScript 对三元运算符的运算顺序有偏见。
+				// comparisons: false, // ExtendScript 对逻辑与、逻辑或的运算顺序也有偏见。
+				defaults: false, // 直接禁用默认得了。
 			},
 		}) : undefined,
 		license({
