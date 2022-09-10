@@ -101,7 +101,7 @@ export default class Core {
 					noteOnCount++;
 					setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
-					setValueAtTime(nullTab.duration, seconds, noteEvent.duration ?? 0, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.duration, seconds, (noteEvent.duration ?? 0) * secondsPerTick, KeyframeInterpolationType.HOLD); // 持续时间单位改为秒。
 					setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.bool, seconds, noteOnCount % 2, KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
 					setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? 100 : -100, KeyframeInterpolationType.HOLD);

@@ -49,8 +49,9 @@ export default class MarkerConductor extends BaseTool {
 		this.unitCombo.onChange = () => {
 			const unitIndex = this.unitCombo.getSelectedIndex();
 			this.beatLbl.text = unitIndex === 0 ? localize(uiStr.beat) : localize(uiStr.shift_seconds_and_frames);
-			this.bpmLbl.text = unitIndex === 0 ? "BPM" :
-				(unitIndex === 1 ? localize(uiStr.seconds) : localize(uiStr.frames));
+			if (unitIndex === 0) this.bpmLbl.text = "BPM"; // TODO: 这部分将会被修改为三元运算符。
+			else if (unitIndex === 1) this.bpmLbl.text = localize(uiStr.seconds);
+			else this.bpmLbl.text = localize(uiStr.frames);
 			setNumberEditText(this.beatTxt, unitIndex === 0 ? NumberType.POSITIVE_INT : NumberType.DECIMAL, 4);
 			this.beatTxt.notify("onChange");
 		};
