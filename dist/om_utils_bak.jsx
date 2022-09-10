@@ -12,9 +12,9 @@
  */
 Utils = {
 	/**
-	 * 将 om_midi 生成的时间重映射 [0 ~ 1] 值映射到素材源的实际时间值。
-	 * @version om_midi v2.0
-	 * @param {string} midiName - om_midi 图层名称。如果留空，则默认为当前图层名称前加上“[midi]”。
+	 * 将 om midi 生成的时间重映射 [0 ~ 1] 值映射到素材源的实际时间值。
+	 * @version om midi v3.x
+	 * @param {string} midiName - om midi 图层名称。如果留空，则默认为当前图层名称前加上“[midi]”。
 	 * @param {boolean} stretchOnly - 仅使用伸缩素材。
 	 * @param {number} rate - 回放速率。
 	 * @returns {number} 时间重映射后的实际值。
@@ -22,8 +22,8 @@ Utils = {
 	timeRemap: function (midiName, stretchOnly, rate) {
 		if (stretchOnly === undefined) stretchOnly = false;
 		if (rate === undefined) rate = 1;
-		var midi = thisComp.layer(midiName || _getMidiName());
-		var progress = midi.effect("时间重映射1")("滑块");
+		var midi = thisComp.layer(midiName || this._getMidiName());
+		var progress = midi.effect("时间重映射")("滑块");
 		var maxDuration = (+(thisLayer.source.duration / thisLayer.source.frameDuration).toFixed(0) - 1) * thisLayer.source.frameDuration;
 		if (stretchOnly)
 			return progress * maxDuration; // 取消注释此行即可强制使用伸缩素材。
@@ -56,7 +56,7 @@ Utils = {
 	getPreviousKey: function (property, time) {
 		if (property === undefined) property = thisProperty;
 		if (time === undefined) time = thisLayer.time;
-		property = _identifyKeyContainerType(property);
+		property = this._identifyKeyContainerType(property);
 		var key = property.nearestKey(time);
 		if (key.time <= time)
 			return key;
@@ -75,7 +75,7 @@ Utils = {
 	getNextKey: function (property, time) {
 		if (property === undefined) property = thisProperty;
 		if (time === undefined) time = thisLayer.time;
-		property = _identifyKeyContainerType(property);
+		property = this._identifyKeyContainerType(property);
 		var key = property.nearestKey(time);
 		if (key.time > time)
 			return key;
@@ -89,7 +89,7 @@ Utils = {
 	},
 	/**
 	 * 缩放高度。
-	 * @param {string} midiName - om_midi 图层名称。
+	 * @param {string} midiName - om midi 图层名称。
 	 * @param {number} incremental - 增量。
 	 * @param {number} exponential - 指数。
 	 * @returns {number} 缩放高度。
@@ -97,18 +97,18 @@ Utils = {
 	rescaleHeight: function (midiName, incremental, exponential) {
 		if (incremental === undefined) incremental = 15;
 		if (exponential === undefined) exponential = 3;
-		var midi = thisComp.layer(midiName || _getMidiName());
-		return (Math.pow((1 - midi.effect("时间重映射1")("滑块")), exponential)) * incremental + thisProperty;
+		var midi = thisComp.layer(midiName || this._getMidiName());
+		return (Math.pow((1 - midi.effect("时间重映射")("滑块")), exponential)) * incremental + thisProperty;
 	},
 	/**
 	 * 缩放宽度。<br />
 	 * 必须搭配“缩放高度”的函数一同使用。
-	 * @param {string} midiName - om_midi 图层名称。
+	 * @param {string} midiName - om midi 图层名称。
 	 * @returns {number} 缩放宽度。
 	 */
 	rescaleWidth: function (midiName) {
 		var scale = Math.abs(effect("变换")("缩放高度"));
-		var midi = thisComp.layer(midiName || _getMidiName());
+		var midi = thisComp.layer(midiName || this._getMidiName());
 		var isFlip = Math.sign(midi.effect("缩放")("滑块"));
 		return isFlip * scale;
 	},
@@ -117,14 +117,14 @@ Utils = {
 	 * @param {number} start - 开始值。
 	 * @param {number} end - 结束值。
 	 * @param {number} exponential - 指数。
-	 * @param {string} midiName - om_midi 图层名称。
+	 * @param {string} midiName - om midi 图层名称。
 	 * @returns {number} 变化值。
 	 */
 	transform: function (start, end, exponential, midiName) {
 		if (exponential === undefined) exponential = 3;
 		if (arguments.length < 2)
 			throw new TypeError("Failed to execute 'transform': ".concat(2, " argument required, but only ").concat(arguments.length, " present."));
-		return Math.pow(thisComp.layer(midiName || _getMidiName()).effect("时间重映射1")("滑块"), (1 / exponential)) * (end - start) + start;
+		return Math.pow(thisComp.layer(midiName || this._getMidiName()).effect("时间重映射")("滑块"), (1 / exponential)) * (end - start) + start;
 	},
 	/**
 	 * 自动根据文本对象的文本发生变化而生成动画。

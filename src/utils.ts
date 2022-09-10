@@ -16,9 +16,9 @@ declare const thisComp: CompItem;
 declare const thisProperty: Property;
 
 /**
- * 将 om_midi 生成的时间重映射 [0 ~ 1] 值映射到素材源的实际时间值。
- * @version om_midi v2.0
- * @param {string} midiName - om_midi 图层名称。如果留空，则默认为当前图层名称前加上“[midi]”。
+ * 将 om midi 生成的时间重映射 [0 ~ 1] 值映射到素材源的实际时间值。
+ * @version om midi v3.x
+ * @param {string} midiName - om midi 图层名称。如果留空，则默认为当前图层名称前加上“[midi]”。
  * @param {boolean} stretchOnly - 仅使用伸缩素材。
  * @param {number} rate - 回放速率。
  * @returns {number} 时间重映射后的实际值。
@@ -85,7 +85,7 @@ function _getMidiName() {
 
 /**
  * 缩放高度。
- * @param {string} midiName - om_midi 图层名称。
+ * @param {string} midiName - om midi 图层名称。
  * @param {number} incremental - 增量。
  * @param {number} exponential - 指数。
  * @returns {number} 缩放高度。
@@ -98,7 +98,7 @@ export function rescaleHeight(midiName: string, incremental: number = 15, expone
 /**
  * 缩放宽度。<br />
  * 必须搭配“缩放高度”的函数一同使用。
- * @param {string} midiName - om_midi 图层名称。
+ * @param {string} midiName - om midi 图层名称。
  * @returns {number} 缩放宽度。
  */
 export function rescaleWidth(midiName: string): number {
@@ -113,7 +113,7 @@ export function rescaleWidth(midiName: string): number {
  * @param {number} start - 开始值。
  * @param {number} end - 结束值。
  * @param {number} exponential - 指数。
- * @param {string} midiName - om_midi 图层名称。
+ * @param {string} midiName - om midi 图层名称。
  * @returns {number} 变化值。
  */
 export function transform(start: number, end: number, exponential: number = 3, midiName: string): number {
