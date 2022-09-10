@@ -1,6 +1,6 @@
 const User = {
 	scriptName: "om midi",
-	version: "3.9.9.0",
+	version: "3.9.10.0",
 	githubPage: "https://github.com/otomad/om_midi",
 	githubLatest: "https://github.com/otomad/om_midi/releases/latest",
 };
