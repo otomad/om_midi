@@ -4,7 +4,7 @@
 <div align="center">
 	<h2 id="om_midi">om midi</h2>
 	<img src="https://img.shields.io/badge/STATE-STABLE-green?style=flat-square" alt="Badge" />
-	<img src="https://img.shields.io/badge/VERSION-3.9.9.0-orange?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/VERSION-3.9.10.0-orange?style=flat-square" alt="Badge" />
 	<!-- <img src="https://img.shields.io/github/downloads/otomad/om_midi/total.svg?style=flat-square&label=DOWNLOADS" alt="Downloads"> -->
 
 **EN** | [简中](README_zh-CN.md)
@@ -20,13 +20,30 @@ The current project is rewritten using new technologies like TypeScript based on
 
 ### Documentations
 * [Z4HD's Chinese Documentation](https://om.z4hd.cf/)
+* [My Chinese Documentation](https://www.bilibili.com/read/cv18532219)
 
 ### Supported AE Versions
 `CS5` and later versions are theoretically supported. And both Windows and macOS are theoretically supported.
 
 ### Install
-Download the latest script file and move it to the `Scripts\ScriptUI Panels` folder located in the After Effects installation directory.
-> (ie. C:\\Program Files\\Adobe\\Adobe After Effects 2022\\Scripts\\ScriptUI Panels)
+Download the latest script files.
+
+#### `om midi`
+Placed in the `Scripts\ScriptUI Panels` folder located in the After Effects installation directory.
+> (ie. C:\Program Files\Adobe\Adobe After Effects 2022\Scripts\ScriptUI Panels)
+#### `om utils`
+There are two ways to import:
+1. Placed in the same directory as the aep project.
+    * Prepend to expressions:
+```javascript
+$.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));
+```
+2. Placed anywhere, and then add to AE project.
+    * Prepend to expressions:
+```javascript
+footage("om_utils.jsx").sourceData;
+```
+
 
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
