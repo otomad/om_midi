@@ -20,7 +20,7 @@ The current project is rewritten using new technologies like TypeScript based on
 
 ### Documentations
 * [Z4HD's Chinese Documentation](https://om.z4hd.cf/)
-* [My Chinese Documentation](https://www.bilibili.com/read/cv18532219)
+* [My Chinese Release Notes](https://www.bilibili.com/read/cv18532219)
 
 ### Supported AE Versions
 `CS5` and later versions are theoretically supported. And both Windows and macOS are theoretically supported.
