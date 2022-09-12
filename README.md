@@ -34,16 +34,15 @@ Placed in the `Scripts\ScriptUI Panels` folder located in the After Effects inst
 #### `om utils`
 There are two ways to import:
 1. Placed in the same directory as the aep project.
-    * Prepend to expressions:
+	* Prepend to expressions:
 ```javascript
 $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));
 ```
 2. Placed anywhere, and then add to AE project.
-    * Prepend to expressions:
+	* Prepend to expressions:
 ```javascript
 footage("om_utils.jsx").sourceData;
 ```
-
 
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
