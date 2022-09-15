@@ -1,4 +1,4 @@
-import { ControllerType, MetaEventType, RegularEventType } from "./MidiFormatType";
+import { ControllerType, MetaEventType, RegularEventType } from "./midi-types";
 
 export class NoteEvent {
 	deltaTime: number = 0; // 与前一项间隔基本时间。

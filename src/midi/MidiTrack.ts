@@ -1,7 +1,7 @@
 import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
-import { MetaEventType, RegularEventType } from "./MidiFormatType";
+import { MetaEventType, RegularEventType } from "./midi-types";
 import MidiReader from "./MidiReader";
-import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./NoteEvent";
+import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./note-events";
 import uiStr from "../languages/ui-str";
 
 export default class MidiTrack extends Array<NoteEvent> {

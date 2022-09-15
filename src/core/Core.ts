@@ -2,8 +2,8 @@ import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError,
 import Portal from "../ui/Portal";
 import getComp from "../modules/getComp";
 import Setting from "../settings/Setting";
-import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/NoteEvent";
-import { ControllerType, RegularEventType } from "../midi/MidiFormatType";
+import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/note-events";
+import { ControllerType, RegularEventType } from "../midi/midi-types";
 import MidiTrack from "../midi/MidiTrack";
 import ProgressPalette from "../ui/ProgressPalette";
 import uiStr from "../languages/ui-str";

@@ -1,7 +1,7 @@
 /**
  * MIDI 文件格式类型。
  */
-enum MidiFormatType {
+export enum MidiFormatType {
 	/**
 	 * MIDI 文件只有一条轨道，所有的通道都在一条轨道中。
 	 */
@@ -151,6 +151,3 @@ export enum ControllerType {
 	MODE_MESSAGES_6 = 0x7E,
 	MODE_MESSAGES_7 = 0x7F,
 }
-
-export default MidiFormatType;
-

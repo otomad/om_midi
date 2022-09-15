@@ -1,7 +1,7 @@
 import { FileUnreadableError } from "../errors";
 import uiStr from "../languages/ui-str";
 import convertTextEncoding from "../temp-file-methods/convertTextEncoding";
-import MidiFormatType from "./MidiFormatType";
+import { MidiFormatType } from "./midi-types";
 import MidiReader from "./MidiReader";
 import MidiTrack from "./MidiTrack";
 
