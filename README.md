@@ -3,11 +3,12 @@
 [![Cover](cover.png)](#om_midi)
 <div align="center">
 	<h2 id="om_midi">om midi</h2>
+	<p><b><i>Ranne</i></b></p>
 	<img src="https://img.shields.io/badge/STATE-STABLE-green?style=flat-square" alt="Badge" />
 	<img src="https://img.shields.io/badge/VERSION-3.9.10.0-orange?style=flat-square" alt="Badge" />
 	<!-- <img src="https://img.shields.io/github/downloads/otomad/om_midi/total.svg?style=flat-square&label=DOWNLOADS" alt="Downloads"> -->
 
-**EN** | [简中](README_zh-CN.md)
+**EN** | [简中](README_zh-CN.md) | [日](README_ja-JP.md)
 </div>
 
 **om midi**, or **OMM** for short, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
@@ -65,7 +66,7 @@ v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 * [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487)
 #### Introduction Videos
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)
-* [Chen Chen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
+* [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
 #### Other Dependencies
 * [Motion Developer's Rollup TypeScript Scaffolding](https://github.com/motiondeveloper/expression-globals-typescript)
 * [Silly-V's](https://github.com/Silly-V/Adobe-TS-ExtendScript) and [aenhancers's](https://github.com/aenhancers/Types-for-Adobe) Adobe Types
