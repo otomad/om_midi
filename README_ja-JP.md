@@ -10,7 +10,7 @@
 
 **om midi**（略して **OMM**）は、**After Effects** 用の Otomad/YTPMV アシスタント スクリプトです。After Effects で MIDI ファイルをキーフレームに自動変換するスクリプトです。om midi の助けを借りて、人々が退屈なビデオとオーディオの調整から解放され、よりクリエイティブな作品により多くのエネルギーを注ぐことができることを願っています。
 
-オリジナルのスクリプト作成者である [デビッド・ヴァン・ブリンク（オミノ）](http://omino.com/)、[ドラ (NGDXW)](https://space.bilibili.com/40208180)、[韓琦](https://space.bilibili.com/66940276)、[家鼈大帝](https://github.com/Z4HD) の努力に感謝します。そして、このリポジトリは家鼈大帝のリポジトリ [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) に基づいて変更されています。
+オリジナルのスクリプト作成者である [デビッド・ヴァン・ブリンク（オミノ）](https://omino.com/)、[ドラ (NGDXW)](https://space.bilibili.com/40208180)、[韓琦](https://space.bilibili.com/66940276)、[家鼈大帝](https://github.com/Z4HD) の努力に感謝します。そして、このリポジトリは家鼈大帝のリポジトリ [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) に基づいて変更されています。
 
 現在のプロジェクトは、レガシー スクリプトに基づく TypeScript などの新しいテクノロジを使用して書き直されています。
 
@@ -47,7 +47,7 @@ footage("om_utils.jsx").sourceData;
 
 バージョン | 一般名 | マルチトラックのサポート | キーフレームをレイヤーに追加 | 日本語 UI | その他の便利なキーフレーム | MIDI トラックを手動で選択 | BPM を変更
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
-v0.1 | [デヴィッド・ヴァン・ブリンク（オミノ）の原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
+v0.1 | [デヴィッド・ヴァン・ブリンク（オミノ）の原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
 v1.0 | [ドラ (NGDXW) の改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
 v1.0 閏 | [韓琦のプリセット](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌
 v1.2 | [家鼈大帝の中国語版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
@@ -56,7 +56,7 @@ v3.x | **現在版** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### 参考文献
 #### 以前のバージョン
-* [デヴィッド・ヴァン・ブリンク（オミノ）の原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
+* [デヴィッド・ヴァン・ブリンク（オミノ）の原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [ドラ (NGDXW) の改版](https://www.bilibili.com/read/cv170398)
 * [韓琦のプリセット](https://www.bilibili.com/video/av29649969)
 * [家鼈大帝の中国語版](https://github.com/Z4HD/om_midi_NGDXW_zh)

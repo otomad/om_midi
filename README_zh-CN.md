@@ -10,7 +10,7 @@
 
 **om midi**，简称 **OMM**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
-感谢脚本原作者们 [大卫·范·布林克（奥米诺）](http://omino.com/)、[哆啦 (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
+感谢脚本原作者们 [大卫·范·布林克（奥米诺）](https://omino.com/)、[哆啦 (NGDXW)](https://space.bilibili.com/40208180)、[韩琦](https://space.bilibili.com/66940276)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
 当前项目根据旧版的脚本使用 TypeScript 等新技术进行重写。
 
@@ -47,7 +47,7 @@ footage("om_utils.jsx").sourceData;
 
 版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文 UI | 额外的实用关键帧 | 手动选择轨道 | 更改 BPM
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
-v0.1 | [大卫·范·布林克（奥米诺）的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
+v0.1 | [大卫·范·布林克（奥米诺）的原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
 v1.0 | [哆啦 (NGDXW) 的改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
 v1.0 闰 | [韩琦的预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌
 v1.2 | [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
@@ -56,7 +56,7 @@ v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### 参考
 #### 之前版本
-* [大卫·范·布林克（奥米诺）的原版](http://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
+* [大卫·范·布林克（奥米诺）的原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [哆啦 (NGDXW) 的改版](https://www.bilibili.com/read/cv170398)
 * [韩琦的预设](https://www.bilibili.com/video/av29649969)
 * [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh)
