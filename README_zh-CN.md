@@ -14,6 +14,8 @@
 
 当前项目根据旧版的脚本使用 TypeScript 等新技术进行重写。
 
+**关于“om midi”的拼写规范：所有**字母**小写**，即便位于句首时也是如此；单词间使用**空格**分隔而不是下划线。
+
 **姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
 ### 说明文档

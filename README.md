@@ -17,6 +17,8 @@ Thanks to original script creators [David Van Brink (omino)](https://omino.com/)
 
 The current project is rewritten using new technologies like TypeScript based on legacy scripts.
 
+**Spelling conventions for "om midi": all** letters are **lowercase**, even at the beginning of a sentence; words are separated by **spaces** instead of underscores.
+
 **Sister Projects:** [Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper).
 
 ### Documentations
