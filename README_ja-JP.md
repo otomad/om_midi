@@ -66,7 +66,7 @@ v3.x | **現在版** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### 紹介ビデオ
 * [竜の祖者 - 通りで.アエプ](https://www.bilibili.com/video/av9228581)
 * [陳沈晨 - メロン風.アエプ](https://www.bilibili.com/video/av9778499)
-#### その他の依存関係
+#### 依存
 * [モーション開発者の Rollup TypeScript スキャフォールディング](https://github.com/motiondeveloper/expression-globals-typescript)
 * [シリーV](https://github.com/Silly-V/Adobe-TS-ExtendScript)と[アエンハンサー](https://github.com/aenhancers/Types-for-Adobe)の Adobe タイプ
 * [セルジ・グスマン（コルシー）の MIDI パーサー JS - MIDI ファイル形式の仕様](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)

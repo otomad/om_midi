@@ -69,7 +69,7 @@ v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### Introduction Videos
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
-#### Other Dependencies
+#### Dependencies
 * [Motion Developer's Rollup TypeScript Scaffolding](https://github.com/motiondeveloper/expression-globals-typescript)
 * [Silly-V's](https://github.com/Silly-V/Adobe-TS-ExtendScript) and [aenhancers's](https://github.com/aenhancers/Types-for-Adobe) Adobe Types
 * [Sergi Guzman (colxi)'s midi-parser-js - MIDI File Format Specifications](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
