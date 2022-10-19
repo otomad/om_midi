@@ -929,6 +929,14 @@ interface Function {
    * @param arguments The first agument to the function. Add as many as needed.
    */
   call(thisObj: object, ...arguments: any[]): any
+  
+  /**
+   * For a given function, creates a bound function that has the same body as the original function.
+   * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+   * @param thisObj An object to which the this keyword can refer inside the new function.
+   * @param arguments A list of arguments to be passed to the new function.
+   */
+  // bind(thisObj: object, ...arguments: any[]): any; // 真尼玛没 bind 草。
 
   /**
    * Creates a string representation of this object that can be fed back to eval() to re-create an object. Works only with JavaScript functions.
