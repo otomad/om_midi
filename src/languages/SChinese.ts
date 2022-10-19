@@ -101,6 +101,7 @@ const SChinese = {
 	horizontal_mirror: "水平镜像",
 	advanced_scale: "高级缩放",
 	loading_midi: "加载 %1 ...",
+	unsupported_fps_time_division_error: "错误：当前模式不支持帧每秒时分数据格式。",
 };
 
 export default SChinese;

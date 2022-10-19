@@ -1,6 +1,6 @@
-import { EaseType } from "../core/Core";
 import uiStr from "../languages/ui-str";
 import addControl from "../modules/addControl";
+import EaseType from "../modules/EaseType";
 import BaseTool from "./BaseTool";
 import ToolsTab from "./ToolsTab";
 

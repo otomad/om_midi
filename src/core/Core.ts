@@ -7,6 +7,7 @@ import { ControllerType, RegularEventType } from "../midi/midi-types";
 import MidiTrack from "../midi/MidiTrack";
 import ProgressPalette from "../ui/ProgressPalette";
 import uiStr from "../languages/ui-str";
+import EaseType from "../modules/EaseType";
 
 const MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
 const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
@@ -87,12 +88,12 @@ export default class Core {
 			
 			let noteOnCount = 0, // 音符开计数。
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF, // 上一次音符事件类型。
-				lastEventSofarTick = -1, // 上一次迄今基本时间。
+				lastEventStartTick = -1, // 上一次迄今基本时间。
 				lastPan = NaN, lastVolume = NaN, lastGlide = NaN; // 上一次声像、音量、弯音。
 			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
-				if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
+				if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
 					return; // 跳过同一时间点上的音符。
-				const seconds = noteEvent.sofarTick * secondsPerTick;
+				const seconds = noteEvent.startTick * secondsPerTick;
 				if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
@@ -113,18 +114,18 @@ export default class Core {
 					setValueAtTime(nullTab.pingpong, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
 						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL;
+						const noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL;
 						setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 						setValueAtTime(nullTab.pingpong, noteOffSeconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
 					lastEventType = RegularEventType.NOTE_ON;
-					lastEventSofarTick = noteEvent.sofarTick;
+					lastEventStartTick = noteEvent.startTick;
 				} else if (noteEvent instanceof NoteOnEvent && noteEvent.velocity === 0 || noteEvent instanceof NoteOffEvent) { // 音符关。力度为 0 的音符开视为音符关。
 					const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
 					setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD); // 新增松键力度。
 					setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD);
 					lastEventType = RegularEventType.NOTE_OFF;
-					lastEventSofarTick = noteEvent.sofarTick;
+					lastEventStartTick = noteEvent.startTick;
 				} else if (noteEvent instanceof ControllerEvent) { // 控制器事件。
 					const controller = noteEvent.controller;
 					if (controller === ControllerType.PAN) { // 声像。
@@ -292,17 +293,17 @@ export default class Core {
 		
 		let noteOnCount = 0,
 			lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
-			lastEventSofarTick = -1;
+			lastEventStartTick = -1;
 		const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
-			if (noteEvent.sofarTick <= lastEventSofarTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
+			if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
 				return; // 跳过同一时间点上的音符。
-			const seconds = noteEvent.sofarTick * secondsPerTick + startTime;
+			const seconds = noteEvent.startTick * secondsPerTick + startTime;
 			if (noteEvent instanceof NoteOnEvent) {
 				if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 					+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 				const hasDuration = noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined;
 				const duration = noteEvent.interruptDuration ?? noteEvent.duration ?? 0;
-				const noteOffSeconds = (noteEvent.sofarTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+				const noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
 				if (effectsTab.hFlip.value) {
 					const addKey = (seconds: number) => !addToGeometry2 ? layer.scale.addKey(seconds) :
 						(geometry2.scaleHeight().addKey(seconds), geometry2.scaleWidth().addKey(seconds));
@@ -360,7 +361,7 @@ export default class Core {
 					}
 				}
 				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) {
-					if (noteOnCount === 0 && noteEvent.sofarTick !== 0) { // 如果第一个音符不在乐曲最开始。
+					if (noteOnCount === 0 && noteEvent.startTick !== 0) { // 如果第一个音符不在乐曲最开始。
 						const inPointValue = layer.timeRemap.keyValue(1);
 						const inPointTime = layer.timeRemap.keyTime(1);
 						layer.timeRemap.setValueAtTime(inPointTime + seconds - startTime, inPointValue);
@@ -423,12 +424,12 @@ export default class Core {
 				}
 				noteOnCount++;
 				lastEventType = RegularEventType.NOTE_ON;
-				lastEventSofarTick = noteEvent.sofarTick;
+				lastEventStartTick = noteEvent.startTick;
 			} else if (noteEvent instanceof NoteOffEvent) {
 				// const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
 				
 				// lastEventType = RegularEventType.NOTE_OFF;
-				// lastEventSofarTick = noteEvent.sofarTick;
+				// lastEventStartTick = noteEvent.startTick;
 			}
 		};
 		this.dealNoteEvents(track, comp, secondsPerTick, curStartTime, addNoteEvent);
@@ -572,7 +573,7 @@ export default class Core {
 		else {
 			let noteCount = 0;
 			while (noteCount * secondsPerTick <= startTime + comp.duration)
-				addNoteEvent(new NoteOnEvent(60, 100, +!!noteCount, 1, noteCount++));
+				addNoteEvent(new NoteOnEvent(0, 60, 100, +!!noteCount, 1, noteCount++));
 		}
 	}
 	
@@ -639,22 +640,4 @@ export default class Core {
 		property.name = TRANSFORM_NAME;
 		return property;
 	}
-}
-
-/**
- * 缓动类型。
- */
-export enum EaseType {
-	/**
-	 * 缓入。
-	 */
-	EASE_IN,
-	/**
-	 * 缓出。
-	 */
-	EASE_OUT,
-	/**
-	 * 缓入缓出。
-	 */
-	EASE_IN_OUT,
 }

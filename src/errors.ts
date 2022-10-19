@@ -115,3 +115,9 @@ export class CannotTuningError extends MyError {
 		super(localize(uiStr.cannot_tuning_error));
 	}
 }
+
+export class UnsupportedFpsTimeDivisionError extends MyError {
+	constructor() {
+		super(localize(uiStr.unsupported_fps_time_division_error));
+	}
+}

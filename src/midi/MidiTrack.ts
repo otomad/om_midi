@@ -34,8 +34,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 	setChannel(value: number) { this.channel ??= value; }
 	setTempo(value: number) {
 		this.tempo ??= value;
-		const midi = this.parent.midi;
-		const bpm = this.bpm();
+		const midi = this.midi(), bpm = this.bpm();
 		midi.bpm ??= bpm;
 		midi.tempoTrack ??= this;
 		if (midi.bpm !== bpm) midi.isDynamicBpm = true;
@@ -53,7 +52,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 		let statusByte: number;
 		while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
 			const deltaTime = this.parent.readDeltaTime();
-			const sofarTick = this.lengthTick += deltaTime;
+			const startTick = this.lengthTick += deltaTime;
 			const lastStatusByte = statusByte!; // 当 statusByte 最高二进制位不为 1（即 statusByte < 128），表示与前一次状态相同。
 			statusByte = this.parent.readByte(1);
 			if (statusByte === -1) break;
@@ -93,7 +92,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 					case MetaEventType.SET_TEMPO: { // 长度一般为 3
 						const numberValue = this.parent.readByte(metaEventLength);
 						if (metaType === MetaEventType.SET_TEMPO) {
-							note = new events.TempoEvent(numberValue);
+							note = new events.TempoMetaEvent(numberValue);
 							this.setTempo(numberValue);
 						} else
 							note = new events.NumberMetaEvent(metaType, numberValue);
@@ -133,8 +132,8 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 								this.noteCount++;
 								for (const prevNoteOn of noteOnStack)
 									if (prevNoteOn.interruptDuration === undefined)
-										if (sofarTick <= prevNoteOn.sofarTick) noteOn.interruptDuration = 0;
-										else prevNoteOn.interruptDuration = sofarTick - prevNoteOn.sofarTick; // 中断复音上的其它音符开。
+										if (startTick <= prevNoteOn.startTick) noteOn.interruptDuration = 0;
+										else prevNoteOn.interruptDuration = startTick - prevNoteOn.startTick; // 中断复音上的其它音符开。
 								noteOnStack.push(noteOn);
 								break;
 							}
@@ -144,7 +143,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 								for (let i = noteOnStack.length - 1; i >= 0; i--) {
 									const noteOn = noteOnStack[i];
 									if (noteOn.pitch === noteOff.pitch) {
-										noteOn.duration = sofarTick - noteOn.sofarTick; // 计算音符时长。
+										noteOn.duration = startTick - noteOn.startTick; // 计算音符时长。
 										noteOn.noteOff = noteOff;
 										noteOff.noteOn = noteOn; // 将两个音符关联在一起。
 										noteOnStack.splice(i, 1); // 移出栈。
@@ -185,7 +184,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 			}
 			if (note !== null) {
 				note.deltaTime = deltaTime;
-				note.sofarTick = sofarTick;
+				note.startTick = startTick;
 				this.push(note);
 			}
 		}
@@ -209,4 +208,6 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 	 * @returns 当前指针的偏移量。
 	 */
 	getPointer() { return this.parent.getPointer(); }
+	
+	midi() { return this.parent.midi; }
 }

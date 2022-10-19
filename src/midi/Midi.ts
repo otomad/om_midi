@@ -1,15 +1,17 @@
 import { FileUnreadableError } from "../errors";
 import uiStr from "../languages/ui-str";
 import convertTextEncoding from "../temp-file-methods/convertTextEncoding";
+import DynamicBpmIntegrator from "./DynamicBpmIntegrator";
 import { MidiFormatType } from "./midi-types";
 import MidiReader from "./MidiReader";
 import MidiTrack from "./MidiTrack";
 
 export default class Midi {
 	// content: string;
-	file?: File;
+	readonly file?: File;
 	private length?: number;
-	private midiReader?: MidiReader;
+	private readonly midiReader?: MidiReader;
+	readonly integrator?: DynamicBpmIntegrator;
 	
 	fileName: string;
 	formatType: MidiFormatType = MidiFormatType.SYNC_MULTI_TRACK;
@@ -49,6 +51,8 @@ export default class Midi {
 			// this.content = file.read(this.length);
 			this.midiReader = new MidiReader(this);
 			file.close();
+			if (this.isDynamicBpm && this.tempoTrack)
+				this.integrator = new DynamicBpmIntegrator(this.tempoTrack);
 			this.removeNotNoteTrack();
 			this.setPreferredTrack();
 			this.convertTracksNameEncoding();
@@ -60,7 +64,7 @@ export default class Midi {
 	 * 可根据需要调用。
 	 * 如果将来需要读取动态 BPM、节拍等信息时再对此处做出修改。
 	 */
-	removeNotNoteTrack(): void {
+	private removeNotNoteTrack(): void {
 		for (let i = this.tracks.length - 1; i >= 0; i--) {
 			const track = this.tracks[i];
 			if (track.noteCount === 0)
@@ -71,7 +75,7 @@ export default class Midi {
 	/**
 	 * 设定首选轨道。
 	 */
-	setPreferredTrack(): void {
+	private setPreferredTrack(): void {
 		for (let i = 0; i < this.tracks.length; i++) {
 			const track = this.tracks[i];
 			if (track.channel !== 10) {
@@ -84,7 +88,7 @@ export default class Midi {
 	/**
 	 * 将 Latin1 编码的轨道名称转换回系统默认编码。
 	 */
-	convertTracksNameEncoding() {
+	private convertTracksNameEncoding() {
 		const tracks: MidiTrack[] = [];
 		let trackNames: string[] = [];
 		for (const track of this.tracks)
@@ -101,4 +105,9 @@ export default class Midi {
 			track.name = name;
 		}
 	}
+	
+	/**
+	 * 判断时分数据是否为标准的基本时间每拍格式。
+	 */
+	isTpbTimeDivision() { return typeof this.timeDivision === "number"; }
 }

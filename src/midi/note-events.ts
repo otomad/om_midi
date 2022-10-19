@@ -1,8 +1,11 @@
+import assign from "../modules/assign";
 import { ControllerType, MetaEventType, RegularEventType } from "./midi-types";
 
 export class NoteEvent {
-	deltaTime: number = 0; // 与前一项间隔基本时间。
-	sofarTick: number = 0; // 至乐曲开始的基本时间。
+	/** 与前一项间隔基本时间。 */
+	deltaTime: number = 0;
+	/** 至乐曲开始的基本时间。 */
+	startTick: number = 0;
 }
 
 export class MetaEvent extends NoteEvent {
@@ -32,7 +35,11 @@ export class NumberMetaEvent extends MetaEvent {
 	}
 }
 
-export class TempoEvent extends NumberMetaEvent {
+export class TempoMetaEvent extends NumberMetaEvent {
+	/**
+	 * Microseconds/Quarter-Note
+	 * 微秒每四分音符
+	 */
 	readonly tempo: number;
 	
 	constructor(tempo: number) {
@@ -41,6 +48,7 @@ export class TempoEvent extends NumberMetaEvent {
 	}
 }
 
+// Set Tempo Meta Event Values
 export class SmpteOffsetMetaEvent extends MetaEvent {
 	readonly hour: number;
 	readonly min: number;
@@ -59,10 +67,14 @@ export class SmpteOffsetMetaEvent extends MetaEvent {
 }
 
 export class TimeSignatureMetaEvent extends MetaEvent {
-	readonly number: number; // 分子
-	readonly denom: number; // 分母。2 的几次幂。
-	readonly metro: number; // 每个 MIDI 时钟包含的基本时间数。一般是 24。
-	readonly thirtySeconds: number; // 每 24 个 MIDI 时钟对应的 32 分音符的数目。一般是 8。
+	/** 分子。 */
+	readonly number: number;
+	/** 分母。2 的几次幂。 */
+	readonly denom: number;
+	/** 每个 MIDI 时钟包含的基本时间数。一般是 24。 */
+	readonly metro: number;
+	/** 每 24 个 MIDI 时钟对应的 32 分音符的数目。一般是 8。 */
+	readonly thirtySeconds: number;
 	
 	constructor(timeSignature: number[]) {
 		super(MetaEventType.TIME_SIGNATURE);
@@ -111,20 +123,23 @@ abstract class NoteOnOffEvent extends RegularEvent {
 }
 
 export class NoteOnEvent extends NoteOnOffEvent {
+	/** 关联的音符关事件。 */
 	noteOff?: NoteOffEvent;
-	duration?: number; // note-off？尝试将时长赋值给 note-on！
-	interruptDuration?: number; // 单轨音 MAD 特殊用途。当有复音时中断前一个音的音符开。
+	/** note-off？尝试将时长赋值给 note-on！ */
+	duration?: number;
+	/** 单轨音 MAD 特殊用途。当有复音时中断前一个音的音符开。 */
+	interruptDuration?: number;
 	
-	constructor(channel: number, pitch: number, velocity: number, deltaTime: number, duration: number, sofarTick: number);
+	constructor(channel: number, pitch: number, velocity: number, deltaTime: number, duration: number, startTick: number);
 	constructor(channel: number, values: number[]);
-	constructor(channel: number, values: number[] | number, velocity?: number, deltaTime?: number, duration?: number, sofarTick?: number) {
+	constructor(channel: number, values: number[] | number, velocity?: number, deltaTime?: number, duration?: number, startTick?: number) {
 		if (values instanceof Array)
 			super(RegularEventType.NOTE_ON, channel, values);
 		else {
 			super(RegularEventType.NOTE_ON, channel, [values, velocity!]);
 			this.deltaTime = deltaTime!;
 			this.duration = duration!;
-			this.sofarTick = sofarTick!;
+			this.startTick = startTick!;
 		}
 	}
 }
@@ -169,5 +184,26 @@ export class PitchBendEvent extends RegularEvent {
 	 */
 	private static take7Bit(b: number) {
 		return b & 0b0111_1111;
+	}
+}
+
+export class NoteOnSecondEvent extends NoteOnEvent {
+	startSecond: number;
+	durationSecond?: number;
+	interruptDurationSecond?: number;
+	
+	constructor(raw: NoteOnEvent, startSecond: number) {
+		super(raw.channel, raw.values);
+		assign(this, raw);
+		this.startSecond = startSecond;
+	}
+}
+
+export class NoteOffSecondEvent extends NoteOffEvent {
+	startSecond: number;
+
+	constructor(raw: NoteOffEvent, startSecond: number) {
+		super(raw.channel, raw.values);
+		this.startSecond = startSecond;
 	}
 }
