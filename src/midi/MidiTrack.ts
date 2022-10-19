@@ -1,10 +1,11 @@
 import { EndOfTrackPositionError, MidiCustomEventsError } from "../errors";
 import { MetaEventType, RegularEventType } from "./midi-types";
 import MidiReader from "./MidiReader";
-import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./note-events";
+import * as events from "./note-events";
+// import { ControllerEvent, CustomMetaEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NumberMetaEvent, PitchBendEvent, RegularEvent, SmpteOffsetMetaEvent, SystemExclusiveEvent, TempoEvent, TextMetaEvent, TimeSignatureMetaEvent } from "./note-events";
 import uiStr from "../languages/ui-str";
 
-export default class MidiTrack extends Array<NoteEvent> {
+export default class MidiTrack extends Array<events.NoteEvent> {
 	private parent: MidiReader;
 	private offset: number;
 	private size: number;
@@ -31,17 +32,24 @@ export default class MidiTrack extends Array<NoteEvent> {
 	setName(value: string) { this.name ??= value; }
 	setInstrument(value: string) { this.instrument ??= value; }
 	setChannel(value: number) { this.channel ??= value; }
-	setTempo(value: number) { this.tempo ??= value; this.parent.midi.bpm ??= this.bpm(); }
+	setTempo(value: number) {
+		this.tempo ??= value;
+		const midi = this.parent.midi;
+		const bpm = this.bpm();
+		midi.bpm ??= bpm;
+		midi.tempoTrack ??= this;
+		if (midi.bpm !== bpm) midi.isDynamicBpm = true;
+	}
 
 	bpm() {
 		if (this.tempo === undefined) return undefined;
 		const bpm = 6e7 / this.tempo;
-		return parseFloat(bpm.toFixed(2));
+		return parseFloat(bpm.toFixed(3));
 	}
 	
 	private readNotes(): void {
 		const endOffset = this.offset + this.size;
-		const noteOnStack: NoteOnEvent[] = []; // 音符开事件栈，用于匹配音符关事件。为什么是栈而不是队列？这与 FL Studio 相匹配。
+		const noteOnStack: events.NoteOnEvent[] = []; // 音符开事件栈，用于匹配音符关事件。为什么是栈而不是队列？这与 FL Studio 相匹配。
 		let statusByte: number;
 		while (!(this.parent.isReadOver() || this.parent.getPointer() >= endOffset)) {
 			const deltaTime = this.parent.readDeltaTime();
@@ -53,7 +61,7 @@ export default class MidiTrack extends Array<NoteEvent> {
 				statusByte = lastStatusByte;
 				this.parent.movePointer(-1);
 			}
-			let note: NoteEvent | null = null;
+			let note: events.NoteEvent | null = null;
 			if (statusByte === 0xff) { // 元数据事件
 				const metaType: MetaEventType = this.parent.readByte(1);
 				const metaEventLength = this.parent.readDeltaTime();
@@ -72,7 +80,7 @@ export default class MidiTrack extends Array<NoteEvent> {
 					case MetaEventType.MARKER:
 					case MetaEventType.CUE_POINT: {
 						const textContent = this.parent.readString(metaEventLength);
-						note = new TextMetaEvent(metaType, textContent);
+						note = new events.TextMetaEvent(metaType, textContent);
 						if (metaType === MetaEventType.TRACK_NAME)
 							this.setName(textContent);
 						else if (metaType === MetaEventType.INSTRUMENT_NAME)
@@ -84,29 +92,32 @@ export default class MidiTrack extends Array<NoteEvent> {
 					case MetaEventType.KEY_SIGNATURE: // 长度一般为 2
 					case MetaEventType.SET_TEMPO: { // 长度一般为 3
 						const numberValue = this.parent.readByte(metaEventLength);
-						note = new NumberMetaEvent(metaType, numberValue);
-						if (metaType === MetaEventType.SET_TEMPO)
+						if (metaType === MetaEventType.SET_TEMPO) {
+							note = new events.TempoEvent(numberValue);
 							this.setTempo(numberValue);
+						} else
+							note = new events.NumberMetaEvent(metaType, numberValue);
 						break;
 					}
 					case MetaEventType.SMPTE_OFFSET: { // 长度一般为 5
 						const smpteOffset = this.parent.readByteArray(metaEventLength);
-						note = new SmpteOffsetMetaEvent(smpteOffset);
+						note = new events.SmpteOffsetMetaEvent(smpteOffset);
 						break;
 					}
 					case MetaEventType.TIME_SIGNATURE: { // 长度一般为 4
 						const timeSignature = this.parent.readByteArray(metaEventLength);
-						note = new TimeSignatureMetaEvent(timeSignature);
+						note = new events.TimeSignatureMetaEvent(timeSignature);
 						break;
 					}
 					default: { // 自定义事件
 						const customValue = this.parent.readByteArray(metaEventLength);
-						note = new CustomMetaEvent(metaType, customValue);
+						note = new events.CustomMetaEvent(metaType, customValue);
 						break;
 					}
 				}
 			} else { // 常规事件
-				this.setChannel((statusByte & 0x0f) + 1); // 后半字节表示通道编号。
+				const channel = (statusByte & 0x0f) + 1; // 后半字节表示通道编号。
+				this.setChannel(channel);
 				const regularType: RegularEventType = statusByte >> 4; // 只取前半字节。
 				switch (regularType) {
 					case RegularEventType.NOTE_AFTERTOUCH:
@@ -117,8 +128,8 @@ export default class MidiTrack extends Array<NoteEvent> {
 						const byte2 = this.parent.readByteArray(2); // 读两位
 						switch (regularType) {
 							case RegularEventType.NOTE_ON: {
-								note = new NoteOnEvent(byte2);
-								const noteOn = note as NoteOnEvent;
+								note = new events.NoteOnEvent(channel, byte2);
+								const noteOn = note as events.NoteOnEvent;
 								this.noteCount++;
 								for (const prevNoteOn of noteOnStack)
 									if (prevNoteOn.interruptDuration === undefined)
@@ -128,8 +139,8 @@ export default class MidiTrack extends Array<NoteEvent> {
 								break;
 							}
 							case RegularEventType.NOTE_OFF: {
-								note = new NoteOffEvent(byte2);
-								const noteOff = note as NoteOffEvent;
+								note = new events.NoteOffEvent(channel, byte2);
+								const noteOff = note as events.NoteOffEvent;
 								for (let i = noteOnStack.length - 1; i >= 0; i--) {
 									const noteOn = noteOnStack[i];
 									if (noteOn.pitch === noteOff.pitch) {
@@ -143,14 +154,14 @@ export default class MidiTrack extends Array<NoteEvent> {
 								break;
 							}
 							case RegularEventType.CONTROLLER:
-								note = new ControllerEvent(byte2);
+								note = new events.ControllerEvent(channel, byte2);
 								break;
 							case RegularEventType.PITCH_BEND_EVENT:
-								note = new PitchBendEvent(byte2);
+								note = new events.PitchBendEvent(channel, byte2);
 								break;
 							case RegularEventType.NOTE_AFTERTOUCH:
 							default:
-								note = new RegularEvent(regularType, byte2); // 其它事件暂时无需求而忽略。
+								note = new events.RegularEvent(regularType, channel, byte2); // 其它事件暂时无需求而忽略。
 								break;
 						}
 						break;
@@ -158,14 +169,14 @@ export default class MidiTrack extends Array<NoteEvent> {
 					case RegularEventType.PROGRAM_CHANGE:
 					case RegularEventType.CHANNEL_AFTERTOUCH: {
 						const byte1 = this.parent.readByteArray(1); // 读一位
-						note = new RegularEvent(regularType, byte1);
+						note = new events.RegularEvent(regularType, channel, byte1);
 						break;
 					}
 					case RegularEventType.END_OF_FILE:
 						return;
 					case RegularEventType.SYSTEM_EXCLUSIVE_EVENTS: {
 						const systemExclusiveEventLength = this.parent.readDeltaTime();
-						note = new SystemExclusiveEvent(this.parent.readByteArray(systemExclusiveEventLength));
+						note = new events.SystemExclusiveEvent(channel, this.parent.readByteArray(systemExclusiveEventLength));
 						break;
 					}
 					default: // 自定义事件，不知道怎么读。

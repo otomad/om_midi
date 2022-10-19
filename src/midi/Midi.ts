@@ -17,8 +17,10 @@ export default class Midi {
 	timeDivision: number | [number, number] = 0;
 	tracks: MidiTrack[] = [];
 	bpm?: number;
-	preferredTrackIndex = 0;
-	isPureQuarter = false;
+	preferredTrackIndex: number = 0;
+	isPureQuarter: boolean = false;
+	isDynamicBpm: boolean = false;
+	tempoTrack?: MidiTrack;
 	
 	/**
 	 * 构建 MIDI 对象。
