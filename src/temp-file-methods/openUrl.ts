@@ -1,6 +1,11 @@
 import { MyError } from "../errors";
 import TempFile from "./TempFile";
 
+/**
+ * 打开网址。
+ * @param url - 网址。
+ * @deprecated
+ */
 function openUrl_legacy(url: string): void {
 	try {
 		const html = new TempFile("tmp.html");
