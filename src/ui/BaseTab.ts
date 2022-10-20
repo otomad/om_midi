@@ -1,8 +1,13 @@
+import ScrollGroup from "../containers/ScrollGroup";
 import addControl from "../modules/addControl";
 import Portal from "./Portal";
 
 export const SPACING = 2;
-export const tabGroupParams: Partial<Group> = {
+const tabScrollGroupParams: Partial<Group> = {
+	spacing: SPACING,
+	margins: [7, 5, 0, 0],
+};
+const tabGroupParams: Partial<Group> = {
 	orientation: "column",
 	alignment: ["fill", "top"],
 	alignChildren: "fill",
@@ -10,17 +15,20 @@ export const tabGroupParams: Partial<Group> = {
 	margins: [10, 5, 10, 0],
 };
 
-export default abstract class BaseTab {
+export default abstract class BaseTab<G extends ScrollGroup | Group> {
 	//#region 组件对象
-	parent: Portal;
-	tab: Tab;
-	group: Group;
+	readonly parent: Portal;
+	readonly tab: Tab;
+	readonly group: G;
 	//#endregion
 	
-	constructor(parent: Portal, text?: string, groupParams: Partial<Group> = tabGroupParams) {
+	constructor(parent: Portal, isScrollGroup: G extends ScrollGroup ? true : false, text?: string, groupParams?: Partial<Group>) {
 		this.parent = parent;
 		this.tab = addControl(this.parent.tabs, "tab", { text });
-		this.group = addControl(this.tab, "group", groupParams);
+		groupParams ??= isScrollGroup ? tabScrollGroupParams : tabGroupParams;
+		this.group = (isScrollGroup ?
+			new ScrollGroup(this.tab, groupParams) :
+			addControl(this.tab, "group", groupParams)) as G;
 	}
 	
 	/**
@@ -36,7 +44,10 @@ export default abstract class BaseTab {
 	}
 	
 	addCheckbox(text?: string): Checkbox {
-		return addControl(this.group, "checkbox", { text, alignment: ["fill", "fill"] });
+		const params: Partial<Checkbox> = { text, alignment: ["fill", "fill"] };
+		return this.group instanceof ScrollGroup ?
+			this.group.add("checkbox", params) :
+			addControl(this.group, "checkbox", params);
 	}
 	
 	abstract translate(): void;

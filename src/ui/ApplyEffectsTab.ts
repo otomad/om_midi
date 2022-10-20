@@ -1,9 +1,10 @@
+import ScrollGroup from "../containers/ScrollGroup";
 import uiStr from "../languages/ui-str";
 import addControl, { addGroup, addItems } from "../modules/addControl";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 
-export default class ApplyEffectsTab extends BaseTab {
+export default class ApplyEffectsTab extends BaseTab<ScrollGroup> {
 	//#region 组件对象
 	timeRemap: Checkbox = this.addCheckbox();
 	timeRemap2: Checkbox = this.addCheckbox();
@@ -21,12 +22,12 @@ export default class ApplyEffectsTab extends BaseTab {
 	//#endregion
 
 	constructor(parent: Portal) {
-		super(parent);
+		super(parent, true);
 		({
 			group: this.basePitchGroup,
 			label: this.basePitchLbl,
 			control: this.basePitchKeyCombo,
-		} = addGroup(this.group, "", "dropdownlist"));
+		} = addGroup(this.group.content, "", "dropdownlist"));
 		this.basePitchOctCombo = addControl(this.basePitchGroup, "dropdownlist");
 		addItems(this.basePitchKeyCombo, ..."C,C#,D,D#,E,F,F#,G,G#,A,A#,B".split(","));
 		addItems(this.basePitchOctCombo, ..."0,1,2,3,4,5,6,7,8,9,10".split(","));

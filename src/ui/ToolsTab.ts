@@ -8,7 +8,7 @@ import BaseTool from "./BaseTool";
 import Setting from "../settings/Setting";
 import uiStr from "../languages/ui-str";
 
-export default class ToolsTab extends BaseTab {
+export default class ToolsTab extends BaseTab<Group> {
 	//#region 组件对象
 	toolsCombo: DropDownList;
 	separator: Separator;
@@ -18,7 +18,7 @@ export default class ToolsTab extends BaseTab {
 	//#endregion
 	
 	constructor(parent: Portal) {
-		super(parent, undefined, { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
+		super(parent, false, undefined, { orientation: "column", alignment: "fill", alignChildren: "fill", margins: [10, 5, 0, 0] });
 		this.toolsCombo = addControl(this.group, "dropdownlist");
 		this.toolsCombo.selection = Setting.getLastTool();
 		this.separator = new Separator(this.group, "horizontal");
@@ -33,7 +33,7 @@ export default class ToolsTab extends BaseTab {
 				tool.visible = i === selected;
 			}
 			Setting.setLastTool(this.toolsCombo.getSelectedIndex());
-		}
+		};
 		this.toolsCombo.notify("onChange");
 	}
 	

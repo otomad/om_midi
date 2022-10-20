@@ -1,8 +1,9 @@
+import ScrollGroup from "../containers/ScrollGroup";
 import uiStr from "../languages/ui-str";
 import BaseTab from "./BaseTab";
 import Portal from "./Portal";
 
-export default class NullObjTab extends BaseTab {
+export default class NullObjTab extends BaseTab<ScrollGroup> {
 	//#region 组件对象
 	pitch: Checkbox = this.addCheckbox();
 	velocity: Checkbox = this.addCheckbox(); // 致前辈：Velocity 就是力度，不是速度。
@@ -22,7 +23,7 @@ export default class NullObjTab extends BaseTab {
 	//#endregion
 
 	constructor(parent: Portal) {
-		super(parent);
+		super(parent, true);
 	}
 	
 	translate(): void {

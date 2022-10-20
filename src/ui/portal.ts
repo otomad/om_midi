@@ -15,6 +15,7 @@ import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
 import Base64Image from "../temp-file-methods/Base64Image";
 import Setting from "../settings/Setting";
+import ScrollGroup from "../containers/ScrollGroup";
 
 export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
 
@@ -51,7 +52,7 @@ export default class Portal {
 	
 	private constructor(window: Window | Panel) {
 		this.window = window;
-		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
+		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"], spacing: 5 });
 		const MidiButtonHeight = 22;
 		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		({
@@ -149,7 +150,10 @@ export default class Portal {
 			});
 		if (window === null) throw new CannotFindWindowError();
 		const portal = new Portal(window);
-		window.onShow = window.onResizing = window.onResize = () => window.layout.resize();
+		window.onShow = window.onResizing = window.onResize = () => {
+			window.layout.resize();
+			portal.resizeScrollGroups();
+		};
 		if (window instanceof Window) {
 			window.center();
 			window.show();
@@ -160,7 +164,7 @@ export default class Portal {
 		return portal;
 	}
 	
-	getSelectedTab(): BaseTab | null {
+	getSelectedTab(): BaseTab<ScrollGroup | Group> | null {
 		if (this.tabs.selection === null) return null;
 		switch ((this.tabs.selection as Tab).text) {
 			case this.nullObjTab.tab.text:
@@ -186,5 +190,11 @@ export default class Portal {
 		this.selectBpmLbl.text = localize(uiStr.set_midi_bpm);
 		this.startTimeLbl.text = localize(uiStr.start_time);
 		addItems(this.startTimeCombo, localize(uiStr.display_start_time), localize(uiStr.current_time), localize(uiStr.work_area), "0");
+	}
+	
+	private resizeScrollGroups() {
+		const baseTabs: BaseTab<ScrollGroup>[] = [this.nullObjTab, this.applyEffectsTab];
+		for (const tab of baseTabs)
+			tab.group.onResize();
 	}
 }

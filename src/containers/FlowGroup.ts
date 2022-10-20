@@ -1,4 +1,4 @@
-import addControl, { ContainerType, ControlType, ControlTypeName, PropertiesType } from "../modules/addControl";
+import addControl, { ContainerType, ControlTypeName, ParamsType, PropertiesType } from "../modules/addControl";
 
 export default class FlowGroup {
 	readonly parent: ContainerType;
@@ -11,7 +11,7 @@ export default class FlowGroup {
 		this.columns = columns;
 	}
 	
-	add<C extends ControlTypeName>(type: C, params?: Partial<ControlType<C>>, properties?: PropertiesType<C>) {
+	add<C extends ControlTypeName>(type: C, params?: ParamsType<C>, properties?: PropertiesType<C>) {
 		let rows = this.outerGroup.children as Group[];
 		if (rows.length === 0 || rows[rows.length - 1].children.length >= this.columns)
 			this.addRow();

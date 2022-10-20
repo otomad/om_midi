@@ -1,10 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="prototypes.d.ts" />
 
 /**
  * 初始化为 ExtendScript 的扩展方法。
  */
-export default function initPrototypes() {
+export default function initPrototypes(): void {
 
 	String.prototype.trim = function (): string {
 		return this.replace(/^\s+|\s+$/g, "");
@@ -34,7 +33,6 @@ export default function initPrototypes() {
 		else return 0;
 	};
 	
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	/* //@ts-ignore
 	Object.hasOwn = function <T extends object, K extends string>(obj: T, prop: K): prop is keyof T {
 		return Object.prototype.hasOwnProperty.call(obj, prop);

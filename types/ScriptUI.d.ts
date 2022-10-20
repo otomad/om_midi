@@ -2531,6 +2531,16 @@ declare class KeyboardState {
 }
 
 /**
+ * Some setter parameters for the Control class.
+ * For some reason TypeScript is temporarily unable to infer the type of the setter.
+ */
+declare interface _ControlSetters {
+  bounds: Partial<_Bounds>
+  location: Partial<Point> | [number, number]
+  size: Partial<Dimension> | [number, number]
+}
+
+/**
  * A Control class.
  */
 declare class _Control {
@@ -2548,7 +2558,7 @@ declare class _Control {
    * Setting an element's size or location changes its bounds property, and vice-versa.
    */
   get bounds(): Bounds
-  set bounds(value: Partial<_Bounds>)
+  set bounds(value: _ControlSetters["bounds"])
 
   /**
    * True if this element is enabled.
@@ -2571,8 +2581,8 @@ declare class _Control {
    * The upper left corner of this element relative to its parent.
    * The location is defined as [bounds.x, bounds.y]. Setting an element's location changes its bounds property, and vice-versa.
    */
-	get location(): Point
-	set location(value: Partial<Point> | [number, number])
+  get location(): Point
+  set location(value: _ControlSetters["location"])
 
   /**
    * The maximum height and width to which the element can be resized.
@@ -2600,9 +2610,11 @@ declare class _Control {
    * The current dimensions of this element.
    * Initially undefined, and unless explicitly set by a script, it is defined by a LayoutManager . A script can explicitly set size before the layout manager is invoked to establish an element size other than the preferredSize or the default size, but this is not recommended. Defined as [bounds.width, bounds.height]. Setting an element's size changes its bounds property, and vice-versa.
    */
-  // get size(): Dimension
-  // set size(value: Partial<Dimension> | [number, number])
-  size: Dimension | [number, number] // 已知特性之一，暂时没法用 get/set。
+  get size(): Dimension
+  set size(value: _ControlSetters["size"])
+  // size: Dimension | [number, number]
+  // 已知特性之一，暂时没法用 get/set。
+  // 已知暂时无法解决特性之一，具体详见：https://github.com/microsoft/TypeScript/issues/51229
 
   /**
    * The element type.

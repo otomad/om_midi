@@ -40,6 +40,8 @@
 		"@typescript-eslint/no-inferrable-types": "off",
 		"no-empty": ["error", { "allowEmptyCatch": true }],
 		"@typescript-eslint/no-non-null-assertion": "off",
-		"no-constant-condition": ["error", { "checkLoops": false }]
+		"no-constant-condition": ["error", { "checkLoops": false }],
+		"@typescript-eslint/triple-slash-reference": "off",
+		"@typescript-eslint/ban-ts-comment": "off"
 	}
 }

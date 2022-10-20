@@ -1,11 +1,11 @@
-import hasOwn from "./hasOwn";
+import assign from "./assign";
 
 //#region 类型
 export type ControlTypeName = "button" | "checkbox" | "dropdownlist" | "edittext" | "flashplayer" | "group" | "iconbutton" | "image" | "listbox" | "panel" | "progressbar" | "radiobutton" | "scrollbar" | "slider" | "statictext" | "tab" | "tabbedpanel" | "treeview";
 
 export type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
 
-export type ControlType<C extends ControlTypeName> =
+type ControlType<C extends ControlTypeName> =
 	C extends "button" ? Button :
 	C extends "checkbox" ? Checkbox :
 	C extends "dropdownlist" ? DropDownList :
@@ -37,6 +37,10 @@ export type PropertiesType<C extends ControlTypeName> =
 type NullableControlType<C extends ControlTypeName | undefined> =
 	C extends ControlTypeName ? ControlType<C> :
 	C extends undefined ? undefined : never;
+	
+type Override<P, S> = Omit<P, keyof S> & S;
+
+export type ParamsType<C extends ControlTypeName> = Partial<Override<ControlType<C>, _ControlSetters>>;
 //#endregion
 
 /**
@@ -47,7 +51,7 @@ type NullableControlType<C extends ControlTypeName | undefined> =
  * @param properties - 控件属性。
  * @returns 添加的控件。
  */
-export default function addControl<C extends ControlTypeName>(parent: ContainerType, type: C, params?: Partial<ControlType<C>>, properties?: PropertiesType<C>): ControlType<C> {
+export default function addControl<C extends ControlTypeName>(parent: ContainerType, type: C, params?: ParamsType<C>, properties?: PropertiesType<C>): ControlType<C> {
 	let _control: _Control;
 	if (type == "group")
 		_control = parent.add(type, undefined, properties);
@@ -61,9 +65,7 @@ export default function addControl<C extends ControlTypeName>(parent: ContainerT
 		// TODO: 技术难点待解决，未知原因，疑同上。
 	const control = _control as ControlType<C>;
 	if (params != undefined)
-		for (const key in params)
-			if (hasOwn(params, key))
-				control[key] = (params as ControlType<C>)[key];
+		assign(control, params);
 	return control;
 }
 
@@ -81,7 +83,7 @@ interface IRegularGroup<C extends ControlTypeName> {
 	label: StaticText,
 	control: NullableControlType<C>,
 }
-export function addGroup<C extends ControlTypeName>(parent: ContainerType, name: string, type?: C, params?: Partial<ControlType<C>>, properties?: PropertiesType<C>): IRegularGroup<C> {
+export function addGroup<C extends ControlTypeName>(parent: ContainerType, name: string, type?: C, params?: ParamsType<C>, properties?: PropertiesType<C>): IRegularGroup<C> {
 	//#region functions
 	const addGroup = () => addControl(parent, "group", { orientation: "row", spacing: 7, alignment: "fill", alignChildren: "fill" });
 	const setLabelMinWidth = (label: StaticText) => {
