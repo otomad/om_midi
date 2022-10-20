@@ -97,11 +97,12 @@ const SChinese = {
 	end_of_track_position_error: "错误：轨道结束位置有误。应为 %1，实际 %2。",
 	cannot_set_time_remap_error: "错误：所选图层不能设置时间重映射。",
 	cannot_tuning_error: "错误：所选图层不包含音频，不能进行调音。",
-	about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝\n脚本作者：兰音\n仓库地址：%1",
+	about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n应用程序：%2\n应用版本：%3\n\n脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝\n脚本作者：兰音\n仓库地址：%1",
 	horizontal_mirror: "水平镜像",
 	advanced_scale: "高级缩放",
 	loading_midi: "加载 %1 ...",
 	unsupported_fps_time_division_error: "错误：当前模式不支持帧每秒时分数据格式。",
+	low_version_error: "错误：使用 Adobe After Effects 软件版本过低，请更新。",
 };
 
 export default SChinese;

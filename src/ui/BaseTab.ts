@@ -45,9 +45,10 @@ export default abstract class BaseTab<G extends ScrollGroup | Group> {
 	
 	addCheckbox(text?: string): Checkbox {
 		const params: Partial<Checkbox> = { text, alignment: ["fill", "fill"] };
-		return this.group instanceof ScrollGroup ?
+		const check = this.group instanceof ScrollGroup ?
 			this.group.add("checkbox", params) :
 			addControl(this.group, "checkbox", params);
+		return check;
 	}
 	
 	abstract translate(): void;

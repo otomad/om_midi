@@ -11,7 +11,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2022 年 10 月 20 日 星期四 下午 16:03:52
+ * 构建日期：2022 年 10 月 20 日 星期四 晚上 20:31:26
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Thursday, October 20, 2022 4:03 PM
+ * Building Date: Thursday, October 20, 2022 8:31 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:
@@ -62,8 +62,8 @@
 var User = {
     scriptName: "om midi",
     version: "3.9.10.0",
-    githubPage: "https://github.com/otomad/om_midi",
-    githubLatest: "https://github.com/otomad/om_midi/releases/latest",
+    githubPage: unescape("%68%74%74%70%73%3a%2f%2f%67%69%74%68%75%62%2e%63%6f%6d%2f%6f%74%6f%6d%61%64%2f%6f%6d%5f%6d%69%64%69"),
+    githubLatest: unescape("%68%74%74%70%73%3a%2f%2f%67%69%74%68%75%62%2e%63%6f%6d%2f%6f%74%6f%6d%61%64%2f%6f%6d%5f%6d%69%64%69%2f%72%65%6c%65%61%73%65%73%2f%6c%61%74%65%73%74"),
 };
 // 该文件不得包含任何类型注解以便 rollup 配置识别。
 
@@ -304,10 +304,12 @@ var English = {
     end_of_track_position_error: "Error: Track ends in wrong position. Expected %1, actually %2.",
     cannot_set_time_remap_error: "Error: Time remapping cannot be set for the selected layer.",
     cannot_tuning_error: "Error: The selected layer does not contain audio so that cannot be tuned.",
-    about: "It reads a Standard MIDI sequence file and creates layers and keyframes corresponding to the notes and controllers in that MIDI sequence file.\n\nScript Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD\nScript Author: Ranne\nRepository Link: %1",
+    about: "It reads a Standard MIDI sequence file and creates layers and keyframes corresponding to the notes and controllers in that MIDI sequence file.\n\nApp: %2\nVersion: %3\n\nScript Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD\nScript Author: Ranne\nRepository Link: %1",
     horizontal_mirror: "Horizontal Mirror",
     advanced_scale: "Advanced Scale",
     loading_midi: "Loading %1 ...",
+    unsupported_fps_time_division_error: "Error: The current mode does not support frames per second time division data format.",
+    low_version_error: "Error: Using Adobe After Effects software version is too low, please update.",
 };
 
 var Japanese = {
@@ -409,10 +411,12 @@ var Japanese = {
     end_of_track_position_error: "エラー: トラックの終了位置が間違っています。期待される %1、実際には %2。",
     cannot_set_time_remap_error: "エラー: 選択したレイヤーにタイム リマップを設定できません。",
     cannot_tuning_error: "エラー: 選択したレイヤーにはオーディオが含まれていないため、調整できません。",
-    about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\n脚本原作者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、韓琦、家鼈大帝\n脚本作者：蘭音\nリポジトリ リンク：%1",
+    about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\nアプリ：%2\nバージョン：%3\n\n脚本原作者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、韓琦、家鼈大帝\n脚本作者：蘭音\nリポジトリ リンク：%1",
     horizontal_mirror: "水平方向のミラー",
     advanced_scale: "高度なスケール",
     loading_midi: "%1 を読み込んでいます...",
+    unsupported_fps_time_division_error: "エラー： 現在のモードは、FPS 時分割データフォーマットに対応していません。",
+    low_version_error: "エラー: Adobe After Effects のソフトウェアのバージョンが低すぎるため、アップデートしてください。",
 };
 
 var SChinese = {
@@ -514,11 +518,12 @@ var SChinese = {
     end_of_track_position_error: "错误：轨道结束位置有误。应为 %1，实际 %2。",
     cannot_set_time_remap_error: "错误：所选图层不能设置时间重映射。",
     cannot_tuning_error: "错误：所选图层不包含音频，不能进行调音。",
-    about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝\n脚本作者：兰音\n仓库地址：%1",
+    about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n应用程序：%2\n应用版本：%3\n\n脚本原作者：大卫·范·布林克 (omino)、Dora (NGDXW)、韩琦、家鳖大帝\n脚本作者：兰音\n仓库地址：%1",
     horizontal_mirror: "水平镜像",
     advanced_scale: "高级缩放",
     loading_midi: "加载 %1 ...",
     unsupported_fps_time_division_error: "错误：当前模式不支持帧每秒时分数据格式。",
+    low_version_error: "错误：使用 Adobe After Effects 软件版本过低，请更新。",
 };
 
 var uiStr = {};
@@ -540,8 +545,8 @@ var ScrollGroup = /** @class */ (function () {
         if (contentParams === void 0) { contentParams = {}; }
         this.scrollY = 0;
         this.parent = parent;
-        this.panel = addControl(parent, "group", { orientation: "row", alignment: ["fill", "fill"], spacing: 0 });
-        this.content = addControl(this.panel, "group", __assign({ orientation: "column", alignment: ["left", "top"], alignChildren: "fill" }, contentParams));
+        this.panel = addControl(parent, "group", { orientation: "stack", alignment: ["fill", "fill"], spacing: 0 });
+        this.content = addControl(this.panel, "group", __assign({ orientation: "column", alignment: ["fill", "top"], alignChildren: "fill" }, contentParams));
         this.children = this.content.children;
         (this.margins = contentParams.margins);
         this.scrollbar = addControl(this.panel, "scrollbar", { alignment: "right" });
@@ -551,20 +556,21 @@ var ScrollGroup = /** @class */ (function () {
         return addControl(this.content, type, params, properties);
     };
     ScrollGroup.prototype.onResize = function () {
-        var _a = this.getContentPadding(), paddingLeft = _a[0]; _a[1];
+        var _a = this.getContentPadding(), paddingLeft = _a[0], paddingTop = _a[1];
         var bounds = this.parent.bounds;
         this.panel.bounds = __assign(__assign({}, bounds), { x: 0, y: 0 });
         var hideScrollbar = false;
         var heights = this.getViewHeight();
         if (heights.viewHeight >= heights.height) {
-            this.scrollY = 0;
+            this.scrollY = paddingTop;
             hideScrollbar = true;
         }
         else if (heights.viewHeight > heights.height + this.scrollY)
             this.scrollY = heights.viewHeight - heights.height;
+        this.content.alignment = ["left", "top"];
         this.content.bounds = { x: paddingLeft, y: this.scrollY, width: bounds.width - SCROLLBAR_WIDTH * (+!hideScrollbar) - paddingLeft, height: this.getContentHeight() };
         this.scrollbar.bounds = { x: hideScrollbar ? bounds.width : bounds.width - SCROLLBAR_WIDTH, y: 0, width: SCROLLBAR_WIDTH, height: bounds.height };
-        this.scrollbar.value = this.scrollY / (-heights.y) * (this.scrollbar.maxvalue - this.scrollbar.minvalue) + this.scrollbar.minvalue;
+        this.scrollbar.value = (this.scrollY - paddingTop) / (-heights.y) * (this.scrollbar.maxvalue - this.scrollbar.minvalue) + this.scrollbar.minvalue;
     };
     ScrollGroup.prototype.getContentHeight = function () {
         var marginTop = this.content.margins[1];
@@ -579,7 +585,9 @@ var ScrollGroup = /** @class */ (function () {
         var y = this.getViewHeight().y;
         if (y <= 0)
             return;
-        this.content.location.y = this.scrollY = -y * (this.scrollbar.value - this.scrollbar.minvalue) / (this.scrollbar.maxvalue - this.scrollbar.minvalue);
+        var paddingTop = this.getContentPadding()[1];
+        var scrollPercent = (this.scrollbar.value - this.scrollbar.minvalue) / (this.scrollbar.maxvalue - this.scrollbar.minvalue);
+        this.content.location.y = this.scrollY = -y * scrollPercent + paddingTop;
     };
     ScrollGroup.prototype.getViewHeight = function () {
         var height = this.content.size.height;
@@ -612,9 +620,6 @@ var ScrollGroup = /** @class */ (function () {
     };
     return ScrollGroup;
 }());
-/* function getHeight(control: _Control) {
-    return (control.size as Dimension).height; // 已知暂时无法解决特性之一，具体详见：https://github.com/microsoft/TypeScript/issues/51229
-} */
 
 var SPACING = 2;
 var tabScrollGroupParams = {
@@ -653,9 +658,10 @@ var BaseTab = /** @class */ (function () {
     };
     BaseTab.prototype.addCheckbox = function (text) {
         var params = { text: text, alignment: ["fill", "fill"] };
-        return this.group instanceof ScrollGroup ?
+        var check = this.group instanceof ScrollGroup ?
             this.group.add("checkbox", params) :
             addControl(this.group, "checkbox", params);
+        return check;
     };
     return BaseTab;
 }());
@@ -1024,6 +1030,13 @@ var UnsupportedFpsTimeDivisionError = /** @class */ (function (_super) {
         return _super.call(this, localize(uiStr.unsupported_fps_time_division_error)) || this;
     }
     return UnsupportedFpsTimeDivisionError;
+}(MyError));
+var LowVersionError = /** @class */ (function (_super) {
+    __extends(LowVersionError, _super);
+    function LowVersionError() {
+        return _super.call(this, localize(uiStr.low_version_error)) || this;
+    }
+    return LowVersionError;
 }(MyError));
 
 var sectionName = "om_midi";
@@ -2053,6 +2066,42 @@ var FlowGroup = /** @class */ (function () {
     return FlowGroup;
 }());
 
+/**
+ * Draw some random rectangles (position, size, color, alpha) on the window background
+ */
+function addNabscriptsBackgroundSignature(window) {
+    var SOLID_COLOR = window.graphics.BrushType.SOLID_COLOR;
+    window.graphics.newBrush(SOLID_COLOR, [1, 1, 1, 1]);
+    var rand = Math.random() * 0.25;
+    var bgBrush = window.graphics.newBrush(SOLID_COLOR, [rand, rand, rand, 1]);
+    window.graphics.backgroundColor = bgBrush;
+    // window.gr.aboutPnl.graphics.backgroundColor = whiteBrush;
+    window.layout.layout(true); // to get window bounds
+    var numRect = 24;
+    var minOpacity = 0.05;
+    var maxOpacity = 0.15;
+    var rightEdge = window.windowBounds.width;
+    var bottomEdge = window.windowBounds.height;
+    for (var i = 0; i < numRect; i++) {
+        var xLoc = 10 + (rightEdge - 20) * Math.random();
+        var yLoc = 10 + (bottomEdge - 20) * Math.random();
+        var width = 5 + 15 * Math.random();
+        var height = 5 + 15 * Math.random();
+        var borderWidth = 1 + 4 * Math.random();
+        var borderColor = [Math.random(), Math.random(), Math.random(), minOpacity + (maxOpacity - minOpacity) * Math.random()];
+        var colorBrush = window.graphics.newBrush(SOLID_COLOR, borderColor);
+        var g1 = window.add("group", [xLoc, yLoc, xLoc + width, yLoc + borderWidth]);
+        var g2 = window.add("group", [xLoc, yLoc + height - borderWidth, xLoc + width, yLoc + height]);
+        var g3 = window.add("group", [xLoc, yLoc + borderWidth, xLoc + borderWidth, yLoc + height - borderWidth]);
+        var g4 = window.add("group", [xLoc + width - borderWidth, yLoc + borderWidth, xLoc + width, yLoc + height - borderWidth]);
+        g1.graphics.backgroundColor =
+            g2.graphics.backgroundColor =
+                g3.graphics.backgroundColor =
+                    g4.graphics.backgroundColor = colorBrush;
+    }
+}
+
+var appDisplayName = BridgeTalk.getDisplayName(BridgeTalk.appSpecifier);
 var SettingsDialog = /** @class */ (function () {
     //#endregion
     function SettingsDialog(portal) {
@@ -2068,7 +2117,7 @@ var SettingsDialog = /** @class */ (function () {
         this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
         this.separator = new Separator(this.group, "vertical");
         this.rightGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
-        this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage) }, { multiline: true, scrolling: true });
+        this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage, appDisplayName, BridgeTalk.appSpecifier) }, { multiline: true, scrolling: true });
         this.openGithubBtnGroup = new FlowGroup(this.leftGroup, 3, ["fill", "bottom"]);
         this.openGithubLatestBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.check_update) + DIALOG_SIGN });
         this.openGithubPageBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.repository_link) });
@@ -2077,7 +2126,7 @@ var SettingsDialog = /** @class */ (function () {
         this.importPureQuarterMidiBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.import_pure_quarter_midi) + DIALOG_SIGN });
         this.generalPanel = this.addPanel(this.rightGroup, localize(uiStr.general), [10, 10, 10, 7]);
         (_a = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"), this.languageGroup = _a.group, this.languageLbl = _a.label, this.languageCombo = _a.control);
-        addItems(this.languageCombo, localize(uiStr.app_default), "简体中文", "English", "日本語");
+        addItems(this.languageCombo, localize(uiStr.app_default) + (" (" + this.getDefaultLocale() + ")"), "简体中文", "English", "日本語");
         var selectedLanguageIndex = Setting.getLanguage();
         if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
             this.languageCombo.selection = selectedLanguageIndex;
@@ -2122,6 +2171,7 @@ var SettingsDialog = /** @class */ (function () {
         };
         this.importOmUtilsBtn.onClick = function () { return new ImportOmUtilsDialog().showDialog(); };
         this.extendScriptEngineAboutBtn.onClick = function () { return $.about(); };
+        addNabscriptsBackgroundSignature(this.window);
     }
     SettingsDialog.prototype.showDialog = function () {
         this.window.center();
@@ -2137,6 +2187,19 @@ var SettingsDialog = /** @class */ (function () {
             spacing: 2,
             margins: margins,
         });
+    };
+    SettingsDialog.prototype.getDefaultLocale = function () {
+        if (!Setting.getLanguage()) {
+            $.locale = "";
+            return $.locale;
+        }
+        else {
+            var locale = $.locale;
+            $.locale = "";
+            var result = $.locale;
+            $.locale = locale;
+            return result;
+        }
     };
     SettingsDialog.langIso = ["", "zh_CN", "en", "ja"];
     return SettingsDialog;
@@ -3192,6 +3255,8 @@ function initPrototypes() {
 
 if (BridgeTalk.appName !== "aftereffects")
     throw new NotAfterEffectsError();
+else if (parseFloat(app.version) < 9.0)
+    throw new LowVersionError();
 else {
     initPrototypes();
     Portal.build(thisObj, User);

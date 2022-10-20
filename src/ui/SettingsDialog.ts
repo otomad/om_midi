@@ -9,6 +9,9 @@ import ImportOmUtilsDialog from "./ImportOmUtilsDialog";
 import Portal from "./Portal";
 import Midi from "../midi/Midi";
 import FlowGroup from "../containers/FlowGroup";
+import addNabscriptsBackgroundSignature from "../modules/addNabscriptsBackgroundSignature";
+
+const appDisplayName = BridgeTalk.getDisplayName(BridgeTalk.appSpecifier);
 
 export default class SettingsDialog {
 	//#region 组件对象
@@ -52,7 +55,7 @@ export default class SettingsDialog {
 		this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.separator = new Separator(this.group, "vertical");
 		this.rightGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
-		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage) }, { multiline: true, scrolling: true });
+		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage, appDisplayName, BridgeTalk.appSpecifier) }, { multiline: true, scrolling: true });
 		this.openGithubBtnGroup = new FlowGroup(this.leftGroup, 3, ["fill", "bottom"]);
 		this.openGithubLatestBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.check_update) + DIALOG_SIGN });
 		this.openGithubPageBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.repository_link) });
@@ -65,7 +68,7 @@ export default class SettingsDialog {
 			label: this.languageLbl,
 			control: this.languageCombo,
 		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"));
-		addItems(this.languageCombo, localize(uiStr.app_default), "简体中文", "English", "日本語");
+		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語");
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
@@ -94,9 +97,9 @@ export default class SettingsDialog {
 			Setting.setNormalizePanTo100(this.normalizePanTo100.value);
 			Setting.setAddToEffectTransform(this.addToEffectTransform.value);
 			Setting.setLanguage(this.languageCombo.getSelectedIndex());
-			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()]
+			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()];
 			this.window.close();
-		}
+		};
 		this.openGithubPageBtn.onClick = () => openUrl(User.githubPage);
 		this.openGithubLatestBtn.onClick = () => openUrl(User.githubLatest);
 		this.importPureQuarterMidiBtn.onClick = () => {
@@ -107,9 +110,11 @@ export default class SettingsDialog {
 			this.portal.selectTrackBtn.text = "";
 			this.portal.selectTrackBtn.enabled = false;
 			this.portal.selectBpmTxt.enabled = true;
-		}
+		};
 		this.importOmUtilsBtn.onClick = () => new ImportOmUtilsDialog().showDialog();
 		this.extendScriptEngineAboutBtn.onClick = () => $.about();
+		
+		addNabscriptsBackgroundSignature(this.window);
 	}
 	
 	showDialog() {
@@ -128,5 +133,18 @@ export default class SettingsDialog {
 			spacing: 2,
 			margins,
 		});
+	}
+	
+	private getDefaultLocale() {
+		if (!Setting.getLanguage()) {
+			$.locale = "";
+			return $.locale;
+		} else {
+			const locale = $.locale;
+			$.locale = "";
+			const result = $.locale;
+			$.locale = locale;
+			return result;
+		}
 	}
 }

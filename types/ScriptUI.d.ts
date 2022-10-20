@@ -23,6 +23,14 @@ declare const enum _BrushOrPenType {
   THEME_COLOR,
 }
 
+/**
+ * Compatible with TypeScript.
+ */
+declare class _BrushOrPenTypeClass {
+  SOLID_COLOR: _BrushOrPenType
+  THEME_COLOR: _BrushOrPenType
+}
+
 type _Bounds = Bounds | [number, number, number, number]
 
 /**
@@ -465,12 +473,14 @@ declare class ScriptUIGraphics {
    * Type constants are: SOLID_COLOR, THEME_COLOR.
    */
   static readonly BrushType: _BrushOrPenType
+  readonly BrushType: _BrushOrPenTypeClass
 
   /**
    * Contains the enumerated constants for the type argument of newPen().
    * Type constants are: SOLID_COLOR, THEME_COLOR.
    */
   static readonly PenType: _BrushOrPenType
+  readonly PenType: _BrushOrPenTypeClass
 
   /**
    * The background color for containers; for non-containers, the parent background color.
@@ -2635,7 +2645,7 @@ declare class _Control {
   /**
    * The bounds of this element relative to the top-level parent window.
    */
-  readonly windowBounds: _Bounds
+  readonly windowBounds: Bounds// _Bounds
 
   /**
    * Registers an event handler for a particular type of event occurring in this element.

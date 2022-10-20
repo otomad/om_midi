@@ -13,8 +13,8 @@ export default class ScrollGroup {
 	
 	constructor(parent: ContainerType, contentParams: Partial<Group> = {}) {
 		this.parent = parent;
-		this.panel = addControl(parent, "group", { orientation: "row", alignment: ["fill", "fill"], spacing: 0 });
-		this.content = addControl(this.panel, "group", { orientation: "column", alignment: ["left", "top"], alignChildren: "fill", ...contentParams });
+		this.panel = addControl(parent, "group", { orientation: "stack", alignment: ["fill", "fill"], spacing: 0 });
+		this.content = addControl(this.panel, "group", { orientation: "column", alignment: ["fill", "top"], alignChildren: "fill", ...contentParams });
 		this.children = this.content.children;
 		({ margins: this.margins } = contentParams);
 		this.scrollbar = addControl(this.panel, "scrollbar", { alignment: "right" });
@@ -32,13 +32,14 @@ export default class ScrollGroup {
 		let hideScrollbar = false;
 		const heights = this.getViewHeight();
 		if (heights.viewHeight >= heights.height) {
-			this.scrollY = 0;
+			this.scrollY = paddingTop;
 			hideScrollbar = true;
 		} else if (heights.viewHeight > heights.height + this.scrollY)
 			this.scrollY = heights.viewHeight - heights.height;
+		this.content.alignment = ["left", "top"];
 		this.content.bounds = { x: paddingLeft, y: this.scrollY, width: bounds.width - SCROLLBAR_WIDTH * (+!hideScrollbar) - paddingLeft, height: this.getContentHeight() };
 		this.scrollbar.bounds = { x: hideScrollbar ? bounds.width : bounds.width - SCROLLBAR_WIDTH, y: 0, width: SCROLLBAR_WIDTH, height: bounds.height };
-		this.scrollbar.value = this.scrollY / (-heights.y) * (this.scrollbar.maxvalue - this.scrollbar.minvalue) + this.scrollbar.minvalue;
+		this.scrollbar.value = (this.scrollY - paddingTop) / (-heights.y) * (this.scrollbar.maxvalue - this.scrollbar.minvalue) + this.scrollbar.minvalue;
 	}
 	
 	getContentHeight() {
@@ -52,7 +53,9 @@ export default class ScrollGroup {
 	protected onScroll() {
 		const { y } = this.getViewHeight();
 		if (y <= 0) return;
-		this.content.location.y = this.scrollY = -y * (this.scrollbar.value - this.scrollbar.minvalue) / (this.scrollbar.maxvalue - this.scrollbar.minvalue);
+		const paddingTop = this.getContentPadding()[1];
+		const scrollPercent = (this.scrollbar.value - this.scrollbar.minvalue) / (this.scrollbar.maxvalue - this.scrollbar.minvalue);
+		this.content.location.y = this.scrollY = -y * scrollPercent + paddingTop;
 	}
 	
 	private getViewHeight() {
@@ -86,7 +89,3 @@ export default class ScrollGroup {
 		else return [0, 0];
 	}
 }
-
-/* function getHeight(control: _Control) {
-	return (control.size as Dimension).height; // 已知暂时无法解决特性之一，具体详见：https://github.com/microsoft/TypeScript/issues/51229
-} */

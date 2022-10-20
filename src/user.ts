@@ -1,8 +1,8 @@
 const User = {
 	scriptName: "om midi",
 	version: "3.9.10.0",
-	githubPage: "https://github.com/otomad/om_midi",
-	githubLatest: "https://github.com/otomad/om_midi/releases/latest",
+	githubPage: unescape("%68%74%74%70%73%3a%2f%2f%67%69%74%68%75%62%2e%63%6f%6d%2f%6f%74%6f%6d%61%64%2f%6f%6d%5f%6d%69%64%69"),
+	githubLatest: unescape("%68%74%74%70%73%3a%2f%2f%67%69%74%68%75%62%2e%63%6f%6d%2f%6f%74%6f%6d%61%64%2f%6f%6d%5f%6d%69%64%69%2f%72%65%6c%65%61%73%65%73%2f%6c%61%74%65%73%74"),
 };
 
 export default User;

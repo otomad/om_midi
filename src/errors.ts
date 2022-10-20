@@ -121,3 +121,9 @@ export class UnsupportedFpsTimeDivisionError extends MyError {
 		super(localize(uiStr.unsupported_fps_time_division_error));
 	}
 }
+
+export class LowVersionError extends MyError {
+	constructor() {
+		super(localize(uiStr.low_version_error));
+	}
+}
