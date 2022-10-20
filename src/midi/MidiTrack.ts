@@ -37,7 +37,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 		const midi = this.midi(), bpm = this.bpm();
 		midi.bpm ??= bpm;
 		midi.tempoTrack ??= this;
-		if (midi.bpm !== bpm) midi.isDynamicBpm = true;
+		if (this.tempo !== value) midi.isDynamicBpm = true;
 	}
 
 	bpm() {

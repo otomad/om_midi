@@ -2,7 +2,7 @@ import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError,
 import Portal from "../ui/Portal";
 import getComp from "../modules/getComp";
 import Setting from "../settings/Setting";
-import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, PitchBendEvent } from "../midi/note-events";
+import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NoteOnSecondEvent, PitchBendEvent } from "../midi/note-events";
 import { ControllerType, RegularEventType } from "../midi/midi-types";
 import MidiTrack from "../midi/MidiTrack";
 import ProgressPalette from "../ui/ProgressPalette";
@@ -70,6 +70,7 @@ export default class Core {
 		
 		const secondsPerTick = this.getSecondsPerTick();
 		const startTime = this.getStartTime(comp);
+		const integrator = this.getIntegrator();
 		
 		for (const track of this.portal.selectedTracks) {
 			if (track === undefined && !this.portal.midi.isPureQuarter) continue;
@@ -93,7 +94,9 @@ export default class Core {
 			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 				if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
 					return; // 跳过同一时间点上的音符。
-				const seconds = noteEvent.startTick * secondsPerTick;
+				const noteSecondEvent = integrator ? integrator.getSecond(noteEvent) as NoteOnSecondEvent : undefined;
+				const seconds = noteSecondEvent ? noteSecondEvent.startSecond :
+					noteEvent.startTick * secondsPerTick;
 				if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
@@ -113,8 +116,13 @@ export default class Core {
 					setValueAtTime(nullTab.timeRemap, seconds, 0, KeyframeInterpolationType.LINEAR);
 					setValueAtTime(nullTab.pingpong, seconds, +!(noteOnCount % 2), KeyframeInterpolationType.LINEAR);
 					if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
-						const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
-						const noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL;
+						let noteOffSeconds: number;
+						if (!noteSecondEvent) {
+							const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
+							noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL;
+						} else
+							noteOffSeconds = noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.duration!
+								- MIN_INTERVAL;
 						setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 						setValueAtTime(nullTab.pingpong, noteOffSeconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
@@ -217,6 +225,7 @@ export default class Core {
 			startTime = layer.inPoint;
 		else if (!isTunningOnly)
 			layer.startTime = getLayerStartTime();
+		const integrator = this.getIntegrator();
 
 		//#region 设置
 		const layering = Setting.getUsingLayering();
@@ -297,13 +306,20 @@ export default class Core {
 		const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 			if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
 				return; // 跳过同一时间点上的音符。
-			const seconds = noteEvent.startTick * secondsPerTick + startTime;
+			const noteSecondEvent = integrator ? integrator.getSecond(noteEvent) as NoteOnSecondEvent : undefined;
+			const seconds = (noteSecondEvent ? noteSecondEvent.startSecond :
+				noteEvent.startTick * secondsPerTick) + startTime;
 			if (noteEvent instanceof NoteOnEvent) {
 				if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 					+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 				const hasDuration = noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined;
-				const duration = noteEvent.interruptDuration ?? noteEvent.duration ?? 0;
-				const noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+				let noteOffSeconds: number;
+				if (!noteSecondEvent) {
+					const duration = noteEvent.interruptDuration ?? noteEvent.duration ?? 0;
+					noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
+				} else
+					noteOffSeconds = (noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.durationSecond ?? 0)
+						- MIN_INTERVAL + startTime;
 				if (effectsTab.hFlip.value) {
 					const addKey = (seconds: number) => !addToGeometry2 ? layer.scale.addKey(seconds) :
 						(geometry2.scaleHeight().addKey(seconds), geometry2.scaleWidth().addKey(seconds));
@@ -639,5 +655,10 @@ export default class Core {
 		const property = effects.addProperty(GEOMETRY2_MATCH_NAME) as PropertyGroup;
 		property.name = TRANSFORM_NAME;
 		return property;
+	}
+	
+	private getIntegrator() {
+		const midi = this.portal.midi;
+		return midi && midi.isDynamicBpm && midi.integrator && this.portal.isUseDynamicBpm() ? midi.integrator : undefined;
 	}
 }

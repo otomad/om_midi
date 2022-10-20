@@ -104,12 +104,14 @@ export default class SettingsDialog {
 		this.openGithubLatestBtn.onClick = () => openUrl(User.githubLatest);
 		this.importPureQuarterMidiBtn.onClick = () => {
 			if (!confirm(localize(uiStr.sure_to_import_pure_quarter_midi), true, localize(uiStr.import_pure_quarter_midi))) return;
-			this.portal.midi = new Midi(true);
+			const midi = new Midi(true);
+			this.portal.midi = midi;
 			this.portal.selectedTracks = [undefined];
 			this.portal.selectMidiName.text = localize(uiStr.pure_quarter_midi);
 			this.portal.selectTrackBtn.text = "";
 			this.portal.selectTrackBtn.enabled = false;
 			this.portal.selectBpmTxt.enabled = true;
+			this.portal.updateDefaultBpm(midi);
 		};
 		this.importOmUtilsBtn.onClick = () => new ImportOmUtilsDialog().showDialog();
 		this.extendScriptEngineAboutBtn.onClick = () => $.about();

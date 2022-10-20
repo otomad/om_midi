@@ -37,7 +37,8 @@ export default abstract class BaseTab<G extends ScrollGroup | Group> {
 	 */
 	getCheckedChecks(): Checkbox[] {
 		const checks: Checkbox[] = [];
-		for (const check of this.group.children)
+		const children = this.group instanceof Group ? this.group.children : this.group.content.children;
+		for (const check of children)
 			if (check instanceof Checkbox && check.value)
 				checks.push(check);
 		return checks;

@@ -8,7 +8,7 @@ import User from "./src/user.ts";
 import path from "path";
 import selfExecute from "./custom_modules/rollup-plugin-self-execute";
 
-const enableTerser = false;
+const enableTerser = true;
 
 export default [{
 	input: "src/index.ts",

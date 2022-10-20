@@ -199,11 +199,12 @@ export class NoteOnSecondEvent extends NoteOnEvent {
 	}
 }
 
-export class NoteOffSecondEvent extends NoteOffEvent {
+export class NoteSecondEvent extends NoteEvent {
 	startSecond: number;
 
-	constructor(raw: NoteOffEvent, startSecond: number) {
-		super(raw.channel, raw.values);
+	constructor(raw: NoteEvent, startSecond: number) {
+		super();
+		assign(this, raw);
 		this.startSecond = startSecond;
 	}
 }

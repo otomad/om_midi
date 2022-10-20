@@ -4,7 +4,7 @@ export enum NumberType {
 	DECIMAL,
 }
 
-export default function setNumberEditText(editText: EditText, type: NumberType, defaultValue: number): void {
+export default function setNumberEditText(editText: EditText, type: NumberType, defaultValue: number | string): void {
 	editText.onChange = () => {
 		let text = editText.text;
 		// TODO: 这部分将会被修改为三元运算符。

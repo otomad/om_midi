@@ -94,7 +94,6 @@ export default class Portal {
 		this.translate();
 		
 		this.core = new Core(this);
-		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, 120);
 		this.selectMidiBtn.onClick = () => {
 			const file = File.openDialog(localize(uiStr.select_a_midi_file),
 				`${localize(uiStr.midi_files)}:*.mid;*.midi,${localize(uiStr.all_files)}:*.*`);
@@ -102,8 +101,8 @@ export default class Portal {
 			let midi: Midi | undefined;
 			try {
 				midi = new Midi(file);
-				if (midi.bpm) this.selectBpmTxt.text = String(midi.bpm);
 				if (midi.tracks.length === 0) throw new MidiNoTrackError();
+				this.updateDefaultBpm(midi);
 				this.selectMidiName.text = file.displayName;
 				const firstTrack = midi.tracks[midi.preferredTrackIndex];
 				this.selectedTracks = [firstTrack];
@@ -196,5 +195,25 @@ export default class Portal {
 		const baseTabs: BaseTab<ScrollGroup>[] = [this.nullObjTab, this.applyEffectsTab];
 		for (const tab of baseTabs)
 			tab.group.onResize();
+	}
+	
+	private displayBpmForNoBpm() {
+		let bpm: number;
+		try {
+			bpm = parseFloat(this.selectBpmTxt.text);
+		} catch (error) {
+			bpm = 120;
+		}
+		return String(bpm);
+	}
+	
+	updateDefaultBpm(midi: Midi) {
+		const bpm = midi.bpm ? midi.displayBpm() : this.displayBpmForNoBpm();
+		this.selectBpmTxt.text = bpm;
+		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, bpm);
+	}
+	
+	isUseDynamicBpm() {
+		return this.selectBpmTxt.text.indexOf("~") !== -1;
 	}
 }

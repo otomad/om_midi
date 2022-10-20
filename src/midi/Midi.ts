@@ -110,4 +110,12 @@ export default class Midi {
 	 * 判断时分数据是否为标准的基本时间每拍格式。
 	 */
 	isTpbTimeDivision() { return typeof this.timeDivision === "number"; }
+	
+	displayBpm(): string {
+		const DEFAULT_BPM = 120;
+		if (!this.bpm) return String(DEFAULT_BPM);
+		let result = String(this.bpm);
+		if (this.isDynamicBpm) result += "~";
+		return result;
+	}
 }
