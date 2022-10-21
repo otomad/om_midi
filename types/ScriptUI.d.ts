@@ -26,9 +26,8 @@ declare const enum _BrushOrPenType {
 /**
  * Compatible with TypeScript.
  */
-declare class _BrushOrPenTypeClass {
-  SOLID_COLOR: _BrushOrPenType
-  THEME_COLOR: _BrushOrPenType
+type _BrushOrPenTypeClass = {
+  [member in Exclude<keyof typeof _BrushOrPenType, number>]: _BrushOrPenType;
 }
 
 type _Bounds = Bounds | [number, number, number, number]

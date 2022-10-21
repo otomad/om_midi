@@ -11,4 +11,16 @@
 	"exclude": [
 		"node_modules",
 	],
+	"baseUrl": "./",
+	"paths": {
+		"@src": [
+			"./src/*"
+		],
+		"@custom_modules": [
+			"./custom_modules/*"
+		],
+		"@types": [
+			"./types/*"
+		],
+	}
 }
