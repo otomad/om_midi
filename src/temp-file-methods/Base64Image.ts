@@ -38,8 +38,8 @@ export default class Base64Image extends TempFile {
 
 			b = (i0 << 18) + (i1 << 12) + ((i2 & 63) << 6) + (i3 & 63);
 			b0 = (b & (255 << 16)) >> 16;
-			b1 = (i2 == 64) ? -1 : (b & (255 << 8)) >> 8;
-			b2 = (i3 == 64) ? -1 : (b & 255);
+			b1 = (i2 === 64) ? -1 : (b & (255 << 8)) >> 8;
+			b2 = (i3 === 64) ? -1 : (b & 255);
 			a[a.length] = String.fromCharCode(b0);
 			if (0 <= b1) a[a.length] = String.fromCharCode(b1);
 			if (0 <= b2) a[a.length] = String.fromCharCode(b2);

@@ -1,5 +1,5 @@
 import { FileUnreadableError } from "../errors";
-import uiStr from "../languages/ui-str";
+import uiStr, { DYNAMIC_BPM_SIGN } from "../languages/ui-str";
 import convertTextEncoding from "../temp-file-methods/convertTextEncoding";
 import DynamicBpmIntegrator from "./DynamicBpmIntegrator";
 import { MidiFormatType } from "./midi-types";
@@ -101,7 +101,7 @@ export default class Midi {
 		for (let i = 0; i < tracks.length && i < trackNames.length; i++) {
 			const track = tracks[i];
 			let name: string | undefined = trackNames[i].trim();
-			if (name == "") name = undefined;
+			if (name === "") name = undefined;
 			track.name = name;
 		}
 	}
@@ -115,7 +115,7 @@ export default class Midi {
 		const DEFAULT_BPM = 120;
 		if (!this.bpm) return String(DEFAULT_BPM);
 		let result = String(this.bpm);
-		if (this.isDynamicBpm) result += "~";
+		if (this.isDynamicBpm) result += DYNAMIC_BPM_SIGN;
 		return result;
 	}
 }

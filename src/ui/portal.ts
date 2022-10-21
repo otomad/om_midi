@@ -9,7 +9,7 @@ import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "./ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
-import uiStr from "../languages/ui-str";
+import uiStr, { DYNAMIC_BPM_SIGN } from "../languages/ui-str";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
@@ -214,6 +214,6 @@ export default class Portal {
 	}
 	
 	isUseDynamicBpm() {
-		return this.selectBpmTxt.text.indexOf("~") !== -1;
+		return this.selectBpmTxt.text.indexOf(DYNAMIC_BPM_SIGN) !== -1;
 	}
 }

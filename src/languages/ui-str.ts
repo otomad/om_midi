@@ -26,4 +26,6 @@ for (const key in SChinese) {
 
 export const DIALOG_SIGN = "...";
 
+export const DYNAMIC_BPM_SIGN = "~";
+
 export default uiStr;

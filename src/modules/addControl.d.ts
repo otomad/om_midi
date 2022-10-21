@@ -1,7 +1,5 @@
 // 此声明文件用于扩展内置对象使其使用更加方便。
 
-/// <reference path="@types/ScriptUI.d.ts" />
-
 type ControlTypeName = keyof ControlTypes;
 
 type ContainerType = Window | Panel | Group | TabbedPanel | Tab;

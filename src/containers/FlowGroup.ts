@@ -1,4 +1,4 @@
-import addControl, { ContainerType, ControlTypeName, ParamsType, PropertiesType } from "../modules/addControl";
+import addControl from "../modules/addControl";
 
 export default class FlowGroup {
 	readonly parent: ContainerType;

@@ -15,7 +15,7 @@ export default function setNumberEditText(editText: EditText, type: NumberType, 
 		if (matches) {
 			text = matches[0].replace(/^0+(?!\.)/g, "");
 			text ||= "0";
-			const num = type == NumberType.POSITIVE_INT ? parseInt(text, 10) : parseFloat(text);
+			const num = type === NumberType.POSITIVE_INT ? parseInt(text, 10) : parseFloat(text);
 			text = String((type !== NumberType.DECIMAL && num <= 0 || isNaN(num)) ? defaultValue : num);
 		} else text = String(defaultValue);
 		editText.text = text;

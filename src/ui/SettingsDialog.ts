@@ -1,5 +1,5 @@
 import Separator from "../components/Separator";
-import addControl, { addGroup, addItems, ContainerType } from "../modules/addControl";
+import addControl, { addGroup, addItems } from "../modules/addControl";
 import Setting from "../settings/Setting";
 import uiStr, { DIALOG_SIGN } from "../languages/ui-str";
 import { CannotFindWindowError } from "../errors";
