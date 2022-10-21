@@ -10,6 +10,7 @@ export default class ScrollGroup {
 	private scrollY: number = 0;
 	readonly children: _Control[];
 	private readonly margins;
+	private resizeTimes = 0;
 	
 	constructor(parent: ContainerType, contentParams: Partial<Group> = {}) {
 		this.parent = parent;
@@ -36,10 +37,12 @@ export default class ScrollGroup {
 			hideScrollbar = true;
 		} else if (heights.viewHeight > heights.height + this.scrollY)
 			this.scrollY = heights.viewHeight - heights.height;
-		this.content.alignment = ["left", "top"];
+		if (this.resizeTimes > 2) // 暂时解决以面板形式打开后的文字显示异常。
+			this.content.alignment = ["left", "top"];
 		this.content.bounds = { x: paddingLeft, y: this.scrollY, width: bounds.width - SCROLLBAR_WIDTH * (+!hideScrollbar) - paddingLeft, height: this.getContentHeight() };
 		this.scrollbar.bounds = { x: hideScrollbar ? bounds.width : bounds.width - SCROLLBAR_WIDTH, y: 0, width: SCROLLBAR_WIDTH, height: bounds.height };
 		this.scrollbar.value = (this.scrollY - paddingTop) / (-heights.y) * (this.scrollbar.maxvalue - this.scrollbar.minvalue) + this.scrollbar.minvalue;
+		this.resizeTimes++;
 	}
 	
 	getContentHeight() {
