@@ -1,0 +1,167 @@
+:root {
+	--foreground-color: #8a8a8a;
+	--ease-out: cubic-bezier(0, 0, 0, 1);
+}
+
+* {
+	font-size: 0.5rem;
+	color: var(--foreground-color);
+	transition: all var(--ease-out) 250ms, color var(--ease-out) 100ms, fill var(--ease-out) 100ms !important;
+	font-family: "Segoe UI", "Microsoft Yahei UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	user-select: none;
+}
+
+*:focus {
+	outline: none !important;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	background-color: #232323;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100vh;
+	overflow: hidden;
+}
+
+button {
+	appearance: none;
+	background-color: transparent;
+	border: var(--foreground-color) 2px solid;
+	border-radius: 99999999rem;
+}
+
+button:hover {
+	background-color: var(--foreground-color);
+}
+
+button:hover,
+button:hover * {
+	color: black;
+}
+
+button:active {
+	--foreground-color: #636363;
+	background-color: var(--foreground-color);
+	border-color: var(--foreground-color);
+}
+
+button:focus:not(:hover):not(:active),
+button:active:not(:hover) {
+	--foreground-color: #2d8ceb;
+	background-color: var(--foreground-color);
+	border-color: var(--foreground-color);
+}
+
+button:focus:not(:hover):not(:active),
+button:active:not(:hover),
+button:focus:not(:hover):not(:active) *,
+button:active:not(:hover) * {
+	color: white;
+}
+
+.midi-table {
+	border-bottom: #2a2a2a 1px solid;
+}
+
+.midi-table > section {
+	padding: 0.25rem 1rem;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.midi-table > section:first-child {
+	padding-top: 1rem;
+}
+
+.midi-table > section:last-child {
+	padding-bottom: 0.5rem;
+}
+
+.midi-table > section > label {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	padding-right: 1rem;
+	cursor: pointer;
+}
+
+.midi-table > section > *:last-child {
+	display: block;
+	width: 100%;
+	text-align: right;
+}
+
+.midi-table > section > input {
+	border: none;
+	background-color: transparent;
+}
+
+.midi-table > section::after {
+	content: "";
+	display: block;
+	width: 0.75rem;
+	height: 0.75rem;
+	border: #8a8a8a solid;
+	border-width: 0 1px 1px 0;
+	transform: rotate(-45deg);
+	flex-shrink: 0;
+	margin-left: 0.75rem;
+}
+
+.midi-table > section:not(.option)::after {
+	opacity: 0;
+}
+
+.midi-table > section:hover {
+	background-color: #8a8a8a3a;
+}
+
+footer {
+	display: flex;
+	justify-content: space-between;
+	height: 4rem;
+	border-top: #2a2a2a 1px solid;
+}
+
+footer button {
+	border: none;
+	border-radius: 0;
+	padding: 0 2rem;
+}
+
+#apply-btn {
+	width: 100%;
+	text-align: left;
+	display: flex;
+	align-items: center;
+}
+
+#midi-bpm-section {
+	cursor: text;
+}
+
+#apply-btn i {
+	margin-right: 0.5rem;
+}
+
+.midi-table i {
+	font-size: 1rem;
+	margin-right: 0.75rem;
+}
+
+header,
+footer {
+	box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
+	background-color: #3333;
+}
