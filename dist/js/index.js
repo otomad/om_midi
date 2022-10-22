@@ -12,6 +12,33 @@
         }
     }
 
+    /*!
+     * Copyright (c) 2017 Jed Watson.
+     * Licensed under the MIT License (MIT), see
+     * http://jedwatson.github.io/classnames
+     */
+    const camelToHyphenCase = (str) => str.replace(/([A-Z])/g, "-$1").toLowerCase();
+    function classNames(...args) {
+        const classes = [], push = (name) => classes.push(classNames.toHyphenCase ? camelToHyphenCase(name) : name);
+        for (const arg of args) {
+            if (!arg)
+                continue;
+            if (typeof arg === "string" || typeof arg === "number")
+                push(String(arg));
+            else if (Array.isArray(arg) && arg.length) {
+                const inner = classNames(...arg);
+                if (inner)
+                    push(inner);
+            }
+            else if (typeof arg === "object")
+                for (const [key, value] of Object.entries(arg))
+                    if (value)
+                        push(key);
+        }
+        return classes.join(" ");
+    }
+    classNames.toHyphenCase = false;
+
     class MidiConfigurator extends React.Component {
         bpmTextRef;
         bpmShadowRef;
@@ -26,7 +53,6 @@
         handleChange = (event) => {
             this.setState({
                 bpmText: event.target.value,
-                // bpmTextWidth: this.bpmShadowRef.current?.getClientRects()[0].width,
             });
         };
         focusBpmText = (isFocus = true) => {
@@ -39,26 +65,26 @@
                 input.blur();
         };
         render() {
+            const Section = (props) => (React.createElement("section", { className: classNames([props.className, "ripple-button"]), tabIndex: props.focusable ? 0 : -1 }, props.children));
             return (React.createElement("header", null,
                 React.createElement("div", { className: "midi-table" },
-                    React.createElement("section", { className: "option ripple-button", id: "browse-midi" },
+                    React.createElement(Section, { className: "option", id: "browse-midi", focusable: true },
                         React.createElement("label", null,
                             React.createElement("i", null, "file_open"),
                             "MIDI \u6587\u4EF6"),
                         React.createElement("span", { id: "midi-name" }, "\u672A\u9009\u62E9 MIDI \u6587\u4EF6")),
-                    React.createElement("section", { className: "option ripple-button" },
+                    React.createElement(Section, { className: "option", focusable: true },
                         React.createElement("label", null,
                             React.createElement("i", null, "audiotrack"),
                             "\u9009\u62E9\u8F68\u9053"),
                         React.createElement("span", null)),
-                    React.createElement("section", { className: "ripple-button", id: "midi-bpm-section", onClick: () => this.focusBpmText(true) },
+                    React.createElement(Section, { id: "midi-bpm-section", onClick: () => this.focusBpmText(true) },
                         React.createElement("label", { htmlFor: "midi-bpm-text" },
                             React.createElement("i", null, "speed"),
                             "\u8BBE\u5B9A BPM"),
-                        React.createElement("span", { className: "midi-bpm-shadow", ref: this.bpmShadowRef },
-                            this.state.bpmText,
-                            React.createElement("input", { type: "text", id: "midi-bpm-text", value: this.state.bpmText, onChange: this.handleChange, ref: this.bpmTextRef }))),
-                    React.createElement("section", { className: "option ripple-button" },
+                        React.createElement("input", { type: "text", id: "midi-bpm-text", value: this.state.bpmText, onChange: this.handleChange, ref: this.bpmTextRef }),
+                        React.createElement("span", { className: "midi-bpm-shadow", ref: this.bpmShadowRef }, this.state.bpmText)),
+                    React.createElement(Section, { className: "option", focusable: true },
                         React.createElement("label", null,
                             React.createElement("i", null, "start"),
                             "\u5F00\u59CB\u65F6\u95F4"),

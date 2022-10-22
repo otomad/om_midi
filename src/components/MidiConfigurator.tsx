@@ -1,10 +1,9 @@
-import React from "react";
+import React, { HTMLProps } from "react";
 import "./MidiConfigurator.scss";
 import classNames from "../modules/classNames";
 
 type State = {
 	bpmText: string | number;
-	// bpmTextWidth?: number;
 }
 
 export default class MidiConfigurator extends React.Component<{}, State> {
@@ -23,7 +22,6 @@ export default class MidiConfigurator extends React.Component<{}, State> {
 	handleChange = (event: { target: { value: string; }; }) => {
 		this.setState({
 			bpmText: event.target.value,
-			// bpmTextWidth: this.bpmShadowRef.current?.getClientRects()[0].width,
 		});
 	};
 	
@@ -35,33 +33,39 @@ export default class MidiConfigurator extends React.Component<{}, State> {
 	};
 	
 	render() {
+		const Section = (props: HTMLProps<HTMLElement> & {
+			focusable?: boolean
+		}) => (
+			<section className={classNames([props.className, "ripple-button"])} tabIndex={props.focusable ? 0 : -1}>
+				{props.children}
+			</section>
+		);
+		
 		return (
 			<header>
 				<div className="midi-table">
-					<section className="option ripple-button" id="browse-midi">
+					<Section className="option" id="browse-midi" focusable>
 						<label><i>file_open</i>MIDI 文件</label>
 						<span id="midi-name">未选择 MIDI 文件</span>
-					</section>
-					<section className="option ripple-button">
+					</Section>
+					<Section className="option" focusable>
 						<label><i>audiotrack</i>选择轨道</label>
 						<span></span>
-					</section>
-					<section className="ripple-button" id="midi-bpm-section" onClick={() => this.focusBpmText(true)}>
+					</Section>
+					<Section id="midi-bpm-section" onClick={() => this.focusBpmText(true)}>
 						<label htmlFor="midi-bpm-text"><i>speed</i>设定 BPM</label>
-						<span className="midi-bpm-shadow" ref={this.bpmShadowRef}>
-							{this.state.bpmText}
-							<input
-								type="text"
-								id="midi-bpm-text"
-								value={this.state.bpmText}
-								onChange={this.handleChange}
-								ref={this.bpmTextRef} />
-						</span>
-					</section>
-					<section className="option ripple-button">
+						<input
+							type="text"
+							id="midi-bpm-text"
+							value={this.state.bpmText}
+							onChange={this.handleChange}
+							ref={this.bpmTextRef} />
+						<span className="midi-bpm-shadow" ref={this.bpmShadowRef}>{this.state.bpmText}</span>
+					</Section>
+					<Section className="option" focusable>
 						<label><i>start</i>开始时间</label>
 						<span>显示开始时间</span>
-					</section>
+					</Section>
 				</div>
 			</header>
 		);

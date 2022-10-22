@@ -8,7 +8,8 @@
 
 const camelToHyphenCase = (str: string) => str.replace(/([A-Z])/g, "-$1").toLowerCase();
 
-type ClassNamesArgsType = string | number | string[] | { [className: string]: boolean };
+type ClassNamesArgType = string | number | undefined | null;
+type ClassNamesArgsType = ClassNamesArgType | ClassNamesArgType[] | { [className: string]: boolean };
 
 export default function classNames(...args: ClassNamesArgsType[]) {
 	const classes: string[] = [],

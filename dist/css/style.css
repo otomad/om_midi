@@ -49,6 +49,7 @@ body {
   justify-content: space-between;
   height: 100vh;
   overflow: hidden;
+  transition: none !important;
 }
 
 #root {
@@ -75,7 +76,8 @@ body {
   padding-right: 1rem;
   cursor: pointer;
 }
-.midi-table > section > :last-child {
+.midi-table > section > :last-child:not(.midi-bpm-shadow),
+.midi-table > section > #midi-bpm-text {
   display: block;
   width: 100%;
   text-align: right;
@@ -84,21 +86,15 @@ body {
   border: none;
   background-color: transparent;
   padding: 0;
-  transition: none;
-  position: absolute;
-  right: 0;
-  width: 100%;
-  min-width: 5rem;
-  text-align: right;
 }
 .midi-table > section#midi-bpm-section {
   cursor: text;
 }
 .midi-table > section .midi-bpm-shadow {
-  position: absolute;
+  position: absolute !important;
   right: 2.5rem;
+  pointer-events: none;
   color: transparent !important;
-  width: auto;
 }
 .midi-table > section .midi-bpm-shadow::after {
   content: "";
@@ -137,6 +133,18 @@ body {
 }
 .midi-table > section:hover::after {
   border-color: black;
+}
+.midi-table > section:focus:not(:hover):not(:active), .midi-table > section:active:not(:hover) {
+  --foreground-color: #2d8ceb;
+  background-color: var(--foreground-color);
+}
+.midi-table > section:focus:not(:hover):not(:active),
+.midi-table > section:focus:not(:hover):not(:active) *, .midi-table > section:active:not(:hover),
+.midi-table > section:active:not(:hover) * {
+  color: white;
+}
+.midi-table > section:focus:not(:hover):not(:active)::after, .midi-table > section:active:not(:hover)::after {
+  border-color: white;
 }
 .midi-table i {
   font-size: 1rem;

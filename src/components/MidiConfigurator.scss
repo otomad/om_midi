@@ -23,7 +23,8 @@
 			cursor: pointer;
 		}
 
-		> :last-child {
+		> :last-child:not(.midi-bpm-shadow),
+		> #midi-bpm-text {
 			display: block;
 			width: 100%;
 			text-align: right;
@@ -33,12 +34,6 @@
 			border: none;
 			background-color: transparent;
 			padding: 0;
-			transition: none;
-			position: absolute;
-			right: 0;
-			width: 100%;
-			min-width: 5rem;
-			text-align: right;
 		}
 		
 		&#midi-bpm-section {
@@ -46,10 +41,10 @@
 		}
 
 		.midi-bpm-shadow {
-			position: absolute;
+			position: absolute !important;
 			right: 2.5rem;
+			pointer-events: none;
 			color: transparent !important;
-			width: auto;
 			
 			&::after {
 				content: "";
@@ -95,6 +90,21 @@
 
 			&::after {
 				border-color: black;
+			}
+		}
+		
+		&:focus:not(:hover):not(:active),
+		&:active:not(:hover) {
+			--foreground-color: #2d8ceb;
+			background-color: var(--foreground-color);
+			
+			&,
+			* {
+				color: white;
+			}
+			
+			&::after {
+				border-color: white;
 			}
 		}
 	}

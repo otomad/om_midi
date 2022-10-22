@@ -25,10 +25,7 @@ button {
 		--foreground-color: #2d8ceb;
 		background-color: var(--foreground-color);
 		border-color: var(--foreground-color);
-	}
-
-	&:focus:not(:hover):not(:active),
-	&:active:not(:hover) {
+		
 		&,
 		* {
 			color: white;
