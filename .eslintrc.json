@@ -45,6 +45,7 @@
 		"@typescript-eslint/triple-slash-reference": "off",
 		"@typescript-eslint/ban-ts-comment": "off",
 		"eqeqeq": "error",
-		"@typescript-eslint/ban-types": "off"
+		"@typescript-eslint/ban-types": "off",
+		"@typescript-eslint/no-namespace": "off"
 	}
 }

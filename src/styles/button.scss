@@ -1,10 +1,15 @@
+$ellipse-radius: 99999999rem;
+
 button {
 	appearance: none;
 	background-color: transparent;
 	border: var(--foreground-color) 2px solid;
-	border-radius: 99999999rem;
+	border-radius: $ellipse-radius;
 	cursor: pointer;
-	
+}
+
+button,
+.button-like {
 	&:hover {
 		background-color: var(--foreground-color);
 		
@@ -14,18 +19,20 @@ button {
 		}
 	}
 
-	/* &:active {
-		--foreground-color: #636363;
-		background-color: var(--foreground-color);
-		border-color: var(--foreground-color);
-	} */
-
-	&:focus:not(:hover):not(:active),
+	&:focus.focus-always:not(:hover):not(:active),
+	&:focus-visible:not(:hover):not(:active),
 	&:active:not(:hover) {
 		--foreground-color: #2d8ceb;
 		background-color: var(--foreground-color);
 		border-color: var(--foreground-color);
 		
+		&,
+		* {
+			color: white;
+		}
+	}
+	
+	&.primary:not(:hover) {
 		&,
 		* {
 			color: white;

@@ -1,8 +1,13 @@
 import "./ripple.scss";
 
+function findLast<T>(array: T[], predicate: (value: T, index: number, array: T[]) => boolean): T | undefined {
+	const results = array.filter(predicate);
+	return results[results.length - 1];
+}
+
 export default function ripple(bindClass = "ripple-button") {
 	function findClass(e: MouseEvent, listener: (element: HTMLElement) => void) {
-		const element = e.path.filter(e => "classList" in e ? e.classList.contains(bindClass) : undefined).at(-1);
+		const element = findLast(e.path, e => "classList" in e ? e.classList.contains(bindClass) : false);
 		if (element instanceof HTMLElement) listener(element);
 	}
 	
@@ -28,7 +33,6 @@ export default function ripple(bindClass = "ripple-button") {
 			{ transform: "scale(1)" },
 		], {
 			duration: 1000,
-			iterations: 1,
 			easing: "cubic-bezier(0, 0, 0, 1)",
 		});
 	}));
@@ -44,10 +48,9 @@ export default function ripple(bindClass = "ripple-button") {
 				{ opacity: 0 },
 			], {
 				duration: FADE_TIME,
-				iterations: 1,
 				easing: "ease-out",
 			});
-			setTimeout(circle => {
+			setTimeout((circle: Element) => {
 				circle.remove();
 			}, FADE_TIME, circle);
 		}

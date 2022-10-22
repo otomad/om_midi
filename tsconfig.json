@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ES2022",
+		"noImplicitAny": true,
+		"moduleResolution": "Node",
+		"strict": true,
+		"typeRoots": [],
+		"lib": [
+			"DOM",
+			"DOM.Iterable",
+			"ESNext",
+			"ES2015.Promise",
+		],
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true,
+	},
+	"exclude": [
+		"node_modules",
+	],
+}

@@ -1,3 +1,7 @@
+header {
+	border-bottom: var(--border-color) 1px solid;
+}
+
 .midi-table {
 	border-bottom: var(--border-color) 1px solid;
 
@@ -7,11 +11,7 @@
 		align-items: center;
 		cursor: pointer;
 
-		&:first-child {
-			padding-top: 1rem;
-		}
-
-		&:last-child {
+		&:last-of-type {
 			padding-bottom: 0.5rem;
 		}
 
@@ -28,6 +28,9 @@
 			display: block;
 			width: 100%;
 			text-align: right;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		input {
@@ -81,13 +84,6 @@
 		}
 
 		&:hover {
-			background-color: var(--foreground-color);
-
-			&,
-			* {
-				color: black;
-			}
-
 			&::after {
 				border-color: black;
 			}
@@ -95,16 +91,12 @@
 		
 		&:focus:not(:hover):not(:active),
 		&:active:not(:hover) {
-			--foreground-color: #2d8ceb;
-			background-color: var(--foreground-color);
-			
-			&,
-			* {
-				color: white;
-			}
-			
 			&::after {
 				border-color: white;
+			}
+			
+			.midi-bpm-shadow::after {
+				background-color: white;
 			}
 		}
 	}

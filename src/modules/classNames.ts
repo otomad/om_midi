@@ -9,9 +9,9 @@
 const camelToHyphenCase = (str: string) => str.replace(/([A-Z])/g, "-$1").toLowerCase();
 
 type ClassNamesArgType = string | number | undefined | null;
-type ClassNamesArgsType = ClassNamesArgType | ClassNamesArgType[] | { [className: string]: boolean };
+type ClassNamesArgsType = ClassNamesArgType | ClassNamesArgType[] | { [className: string]: boolean | undefined };
 
-export default function classNames(...args: ClassNamesArgsType[]) {
+function classNames(...args: ClassNamesArgsType[]) {
 	const classes: string[] = [],
 		push = (name: string) => classes.push(classNames.toHyphenCase ? camelToHyphenCase(name) : name);
 	for (const arg of args) {
@@ -29,4 +29,6 @@ export default function classNames(...args: ClassNamesArgsType[]) {
 	return classes.join(" ");
 }
 
-classNames.toHyphenCase = false;
+classNames.toHyphenCase = true;
+
+export default classNames;

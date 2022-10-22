@@ -19,4 +19,19 @@
 			position: relative;
 		}
 	}
+	
+	&.ripple-lighter {
+		.ripple-circle {
+			background-color: #ffffff48;
+		}
+		
+		&:focus.focus-always:not(:hover):not(:active),
+		&:focus-visible:not(:hover):not(:active),
+		&:active:not(:hover),
+		&:focus-visible:hover {
+			.ripple-circle {
+				background-color: #00000048;
+			}
+		}
+	}
 }

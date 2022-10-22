@@ -1,13 +1,17 @@
-(function (React, ReactDOM) {
+(function (React, CSInterface, ReactDOM) {
     'use strict';
 
     class Dock extends React.Component {
+        constructor(props) {
+            super(props);
+            Root.r.dock = this;
+        }
         render() {
             return (React.createElement("footer", null,
-                React.createElement("button", { id: "apply-btn", className: "ripple-button" },
+                React.createElement("button", { id: "apply-btn", className: "primary ripple-button focus-always" },
                     React.createElement("i", null, "done"),
                     React.createElement("span", null, "\u5E94\u7528")),
-                React.createElement("button", { id: "settings-btn", className: "ripple-button" },
+                React.createElement("button", { id: "settings-btn", className: "ripple-button focus-always" },
                     React.createElement("i", null, "settings"))));
         }
     }
@@ -37,18 +41,198 @@
         }
         return classes.join(" ");
     }
-    classNames.toHyphenCase = false;
+    classNames.toHyphenCase = true;
 
+    const cs = new CSInterface();
+    const available = isRunningInAdobeCep();
+    const CSHelper = {
+        async openMidi() {
+            const result = await new Promise((resolve, reject) => {
+                cs.evalScript("$.om_midi.openFile()", resolve);
+            });
+            if (!result || result === "undefined")
+                return;
+            return result;
+        },
+        updateThemeColor() {
+            if (!available)
+                return;
+            const skinInfo = cs.getHostEnvironment().appSkinInfo;
+            const backgroundColor = skinInfo.panelBackgroundColorSRGB.color;
+            const accentColor = skinInfo.systemHighlightColor;
+            const foregroundColor = getForegroundColor(backgroundColor);
+            const borderColor = getBorderColor(backgroundColor);
+            setRootCss("--background-color", backgroundColor);
+            setRootCss("--foreground-color", foregroundColor);
+            setRootCss("--border-color", borderColor);
+            setRootCss("--accent-color", accentColor);
+        },
+    };
+    if (available)
+        cs.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, CSHelper.updateThemeColor);
+    else
+        setRootCss("--background-color", "#232323");
+    function getForegroundColor(backgroundColor) {
+        return getSpecifiedColor(backgroundColor, color => 1.2 * color + 96);
+    }
+    function getBorderColor(backgroundColor) {
+        return getSpecifiedColor(backgroundColor, color => 1.16 * color + 5.4);
+    }
+    function getSpecifiedColor(originalColor, formula) {
+        return {
+            red: formula(originalColor.red),
+            green: formula(originalColor.green),
+            blue: formula(originalColor.blue),
+            alpha: originalColor.alpha,
+        };
+    }
+    function setRootCss(property, value) {
+        if (typeof value === "object")
+            value = `rgba(${value.red}, ${value.green}, ${value.blue}, ${value.alpha})`;
+        document.documentElement.style.setProperty(property, String(value));
+    }
+    /**
+     * 检测当前是在 Adobe 扩展中运行，还是在浏览器中运行。
+     * @returns 在 Adobe 扩展中运行。
+     */
+    function isRunningInAdobeCep() {
+        try {
+            cs.getHostEnvironment();
+        }
+        catch (error) {
+            return false;
+        }
+        return true;
+    }
+    var CSHelper$1 = CSHelper;
+
+    class TabBar extends React.Component {
+        indicatorRef;
+        constructor(props) {
+            super(props);
+            props.parent.tabBar = this;
+            this.state = {
+                currentTab: "nullObj",
+            };
+            this.indicatorRef = React.createRef();
+        }
+        setActiveTab = (tab) => {
+            this.setState({
+                currentTab: tab,
+            }, () => {
+                const indicator = this.indicatorRef.current;
+                if (!indicator)
+                    return;
+                const activeTab = [...indicator.previousSibling.children].find(tab => tab.classList.contains("active"));
+                if (!activeTab)
+                    return;
+                const left = activeTab.getClientRects()[0].left;
+                indicator.style.left = left + "px";
+            });
+        };
+        render() {
+            const isCurrentTab = (tab) => this.state.currentTab === tab ? "active" : "";
+            return (React.createElement(React.Fragment, null,
+                React.createElement("ul", { className: "tab-bar" },
+                    React.createElement(Li, { className: isCurrentTab("nullObj"), onClick: () => this.setActiveTab("nullObj") },
+                        React.createElement("i", null, "hourglass_empty"),
+                        "\u7A7A\u5BF9\u8C61"),
+                    React.createElement(Li, { className: isCurrentTab("applyEffects"), onClick: () => this.setActiveTab("applyEffects") },
+                        React.createElement("i", null, "blur_on"),
+                        "\u5E94\u7528\u6548\u679C"),
+                    React.createElement(Li, { className: isCurrentTab("tools"), onClick: () => this.setActiveTab("tools") },
+                        React.createElement("i", null, "widgets"),
+                        "\u5DE5\u5177")),
+                React.createElement("div", { className: "indicator", ref: this.indicatorRef })));
+        }
+    }
+    function Li(props) {
+        return React.createElement("li", { ...props, className: classNames([props.className, "ripple-button", "ripple-lighter", "button-like"]), tabIndex: 0 }, props.children);
+    }
+
+    function getPath(target) {
+        if (!(target instanceof Element))
+            return [];
+        const path = [];
+        while (target instanceof Element) {
+            path.push(target);
+            target = target.parentElement;
+        }
+        return path;
+    }
+
+    class FlyoutMenu extends React.Component {
+        menuRef;
+        constructor(props) {
+            super(props);
+            props.parent.startTimeMenu = this;
+            this.menuRef = React.createRef();
+        }
+        hideMenu = (e) => {
+            if (!this.menuRef.current || !getPath(e.target).includes(this.menuRef.current))
+                this.props.parent.onStartTimeClick(false);
+        };
+        componentDidUpdate() {
+            const menu = this.menuRef.current, circle = menu?.parentElement;
+            if (!menu || !circle)
+                return;
+            if (this.props.shown) {
+                const rect = menu.getClientRects()[0];
+                const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2);
+                const setCircleStyle = (styles) => Object.assign(circle.style, styles);
+                setCircleStyle({
+                    width: radius + "px",
+                    height: radius + "px",
+                    transform: `translate(${(radius - rect.width) / 2}px, ${-(radius - rect.height) / 2}px)`,
+                });
+            }
+            else
+                "width,height,transform".split(",").forEach(p => circle.style.removeProperty(p));
+        }
+        render() {
+            return (React.createElement(React.Fragment, null,
+                this.props.shown ? React.createElement("div", { className: "menu-mask", onClick: this.hideMenu }) : undefined,
+                React.createElement("div", { className: "circle-mask", onClick: this.hideMenu },
+                    React.createElement("menu", { type: "context", ref: this.menuRef, className: classNames({
+                            flyoutMenu: true,
+                            hide: !this.props.shown,
+                        }) }, this.props.children))));
+        }
+    }
+    class FlyoutMenuItem extends React.Component {
+        render() {
+            return (React.createElement("div", { className: "flyout-menu-item button-like ripple-button", onClick: this.props.onClick },
+                React.createElement("i", { className: classNames({
+                        checkBox: this.props.type !== "normal",
+                    }) }, this.props.type === "checkbox" ?
+                    (this.props.isChecked ? "check_box" : "check_box_outline_blank") :
+                    (this.props.isChecked ? "radio_button_checked" : "radio_button_unchecked")),
+                this.props.children));
+        }
+    }
+
+    const startTime = {
+        displayStart: "显示开始时间",
+        current: "当前时间",
+        workArea: "工作区域",
+        zero: "0",
+    };
     class MidiConfigurator extends React.Component {
         bpmTextRef;
-        bpmShadowRef;
-        constructor(props = {}) {
+        //#region 组件
+        tabBar;
+        startTimeMenu;
+        //#endregion
+        constructor(props) {
             super(props);
+            Root.r.midiConfigurator = this;
             this.state = {
                 bpmText: 120,
+                midiName: "未选择 MIDI 文件",
+                isStartTimeMenuShown: false,
+                startTime: "displayStart",
             };
             this.bpmTextRef = React.createRef();
-            this.bpmShadowRef = React.createRef();
         }
         handleChange = (event) => {
             this.setState({
@@ -64,15 +248,27 @@
             else
                 input.blur();
         };
+        openMidi = async () => {
+            const midiName = await CSHelper$1.openMidi();
+            if (midiName)
+                this.setState({ midiName });
+        };
+        onStartTimeClick = (shown = true, event) => {
+            this.setState({ isStartTimeMenuShown: shown });
+        };
+        setStartTime = (tag) => {
+            this.setState({ isStartTimeMenuShown: false, startTime: tag });
+        };
         render() {
-            const Section = (props) => (React.createElement("section", { className: classNames([props.className, "ripple-button"]), tabIndex: props.focusable ? 0 : -1 }, props.children));
+            const StartTimeMenuItem = this.StartTimeMenuItem;
+            const startTimeMenuItems = Object.keys(startTime).map(tag => React.createElement(StartTimeMenuItem, { tag: tag, key: "startTime-" + tag }));
             return (React.createElement("header", null,
                 React.createElement("div", { className: "midi-table" },
-                    React.createElement(Section, { className: "option", id: "browse-midi", focusable: true },
+                    React.createElement(Section, { className: "option", id: "browse-midi", focusable: true, onClick: this.openMidi },
                         React.createElement("label", null,
                             React.createElement("i", null, "file_open"),
                             "MIDI \u6587\u4EF6"),
-                        React.createElement("span", { id: "midi-name" }, "\u672A\u9009\u62E9 MIDI \u6587\u4EF6")),
+                        React.createElement("span", { id: "midi-name" }, this.state.midiName)),
                     React.createElement(Section, { className: "option", focusable: true },
                         React.createElement("label", null,
                             React.createElement("i", null, "audiotrack"),
@@ -83,27 +279,52 @@
                             React.createElement("i", null, "speed"),
                             "\u8BBE\u5B9A BPM"),
                         React.createElement("input", { type: "text", id: "midi-bpm-text", value: this.state.bpmText, onChange: this.handleChange, ref: this.bpmTextRef }),
-                        React.createElement("span", { className: "midi-bpm-shadow", ref: this.bpmShadowRef }, this.state.bpmText)),
-                    React.createElement(Section, { className: "option", focusable: true },
+                        React.createElement("span", { className: "midi-bpm-shadow" }, this.state.bpmText)),
+                    React.createElement(Section, { className: "option", id: "start-time-section", focusable: true, onClick: e => this.onStartTimeClick(true, e) },
                         React.createElement("label", null,
                             React.createElement("i", null, "start"),
                             "\u5F00\u59CB\u65F6\u95F4"),
-                        React.createElement("span", null, "\u663E\u793A\u5F00\u59CB\u65F6\u95F4")))));
+                        React.createElement("span", null, startTime[this.state.startTime])),
+                    React.createElement(FlyoutMenu, { shown: this.state.isStartTimeMenuShown, parent: this }, startTimeMenuItems)),
+                React.createElement(TabBar, { parent: this })));
         }
+        StartTimeMenuItem = (props) => (React.createElement(FlyoutMenuItem, { type: "radiobutton", isChecked: this.state.startTime === props.tag, onClick: () => this.setStartTime(props.tag) }, startTime[props.tag]));
     }
+    function Section(props) {
+        const { focusable, ...htmlProps } = props;
+        return (React.createElement("section", { ...htmlProps, className: classNames([htmlProps.className, "ripple-button", "button-like"]), tabIndex: focusable ? 0 : -1 }, props.children));
+    }
+    /* function hideMenu(e: MouseEvent) {
+        if (e.path.filter(e => e instanceof HTMLElement && e.classList.contains("flyout-menu")).length === 0) {
+            Root.r.midiConfigurator?.onStartTimeClick(false);
+        }
+    } */
 
     class Root extends React.Component {
+        static r;
+        //#region 组件
+        midiConfigurator;
+        dock;
+        //#endregion
+        constructor(props) {
+            super(props);
+            Root.r = this;
+        }
         render() {
             return (React.createElement(React.Fragment, null,
-                React.createElement(MidiConfigurator, null),
+                React.createElement(MidiConfigurator, { parent: this }),
                 React.createElement("main", null),
-                React.createElement(Dock, null)));
+                React.createElement(Dock, { parent: this })));
         }
     }
 
+    function findLast(array, predicate) {
+        const results = array.filter(predicate);
+        return results[results.length - 1];
+    }
     function ripple(bindClass = "ripple-button") {
         function findClass(e, listener) {
-            const element = e.path.filter(e => "classList" in e ? e.classList.contains(bindClass) : undefined).at(-1);
+            const element = findLast(e.path, e => "classList" in e ? e.classList.contains(bindClass) : false);
             if (element instanceof HTMLElement)
                 listener(element);
         }
@@ -128,7 +349,6 @@
                 { transform: "scale(1)" },
             ], {
                 duration: 1000,
-                iterations: 1,
                 easing: "cubic-bezier(0, 0, 0, 1)",
             });
         }));
@@ -144,10 +364,9 @@
                     { opacity: 0 },
                 ], {
                     duration: FADE_TIME,
-                    iterations: 1,
                     easing: "ease-out",
                 });
-                setTimeout(circle => {
+                setTimeout((circle) => {
                     circle.remove();
                 }, FADE_TIME, circle);
             }
@@ -173,8 +392,9 @@
         return Math.max(pointer.distance(leftTop), pointer.distance(rightTop), pointer.distance(rightBottom), pointer.distance(leftBottom));
     }
 
+    CSHelper$1.updateThemeColor();
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(React.createElement(Root));
     ripple();
 
-})(React, ReactDOM);
+})(React, CSInterface, ReactDOM);
