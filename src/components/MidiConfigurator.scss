@@ -89,7 +89,7 @@ header {
 			}
 		}
 		
-		&:focus:not(:hover):not(:active),
+		&:focus-visible:not(:hover):not(:active),
 		&:active:not(:hover) {
 			&::after {
 				border-color: white;

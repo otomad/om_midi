@@ -67,7 +67,8 @@ i {
   box-sizing: border-box;
 }
 
-*:focus {
+*:focus,
+*:focus-visible {
   outline: none !important;
 }
 
@@ -234,10 +235,10 @@ button.primary:not(:hover) *,
 .midi-table > section:hover::after {
   border-color: black;
 }
-.midi-table > section:focus:not(:hover):not(:active)::after, .midi-table > section:active:not(:hover)::after {
+.midi-table > section:focus-visible:not(:hover):not(:active)::after, .midi-table > section:active:not(:hover)::after {
   border-color: white;
 }
-.midi-table > section:focus:not(:hover):not(:active) .midi-bpm-shadow::after, .midi-table > section:active:not(:hover) .midi-bpm-shadow::after {
+.midi-table > section:focus-visible:not(:hover):not(:active) .midi-bpm-shadow::after, .midi-table > section:active:not(:hover) .midi-bpm-shadow::after {
   background-color: white;
 }
 .midi-table i {
