@@ -21,11 +21,17 @@
 		"rollup": "^3.2.3",
 		"rollup-plugin-cleanup": "^3.2.1",
 		"rollup-plugin-copy": "^3.4.0",
+		"rollup-plugin-sass": "^1.12.16",
+		"sass": "^1.55.0",
 		"tslib": "^2.4.0",
 		"typescript": "^4.8.4"
 	},
 	"devDependencies": {
 		"@types/react-dom": "^18.0.6",
+		"@typescript-eslint/eslint-plugin": "^5.40.1",
+		"@typescript-eslint/parser": "^5.40.1",
+		"eslint": "^8.25.0",
+		"eslint-plugin-react": "^7.31.10",
 		"react-dom": "^18.2.0"
 	}
 }

@@ -1,0 +1,40 @@
+@import "./styles/ease";
+
+:root {
+	--background-color: #232323;
+	--foreground-color: #8a8a8a;
+	--press-color: #636363;
+	--accent-color: #2d8ceb;
+	--border-color: #2a2a2a;
+}
+
+*,
+*::before,
+*::after {
+	font-size: 0.5rem;
+	color: var(--foreground-color);
+	transition: all $ease-out-max 250ms, color $ease-out-max 100ms, fill $ease-out-max 100ms !important;
+	font-family: "Segoe UI", "Microsoft Yahei UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	user-select: none;
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: none !important;
+}
+
+html,
+body {
+	background-color: var(--background-color);
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100vh;
+	overflow: hidden;
+}
+
+#root {
+	display: contents;
+}

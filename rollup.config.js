@@ -1,6 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json" assert { type: "json" };
 import copy from "rollup-plugin-copy";
+import sass from "rollup-plugin-sass";
 
 export default {
 	input: "src/index.ts",
@@ -25,6 +26,12 @@ export default {
 			moduleResolution: "node",
 			strict: true,
 			jsx: "react",
+		}),
+		sass({
+			output: "dist/css/style.css",
+			options: {
+				outputStyle: "expanded",
+			}
 		}),
 	],
 };

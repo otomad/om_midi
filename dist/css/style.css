@@ -1,0 +1,199 @@
+.ripple-button {
+  overflow: hidden;
+  position: relative;
+}
+.ripple-button .ripple-circle {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.2823529412);
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border-radius: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.ripple-button .ripple-circle ~ :not(.ripple-circle) {
+  z-index: 3;
+  position: relative;
+}:root {
+  --background-color: #232323;
+  --foreground-color: #8a8a8a;
+  --press-color: #636363;
+  --accent-color: #2d8ceb;
+  --border-color: #2a2a2a;
+}
+
+*,
+*::before,
+*::after {
+  font-size: 0.5rem;
+  color: var(--foreground-color);
+  transition: all cubic-bezier(0, 0, 0, 1) 250ms, color cubic-bezier(0, 0, 0, 1) 100ms, fill cubic-bezier(0, 0, 0, 1) 100ms !important;
+  font-family: "Segoe UI", "Microsoft Yahei UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+html,
+body {
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  display: contents;
+}.midi-table {
+  border-bottom: var(--border-color) 1px solid;
+}
+.midi-table > section {
+  padding: 0.25rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.midi-table > section:first-child {
+  padding-top: 1rem;
+}
+.midi-table > section:last-child {
+  padding-bottom: 0.5rem;
+}
+.midi-table > section > label {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-right: 1rem;
+  cursor: pointer;
+}
+.midi-table > section > :last-child {
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+.midi-table > section input {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  transition: none;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  min-width: 5rem;
+  text-align: right;
+}
+.midi-table > section#midi-bpm-section {
+  cursor: text;
+}
+.midi-table > section .midi-bpm-shadow {
+  position: absolute;
+  right: 2.5rem;
+  color: transparent !important;
+  width: auto;
+}
+.midi-table > section .midi-bpm-shadow::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0.5px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+}
+.midi-table > section:hover .midi-bpm-shadow::after {
+  background-color: black;
+}
+.midi-table > section #midi-bpm-text:focus + .midi-bpm-shadow::after {
+  transform: scaleX(1);
+}
+.midi-table > section::after {
+  content: "";
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: var(--foreground-color) solid;
+  border-width: 0 1px 1px 0;
+  transform: rotate(-45deg);
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+.midi-table > section:not(.option)::after {
+  opacity: 0;
+}
+.midi-table > section:hover {
+  background-color: var(--foreground-color);
+}
+.midi-table > section:hover,
+.midi-table > section:hover * {
+  color: black;
+}
+.midi-table > section:hover::after {
+  border-color: black;
+}
+.midi-table i {
+  font-size: 1rem;
+  margin-right: 0.75rem;
+}button {
+  appearance: none;
+  background-color: transparent;
+  border: var(--foreground-color) 2px solid;
+  border-radius: 99999999rem;
+  cursor: pointer;
+  /* &:active {
+  	--foreground-color: #636363;
+  	background-color: var(--foreground-color);
+  	border-color: var(--foreground-color);
+  } */
+}
+button:hover {
+  background-color: var(--foreground-color);
+}
+button:hover,
+button:hover * {
+  color: black;
+}
+button:focus:not(:hover):not(:active), button:active:not(:hover) {
+  --foreground-color: #2d8ceb;
+  background-color: var(--foreground-color);
+  border-color: var(--foreground-color);
+}
+button:focus:not(:hover):not(:active),
+button:focus:not(:hover):not(:active) *, button:active:not(:hover),
+button:active:not(:hover) * {
+  color: white;
+}footer {
+  display: flex;
+  justify-content: space-between;
+  height: 4rem;
+  border-top: var(--border-color) 1px solid;
+}
+
+footer button {
+  border: none;
+  border-radius: 0;
+  padding: 0 2rem;
+}
+
+#apply-btn {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+#apply-btn i {
+  margin-right: 0.5rem;
+}
+
+header,
+footer {
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
+}

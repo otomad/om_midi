@@ -1,0 +1,28 @@
+footer {
+	display: flex;
+	justify-content: space-between;
+	height: 4rem;
+	border-top: var(--border-color) 1px solid;
+}
+
+footer button {
+	border: none;
+	border-radius: 0;
+	padding: 0 2rem;
+}
+
+#apply-btn {
+	width: 100%;
+	text-align: left;
+	display: flex;
+	align-items: center;
+}
+
+#apply-btn i {
+	margin-right: 0.5rem;
+}
+
+header,
+footer {
+	box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
+}

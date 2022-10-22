@@ -1,0 +1,106 @@
+.midi-table {
+	border-bottom: var(--border-color) 1px solid;
+
+	> section {
+		padding: 0.25rem 1rem;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+
+		&:first-child {
+			padding-top: 1rem;
+		}
+
+		&:last-child {
+			padding-bottom: 0.5rem;
+		}
+
+		> label {
+			display: flex;
+			align-items: center;
+			flex-shrink: 0;
+			padding-right: 1rem;
+			cursor: pointer;
+		}
+
+		> :last-child {
+			display: block;
+			width: 100%;
+			text-align: right;
+		}
+
+		input {
+			border: none;
+			background-color: transparent;
+			padding: 0;
+			transition: none;
+			position: absolute;
+			right: 0;
+			width: 100%;
+			min-width: 5rem;
+			text-align: right;
+		}
+		
+		&#midi-bpm-section {
+			cursor: text;
+		}
+
+		.midi-bpm-shadow {
+			position: absolute;
+			right: 2.5rem;
+			color: transparent !important;
+			width: auto;
+			
+			&::after {
+				content: "";
+				display: block;
+				width: 100%;
+				height: 0.5px;
+				background-color: var(--accent-color);
+				transform: scaleX(0);
+			}
+		}
+		
+		&:hover .midi-bpm-shadow::after {
+			background-color: black;
+		}
+		
+		#midi-bpm-text:focus + .midi-bpm-shadow::after {
+			transform: scaleX(1);
+		}
+
+		&::after {
+			content: "";
+			display: block;
+			width: 0.75rem;
+			height: 0.75rem;
+			border: var(--foreground-color) solid;
+			border-width: 0 1px 1px 0;
+			transform: rotate(-45deg);
+			flex-shrink: 0;
+			margin-left: 0.75rem;
+		}
+
+		&:not(.option)::after {
+			opacity: 0;
+		}
+
+		&:hover {
+			background-color: var(--foreground-color);
+
+			&,
+			* {
+				color: black;
+			}
+
+			&::after {
+				border-color: black;
+			}
+		}
+	}
+
+	i {
+		font-size: 1rem;
+		margin-right: 0.75rem;
+	}
+}

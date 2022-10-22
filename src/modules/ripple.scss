@@ -1,0 +1,22 @@
+.ripple-button {
+	overflow: hidden;
+	position: relative;
+	
+	.ripple-circle {
+		display: block;
+		background-color: #00000048;
+		$size: 20px;
+		width: $size;
+		height: $size;
+		position: absolute;
+		border-radius: 100%;
+		left: 0;
+		top: 0;
+		z-index: 2;
+		
+		~ :not(.ripple-circle) {
+			z-index: 3;
+			position: relative;
+		}
+	}
+}

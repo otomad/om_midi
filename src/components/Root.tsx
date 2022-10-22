@@ -1,5 +1,15 @@
 import React from "react";
+import Dock from "./Dock";
+import MidiConfigurator from "./MidiConfigurator";
 
-const hello = <p>Hello!</p>;
-
-export default hello;
+export default class Root extends React.Component {
+	render() {
+		return (
+			<>
+				<MidiConfigurator />
+				<main />
+				<Dock />
+			</>
+		);
+	}
+}

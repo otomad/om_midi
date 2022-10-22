@@ -1,0 +1,37 @@
+button {
+	appearance: none;
+	background-color: transparent;
+	border: var(--foreground-color) 2px solid;
+	border-radius: 99999999rem;
+	cursor: pointer;
+	
+	&:hover {
+		background-color: var(--foreground-color);
+		
+		&,
+		* {
+			color: black;
+		}
+	}
+
+	/* &:active {
+		--foreground-color: #636363;
+		background-color: var(--foreground-color);
+		border-color: var(--foreground-color);
+	} */
+
+	&:focus:not(:hover):not(:active),
+	&:active:not(:hover) {
+		--foreground-color: #2d8ceb;
+		background-color: var(--foreground-color);
+		border-color: var(--foreground-color);
+	}
+
+	&:focus:not(:hover):not(:active),
+	&:active:not(:hover) {
+		&,
+		* {
+			color: white;
+		}
+	}
+}
