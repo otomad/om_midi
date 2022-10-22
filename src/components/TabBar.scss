@@ -13,6 +13,8 @@
 		width: 100%;
 		justify-content: center;
 		padding: 0.5rem;
+		white-space: nowrap;
+		padding-bottom: calc(0.5rem + 2px);
 		
 		i {
 			margin-right: 0.5rem;
@@ -44,8 +46,10 @@
 }
 
 .indicator {
+	$height: 2px;
 	width: calc(100vw / 3);
-	height: 2px;
+	height: $height;
+	margin-top: -$height;
 	position: relative;
 	background-color: var(--accent-color);
 	left: 0;
