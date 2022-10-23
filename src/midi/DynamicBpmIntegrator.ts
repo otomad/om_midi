@@ -35,10 +35,11 @@ export default class DynamicBpmIntegrator {
 						lastData.secondsPerQuarter = secondsPerQuarter;
 						continue;
 					}
-					startSecond = (startTick - lastData.startTick) / this.ticksPerQuarter * lastData.secondsPerQuarter;
+					startSecond = (startTick - lastData.startTick) / this.ticksPerQuarter * lastData.secondsPerQuarter + lastData.startSecond;
 				}
 				this.datas.push(new BpmKeysData(secondsPerQuarter, startTick, startSecond));
 			}
+		write(this.datas.length);
 	}
 	
 	private getLastData(): BpmKeysData | undefined { return this.datas[this.datas.length - 1]; }

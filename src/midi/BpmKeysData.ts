@@ -20,4 +20,9 @@ export default class BpmKeysData {
 		this.startTick = startTick;
 		this.startSecond = startSecond;
 	}
+	
+	/** 方便调试 */
+	toString() {
+		return `${this.startSecond.toFixed(2)}s,${(60 / this.secondsPerQuarter).toFixed(2)}bpm,${this.startTick}t`;
+	}
 }

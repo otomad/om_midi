@@ -121,8 +121,8 @@ export default class Core {
 							const duration = noteEvent.interruptDuration ?? noteEvent.duration!;
 							noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL;
 						} else
-							noteOffSeconds = noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.duration!
-								- MIN_INTERVAL;
+							noteOffSeconds = (noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.durationSecond!)
+								- MIN_INTERVAL + noteSecondEvent.startSecond;
 						setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 						setValueAtTime(nullTab.pingpong, noteOffSeconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
@@ -319,7 +319,7 @@ export default class Core {
 					noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL + startTime;
 				} else
 					noteOffSeconds = (noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.durationSecond ?? 0)
-						- MIN_INTERVAL + startTime;
+						- MIN_INTERVAL + noteSecondEvent.startSecond + startTime;
 				if (effectsTab.hFlip.value) {
 					const addKey = (seconds: number) => !addToGeometry2 ? layer.scale.addKey(seconds) :
 						(geometry2.scaleHeight().addKey(seconds), geometry2.scaleWidth().addKey(seconds));

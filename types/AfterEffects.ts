@@ -707,10 +707,10 @@ declare var currentFormatToTime: (
 declare var timeToCurrentFormat: (time: number, fps: number, isDuration?: boolean) => string
 
 /** Writes text to the Info panel, with no line break added. */
-declare var write: (text: string) => void
+declare var write: (text: string | number | boolean) => void
 
 /** Writes text to the Info panel, adding a line break at the end. */
-declare var writeLn: (text: string) => void
+declare var writeLn: (text: string | number | boolean) => void
 
 /** When true, the specified object exists. */
 declare var isValid: (obj: object) => boolean
