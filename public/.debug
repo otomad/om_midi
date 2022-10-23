@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ExtensionList>
-	<Extension Id="OmMidi">
+	<Extension Id="ommidi">
 		<HostList>
 			<Host Name="AEFT" Port="7777"/>
 		</HostList>
