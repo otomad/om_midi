@@ -1,0 +1,34 @@
+.drag-handler {
+	position: fixed;
+	pointer-events: none;
+	width: 100vw;
+	height: 100vh;
+	left: 0;
+	top: 0;
+	background-color: #fff8;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 15vmin;
+	
+	> * {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 10vmin;
+		font-weight: 500;
+		color: var(--background-color);
+		border: var(--background-color) 8px dashed;
+		width: 100%;
+		height: 100%;
+		border-radius: 3rem;
+	}
+	
+	&.fading {
+		opacity: 0;
+		
+		> * {
+			transform: scale(0.8);
+		}
+	}
+}

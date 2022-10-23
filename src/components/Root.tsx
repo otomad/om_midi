@@ -1,5 +1,6 @@
 import React from "react";
 import Dock from "./Dock";
+import DragHandler from "./DragHandler";
 import MidiConfigurator from "./MidiConfigurator";
 
 export default class Root extends React.Component {
