@@ -408,5 +408,6 @@
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(React.createElement(Root));
     ripple();
+    document.oncontextmenu = e => e.preventDefault();
 
 })(React, CSInterface, ReactDOM);
