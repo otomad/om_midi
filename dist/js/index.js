@@ -183,11 +183,12 @@
                 setCircleStyle({
                     width: radius + "px",
                     height: radius + "px",
-                    transform: `translate(${(radius - rect.width) / 2}px, ${-(radius - rect.height) / 2}px)`,
+                    marginRight: -(radius - rect.width) / 2 + "px",
+                    marginTop: -(radius - rect.height) / 2 + "px",
                 });
             }
             else
-                "width,height,transform".split(",").forEach(p => circle.style.removeProperty(p));
+                circle.removeAttribute("style");
         }
         render() {
             return (React.createElement(React.Fragment, null,
@@ -227,7 +228,8 @@
             super(props);
             Root.r.midiConfigurator = this;
             this.state = {
-                bpmText: 120,
+                bpmText: "",
+                defaultBpmText: 120,
                 midiName: "未选择 MIDI 文件",
                 isStartTimeMenuShown: false,
                 startTime: "displayStart",
@@ -235,8 +237,9 @@
             this.bpmTextRef = React.createRef();
         }
         handleChange = (event) => {
+            const value = event.target.value; // parseFloat(event.target.value);
             this.setState({
-                bpmText: event.target.value,
+                bpmText: value,
             });
         };
         focusBpmText = (isFocus = true) => {
@@ -278,8 +281,8 @@
                         React.createElement("label", { htmlFor: "midi-bpm-text" },
                             React.createElement("i", null, "speed"),
                             "\u8BBE\u5B9A BPM"),
-                        React.createElement("input", { type: "text", id: "midi-bpm-text", value: this.state.bpmText, onChange: this.handleChange, ref: this.bpmTextRef }),
-                        React.createElement("span", { className: "midi-bpm-shadow" }, this.state.bpmText)),
+                        React.createElement("input", { type: "text", id: "midi-bpm-text", value: this.state.bpmText, placeholder: String(this.state.defaultBpmText), onChange: this.handleChange, ref: this.bpmTextRef }),
+                        React.createElement("span", { className: "midi-bpm-shadow" }, this.state.bpmText !== "" ? this.state.bpmText : this.state.defaultBpmText)),
                     React.createElement(Section, { className: "option", id: "start-time-section", focusable: true, onClick: e => this.onStartTimeClick(true, e) },
                         React.createElement("label", null,
                             React.createElement("i", null, "start"),

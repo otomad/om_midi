@@ -34,9 +34,10 @@ export class FlyoutMenu extends React.Component<MenuProps> {
 			setCircleStyle({
 				width: radius + "px",
 				height: radius + "px",
-				transform: `translate(${(radius - rect.width) / 2}px, ${-(radius - rect.height) / 2}px)`,
+				marginRight: -(radius - rect.width) / 2 + "px",
+				marginTop: -(radius - rect.height) / 2 + "px",
 			});
-		} else "width,height,transform".split(",").forEach(p => circle.style.removeProperty(p));
+		} else circle.removeAttribute("style");
 	}
 	
 	render() {

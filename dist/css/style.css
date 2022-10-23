@@ -1,27 +1,51 @@
-.ripple-button {
-  overflow: hidden;
-  position: relative;
+button {
+  appearance: none;
+  background-color: transparent;
+  border: var(--foreground-color) 2px solid;
+  border-radius: 99999999rem;
+  cursor: pointer;
 }
-.ripple-button .ripple-circle {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.2823529412);
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  border-radius: 100%;
-  left: 0;
-  top: 0;
-  z-index: 2;
+
+button:hover,
+.button-like:hover {
+  background-color: var(--foreground-color);
 }
-.ripple-button .ripple-circle ~ :not(.ripple-circle) {
-  z-index: 3;
-  position: relative;
+button:hover,
+button:hover *,
+.button-like:hover,
+.button-like:hover * {
+  color: black;
 }
-.ripple-button.ripple-lighter .ripple-circle {
-  background-color: rgba(255, 255, 255, 0.2823529412);
+button:focus.focus-always:not(:hover):not(:active), button:focus-visible:not(:hover):not(:active), button:active:not(:hover),
+.button-like:focus.focus-always:not(:hover):not(:active),
+.button-like:focus-visible:not(:hover):not(:active),
+.button-like:active:not(:hover) {
+  --foreground-color: #2d8ceb;
+  background-color: var(--foreground-color);
+  border-color: var(--foreground-color);
 }
-.ripple-button.ripple-lighter:focus.focus-always:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:active:not(:hover) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:hover .ripple-circle {
-  background-color: rgba(0, 0, 0, 0.2823529412);
+button:focus.focus-always:not(:hover):not(:active),
+button:focus.focus-always:not(:hover):not(:active) *, button:focus-visible:not(:hover):not(:active),
+button:focus-visible:not(:hover):not(:active) *, button:active:not(:hover),
+button:active:not(:hover) *,
+.button-like:focus.focus-always:not(:hover):not(:active),
+.button-like:focus.focus-always:not(:hover):not(:active) *,
+.button-like:focus-visible:not(:hover):not(:active),
+.button-like:focus-visible:not(:hover):not(:active) *,
+.button-like:active:not(:hover),
+.button-like:active:not(:hover) * {
+  color: white;
+}
+button.primary:not(:hover),
+button.primary:not(:hover) *,
+.button-like.primary:not(:hover),
+.button-like.primary:not(:hover) * {
+  color: white;
+}
+button *::placeholder,
+.button-like *::placeholder {
+  color: unset;
+  opacity: 0.7;
 }/* fallback */
 @font-face {
   font-family: "Material Icons";
@@ -87,6 +111,84 @@ body {
 
 #root {
   display: contents;
+}.ripple-button {
+  overflow: hidden;
+  position: relative;
+}
+.ripple-button .ripple-circle {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.2823529412);
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border-radius: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.ripple-button .ripple-circle ~ :not(.ripple-circle) {
+  z-index: 3;
+  position: relative;
+}
+.ripple-button.ripple-lighter .ripple-circle {
+  background-color: rgba(255, 255, 255, 0.2823529412);
+}
+.ripple-button.ripple-lighter:focus.focus-always:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:active:not(:hover) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:hover .ripple-circle {
+  background-color: rgba(0, 0, 0, 0.2823529412);
+}.flyout-menu {
+  position: relative;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
+  padding: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #313131;
+  transition: opacity cubic-bezier(0, 0, 0, 1) 250ms !important;
+  margin: 0;
+  right: 0;
+  top: 0;
+  width: fit-content;
+  flex-shrink: 0;
+}
+.flyout-menu > .flyout-menu-item {
+  padding: 0.5rem 2.25rem;
+  margin: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1.25rem;
+  white-space: nowrap;
+}
+.flyout-menu > .flyout-menu-item i {
+  margin-right: 1rem;
+}
+.flyout-menu > .flyout-menu-item i:not(.check-box) {
+  opacity: 0;
+}
+.flyout-menu.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu-mask {
+  position: fixed;
+  z-index: 4;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.circle-mask {
+  position: absolute;
+  right: 0;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
 }footer {
   display: flex;
   justify-content: space-between;
@@ -115,49 +217,6 @@ footer button {
 header,
 footer {
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
-}button {
-  appearance: none;
-  background-color: transparent;
-  border: var(--foreground-color) 2px solid;
-  border-radius: 99999999rem;
-  cursor: pointer;
-}
-
-button:hover,
-.button-like:hover {
-  background-color: var(--foreground-color);
-}
-button:hover,
-button:hover *,
-.button-like:hover,
-.button-like:hover * {
-  color: black;
-}
-button:focus.focus-always:not(:hover):not(:active), button:focus-visible:not(:hover):not(:active), button:active:not(:hover),
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:active:not(:hover) {
-  --foreground-color: #2d8ceb;
-  background-color: var(--foreground-color);
-  border-color: var(--foreground-color);
-}
-button:focus.focus-always:not(:hover):not(:active),
-button:focus.focus-always:not(:hover):not(:active) *, button:focus-visible:not(:hover):not(:active),
-button:focus-visible:not(:hover):not(:active) *, button:active:not(:hover),
-button:active:not(:hover) *,
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus.focus-always:not(:hover):not(:active) *,
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active) *,
-.button-like:active:not(:hover),
-.button-like:active:not(:hover) * {
-  color: white;
-}
-button.primary:not(:hover),
-button.primary:not(:hover) *,
-.button-like.primary:not(:hover),
-.button-like.primary:not(:hover) * {
-  color: white;
 }header {
   border-bottom: var(--border-color) 1px solid;
 }
@@ -286,101 +345,4 @@ button.primary:not(:hover) *,
   background-color: var(--accent-color);
   left: 0;
   transition: left cubic-bezier(1, 0, 0, 1) 500ms !important;
-}button {
-  appearance: none;
-  background-color: transparent;
-  border: var(--foreground-color) 2px solid;
-  border-radius: 99999999rem;
-  cursor: pointer;
-}
-
-button:hover,
-.button-like:hover {
-  background-color: var(--foreground-color);
-}
-button:hover,
-button:hover *,
-.button-like:hover,
-.button-like:hover * {
-  color: black;
-}
-button:focus.focus-always:not(:hover):not(:active), button:focus-visible:not(:hover):not(:active), button:active:not(:hover),
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:active:not(:hover) {
-  --foreground-color: #2d8ceb;
-  background-color: var(--foreground-color);
-  border-color: var(--foreground-color);
-}
-button:focus.focus-always:not(:hover):not(:active),
-button:focus.focus-always:not(:hover):not(:active) *, button:focus-visible:not(:hover):not(:active),
-button:focus-visible:not(:hover):not(:active) *, button:active:not(:hover),
-button:active:not(:hover) *,
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus.focus-always:not(:hover):not(:active) *,
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active) *,
-.button-like:active:not(:hover),
-.button-like:active:not(:hover) * {
-  color: white;
-}
-button.primary:not(:hover),
-button.primary:not(:hover) *,
-.button-like.primary:not(:hover),
-.button-like.primary:not(:hover) * {
-  color: white;
-}.flyout-menu {
-  position: relative;
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
-  padding: 0;
-  border-radius: 1rem;
-  overflow: hidden;
-  background-color: #313131;
-  transition: opacity cubic-bezier(0, 0, 0, 1) 250ms !important;
-  margin: 0;
-  right: 0;
-  top: 0;
-  width: fit-content;
-  flex-shrink: 0;
-}
-.flyout-menu > .flyout-menu-item {
-  padding: 0.5rem 2.25rem;
-  margin: 0.5rem 0.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  padding-left: 1.25rem;
-  white-space: nowrap;
-}
-.flyout-menu > .flyout-menu-item i {
-  margin-right: 1rem;
-}
-.flyout-menu > .flyout-menu-item i:not(.check-box) {
-  opacity: 0;
-}
-.flyout-menu.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.menu-mask {
-  position: fixed;
-  z-index: 4;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-}
-
-.circle-mask {
-  position: absolute;
-  right: 0;
-  width: 0px;
-  height: 0px;
-  overflow: hidden;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
 }

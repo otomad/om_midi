@@ -5,7 +5,6 @@ import CSHelper from "../modules/CSHelper";
 import TabBar from "./TabBar";
 import { FlyoutMenu, FlyoutMenuItem } from "../containers/FlyoutMenu";
 import Root from "./Root";
-import getPath from "../modules/getPath";
 
 const startTime = {
 	displayStart: "显示开始时间",
@@ -22,6 +21,7 @@ interface Props {
 
 interface State {
 	bpmText: string | number;
+	defaultBpmText: string | number;
 	midiName: string;
 	isStartTimeMenuShown: boolean;
 	startTime: StartTimeTag;
@@ -39,7 +39,8 @@ export default class MidiConfigurator extends React.Component<Props, State> {
 		super(props);
 		Root.r.midiConfigurator = this;
 		this.state = {
-			bpmText: 120,
+			bpmText: "",
+			defaultBpmText: 120,
 			midiName: "未选择 MIDI 文件",
 			isStartTimeMenuShown: false,
 			startTime: "displayStart",
@@ -48,8 +49,9 @@ export default class MidiConfigurator extends React.Component<Props, State> {
 	}
 	
 	handleChange = (event: { target: { value: string; }; }) => {
+		const value = event.target.value; // parseFloat(event.target.value);
 		this.setState({
-			bpmText: event.target.value,
+			bpmText: value,
 		});
 	};
 	
@@ -95,9 +97,10 @@ export default class MidiConfigurator extends React.Component<Props, State> {
 							type="text"
 							id="midi-bpm-text"
 							value={this.state.bpmText}
+							placeholder={String(this.state.defaultBpmText)}
 							onChange={this.handleChange}
 							ref={this.bpmTextRef} />
-						<span className="midi-bpm-shadow">{this.state.bpmText}</span>
+						<span className="midi-bpm-shadow">{this.state.bpmText !== "" ? this.state.bpmText : this.state.defaultBpmText}</span>
 					</Section>
 					<Section className="option" id="start-time-section" focusable onClick={e => this.onStartTimeClick(true, e)}>
 						<label><i>start</i>开始时间</label>
