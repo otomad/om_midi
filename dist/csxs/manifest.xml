@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="5.0" ExtensionBundleId="OmMidi" ExtensionBundleVersion="11.1"
-ExtensionBundleName="om midi" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExtensionManifest Version="5.0" ExtensionBundleId="ommidi" ExtensionBundleVersion="11.1"
+	ExtensionBundleName="om midi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="OmMidi" Version="10.3.0" />
+		<Extension Id="ommidi" Version="10.3.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -18,7 +18,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	</ExecutionEnvironment>
 
 	<DispatchInfoList>
-		<Extension Id="OmMidi">
+		<Extension Id="ommidi">
 			<DispatchInfo >
 				<Resources>
 					<MainPath>./index.html</MainPath>
@@ -40,6 +40,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 							<Height>300</Height>
 							<Width>180</Width>
 						</Size>
+						<MinSize>
+							<Height>100</Height>
+							<Width>100</Width>
+						</MinSize>
 					</Geometry>
 				</UI>
 			</DispatchInfo>

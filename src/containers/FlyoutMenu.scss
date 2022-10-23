@@ -13,6 +13,7 @@
 	top: 0;
 	width: fit-content;
 	flex-shrink: 0;
+	border: var(--border-color) 1px solid;
 	
 	> .flyout-menu-item {
 		padding: 0.5rem 2.25rem;

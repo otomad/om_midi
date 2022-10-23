@@ -163,37 +163,46 @@
 
     class FlyoutMenu extends React.Component {
         menuRef;
+        circleRef;
         constructor(props) {
             super(props);
             props.parent.startTimeMenu = this;
             this.menuRef = React.createRef();
+            this.circleRef = React.createRef();
+            this.state = {
+                changeState: false,
+            };
         }
         hideMenu = (e) => {
             if (!this.menuRef.current || !getPath(e.target).includes(this.menuRef.current))
                 this.props.parent.onStartTimeClick(false);
         };
-        componentDidUpdate() {
-            const menu = this.menuRef.current, circle = menu?.parentElement;
-            if (!menu || !circle)
+        componentWillUpdate() {
+            if (this.state.changeState)
                 return;
+            this.setState({ changeState: true });
+        }
+        componentDidUpdate() {
+            const menu = this.menuRef.current, circle = this.circleRef.current;
+            if (!this.state.changeState || !menu || !circle)
+                return;
+            let circleStyle;
             if (this.props.shown) {
                 const rect = menu.getClientRects()[0];
                 const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2);
-                const setCircleStyle = (styles) => Object.assign(circle.style, styles);
-                setCircleStyle({
+                circleStyle = {
                     width: radius + "px",
                     height: radius + "px",
                     marginRight: -(radius - rect.width) / 2 + "px",
                     marginTop: -(radius - rect.height) / 2 + "px",
-                });
+                };
             }
-            else
-                circle.removeAttribute("style");
+            this.setState({ changeState: false, circleStyle });
         }
         render() {
             return (React.createElement(React.Fragment, null,
                 this.props.shown ? React.createElement("div", { className: "menu-mask", onClick: this.hideMenu }) : undefined,
-                React.createElement("div", { className: "circle-mask", onClick: this.hideMenu },
+                React.createElement("div", { className: "circle-mask", onClick: this.hideMenu, ref: this.circleRef, style: this.state.circleStyle },
                     React.createElement("menu", { type: "context", ref: this.menuRef, className: classNames({
                             flyoutMenu: true,
                             hide: !this.props.shown,

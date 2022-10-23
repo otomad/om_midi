@@ -5,18 +5,32 @@ import getPath from "../modules/getPath";
 import { ChildrenProps } from "../modules/props";
 import "./FlyoutMenu.scss";
 
+type CircleStyle = {
+	width: string, height: string, marginRight: string, marginTop: string,
+}
+
 interface MenuProps extends ChildrenProps {
 	shown?: boolean;
 	parent: MidiConfigurator;
 }
 
-export class FlyoutMenu extends React.Component<MenuProps> {
+interface MenuState {
+	changeState: boolean;
+	circleStyle?: CircleStyle;
+}
+
+export class FlyoutMenu extends React.Component<MenuProps, MenuState> {
 	menuRef;
+	circleRef;
 	
 	constructor(props: MenuProps) {
 		super(props);
 		props.parent.startTimeMenu = this;
 		this.menuRef = React.createRef<HTMLElement>();
+		this.circleRef = React.createRef<HTMLDivElement>();
+		this.state = {
+			changeState: false,
+		};
 	}
 	
 	hideMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -24,27 +38,33 @@ export class FlyoutMenu extends React.Component<MenuProps> {
 			this.props.parent.onStartTimeClick(false);
 	};
 	
+	componentWillUpdate() {
+		if (this.state.changeState) return;
+		this.setState({ changeState: true });
+	}
+	
 	componentDidUpdate() {
-		const menu = this.menuRef.current, circle = menu?.parentElement;
-		if (!menu || !circle) return;
+		const menu = this.menuRef.current, circle = this.circleRef.current;
+		if (!this.state.changeState || !menu || !circle) return;
+		let circleStyle: CircleStyle | undefined;
 		if (this.props.shown) {
 			const rect = menu.getClientRects()[0];
 			const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2);
-			const setCircleStyle = (styles: Partial<CSSStyleDeclaration>) => Object.assign(circle.style, styles);
-			setCircleStyle({
+			circleStyle = {
 				width: radius + "px",
 				height: radius + "px",
 				marginRight: -(radius - rect.width) / 2 + "px",
 				marginTop: -(radius - rect.height) / 2 + "px",
-			});
-		} else circle.removeAttribute("style");
+			};
+		}
+		this.setState({ changeState: false, circleStyle });
 	}
 	
 	render() {
 		return (
 			<>
 				{this.props.shown ? <div className="menu-mask" onClick={this.hideMenu}></div> : undefined}
-				<div className="circle-mask" onClick={this.hideMenu}>
+				<div className="circle-mask" onClick={this.hideMenu} ref={this.circleRef} style={this.state.circleStyle}>
 					<menu type="context" ref={this.menuRef} className={classNames({
 						flyoutMenu: true,
 						hide: !this.props.shown,
