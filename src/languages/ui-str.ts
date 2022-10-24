@@ -5,7 +5,7 @@ import hasOwn from "../modules/hasOwn";
 
 type LangTag = "zh" | "en" | "ja";
 
-type ZString = {
+export type ZString = {
 	[tag in LangTag]: string
 };
 

@@ -21,6 +21,12 @@ interface Array<T> {
 	 * @returns 是否包含该对象。
 	 */
 	includes(item: T): boolean;
+	
+	/**
+	 * 遍历数组。
+	 * @param callbackfn - 回调函数。
+	 */
+	forEach(callbackfn: (value: T, index: number, array: T[]) => void): void;
 }
 
 interface DropDownList {

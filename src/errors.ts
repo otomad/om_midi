@@ -127,3 +127,9 @@ export class LowVersionError extends MyError {
 		super(localize(uiStr.low_version_error));
 	}
 }
+
+export class HasNoVideoError extends MyError {
+	constructor() {
+		super(localize(uiStr.has_no_video_error));
+	}
+}

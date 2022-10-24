@@ -7,7 +7,7 @@
 		"strict": true,
 		"noLib": true,
 		"typeRoots": [],
-		"baseUrl": "./",
+		/* "baseUrl": "./",
 		"paths": {
 			"@src": [
 				"./src/*"
@@ -18,7 +18,7 @@
 			"@types": [
 				"./types/*"
 			],
-		},
+		}, */
 	},
 	"exclude": [
 		"node_modules",

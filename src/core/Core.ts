@@ -1,11 +1,11 @@
-import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
+import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, HasNoVideoError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
 import Portal from "../ui/Portal";
 import getComp from "../modules/getComp";
 import Setting from "../settings/Setting";
 import { ControllerEvent, NoteEvent, NoteOffEvent, NoteOnEvent, NoteOnSecondEvent, PitchBendEvent } from "../midi/note-events";
 import { ControllerType, RegularEventType } from "../midi/midi-types";
 import MidiTrack from "../midi/MidiTrack";
-import ProgressPalette from "../ui/ProgressPalette";
+import ProgressPalette from "../dialogs/ProgressPalette";
 import uiStr from "../languages/ui-str";
 import EaseType from "../modules/EaseType";
 
@@ -209,7 +209,7 @@ export default class Core {
 		app.beginUndoGroup("om midi - Apply Effects");
 		const effectsTab = this.portal.applyEffectsTab;
 		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
-		if (effectsTab.getCheckedChecks().length === 0) throw new NoOptionsCheckedError();
+		if (effectsTab._getCheckedChecks().length === 0) throw new NoOptionsCheckedError();
 		if (this.portal.selectedTracks.length !== 1) throw new NotOneTrackForApplyEffectsOnlyError();
 		const isTunningOnly = effectsTab.getCheckedChecks().length === 1 && effectsTab.tuning.value;
 		const _layer = this.getSelectLayer(comp);
@@ -251,13 +251,19 @@ export default class Core {
 			scaleHeight() { return this.prop().property(4) as OneDProperty; },
 			scaleWidth() { return this.prop().property(5) as OneDProperty; },
 			rotation() { return this.prop().property(8) as OneDProperty; },
+			opacity() { return this.prop().property(9) as OneDProperty; },
 		};
-		if (effectsTab.hFlip.value || effectsTab.cwRotation.value || effectsTab.ccwRotation.value) {
-			if (effectsTab.hFlip.value)
-				layer.scale.expressionEnabled = false;
-			else if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value)
-				layer.rotation.expressionEnabled = false;
-			if (addToGeometry2) {
+		if (effectsTab.hFlip.value || effectsTab.cwRotation.value || effectsTab.ccwRotation.value || effectsTab.mapVelToOpacity.value) {
+			if (!addToGeometry2) {
+				if (!layer.hasVideo)
+					throw new HasNoVideoError();
+				if (effectsTab.hFlip.value)
+					layer.scale.expressionEnabled = false;
+				if (effectsTab.cwRotation.value || effectsTab.ccwRotation.value)
+					layer.rotation.expressionEnabled = false;
+				if (effectsTab.mapVelToOpacity.value)
+					layer.opacity.expressionEnabled = false;
+			} else {
 				geometry2Index = this.getGeometry2Effect(layer).propertyIndex;
 				geometry2.scaleTogether().setValue(false);
 			}
@@ -376,6 +382,21 @@ export default class Core {
 						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
+				if (effectsTab.mapVelToOpacity.value) {
+					const addKey = (seconds: number) => !addToGeometry2 ? layer.opacity.addKey(seconds) :
+						geometry2.opacity().addKey(seconds);
+					const setValueAtKey = (keyIndex: number, value: number) =>
+						!addToGeometry2 ? layer.opacity.setValueAtKey(keyIndex, value) :
+						geometry2.opacity().setValueAtKey(keyIndex, value);
+					const setInterpolationTypeAtKey = (keyIndex: number, inType: KeyframeInterpolationType) =>
+						!addToGeometry2 ? layer.opacity.setInterpolationTypeAtKey(keyIndex, inType) :
+						geometry2.opacity().setInterpolationTypeAtKey(keyIndex, inType);
+					
+					const value = effectsTab.mapVelToOpacity.map(noteEvent.velocity);
+					const key = addKey(seconds);
+					setValueAtKey(key, value);
+					setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+				}
 				if (effectsTab.timeRemap.value || effectsTab.timeRemap2.value || effectsTab.pingpong.value) {
 					if (noteOnCount === 0 && noteEvent.startTick !== 0) { // 如果第一个音符不在乐曲最开始。
 						const inPointValue = layer.timeRemap.keyValue(1);
@@ -412,7 +433,7 @@ export default class Core {
 					mirrorProp().setValueAtKey(key, noteOnCount % 2 ? 0 : 180);
 					mirrorProp().setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 				}
-				if (effectsTab.tuning.value && audioLayer) { // TODO: 根据音符事件力度来控制音频电平。
+				if (effectsTab.tuning.value && audioLayer) {
 					const key = audioLayer.timeRemap.addKey(seconds);
 					audioLayer.timeRemap.setValueAtKey(key, curStartTime);
 					audioLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
@@ -430,6 +451,20 @@ export default class Core {
 							audioLayer.timeRemap.setValueAtKey(key2, sourceLength);
 						}
 						audioLayer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+					}
+					
+					if (effectsTab.mapVelToVolume.value) {
+						const audioLevels = audioLayer.audio.audioLevels;
+						const key = audioLevels.addKey(seconds);
+						const value = effectsTab.mapVelToVolume.map(noteEvent.velocity);
+						audioLevels.setValueAtKey(key, [value, value]);
+						audioLevels.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+						if (hasDuration) {
+							const key2 = audioLevels.addKey(noteOffSeconds);
+							const MIN_VOLUME = -192;
+							audioLevels.setValueAtKey(key2, [MIN_VOLUME, MIN_VOLUME]);
+							audioLevels.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.HOLD);
+						}
 					}
 				}
 				if (layering && noteOnCount !== 0) {

@@ -7,15 +7,15 @@ import license from "rollup-plugin-license";
 import User from "./src/user.ts";
 import path from "path";
 import selfExecute from "./custom_modules/rollup-plugin-self-execute";
+import cleanup from "rollup-plugin-cleanup";
 
-const enableTerser = false;
+const enableTerser = true;
 
 export default [{
 	input: "src/index.ts",
 	output: {
 		file: pkg.main,
-		format: "cjs",
-		format: "es",
+		format: "es", // "iife"
 	},
 	onwarn: function (warning) {
 		console.warn(warning.message);
@@ -39,6 +39,10 @@ export default [{
 		// afterEffectJsx(),
 		selfExecute({
 			"this": "thisObj",
+		}),
+		cleanup({
+			comments: "all",
+			lineEndings: "unix",
 		}),
 		enableTerser ? terser({
 			compress: {

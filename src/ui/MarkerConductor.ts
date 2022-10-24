@@ -1,6 +1,6 @@
 import uiStr from "../languages/ui-str";
 import { addGroup, addItems } from "../modules/addControl";
-import setNumberEditText, { NumberType } from "../modules/setNumberEditText";
+import setNumberEditText from "../modules/setNumberEditText";
 import BaseTool from "./BaseTool";
 import ToolsTab from "./ToolsTab";
 
@@ -45,14 +45,14 @@ export default class MarkerConductor extends BaseTool {
 		} = addGroup(this.group, "", "dropdownlist", { alignment: FILL_CENTER }));
 		
 		this.translate();
-		setNumberEditText(this.bpmTxt, NumberType.POSITIVE_DECIMAL, 120);
+		setNumberEditText(this.bpmTxt, { type: "decimal", min: 1 }, 120);
 		this.unitCombo.onChange = () => {
 			const unitIndex = this.unitCombo.getSelectedIndex();
 			this.beatLbl.text = unitIndex === 0 ? localize(uiStr.beat) : localize(uiStr.shift_seconds_and_frames);
 			if (unitIndex === 0) this.bpmLbl.text = "BPM"; // TODO: 这部分将会被修改为三元运算符。
 			else if (unitIndex === 1) this.bpmLbl.text = localize(uiStr.seconds);
 			else this.bpmLbl.text = localize(uiStr.frames);
-			setNumberEditText(this.beatTxt, unitIndex === 0 ? NumberType.POSITIVE_INT : NumberType.DECIMAL, 4);
+			setNumberEditText(this.beatTxt, unitIndex === 0 ? { type: "int", min: 1 } : { type: "decimal" }, 4);
 			this.beatTxt.notify("onChange");
 		};
 		this.unitCombo.notify("onChange");

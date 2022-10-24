@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "expression-globals-typescript": "^3.2.6",
+    "rollup-plugin-cleanup": "^3.2.1",
     "types-for-adobe": "github:pravdomil/types-for-adobe"
   }
 }

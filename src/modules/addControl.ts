@@ -1,5 +1,6 @@
 /// <reference path="addControl.d.ts" />
 
+import { ZString } from "../languages/ui-str";
 import assign from "./assign";
 
 /**

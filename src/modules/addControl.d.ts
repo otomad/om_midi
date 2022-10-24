@@ -2,7 +2,7 @@
 
 type ControlTypeName = keyof ControlTypes;
 
-type ContainerType = Window | Panel | Group | TabbedPanel | Tab;
+type ContainerType = Window | Panel | Group | TabbedPanel | Tab; // ControlTypes[keyof ControlTypes] & { add: Function }
 
 type ControlTypes = {
 	button: Button,

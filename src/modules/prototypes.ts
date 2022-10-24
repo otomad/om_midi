@@ -19,6 +19,13 @@ export default function initPrototypes(): void {
 	Array.prototype.includes = function <T>(item: T): boolean {
 		return this.indexOf(item) !== -1;
 	};
+	
+	Array.prototype.forEach = function <T>(callbackfn: (value: T, index: number, array: T[]) => void): void {
+		for (let i = 0; i < this.length; i++) {
+			const element = this[i];
+			callbackfn(element, i, this);
+		}
+	};
 
 	DropDownList.prototype.getSelectedIndex = function (): number {
 		for (let i = 0; i < this.items.length; i++)

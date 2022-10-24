@@ -3,11 +3,11 @@ import addControl, { addGroup, addItems } from "../modules/addControl";
 import NullObjTab from "./NullObjTab";
 import ApplyEffectsTab from "./ApplyEffectsTab";
 import ToolsTab from "./ToolsTab";
-import SettingsDialog from "./SettingsDialog";
-import setNumberEditText, { NumberType } from "../modules/setNumberEditText";
+import SettingsDialog from "../dialogs/SettingsDialog";
+import setNumberEditText from "../modules/setNumberEditText";
 import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
-import ProgressPalette from "./ProgressPalette";
+import ProgressPalette from "../dialogs/ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
 import uiStr, { DYNAMIC_BPM_SIGN } from "../languages/ui-str";
 import BaseTab from "./BaseTab";
@@ -18,6 +18,8 @@ import Setting from "../settings/Setting";
 import ScrollGroup from "../containers/ScrollGroup";
 
 export const LARGE_NUMBER = 1e4; // 这个大数设置大了会跑不了。
+export const MIDI_BUTTON_HEIGHT = 22;
+export const MIDI_BUTTON_WIDTH = 15;
 
 export default class Portal {
 	//#region 组件对象
@@ -53,13 +55,12 @@ export default class Portal {
 	private constructor(window: Window | Panel) {
 		this.window = window;
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"], spacing: 5 });
-		const MidiButtonHeight = 22;
 		const FILL_CENTER: [_AlignmentName, _AlignmentName] = ["fill", "center"];
 		({
 			group: this.selectMidiGroup,
 			label: this.selectMidiLbl,
 			control: this.selectMidiBtn,
-		} = addGroup(this.group, "", "button", { text: "...", size: [15, MidiButtonHeight] }));
+		} = addGroup(this.group, "", "button", { text: "...", size: [MIDI_BUTTON_WIDTH, MIDI_BUTTON_HEIGHT] }));
 		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { alignment: FILL_CENTER });
 		({
 			group: this.selectTrackGroup,
@@ -68,7 +69,7 @@ export default class Portal {
 		} = addGroup(this.group, "", "button", {
 			text: "",
 			alignment: FILL_CENTER,
-			maximumSize: [LARGE_NUMBER, MidiButtonHeight],
+			maximumSize: [LARGE_NUMBER, MIDI_BUTTON_HEIGHT],
 			enabled: false,
 		}));
 		({
@@ -210,7 +211,7 @@ export default class Portal {
 	updateDefaultBpm(midi: Midi) {
 		const bpm = midi.bpm ? midi.displayBpm() : this.displayBpmForNoBpm();
 		this.selectBpmTxt.text = bpm;
-		setNumberEditText(this.selectBpmTxt, NumberType.POSITIVE_DECIMAL, bpm);
+		setNumberEditText(this.selectBpmTxt, { type: "decimal", min: 1 }, bpm);
 	}
 	
 	isUseDynamicBpm() {

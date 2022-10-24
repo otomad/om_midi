@@ -1,7 +1,8 @@
 {
 	"env": {
 		"browser": true,
-		"es2021": true
+		"es2021": true,
+		"node": true
 	},
 	"extends": [
 		"eslint:recommended",
@@ -43,6 +44,8 @@
 		"no-constant-condition": ["error", { "checkLoops": false }],
 		"@typescript-eslint/triple-slash-reference": "off",
 		"@typescript-eslint/ban-ts-comment": "off",
-		"eqeqeq": "error"
+		"eqeqeq": "error",
+		"@typescript-eslint/ban-types": "off",
+		"@typescript-eslint/no-namespace": "off"
 	}
 }
