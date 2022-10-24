@@ -306,11 +306,6 @@
         const { focusable, ...htmlProps } = props;
         return (React.createElement("section", { ...htmlProps, className: classNames([htmlProps.className, "ripple-button", "button-like"]), tabIndex: focusable ? 0 : -1 }, props.children));
     }
-    /* function hideMenu(e: MouseEvent) {
-        if (e.path.filter(e => e instanceof HTMLElement && e.classList.contains("flyout-menu")).length === 0) {
-            Root.r.midiConfigurator?.onStartTimeClick(false);
-        }
-    } */
 
     class Root extends React.Component {
         static r;
@@ -345,7 +340,7 @@
             const rect = element.getClientRects()[0];
             if (!rect)
                 return;
-            const circleRadius = getMaxRadius(rect, e);
+            const circleRadius = getMaxRadius(rect, e) + 1; // + 1 用于边缘问题。
             let pointerX = e.clientX - rect.x, pointerY = e.clientY - rect.y;
             pointerX -= circleRadius;
             pointerY -= circleRadius;
@@ -377,10 +372,7 @@
                 ], {
                     duration: FADE_TIME,
                     easing: "ease-out",
-                });
-                setTimeout((circle) => {
-                    circle.remove();
-                }, FADE_TIME, circle);
+                }).finished.then(() => circle.remove());
             }
         });
     }

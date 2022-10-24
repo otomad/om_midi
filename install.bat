@@ -4,12 +4,9 @@ chcp >nul 2>nul 65001
 
 :: check admin
 net session >nul 2>&1
-if %errorlevel% neq 0 (
-	echo 请以管理员身份运行安装程序。
-	echo Please run install as an administrator.
-	goto getAdmin
-) else goto skipAdmin
-:getAdmin
+if %errorlevel% == 0 goto skipAdmin
+echo 请以管理员身份运行安装程序。
+echo Please run install as an administrator.
 %1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
 :skipAdmin
 

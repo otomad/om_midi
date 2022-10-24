@@ -16,7 +16,7 @@ export default function ripple(bindClass = "ripple-button") {
 	document.addEventListener("mousedown", e => findClass(e, element => {
 		const rect = element.getClientRects()[0];
 		if (!rect) return;
-		const circleRadius = getMaxRadius(rect, e);
+		const circleRadius = getMaxRadius(rect, e) + 1; // + 1 用于边缘问题。
 		let pointerX = e.clientX - rect.x,
 			pointerY = e.clientY - rect.y;
 		pointerX -= circleRadius;
@@ -49,10 +49,7 @@ export default function ripple(bindClass = "ripple-button") {
 			], {
 				duration: FADE_TIME,
 				easing: "ease-out",
-			});
-			setTimeout((circle: Element) => {
-				circle.remove();
-			}, FADE_TIME, circle);
+			}).finished.then(() => circle.remove());
 		}
 	});
 }

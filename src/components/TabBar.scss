@@ -14,11 +14,15 @@
 		justify-content: center;
 		padding: 0.5rem;
 		white-space: nowrap;
-		padding-bottom: calc(0.5rem + 2px);
+		padding-bottom: 0.5rem;
+		border-bottom: var(--border-color) 2px solid;
+		transition: all $ease-out-max 250ms, color $ease-out-max 100ms, border-width $ease-out-max 100ms !important;
 		
 		i {
 			margin-right: 0.5rem;
 			font-size: 2rem;
+			position: static !important;
+			z-index: 0 !important;
 		}
 		
 		&:hover:not(:focus-visible) {
@@ -26,6 +30,13 @@
 			i {
 				background-color: transparent;
 				color: white;
+			}
+		}
+		
+		&:hover:active:not(:focus-visible) {
+			&,
+			i {
+				border-width: 0;
 			}
 		}
 		
@@ -42,16 +53,24 @@
 				color: #97c1eb;
 			}
 		}
+		
+		&:active:not(:hover) {
+			&,
+			i {
+				color: white;
+			}
+		}
 	}
 }
 
+$indicator-height: 2px;
+
 .indicator {
-	$height: 2px;
 	width: calc(100vw / 3);
-	height: $height;
-	margin-top: -$height;
+	height: $indicator-height;
+	margin-top: -$indicator-height;
 	position: relative;
 	background-color: var(--accent-color);
 	left: 0;
-	transition: left $ease-in-out-expo 500ms !important;
+	transition: left $ease-out-max 500ms !important;
 }

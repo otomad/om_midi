@@ -1,18 +1,14 @@
-header {
-	border-bottom: var(--border-color) 1px solid;
-}
-
 .midi-table {
 	border-bottom: var(--border-color) 1px solid;
 
 	> section {
-		padding: 0.25rem 1rem;
+		padding: 0.5rem 1rem;
 		display: flex;
 		align-items: center;
 		cursor: pointer;
 
 		&:last-of-type {
-			padding-bottom: 0.5rem;
+			padding-bottom: 0.75rem;
 		}
 
 		> label {

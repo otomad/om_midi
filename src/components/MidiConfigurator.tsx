@@ -134,9 +134,3 @@ function Section(props: HTMLProps<HTMLElement> & {
 		</section>
 	);
 }
-
-/* function hideMenu(e: MouseEvent) {
-	if (e.path.filter(e => e instanceof HTMLElement && e.classList.contains("flyout-menu")).length === 0) {
-		Root.r.midiConfigurator?.onStartTimeClick(false);
-	}
-} */

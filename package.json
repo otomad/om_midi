@@ -16,7 +16,11 @@
 	"author": "",
 	"license": "GPL",
 	"dependencies": {
+		"@adobe/react-spectrum": "^3.22.0",
 		"@rollup/plugin-typescript": "^9.0.1",
+		"@spectrum-css/button": "^6.0.13",
+		"@spectrum-css/page": "^5.0.11",
+		"@spectrum-css/vars": "^8.0.0",
 		"csinterface-ts": "^1.0.3",
 		"react": "^18.2.0",
 		"rollup": "^3.2.3",
