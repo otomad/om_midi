@@ -5,7 +5,7 @@
 	<h2 id="om_midi">om midi</h2>
 	<p><b><i>Ranne</i></b></p>
 	<img src="https://img.shields.io/badge/STATE-STABLE-green?style=flat-square" alt="Badge" />
-	<img src="https://img.shields.io/badge/VERSION-3.9.10.0-orange?style=flat-square" alt="Badge" />
+	<img src="https://img.shields.io/badge/VERSION-3.10.25.0-orange?style=flat-square" alt="Badge" />
 	<!-- <img src="https://img.shields.io/github/downloads/otomad/om_midi/total.svg?style=flat-square&label=DOWNLOADS" alt="Downloads"> -->
 
 **EN** | [简中](README_zh-CN.md) | [日](README_ja-JP.md)
