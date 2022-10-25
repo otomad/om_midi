@@ -53,7 +53,7 @@ const SChinese = {
 	using_selected_layer_name: "使用选中图层名称而不是 MIDI 轨道名称。",
 	normalize_pan_to_100: "声像标准化到 -100 ~ 100。",
 	using_layering: "@冰鸠さくの的特有图层叠叠乐方法。",
-	optimize_apply_effects: "优化部分效果视觉。",
+	optimize_apply_effects: "为部分效果开启视觉动画。",
 	add_to_effect_transform: "将属性添加到效果中的变换中。",
 	sure_to_import_pure_quarter_midi: "确定要导入纯四分音符 MIDI 文件吗？",
 	pure_quarter_midi: "纯四分音符 MIDI",
@@ -110,6 +110,11 @@ const SChinese = {
 	audio_levels: "音频电平",
 	notes_velocity: "音符力度",
 	has_no_video_error: "错误：所选图层不包含视频，不能应用所选效果。",
+	motion_for_horizontal_flip: "水平翻转的运动方式",
+	motion_entrance: "进入",
+	motion_exit: "退出",
+	motion_float_left: "左浮",
+	motion_float_right: "右浮",
 };
 
 export default SChinese;

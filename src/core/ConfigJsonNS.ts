@@ -7,8 +7,8 @@ namespace ConfigJsonNS {
 		targetLess = -192;
 		targetMore = 0;
 		
-		constructor(raw?: Partial<MappingVelocity>) {
-			if (raw) assign(this, raw);
+		constructor(literal?: Partial<MappingVelocity>) {
+			if (literal) assign(this, literal);
 		}
 	}
 }

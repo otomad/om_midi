@@ -55,7 +55,7 @@ const Japanese: typeof SChinese = {
 	using_selected_layer_name: "MIDI トラック名の代わりに、選択したレイヤー名を使用します。",
 	normalize_pan_to_100: "パンを -100~100 に正規化します。",
 	using_layering: "@氷鳩さくのの特有なレイヤリング方法。",
-	optimize_apply_effects: "一部のエフェクトのビジュアルを最適化。",
+	optimize_apply_effects: "一部の効果の視覚モーションを有効にする。",
 	add_to_effect_transform: "変換という効果にプロパティを追加します。",
 	sure_to_import_pure_quarter_midi: "純粋な 4 分音符 MIDI ファイルをインポートしてもよろしいですか？",
 	pure_quarter_midi: "純粋な 4 分音符 MIDI",
@@ -112,6 +112,11 @@ const Japanese: typeof SChinese = {
 	audio_levels: "オーディオレベル",
 	notes_velocity: "音符ベロシティ",
 	has_no_video_error: "エラー：選択したレイヤーにはビデオが含まれていないため、選択されたエフェクトを適用できません。",
+	motion_for_horizontal_flip: "水平方向にフリップのモーション",
+	motion_entrance: "開始",
+	motion_exit: "終了",
+	motion_float_left: "フロートレフト",
+	motion_float_right: "フロートライト",
 };
 
 export default Japanese;

@@ -33,8 +33,9 @@ export default class SettingsDialog {
 	languageCombo: DropDownList;
 	usingSelectedLayerName: Checkbox;
 	usingLayering: Checkbox;
-	optimizeApplyEffects: Checkbox;
 	normalizePanTo100: Checkbox;
+	optimizeApplyEffects: Checkbox;
+	hFlipMotionCombo: DropDownList;
 	addToEffectTransform: Checkbox;
 	openGithubBtnGroup: FlowGroup;
 	openGithubLatestBtn: Button;
@@ -80,10 +81,15 @@ export default class SettingsDialog {
 		this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
 		this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.using_layering) });
 		this.usingLayering.value = Setting.getUsingLayering();
-		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
-		this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
 		this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.add_to_effect_transform) });
 		this.addToEffectTransform.value = Setting.getAddToEffectTransform();
+		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
+		this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
+		({ control: this.hFlipMotionCombo } = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist"));
+		addItems(this.hFlipMotionCombo, localize(uiStr.motion_entrance), localize(uiStr.motion_exit), localize(uiStr.motion_float_left), localize(uiStr.motion_float_right));
+		const selectedHFlipMotionIndex = Setting.getMotionForHorizontalFlip();
+		if (selectedHFlipMotionIndex > 0 && selectedHFlipMotionIndex < this.hFlipMotionCombo.items.length)
+			this.hFlipMotionCombo.selection = selectedHFlipMotionIndex;
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
 		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
 		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
@@ -96,6 +102,7 @@ export default class SettingsDialog {
 			Setting.setOptimizeApplyEffects(this.optimizeApplyEffects.value);
 			Setting.setNormalizePanTo100(this.normalizePanTo100.value);
 			Setting.setAddToEffectTransform(this.addToEffectTransform.value);
+			Setting.setMotionForHorizontalFlip(this.hFlipMotionCombo.getSelectedIndex());
 			Setting.setLanguage(this.languageCombo.getSelectedIndex());
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()];
 			this.window.close();
@@ -115,6 +122,8 @@ export default class SettingsDialog {
 		};
 		this.importOmUtilsBtn.onClick = () => new ImportOmUtilsDialog().showDialog();
 		this.extendScriptEngineAboutBtn.onClick = () => $.about();
+		this.optimizeApplyEffects.onClick = () => this.hFlipMotionCombo.enabled = this.optimizeApplyEffects.value;
+		this.optimizeApplyEffects.onClick();
 		
 		addNabscriptsBackgroundSignature(this.window);
 	}

@@ -55,7 +55,7 @@ const English: typeof SChinese = {
 	using_selected_layer_name: "Use selected layer name instead of MIDI track name.",
 	normalize_pan_to_100: "Normalize the pan to -100 ~ 100.",
 	using_layering: "@Koorihato Sakuno's unique layering method.",
-	optimize_apply_effects: "Optimize some effects visual.",
+	optimize_apply_effects: "Turn on visual motion for some effects.",
 	add_to_effect_transform: "Add the properties to an effect called Transform.",
 	sure_to_import_pure_quarter_midi: "Are you sure you want to import the pure quarter notes MIDI file?",
 	pure_quarter_midi: "Pure quarter notes MIDI",
@@ -112,6 +112,11 @@ const English: typeof SChinese = {
 	audio_levels: "Audio levels",
 	notes_velocity: "Notes velocity",
 	has_no_video_error: "Error: The selected layer does not contain video so that the selected effect cannot be applied.",
+	motion_for_horizontal_flip: "Motion for Horizontal Flip",
+	motion_entrance: "Entrance",
+	motion_exit: "Exit",
+	motion_float_left: "Float Left",
+	motion_float_right: "Float Right",
 };
 
 export default English;

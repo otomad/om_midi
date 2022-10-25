@@ -13,6 +13,7 @@ const defs = {
 	ApplyEffectsStartTime: 1,
 	NullObjectStartTime: 0,
 	LastTool: 0,
+	MotionForHorizontalFlip: 0,
 };
 
 type SettingTag = keyof typeof defs;

@@ -8,6 +8,7 @@ import MidiTrack from "../midi/MidiTrack";
 import ProgressPalette from "../dialogs/ProgressPalette";
 import uiStr from "../languages/ui-str";
 import EaseType from "../modules/EaseType";
+import HFlipMotionType from "../modules/HFlipMotionType";
 
 const MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
 const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
@@ -231,6 +232,7 @@ export default class Core {
 		const layering = Setting.getUsingLayering();
 		const optimize = Setting.getOptimizeApplyEffects();
 		const addToGeometry2 = Setting.getAddToEffectTransform();
+		const hFlipMotion = Setting.getMotionForHorizontalFlip() as HFlipMotionType;
 		//#endregion
 		
 		//#region 预处理效果
@@ -244,6 +246,9 @@ export default class Core {
 			mirrorIndex = Core.getEffects(layer).addProperty("ADBE Mirror").propertyIndex;
 			(Core.getEffects(layer).property(mirrorIndex).property(1) as TwoDProperty).setValue([source.width / 2, source.height / 2]);
 		}
+		const requireAdjustAnchor = optimize && (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT);
+		let currentAnchor: TwoDPoint = [960, 540];
+		let currentScale = 100;
 		let geometry2Index = 0;
 		const geometry2 = {
 			prop: () => Core.getEffects(layer).property(geometry2Index) as PropertyBase,
@@ -252,6 +257,7 @@ export default class Core {
 			scaleWidth() { return this.prop().property(5) as OneDProperty; },
 			rotation() { return this.prop().property(8) as OneDProperty; },
 			opacity() { return this.prop().property(9) as OneDProperty; },
+			anchor() { return this.prop().property(1) as TwoDProperty; },
 		};
 		if (effectsTab.hFlip.value || effectsTab.cwRotation.value || effectsTab.ccwRotation.value || effectsTab.mapVelToOpacity.value) {
 			if (!addToGeometry2) {
@@ -263,10 +269,15 @@ export default class Core {
 					layer.rotation.expressionEnabled = false;
 				if (effectsTab.mapVelToOpacity.value)
 					layer.opacity.expressionEnabled = false;
+				if (requireAdjustAnchor)
+					layer.anchorPoint.expressionEnabled = false;
+				currentScale = layer.scale.value[1];
 			} else {
 				geometry2Index = this.getGeometry2Effect(layer).propertyIndex;
 				geometry2.scaleTogether().setValue(false);
+				currentScale = geometry2.scaleHeight().value;
 			}
+			currentAnchor = layer.anchorPoint.value.slice(0, 2) as TwoDPoint;
 		}
 		const timeRemapRemoveKey = (layer: AVLayer, keyIndex: number) => {
 			try {
@@ -343,15 +354,43 @@ export default class Core {
 						this.setPointKeyEase(geometry2.scaleWidth(), keyIndex, easeType, isHold));
 					
 					const key = addKey(seconds);
-					const scale = noteOnCount % 2 ? -100 : 100;
-					if (!optimize || !hasDuration) {
-						setValueAtKey(key, [scale, 100]);
+					const scale = (noteOnCount % 2 ? -1 : 1) * currentScale;
+					const enterIncremental = ENTER_INCREMENTAL / 100 * Math.abs(currentScale);
+					if (!optimize || !hasDuration || requireAdjustAnchor) {
+						setValueAtKey(key, [scale, currentScale]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						setValueAtKey(key, [scale + ENTER_INCREMENTAL * Math.sign(scale), 100 + ENTER_INCREMENTAL]);
+						let value1: TwoDPoint = [scale + enterIncremental * Math.sign(scale), currentScale + enterIncremental],
+							value2: TwoDPoint = [scale, currentScale];
+						if (hFlipMotion === HFlipMotionType.EXIT)
+							[value1, value2] = [value2, value1];
+						setValueAtKey(key, value1);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = addKey(noteOffSeconds);
-						setValueAtKey(key2, [scale, 100]);
+						setValueAtKey(key2, value2);
+						setPointKeyEase(key2, EaseType.EASE_IN, true);
+					}
+					if (requireAdjustAnchor && hasDuration) { // 调整锚点
+						const addKey = (seconds: number) => !addToGeometry2 ? layer.anchorPoint.addKey(seconds) :
+							geometry2.anchor().addKey(seconds);
+						const setValueAtKey = (keyIndex: number, value: TwoDPoint) =>
+							!addToGeometry2 ? layer.anchorPoint.setValueAtKey(keyIndex, value) :
+							geometry2.anchor().setValueAtKey(keyIndex, value);
+						const setInterpolationTypeAtKey = (keyIndex: number, inType: KeyframeInterpolationType) =>
+							!addToGeometry2 ? layer.anchorPoint.setInterpolationTypeAtKey(keyIndex, inType) :
+							geometry2.anchor().setInterpolationTypeAtKey(keyIndex, inType);
+						const setPointKeyEase = (keyIndex: number, easeType: EaseType, isHold: boolean) =>
+							!addToGeometry2 ? this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
+							this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
+						
+						const MOVEMENT_RATIO = 10;
+						const movement = source.width / MOVEMENT_RATIO;
+						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT ? -1 : 1;
+						const key = addKey(seconds);
+						setValueAtKey(key, [currentAnchor[0] + direction * movement, currentAnchor[1]]);
+						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
+						const key2 = addKey(noteOffSeconds);
+						setValueAtKey(key2, currentAnchor);
 						setPointKeyEase(key2, EaseType.EASE_IN, true);
 					}
 				}
