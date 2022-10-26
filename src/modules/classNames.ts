@@ -6,7 +6,7 @@
  * http://jedwatson.github.io/classnames
  */
 
-const camelToHyphenCase = (str: string) => str.replace(/([A-Z])/g, "-$1").toLowerCase();
+export const camelToHyphenCase = (str: string) => str.replace(/([A-Z])/g, "-$1").toLowerCase();
 
 type ClassNamesArgType = string | number | undefined | null;
 type ClassNamesArgsType = ClassNamesArgType | ClassNamesArgType[] | { [className: string]: boolean | undefined };
@@ -29,6 +29,6 @@ function classNames(...args: ClassNamesArgsType[]) {
 	return classes.join(" ");
 }
 
-classNames.toHyphenCase = true;
+classNames.toHyphenCase = false;
 
 export default classNames;

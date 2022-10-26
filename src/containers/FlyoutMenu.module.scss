@@ -1,6 +1,7 @@
 @import "../styles/ease";
+@import "../styles/mixin";
 
-.flyout-menu {
+.flyoutMenu {
 	position: relative;
 	box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
 	padding: 0;
@@ -15,7 +16,7 @@
 	flex-shrink: 0;
 	border: var(--border-color) 1px solid;
 	
-	> .flyout-menu-item {
+	> .flyoutMenuItem {
 		padding: 0.5rem 2.25rem;
 		margin: 0.5rem 0.5rem;
 		border-radius: 0.5rem;
@@ -27,7 +28,7 @@
 		i {
 			margin-right: 1rem;
 			
-			&:not(.check-box) {
+			&:not(.checkBox) {
 				opacity: 0;
 			}
 		}
@@ -39,7 +40,7 @@
 	}
 }
 
-.menu-mask {
+.menuMask {
 	position: fixed;
 	z-index: 4;
 	width: 100vw;
@@ -48,16 +49,23 @@
 	left: 0;
 }
 
-.circle-mask {
+.circleMask {
 	position: absolute;
 	right: 0;
-	width: 0px;
-	height: 0px;
+	width: 0;
+	height: 0;
 	overflow: hidden;
 	border-radius: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	@include flex-center;
 	z-index: 5;
+	opacity: 0;
 	// background-color: #f008;
+	
+	&Enter {
+		width: var(--width);
+		height: var(--height);
+		margin-right: var(--margin-right);
+		margin-top: var(--margin-top);
+		opacity: 1;
+	}
 }

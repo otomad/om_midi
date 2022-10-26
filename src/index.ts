@@ -6,11 +6,8 @@ import ripple from "./modules/ripple";
 import CSHelper from "./modules/CSHelper";
 
 CSHelper.updateThemeColor();
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
+const rootDom = document.getElementById("root");
+const root = ReactDOM.createRoot(rootDom);
 root.render(React.createElement(Root));
-
 ripple();
-
 document.oncontextmenu = e => e.preventDefault();

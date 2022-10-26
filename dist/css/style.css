@@ -11,7 +11,7 @@ footer button {
   padding: 0 2rem;
 }
 
-#apply-btn {
+#Dock-module_applyBtn__TLJRT {
   width: 100%;
   text-align: left;
   display: flex;
@@ -19,7 +19,7 @@ footer button {
   padding-left: 1rem;
 }
 
-#apply-btn i {
+#Dock-module_applyBtn__TLJRT i {
   margin-right: 0.5rem;
 }
 
@@ -28,101 +28,30 @@ footer {
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
 }
 
-#settings-btn {
+#Dock-module_settingsBtn__k4dDb {
   padding-right: 2.5rem;
-}button {
-  appearance: none;
-  background-color: transparent;
-  border: var(--foreground-color) 2px solid;
-  border-radius: 99999999rem;
-  cursor: pointer;
 }
-
-button:hover,
-.button-like:hover {
-  background-color: var(--foreground-color);
-}
-button:hover,
-button:hover *,
-.button-like:hover,
-.button-like:hover * {
-  color: black;
-}
-button:focus.focus-always:not(:hover):not(:active), button:focus-visible:not(:hover):not(:active), button:active:not(:hover),
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:active:not(:hover) {
-  --foreground-color: #2d8ceb;
-  background-color: var(--foreground-color);
-  border-color: var(--foreground-color);
-}
-button:focus.focus-always:not(:hover):not(:active),
-button:focus.focus-always:not(:hover):not(:active) *, button:focus-visible:not(:hover):not(:active),
-button:focus-visible:not(:hover):not(:active) *, button:active:not(:hover),
-button:active:not(:hover) *,
-.button-like:focus.focus-always:not(:hover):not(:active),
-.button-like:focus.focus-always:not(:hover):not(:active) *,
-.button-like:focus-visible:not(:hover):not(:active),
-.button-like:focus-visible:not(:hover):not(:active) *,
-.button-like:active:not(:hover),
-.button-like:active:not(:hover) * {
-  color: white;
-}
-button.primary:not(:hover),
-button.primary:not(:hover) *,
-.button-like.primary:not(:hover),
-.button-like.primary:not(:hover) * {
-  color: white;
-}
-button *::placeholder,
-.button-like *::placeholder {
-  color: unset;
-  opacity: 0.7;
-}.ripple-button {
-  overflow: hidden;
-  position: relative;
-}
-.ripple-button .ripple-circle {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.2823529412);
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  border-radius: 100%;
-  left: 0;
-  top: 0;
-  z-index: 2;
-}
-.ripple-button .ripple-circle ~ :not(.ripple-circle) {
-  z-index: 3;
-  position: relative;
-}
-.ripple-button.ripple-lighter .ripple-circle {
-  background-color: rgba(255, 255, 255, 0.2823529412);
-}
-.ripple-button.ripple-lighter:focus.focus-always:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:not(:hover):not(:active) .ripple-circle, .ripple-button.ripple-lighter:active:not(:hover) .ripple-circle, .ripple-button.ripple-lighter:focus-visible:hover .ripple-circle {
-  background-color: rgba(0, 0, 0, 0.2823529412);
-}.midi-table {
+.MidiConfigurator-module_midiTable__sbkTJ {
   border-bottom: var(--border-color) 1px solid;
 }
-.midi-table > section {
+.MidiConfigurator-module_midiTable__sbkTJ > section {
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.midi-table > section:last-of-type {
+.MidiConfigurator-module_midiTable__sbkTJ > section:last-of-type {
   padding-bottom: 0.75rem;
 }
-.midi-table > section > label {
+.MidiConfigurator-module_midiTable__sbkTJ > section > label {
   display: flex;
   align-items: center;
   flex-shrink: 0;
   padding-right: 1rem;
   cursor: pointer;
 }
-.midi-table > section > :last-child:not(.midi-bpm-shadow),
-.midi-table > section > #midi-bpm-text {
+.MidiConfigurator-module_midiTable__sbkTJ > section > :last-child:not(.MidiConfigurator-module_midiBpmShadow__OwsQ8),
+.MidiConfigurator-module_midiTable__sbkTJ > section > #MidiConfigurator-module_midiBpmText__HYCKM {
   display: block;
   width: 100%;
   text-align: right;
@@ -130,21 +59,21 @@ button *::placeholder,
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.midi-table > section input {
+.MidiConfigurator-module_midiTable__sbkTJ > section input {
   border: none;
   background-color: transparent;
   padding: 0;
 }
-.midi-table > section#midi-bpm-section {
+.MidiConfigurator-module_midiTable__sbkTJ > section#MidiConfigurator-module_midiBpmSection__2Zp-N {
   cursor: text;
 }
-.midi-table > section .midi-bpm-shadow {
+.MidiConfigurator-module_midiTable__sbkTJ > section .MidiConfigurator-module_midiBpmShadow__OwsQ8 {
   position: absolute !important;
   right: 2.5rem;
   pointer-events: none;
   color: transparent !important;
 }
-.midi-table > section .midi-bpm-shadow::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section .MidiConfigurator-module_midiBpmShadow__OwsQ8::after {
   content: "";
   display: block;
   width: 100%;
@@ -152,13 +81,13 @@ button *::placeholder,
   background-color: var(--accent-color);
   transform: scaleX(0);
 }
-.midi-table > section:hover .midi-bpm-shadow::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section:hover .MidiConfigurator-module_midiBpmShadow__OwsQ8::after {
   background-color: black;
 }
-.midi-table > section #midi-bpm-text:focus + .midi-bpm-shadow::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section #MidiConfigurator-module_midiBpmText__HYCKM:focus + .MidiConfigurator-module_midiBpmShadow__OwsQ8::after {
   transform: scaleX(1);
 }
-.midi-table > section::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section::after {
   content: "";
   display: block;
   width: 0.75rem;
@@ -169,22 +98,143 @@ button *::placeholder,
   flex-shrink: 0;
   margin-left: 0.75rem;
 }
-.midi-table > section:not(.option)::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section:not(.MidiConfigurator-module_option__sCodc)::after {
   opacity: 0;
 }
-.midi-table > section:hover::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section:hover::after {
   border-color: black;
 }
-.midi-table > section:focus-visible:not(:hover):not(:active)::after, .midi-table > section:active:not(:hover)::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section:focus-visible:not(:hover):not(:active)::after, .MidiConfigurator-module_midiTable__sbkTJ > section:active:not(:hover)::after {
   border-color: white;
 }
-.midi-table > section:focus-visible:not(:hover):not(:active) .midi-bpm-shadow::after, .midi-table > section:active:not(:hover) .midi-bpm-shadow::after {
+.MidiConfigurator-module_midiTable__sbkTJ > section:focus-visible:not(:hover):not(:active) .MidiConfigurator-module_midiBpmShadow__OwsQ8::after, .MidiConfigurator-module_midiTable__sbkTJ > section:active:not(:hover) .MidiConfigurator-module_midiBpmShadow__OwsQ8::after {
   background-color: white;
 }
-.midi-table i {
+.MidiConfigurator-module_midiTable__sbkTJ i {
   font-size: 1rem;
   margin-right: 0.75rem;
-}/* fallback */
+}
+.TabBar-module_tabBar__o4svY {
+  margin-bottom: 0.5rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+.TabBar-module_tabBar__o4svY > li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  white-space: nowrap;
+  padding-bottom: 0.5rem;
+  border-bottom: var(--border-color) 2px solid;
+  transition: all cubic-bezier(0, 0, 0, 1) 250ms, color cubic-bezier(0, 0, 0, 1) 100ms, border-width cubic-bezier(0, 0, 0, 1) 100ms !important;
+}
+.TabBar-module_tabBar__o4svY > li i {
+  margin-right: 0.5rem;
+  font-size: 2rem;
+  position: static !important;
+  z-index: 0 !important;
+}
+.TabBar-module_tabBar__o4svY > li:hover:not(:focus-visible),
+.TabBar-module_tabBar__o4svY > li:hover:not(:focus-visible) i {
+  background-color: transparent;
+  color: white;
+}
+.TabBar-module_tabBar__o4svY > li:hover:active:not(:focus-visible),
+.TabBar-module_tabBar__o4svY > li:hover:active:not(:focus-visible) i {
+  border-width: 0;
+}
+.TabBar-module_tabBar__o4svY > li.TabBar-module_active__G53lI:not(:hover):not(:active):not(:focus-visible),
+.TabBar-module_tabBar__o4svY > li.TabBar-module_active__G53lI:not(:hover):not(:active):not(:focus-visible) i {
+  color: var(--accent-color);
+}
+.TabBar-module_tabBar__o4svY > li.TabBar-module_active__G53lI:hover:not(:focus-visible),
+.TabBar-module_tabBar__o4svY > li.TabBar-module_active__G53lI:hover:not(:focus-visible) i {
+  color: #97c1eb;
+}
+.TabBar-module_tabBar__o4svY > li:active:not(:hover),
+.TabBar-module_tabBar__o4svY > li:active:not(:hover) i {
+  color: white;
+}
+
+.TabBar-module_indicator__K8OJf {
+  width: 33.3333333333vw;
+  height: 2px;
+  margin-top: -2px;
+  position: relative;
+  background-color: var(--accent-color);
+  left: 0;
+  transition: left cubic-bezier(0, 0, 0, 1) 500ms !important;
+}
+.FlyoutMenu-module_flyoutMenu__6EQaK {
+  position: relative;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
+  padding: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #313131;
+  transition: opacity cubic-bezier(0, 0, 0, 1) 250ms !important;
+  margin: 0;
+  right: 0;
+  top: 0;
+  width: fit-content;
+  flex-shrink: 0;
+  border: var(--border-color) 1px solid;
+}
+.FlyoutMenu-module_flyoutMenu__6EQaK > .FlyoutMenu-module_flyoutMenuItem__SHTsq {
+  padding: 0.5rem 2.25rem;
+  margin: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding-left: 1.25rem;
+  white-space: nowrap;
+}
+.FlyoutMenu-module_flyoutMenu__6EQaK > .FlyoutMenu-module_flyoutMenuItem__SHTsq i {
+  margin-right: 1rem;
+}
+.FlyoutMenu-module_flyoutMenu__6EQaK > .FlyoutMenu-module_flyoutMenuItem__SHTsq i:not(.FlyoutMenu-module_checkBox__4w01A) {
+  opacity: 0;
+}
+.FlyoutMenu-module_flyoutMenu__6EQaK.FlyoutMenu-module_hide__YKfNO {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.FlyoutMenu-module_menuMask__y3QOm {
+  position: fixed;
+  z-index: 4;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.FlyoutMenu-module_circleMask__Y1FR9 {
+  position: absolute;
+  right: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  opacity: 0;
+}
+.FlyoutMenu-module_circleMaskEnter__LJhFK {
+  width: var(--width);
+  height: var(--height);
+  margin-right: var(--margin-right);
+  margin-top: var(--margin-top);
+  opacity: 1;
+}
+/* fallback */
 @font-face {
   font-family: "Material Icons";
   font-style: normal;
@@ -249,113 +299,78 @@ body {
 
 #root {
   display: contents;
-}.tab-bar {
-  margin-bottom: 0.5rem;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: space-around;
 }
-.tab-bar > li {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  padding: 0.5rem;
-  white-space: nowrap;
-  padding-bottom: 0.5rem;
-  border-bottom: var(--border-color) 2px solid;
-  transition: all cubic-bezier(0, 0, 0, 1) 250ms, color cubic-bezier(0, 0, 0, 1) 100ms, border-width cubic-bezier(0, 0, 0, 1) 100ms !important;
-}
-.tab-bar > li i {
-  margin-right: 0.5rem;
-  font-size: 2rem;
-  position: static !important;
-  z-index: 0 !important;
-}
-.tab-bar > li:hover:not(:focus-visible),
-.tab-bar > li:hover:not(:focus-visible) i {
+button {
+  appearance: none;
   background-color: transparent;
-  color: white;
-}
-.tab-bar > li:hover:active:not(:focus-visible),
-.tab-bar > li:hover:active:not(:focus-visible) i {
-  border-width: 0;
-}
-.tab-bar > li.active:not(:hover):not(:active):not(:focus-visible),
-.tab-bar > li.active:not(:hover):not(:active):not(:focus-visible) i {
-  color: var(--accent-color);
-}
-.tab-bar > li.active:hover:not(:focus-visible),
-.tab-bar > li.active:hover:not(:focus-visible) i {
-  color: #97c1eb;
-}
-.tab-bar > li:active:not(:hover),
-.tab-bar > li:active:not(:hover) i {
-  color: white;
+  border: var(--foreground-color) 2px solid;
+  border-radius: 99999999rem;
+  cursor: pointer;
 }
 
-.indicator {
-  width: 33.3333333333vw;
-  height: 2px;
-  margin-top: -2px;
-  position: relative;
-  background-color: var(--accent-color);
-  left: 0;
-  transition: left cubic-bezier(0, 0, 0, 1) 500ms !important;
-}.flyout-menu {
-  position: relative;
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 3px -2px rgba(0, 0, 0, 0.4);
-  padding: 0;
-  border-radius: 1rem;
+button:hover,
+.buttonLike:hover {
+  background-color: var(--foreground-color);
+}
+button:hover,
+button:hover *,
+.buttonLike:hover,
+.buttonLike:hover * {
+  color: black;
+}
+button:focus.focusAlways:not(:hover):not(:active), button:focus-visible:not(:hover):not(:active), button:active:not(:hover),
+.buttonLike:focus.focusAlways:not(:hover):not(:active),
+.buttonLike:focus-visible:not(:hover):not(:active),
+.buttonLike:active:not(:hover) {
+  --foreground-color: #2d8ceb;
+  background-color: var(--foreground-color);
+  border-color: var(--foreground-color);
+}
+button:focus.focusAlways:not(:hover):not(:active),
+button:focus.focusAlways:not(:hover):not(:active) *, button:focus-visible:not(:hover):not(:active),
+button:focus-visible:not(:hover):not(:active) *, button:active:not(:hover),
+button:active:not(:hover) *,
+.buttonLike:focus.focusAlways:not(:hover):not(:active),
+.buttonLike:focus.focusAlways:not(:hover):not(:active) *,
+.buttonLike:focus-visible:not(:hover):not(:active),
+.buttonLike:focus-visible:not(:hover):not(:active) *,
+.buttonLike:active:not(:hover),
+.buttonLike:active:not(:hover) * {
+  color: white;
+}
+button.primary:not(:hover),
+button.primary:not(:hover) *,
+.buttonLike.primary:not(:hover),
+.buttonLike.primary:not(:hover) * {
+  color: white;
+}
+button *::placeholder,
+.buttonLike *::placeholder {
+  color: unset;
+  opacity: 0.7;
+}
+.rippleButton {
   overflow: hidden;
-  background-color: #313131;
-  transition: opacity cubic-bezier(0, 0, 0, 1) 250ms !important;
-  margin: 0;
-  right: 0;
-  top: 0;
-  width: fit-content;
-  flex-shrink: 0;
-  border: var(--border-color) 1px solid;
+  position: relative;
 }
-.flyout-menu > .flyout-menu-item {
-  padding: 0.5rem 2.25rem;
-  margin: 0.5rem 0.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  padding-left: 1.25rem;
-  white-space: nowrap;
-}
-.flyout-menu > .flyout-menu-item i {
-  margin-right: 1rem;
-}
-.flyout-menu > .flyout-menu-item i:not(.check-box) {
-  opacity: 0;
-}
-.flyout-menu.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.menu-mask {
-  position: fixed;
-  z-index: 4;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-}
-
-.circle-mask {
+.rippleButton .rippleCircle {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.2823529412);
+  width: 20px;
+  height: 20px;
   position: absolute;
-  right: 0;
-  width: 0px;
-  height: 0px;
-  overflow: hidden;
   border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.rippleButton .rippleCircle ~ :not(.rippleCircle) {
+  z-index: 3;
+  position: relative;
+}
+.rippleButton.rippleLighter .rippleCircle {
+  background-color: rgba(255, 255, 255, 0.2823529412);
+}
+.rippleButton.rippleLighter:focus.focusAlways:not(:hover):not(:active) .rippleCircle, .rippleButton.rippleLighter:focus-visible:not(:hover):not(:active) .rippleCircle, .rippleButton.rippleLighter:active:not(:hover) .rippleCircle, .rippleButton.rippleLighter:focus-visible:hover .rippleCircle {
+  background-color: rgba(0, 0, 0, 0.2823529412);
 }

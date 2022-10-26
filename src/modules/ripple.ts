@@ -1,3 +1,4 @@
+import "../styles/button.scss";
 import "./ripple.scss";
 
 function findLast<T>(array: T[], predicate: (value: T, index: number, array: T[]) => boolean): T | undefined {
@@ -5,13 +6,14 @@ function findLast<T>(array: T[], predicate: (value: T, index: number, array: T[]
 	return results[results.length - 1];
 }
 
-export default function ripple(bindClass = "ripple-button") {
+export default function ripple() {
+	const bindClass = "rippleButton";
+	const circleClass = "rippleCircle";
+	
 	function findClass(e: MouseEvent, listener: (element: HTMLElement) => void) {
 		const element = findLast(e.path, e => "classList" in e ? e.classList.contains(bindClass) : false);
 		if (element instanceof HTMLElement) listener(element);
 	}
-	
-	const CIRCLE_CLASS = "ripple-circle";
 	
 	document.addEventListener("mousedown", e => findClass(e, element => {
 		const rect = element.getClientRects()[0];
@@ -22,7 +24,7 @@ export default function ripple(bindClass = "ripple-button") {
 		pointerX -= circleRadius;
 		pointerY -= circleRadius;
 		const circle = document.createElement("div");
-		circle.classList.add(CIRCLE_CLASS);
+		circle.classList.add(circleClass);
 		circle.style.width = circleRadius * 2 + "px";
 		circle.style.height = circleRadius * 2 + "px";
 		circle.style.left = pointerX + "px";
@@ -40,7 +42,7 @@ export default function ripple(bindClass = "ripple-button") {
 	document.addEventListener("mouseup", () => {
 		const FADE_TIME = 250;
 		const IS_FADING_CLASS = "is-fading";
-		for (const circle of document.getElementsByClassName(CIRCLE_CLASS)) {
+		for (const circle of document.getElementsByClassName(circleClass)) {
 			if (circle.classList.contains(IS_FADING_CLASS)) return;
 			circle.classList.add(IS_FADING_CLASS);
 			circle.animate([

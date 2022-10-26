@@ -1,5 +1,5 @@
 import React, { HTMLProps } from "react";
-import "./MidiConfigurator.scss";
+import styles from "./MidiConfigurator.module.scss";
 import classNames from "../modules/classNames";
 import CSHelper from "../modules/CSHelper";
 import TabBar from "./TabBar";
@@ -82,27 +82,27 @@ export default class MidiConfigurator extends React.Component<Props, State> {
 			<StartTimeMenuItem tag={tag} key={"startTime-" + tag} />);
 		return (
 			<header>
-				<div className="midi-table">
-					<Section className="option" id="browse-midi" focusable onClick={this.openMidi}>
+				<div className={styles.midiTable}>
+					<Section className={styles.option} focusable onClick={this.openMidi}>
 						<label><i>file_open</i>MIDI 文件</label>
-						<span id="midi-name">{this.state.midiName}</span>
+						<span>{this.state.midiName}</span>
 					</Section>
-					<Section className="option" focusable>
+					<Section className={styles.option} focusable>
 						<label><i>audiotrack</i>选择轨道</label>
 						<span></span>
 					</Section>
-					<Section id="midi-bpm-section" onClick={() => this.focusBpmText(true)}>
-						<label htmlFor="midi-bpm-text"><i>speed</i>设定 BPM</label>
+					<Section id={styles.midiBpmSection} onClick={() => this.focusBpmText(true)}>
+						<label htmlFor={styles.midiBpmText}><i>speed</i>设定 BPM</label>
 						<input
 							type="text"
-							id="midi-bpm-text"
+							id={styles.midiBpmText}
 							value={this.state.bpmText}
 							placeholder={String(this.state.defaultBpmText)}
 							onChange={this.handleChange}
 							ref={this.bpmTextRef} />
-						<span className="midi-bpm-shadow">{this.state.bpmText !== "" ? this.state.bpmText : this.state.defaultBpmText}</span>
+						<span className={styles.midiBpmShadow}>{this.state.bpmText !== "" ? this.state.bpmText : this.state.defaultBpmText}</span>
 					</Section>
-					<Section className="option" id="start-time-section" focusable onClick={e => this.onStartTimeClick(true, e)}>
+					<Section className={styles.option} focusable onClick={e => this.onStartTimeClick(true, e)}>
 						<label><i>start</i>开始时间</label>
 						<span>{startTime[this.state.startTime]}</span>
 					</Section>
@@ -129,7 +129,7 @@ function Section(props: HTMLProps<HTMLElement> & {
 }) {
 	const { focusable, ...htmlProps } = props;
 	return (
-		<section {...htmlProps} className={classNames([htmlProps.className, "ripple-button", "button-like"])} tabIndex={focusable ? 0 : -1}>
+		<section {...htmlProps} className={classNames([htmlProps.className, "rippleButton", "buttonLike"])} tabIndex={focusable ? 0 : -1}>
 			{props.children}
 		</section>
 	);

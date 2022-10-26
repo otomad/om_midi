@@ -9,7 +9,7 @@ button {
 }
 
 button,
-.button-like {
+.buttonLike {
 	&:hover {
 		background-color: var(--foreground-color);
 		
@@ -19,7 +19,7 @@ button,
 		}
 	}
 
-	&:focus.focus-always:not(:hover):not(:active),
+	&:focus.focusAlways:not(:hover):not(:active),
 	&:focus-visible:not(:hover):not(:active),
 	&:active:not(:hover) {
 		--foreground-color: #2d8ceb;

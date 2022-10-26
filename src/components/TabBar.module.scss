@@ -1,6 +1,7 @@
 @import "../styles/ease";
+@import "../styles/mixin";
 
-.tab-bar {
+.tabBar {
 	margin-bottom: 0.5rem;
 	list-style-type: none;
 	margin: 0;
@@ -9,9 +10,8 @@
 	justify-content: space-around;
 	
 	> li {
-		display: flex;
+		@include flex-center;
 		width: 100%;
-		justify-content: center;
 		padding: 0.5rem;
 		white-space: nowrap;
 		padding-bottom: 0.5rem;

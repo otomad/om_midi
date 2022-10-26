@@ -1,9 +1,10 @@
 import React from "react";
+import { CSSTransition } from "react-transition-group";
 import MidiConfigurator from "../components/MidiConfigurator";
-import classNames from "../modules/classNames";
+import classNames, { camelToHyphenCase } from "../modules/classNames";
 import getPath from "../modules/getPath";
 import { ChildrenProps } from "../modules/props";
-import "./FlyoutMenu.scss";
+import styles from "./FlyoutMenu.module.scss";
 
 type CircleStyle = {
 	width: string, height: string, marginRight: string, marginTop: string,
@@ -14,12 +15,12 @@ interface MenuProps extends ChildrenProps {
 	parent: MidiConfigurator;
 }
 
-interface MenuState {
-	changeState: boolean;
-	circleStyle?: CircleStyle;
-}
+// interface MenuState {
+// 	changeState: boolean;
+// 	circleStyle?: CircleStyle;
+// }
 
-export class FlyoutMenu extends React.Component<MenuProps, MenuState> {
+export class FlyoutMenu extends React.Component<MenuProps> {
 	menuRef;
 	circleRef;
 	
@@ -28,9 +29,6 @@ export class FlyoutMenu extends React.Component<MenuProps, MenuState> {
 		props.parent.startTimeMenu = this;
 		this.menuRef = React.createRef<HTMLElement>();
 		this.circleRef = React.createRef<HTMLDivElement>();
-		this.state = {
-			changeState: false,
-		};
 	}
 	
 	hideMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -38,40 +36,49 @@ export class FlyoutMenu extends React.Component<MenuProps, MenuState> {
 			this.props.parent.onStartTimeClick(false);
 	};
 	
-	componentWillUpdate() {
+	/* componentWillUpdate() {
 		if (this.state.changeState) return;
 		this.setState({ changeState: true });
-	}
+	} */
 	
 	componentDidUpdate() {
 		const menu = this.menuRef.current, circle = this.circleRef.current;
-		if (!this.state.changeState || !menu || !circle) return;
-		let circleStyle: CircleStyle | undefined;
+		if (!menu || !circle) return;
+		// let circleStyle: CircleStyle | undefined;
 		if (this.props.shown) {
 			const rect = menu.getClientRects()[0];
 			const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2);
-			circleStyle = {
+			setCustomProperties(circle, {
 				width: radius + "px",
 				height: radius + "px",
 				marginRight: -(radius - rect.width) / 2 + "px",
 				marginTop: -(radius - rect.height) / 2 + "px",
-			};
+			});
 		}
-		this.setState({ changeState: false, circleStyle });
+		// this.setState({ changeState: false, circleStyle });
 	}
 	
 	render() {
 		return (
 			<>
-				{this.props.shown ? <div className="menu-mask" onClick={this.hideMenu}></div> : undefined}
-				<div className="circle-mask" onClick={this.hideMenu} ref={this.circleRef} style={this.state.circleStyle}>
-					<menu type="context" ref={this.menuRef} className={classNames({
-						flyoutMenu: true,
-						hide: !this.props.shown,
-					})}>
-						{this.props.children}
-					</menu>
-				</div>
+				{this.props.shown ? <div className={styles.menuMask} onClick={this.hideMenu}></div> : undefined}
+				<CSSTransition
+					in={this.props.shown}
+					timeout={250}
+					unmountOnExit={true}
+					classNames={{
+						enterActive: styles.circleMaskEnter,
+						enterDone: styles.circleMaskEnter,
+					}}>
+					<div className={styles.circleMask} onClick={this.hideMenu} ref={this.circleRef}>
+						<menu type="context" ref={this.menuRef} className={classNames({
+							[styles.flyoutMenu]: true,
+							hide: !this.props.shown,
+						})}>
+							{this.props.children}
+						</menu>
+					</div>
+				</CSSTransition>
 			</>
 		);
 	}
@@ -88,9 +95,9 @@ interface MenuItemProps extends ChildrenProps {
 export class FlyoutMenuItem extends React.Component<MenuItemProps> {
 	render() {
 		return (
-			<div className="flyout-menu-item button-like ripple-button" onClick={this.props.onClick}>
+			<div className={classNames(styles.flyoutMenuItem, "buttonLike", "rippleButton")} onClick={this.props.onClick}>
 				<i className={classNames({
-					checkBox: this.props.type !== "normal",
+					[styles.checkBox]: this.props.type !== "normal",
 				})}>{
 						this.props.type === "checkbox" ?
 							(this.props.isChecked ? "check_box" : "check_box_outline_blank") :
@@ -101,4 +108,9 @@ export class FlyoutMenuItem extends React.Component<MenuItemProps> {
 			</div>
 		);
 	}
+}
+
+function setCustomProperties(element: HTMLElement, styles: object) {
+	for (const [property, value] of Object.entries(styles))
+		element.style.setProperty("--" + camelToHyphenCase(property), value);
 }

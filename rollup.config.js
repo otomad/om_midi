@@ -1,13 +1,21 @@
 import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json" assert { type: "json" };
 import copy from "rollup-plugin-copy";
-import sass from "rollup-plugin-sass";
+import postcss from "rollup-plugin-postcss";
 
 export default {
 	input: "src/index.ts",
 	output: {
-		file: pkg.main,
+		dir: "./dist",
+		chunkFileNames: "js/index.js",
+		entryFileNames: "js/index.js",
 		format: "iife",
+		globals: {
+			react: "React",
+			"react-dom/client": "ReactDOM",
+			"csinterface-ts": "CSInterface",
+			"react-transition-group": "ReactTransitionGroup",
+		},
 	},
 	onwarn: function (warning) {
 		console.warn(warning.message);
@@ -27,11 +35,10 @@ export default {
 			strict: true,
 			jsx: "react",
 		}),
-		sass({
-			output: "dist/css/style.css",
-			options: {
-				outputStyle: "expanded",
-			}
+		postcss({
+			minimize: false,
+			autoModules: true,
+			extract: "css/style.css",
 		}),
 	],
 };

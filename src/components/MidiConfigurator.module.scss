@@ -1,4 +1,4 @@
-.midi-table {
+.midiTable {
 	border-bottom: var(--border-color) 1px solid;
 
 	> section {
@@ -19,8 +19,8 @@
 			cursor: pointer;
 		}
 
-		> :last-child:not(.midi-bpm-shadow),
-		> #midi-bpm-text {
+		> :last-child:not(.midiBpmShadow),
+		> #midiBpmText {
 			display: block;
 			width: 100%;
 			text-align: right;
@@ -35,11 +35,11 @@
 			padding: 0;
 		}
 		
-		&#midi-bpm-section {
+		&#midiBpmSection {
 			cursor: text;
 		}
 
-		.midi-bpm-shadow {
+		.midiBpmShadow {
 			position: absolute !important;
 			right: 2.5rem;
 			pointer-events: none;
@@ -55,11 +55,11 @@
 			}
 		}
 		
-		&:hover .midi-bpm-shadow::after {
+		&:hover .midiBpmShadow::after {
 			background-color: black;
 		}
 		
-		#midi-bpm-text:focus + .midi-bpm-shadow::after {
+		#midiBpmText:focus + .midiBpmShadow::after {
 			transform: scaleX(1);
 		}
 
@@ -91,7 +91,7 @@
 				border-color: white;
 			}
 			
-			.midi-bpm-shadow::after {
+			.midiBpmShadow::after {
 				background-color: white;
 			}
 		}
