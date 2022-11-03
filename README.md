@@ -13,7 +13,7 @@
 
 **om midi**, or **OMM** for short, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
 
-Thanks to original script creators [David Van Brink (omino)](https://omino.com/), [Dora (NGDXW)](https://space.bilibili.com/40208180), [HanceyMica](https://space.bilibili.com/66940276), [Z4HD](https://github.com/Z4HD) for their efforts. And this repository is modified based on Z4HD's repository [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
+Thanks to original script creators [David Van Brink (omino)](https://omino.com/), [Dora (NGDXW)](https://space.bilibili.com/40208180), [Hancey](https://space.bilibili.com/66940276)[Mica](https://space.bilibili.com/7035664), [Z4HD](https://github.com/Z4HD) for their efforts. And this repository is modified based on Z4HD's repository [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
 
 The current project is rewritten using new technologies like TypeScript based on legacy scripts.
 
