@@ -13,7 +13,7 @@
 
 **om midi**, or **OMM** for short, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
 
-Thanks to original script creators [David Van Brink (omino)](https://omino.com/), [Dora (NGDXW)](https://space.bilibili.com/40208180), [Hancey](https://space.bilibili.com/66940276)[Mica](https://space.bilibili.com/7035664), [Z4HD](https://github.com/Z4HD) for their efforts. And this repository is modified based on Z4HD's repository [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
+Thanks to original script creators [David Van Brink (omino)](https://omino.com/), [Dora (NGDXW)](https://space.bilibili.com/40208180), [Z4HD](https://github.com/Z4HD) for their efforts. And this repository is modified based on Z4HD's repository [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
 
 The current project is rewritten using new technologies like TypeScript based on legacy scripts.
 
@@ -54,7 +54,7 @@ Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI |
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
 v0.1 | [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌
 v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
-v1.0 Plus | [HanceyMica's Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
+v1.0 Plus | [Expression Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
 v1.2 | [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
 v2.0 | [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌
 v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
@@ -63,7 +63,7 @@ v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 #### Previous Versions
 * [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398)
-* [HanceyMica's Presets](https://www.bilibili.com/video/av29649969)
+* [Expression Presets](https://www.bilibili.com/video/av29649969)
 * [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487)
 #### Introduction Videos

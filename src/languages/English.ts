@@ -99,7 +99,7 @@ const English: typeof SChinese = {
 	end_of_track_position_error: "Error: Track ends in wrong position. Expected %1, actually %2.",
 	cannot_set_time_remap_error: "Error: Time remapping cannot be set for the selected layer.",
 	cannot_tuning_error: "Error: The selected layer does not contain audio so that cannot be tuned.",
-	about: "It reads a Standard MIDI sequence file and creates layers and keyframes corresponding to the notes and controllers in that MIDI sequence file.\n\nVersion: %4\nApp: %2\nSpecifier: %3\n\nScript Original Authors: David Van Brink (omino), Dora (NGDXW), HanceyMica, Z4HD\nScript Author: Ranne\nRepository Link: %1",
+	about: "It reads a Standard MIDI sequence file and creates layers and keyframes corresponding to the notes and controllers in that MIDI sequence file.\n\nVersion: %4\nApp: %2\nSpecifier: %3\n\nScript Original Authors: David Van Brink (omino), Dora (NGDXW), Z4HD\nScript Author: Ranne\nRepository Link: %1",
 	horizontal_mirror: "Horizontal Mirror",
 	advanced_scale: "Advanced Scale",
 	loading_midi: "Loading %1 ...",
