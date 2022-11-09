@@ -142,7 +142,7 @@ export default class Portal {
 		};
 	}
 	
-	public static build(thisObj: Panel, user: typeof User): Portal {
+	public static build(thisObj: Panel | typeof globalThis, user: typeof User): Portal {
 		$.strict = true;
 		const window = thisObj instanceof Panel ? thisObj :
 			new Window("palette", user.scriptName + " v" + user.version, undefined, {

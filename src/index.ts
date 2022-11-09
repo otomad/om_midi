@@ -1,9 +1,9 @@
+/// <reference path="this.d.ts" />
 import user from "./user";
+import thisObj from "this";
 import Portal from "./ui/Portal";
 import { LowVersionError, NotAfterEffectsError } from "./errors";
 import initPrototypes from "./modules/prototypes";
-
-declare const thisObj: Panel;
 
 if (BridgeTalk.appName !== "aftereffects")
 	throw new NotAfterEffectsError();
