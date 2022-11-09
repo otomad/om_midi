@@ -19,12 +19,13 @@ export default [{
 			this: "this",
 		},
 		externalLiveBindings: false,
+		interop: false, // fuck the shit `_interopDefaultLegacy`.
 	},
 	onwarn: function (warning) {
 		console.warn(warning.message);
 	},
 	context: "this",
-	external: Object.keys(pkg.dependencies),
+	external: [...Object.keys(pkg.dependencies), "this"],
 	plugins: [
 		replace({
 			preventAssignment: true,
@@ -36,20 +37,20 @@ export default [{
 			module: "esnext",
 			target: "es5",
 			noImplicitAny: true,
-			moduleResolution: "node",
+			moduleResolution: "classic",
 			strict: true,
 		}),
 		cleanup({
 			comments: "all",
 			lineEndings: "unix",
 		}),
-		enableTerser ? terser({
+		enableTerser && terser({
 			compress: {
 				// conditionals: false, // ExtendScript 对三元运算符的运算顺序有偏见。
 				// comparisons: false, // ExtendScript 对逻辑与、逻辑或的运算顺序也有偏见。
 				defaults: false, // 直接禁用默认得了。
 			},
-		}) : undefined,
+		}),
 		license({
 			banner: {
 				content: {

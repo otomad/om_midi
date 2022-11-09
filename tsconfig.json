@@ -3,7 +3,7 @@
 		"module": "esnext",
 		"target": "es5",
 		"noImplicitAny": true,
-		"moduleResolution": "node",
+		"moduleResolution": "Classic",
 		"strict": true,
 		"noLib": true,
 		"typeRoots": [],
