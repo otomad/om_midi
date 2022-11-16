@@ -54,7 +54,7 @@ const English: typeof SChinese = {
 	import_pure_quarter_midi: "Import pure quarter MIDI",
 	using_selected_layer_name: "Use selected layer name instead of MIDI track name.",
 	normalize_pan_to_100: "Normalize the pan to -100 ~ 100.",
-	using_layering: "@Koorihato Sakuno's unique layering method.",
+	using_layering: "@Hibato Sakuno's unique layering method.",
 	optimize_apply_effects: "Turn on visual motion for some effects.",
 	add_to_effect_transform: "Add the properties to an effect called Transform.",
 	sure_to_import_pure_quarter_midi: "Are you sure you want to import the pure quarter notes MIDI file?",
