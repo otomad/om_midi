@@ -44,6 +44,11 @@ $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));
 footage("om_utils.jsx").sourceData;
 ```
 
+#### お兄ちゃん気をつけてね
+After Effects でスクリプトを開くと、図のようなエラーが発生する場合。
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
+*編集 > 環境設定 > スクリプトとエクスプレッション > スクリプトによるファイルへの書き込みとネットワークへのアクセスを許可* を有効にしてください。
+
 ### バージョン比較
 > v1.2 を除き、その他のバージョン タグは付与されません。そのため、これらのバージョン タグは自分で定義しています。
 
