@@ -1,6 +1,6 @@
 /**
  * om midi v3.10.25.0
- * 简称 OMM，After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
+ * After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。
  * 希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
  *
  * 描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。
@@ -11,7 +11,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2022 年 11 月 27 日 星期日 下午 13:52:56
+ * 构建日期：2022 年 12 月 29 日 星期四 下午 17:27:36
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Sunday, November 27, 2022 1:52 PM
+ * Building Date: Thursday, December 29, 2022 5:27 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:

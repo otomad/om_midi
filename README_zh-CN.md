@@ -8,7 +8,7 @@
 [EN](README.md) | **简中** | [日](README_ja-JP.md)
 </div>
 
-**om midi**，简称 **OMM**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
+**om midi**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
 感谢脚本原作者们 [大卫·范·布林克（奥米诺）](https://omino.com/)、[哆啦 (NGDXW)](https://space.bilibili.com/40208180)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
@@ -75,6 +75,7 @@ v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 * [动感开发的 Rollup TypeScript 脚手架](https://github.com/motiondeveloper/expression-globals-typescript)
 * [犀利 V](https://github.com/Silly-V/Adobe-TS-ExtendScript) 和 [AE 增强者](https://github.com/aenhancers/Types-for-Adobe)的 Adobe 类型注解
 * [塞尔吉·古兹曼（科尔西）的 MIDI 解析器 JS - MIDI 文件格式规范](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
+* M 制造者的 [M 制造者](https://github.com/stysmmaker/mmkr)和[从 JSON 中添加标记](https://github.com/stysmmaker/AddMarkersFromJSON)。
 
 </div>
 

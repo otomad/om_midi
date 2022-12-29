@@ -8,7 +8,7 @@
 [EN](README.md) | [简中](README_zh-CN.md) | **日**
 </div>
 
-**om midi**（略して **OMM**）は、**After Effects** 用の音 MAD / YTPMV アシスタント スクリプトです。After Effects で MIDI ファイルをキーフレームに自動変換するスクリプトです。om midi の助けを借りて、人々が退屈なビデオとオーディオの調整から解放され、よりクリエイティブな作品により多くのエネルギーを注ぐことができることを願っています。
+**om midi** は、**After Effects** 用の音 MAD / YTPMV アシスタント スクリプトです。After Effects で MIDI ファイルをキーフレームに自動変換するスクリプトです。om midi の助けを借りて、人々が退屈なビデオとオーディオの調整から解放され、よりクリエイティブな作品により多くのエネルギーを注ぐことができることを願っています。
 
 オリジナルのスクリプト作成者である [デビッド・ヴァン・ブリンク（オミノ）](https://omino.com/)、[ドラ (NGDXW)](https://space.bilibili.com/40208180)、[家鼈大帝](https://github.com/Z4HD) の努力に感謝します。そして、このリポジトリは家鼈大帝のリポジトリ [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) に基づいて変更されています。
 
@@ -75,5 +75,6 @@ v3.x | **現在版** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 * [モーション開発者の Rollup TypeScript スキャフォールディング](https://github.com/motiondeveloper/expression-globals-typescript)
 * [シリーV](https://github.com/Silly-V/Adobe-TS-ExtendScript)と[アエンハンサー](https://github.com/aenhancers/Types-for-Adobe)の Adobe タイプ
 * [セルジ・グスマン（コルシー）の MIDI パーサー JS - MIDI ファイル形式の仕様](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
+* M メーカーの [M メーカー](https://github.com/stysmmaker/mmkr)と[JSON からマーカーを追加](https://github.com/stysmmaker/AddMarkersFromJSON)。
 
 </div>
