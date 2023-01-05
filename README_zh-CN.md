@@ -45,8 +45,8 @@ footage("om_utils.jsx").sourceData;
 ```
 
 #### 值得注意的是
-如果 After Effects 在打开脚本时引发如图所示的错误。
-![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
+如果 After Effects 在打开脚本时引发如图所示的错误。  
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 请启用 *编辑 > 首选项 > 脚本和表达式 > 允许脚本写入文件和访问网络*。
 
 ### 版本对比
