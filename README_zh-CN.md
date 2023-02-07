@@ -10,7 +10,7 @@
 
 **om midi**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
-感谢脚本原作者们 [大卫·范·布林克（奥米诺）](https://omino.com/)、[哆啦 (NGDXW)](https://space.bilibili.com/40208180)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
+感谢脚本原作者们[大卫·范·布林克（奥米诺）](https://omino.com/)、[哆啦 (NGDXW)](https://space.bilibili.com/40208180)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
 当前项目根据旧版的脚本使用 TypeScript 等新技术进行重写。
 

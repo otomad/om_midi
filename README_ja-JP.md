@@ -10,7 +10,7 @@
 
 **om midi** は、**After Effects** 用の音 MAD / YTPMV アシスタント スクリプトです。After Effects で MIDI ファイルをキーフレームに自動変換するスクリプトです。om midi の助けを借りて、人々が退屈なビデオとオーディオの調整から解放され、よりクリエイティブな作品により多くのエネルギーを注ぐことができることを願っています。
 
-オリジナルのスクリプト作成者である [デビッド・ヴァン・ブリンク（オミノ）](https://omino.com/)、[ドラ (NGDXW)](https://space.bilibili.com/40208180)、[家鼈大帝](https://github.com/Z4HD) の努力に感謝します。そして、このリポジトリは家鼈大帝のリポジトリ [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) に基づいて変更されています。
+オリジナルのスクリプト作成者である[デビッド・ヴァン・ブリンク（オミノ）](https://omino.com/)、[ドラ (NGDXW)](https://space.bilibili.com/40208180)、[家鼈大帝](https://github.com/Z4HD)の努力に感謝します。そして、このリポジトリは家鼈大帝のリポジトリ [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) に基づいて変更されています。
 
 現在のプロジェクトは、レガシー スクリプトに基づく TypeScript などの新しいテクノロジを使用して書き直されています。
 
