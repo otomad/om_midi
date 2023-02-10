@@ -8,7 +8,7 @@
 	<img src="https://img.shields.io/badge/VERSION-3.10.25.0-orange?style=flat-square" alt="Badge" />
 	<!-- <img src="https://img.shields.io/github/downloads/otomad/om_midi/total.svg?style=flat-square&label=DOWNLOADS" alt="Downloads"> -->
 
-**EN** | [简中](README_zh-CN.md) | [日](README_ja-JP.md)
+**English** | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md)
 </div>
 
 **om midi**, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
@@ -55,14 +55,14 @@ Please enable *Edit > Preferences > Scripting & Expressions > Allow Scripts to W
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
 
-Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI | Additional Useful Keyframes | Manually Select MIDI Tracks | Change BPM
-:--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
-v0.1 | [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌
-v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
-v1.0 Plus | [Expression Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
-v1.2 | [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
-v2.0 | [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌
-v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI | Additional Useful Keyframes | Manually Select MIDI Tracks | Change BPM | Dynamic BPM
+:--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---:
+v0.1 | [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌
+v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.0 Plus | [Expression Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.2 | [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌
+v2.0 | [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌
+v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### References
 #### Previous Versions
@@ -78,6 +78,6 @@ v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 * [Motion Developer's Rollup TypeScript Scaffolding](https://github.com/motiondeveloper/expression-globals-typescript)
 * [Silly-V's](https://github.com/Silly-V/Adobe-TS-ExtendScript) and [aenhancers's](https://github.com/aenhancers/Types-for-Adobe) Adobe Types
 * [Sergi Guzman (colxi)'s midi-parser-js - MIDI File Format Specifications](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
-* MMaker's [mmkr](https://github.com/stysmmaker/mmkr) and [AddMarkersFromJSON](https://github.com/stysmmaker/AddMarkersFromJSON).
+* MMaker's [mmkr](https://github.com/stysmmaker/mmkr) and [AddMarkersFromJSON](https://github.com/stysmmaker/AddMarkersFromJSON)
 
 </div>
