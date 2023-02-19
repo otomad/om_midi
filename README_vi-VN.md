@@ -8,7 +8,7 @@
 [EN](README.md) | [简中](README_zh-CN.md) | [日](README_ja-JP.md) | **VI**
 </div>
 
-**om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và audio nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
+**om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và âm thanh nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
 
 Chân thành cảm ơn những người tạo ra script là [David Van Brink (omino)](https://omino.com/), [Dora (NGDXW)](https://space.bilibili.com/40208180), [Z4HD](https://github.com/Z4HD) vì công sức của họ. Và lưu trữ (repository) này được chỉnh sửa dựa trên lưu trữ của Z4HD là [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
 
