@@ -5,7 +5,7 @@
 	<h2 id="om_midi">om midi</h2>
 	<p><b><i>Lan Âm</i></b></p>
 
-[EN](README.md) | [简中](README_zh-CN.md) | [日](README_ja-JP.md) | **VI**
+[EN](README.md) | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | **VI**
 </div>
 
 **om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và âm thanh nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
@@ -54,14 +54,14 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 ### So sánh các phiên bản
 > Ngoại trừ v1.2, không có thẻ phiên bản được ghi rõ cho các phiên bản khác. Vì vậy, các thẻ phiên bản được xác định bởi chính tôi.
 
-Ver. | Tên thông thường | Hỗ trợ Multitrack | Thêm Keyframes vào Layers | UI tiếng Anh (giờ có tiếng Việt) |  Keyframes hữu ích bổ sung | Chọn các MIDI Track thủ công | Thay đổi BPM
+Ver. | Tên thông thường | Hỗ trợ Multitrack | Thêm Keyframes vào Layers | UI tiếng Anh (giờ có tiếng Việt) |  Keyframes hữu ích bổ sung | Chọn các MIDI Track thủ công | Thay đổi BPM | BPM động
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
 v0.1 | [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌
-v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
-v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
-v1.2 | [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
-v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌
-v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.2 | [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌
+v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌
+v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### Chú thích
 #### Các phiên bản trước
