@@ -75,7 +75,7 @@ v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔�
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
 #### Phụ thuộc vào
 * [Rollup TypeScript Scaffolding của Motion Developer](https://github.com/motiondeveloper/expression-globals-typescript)
-* Adobe Types của [Silly-V](https://github.com/Silly-V/Adobe-TS-ExtendScript) và [aenhancers's](https://github.com/aenhancers/Types-for-Adobe)
+* Adobe Types của [Silly-V](https://github.com/Silly-V/Adobe-TS-ExtendScript) và [aenhancers](https://github.com/aenhancers/Types-for-Adobe)
 * [midi-parser-js của Sergi Guzman (colxi)- Thông số kỹ thuật định dạng tệp MIDI](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 * [mmkr](https://github.com/stysmmaker/mmkr) và [AddMarkersFromJSON](https://github.com/stysmmaker/AddMarkersFromJSON) của MMaker.
 
