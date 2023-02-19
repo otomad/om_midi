@@ -55,7 +55,7 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 > Ngoại trừ v1.2, không có thẻ phiên bản được ghi rõ cho các phiên bản khác. Vì vậy, các thẻ phiên bản được xác định bởi chính tôi.
 
 Ver. | Tên thông thường | Hỗ trợ Multitrack | Thêm Keyframes vào Layers | UI tiếng Anh (giờ có tiếng Việt) |  Keyframes hữu ích bổ sung | Chọn các MIDI Track thủ công | Thay đổi BPM | BPM động
-:--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
+:--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: 
 v0.1 | [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌
 v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌
 v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌
