@@ -57,11 +57,11 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 Ver. | Tên thông thường | Hỗ trợ Multitrack | Thêm Keyframes vào Layers | UI tiếng Anh (giờ có tiếng Việt) |  Keyframes hữu ích bổ sung | Chọn các MIDI Track thủ công | Thay đổi BPM
 :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---:
 v0.1 | [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌
-v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌
-v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌
-v1.2 | [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌
-v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌
-v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌
+v1.2 | [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌
+v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌
+v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
 
 ### Chú thích
 #### Các phiên bản trước
