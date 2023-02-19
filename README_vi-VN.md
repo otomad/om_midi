@@ -28,7 +28,7 @@ Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahe
 `CS5` và các phiên bản sau này về mặt lý thuyết là được hỗ trợ . Và cả 2 hệ điều hành Windows và macOS về mặt lý thuyết là được hỗ trợ.
 
 ### Cài đặt
-Tải file mới nhất của script.
+[**Tải xuống**](https://github.com/otomad/om_midi/releases) file mới nhất của script.
 
 #### `om midi`
 Đặt script vào thư mục `Scripts\ScriptUI Panels` nằm trong đường dẫn cài đặt của After Effects.
