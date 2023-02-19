@@ -5,7 +5,7 @@
 	<h2 id="om_midi">om midi</h2>
 	<p><b><i>Lan Âm</i></b></p>
 
-[EN](README.md) | [简中](README_zh-CN.md) | [日](README_ja-JP.md) | **VI**
+[EN](README.md) | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | **VI**
 </div>
 
 **om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và âm thanh nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
