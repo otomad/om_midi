@@ -2,7 +2,7 @@
 
 欢迎阅读 om_midi.jsx 的中文文档。
 
-[![Index](/gallery/index1.webp)](/gallery/index1.webp)
+[![Index](gallery/index1.webp)](gallery/index1.webp)
 
 !!! danger "暂停更新"
     > _[再次对om_midi脚本进行修改](https://www.bilibili.com/read/cv1217487)_

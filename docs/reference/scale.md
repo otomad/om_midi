@@ -3,7 +3,7 @@
 !!! note "版本信息"
     该特性包含于 NGDXW先辈 修改版 om_midi
 
-[![sample](/gallery/scale-sample1.png)](/gallery/scale-sample1.png)
+[![sample](../gallery/scale-sample1.png)](../gallery/scale-sample1.png)
 
 生成值为 `100` 或 `-100` 的关键帧，主要用于制作左右/上下抽动效果。
 
@@ -35,7 +35,7 @@ temp = thisComp.layer("midi").effect("缩放")("滑块"); //该行以实际情�
 
 此举会使垂直方向的缩放值恒为 `100` ,进而实现水平翻转的效果。
 
-###　上下抽动
+### 上下抽动
 
 还是上面的表达式，改成如下形式：
 
