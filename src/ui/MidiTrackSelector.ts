@@ -25,7 +25,7 @@ export default class MidiTrackSelector {
 		this.group = addControl(this.window, "group", { orientation: "column", alignChildren: "fill", alignment: ["fill", "fill"] });
 		this.selectAllCheck = addControl(this.group, "checkbox", { text: localize(uiStr.select_all) });
 		this.trackList = addControl(this.group, "listbox", { alignment: ["fill", "fill"] }, {
-			multiselect: true, numberOfColumns: 4, showHeaders: true,
+			multiselect: true, numberOfColumns: 3, showHeaders: true,
 			columnTitles: [localize(uiStr.channel), localize(uiStr.name), localize(uiStr.note_count)],
 			columnWidths: [50, 225, 75],
 		});
