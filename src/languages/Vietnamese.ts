@@ -120,7 +120,7 @@ const Vietnamese: typeof SChinese = {
 	motion_float_right: "Nổi phải",
 	motion_float_up: "Nổi lên",
 	motion_float_down: "Nổi xuống",
-	script_translator: "Thông dịch viên: ",
+	script_translator: "Biên dịch: ",
 };
 
 export default Vietnamese;
