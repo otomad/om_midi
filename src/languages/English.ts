@@ -1,6 +1,7 @@
 import SChinese from "./SChinese";
 
 const English: typeof SChinese = {
+	__translator__: "",
 	ok: "OK",
 	cancel: "Cancel",
 	channel_abbr: "CH",
@@ -52,11 +53,11 @@ const English: typeof SChinese = {
 	about_script_engine: "About ExtendScript engine",
 	import_om_utils: "Import om utils",
 	import_pure_quarter_midi: "Import pure quarter MIDI",
-	using_selected_layer_name: "Use selected layer name instead of MIDI track name.",
-	normalize_pan_to_100: "Normalize the pan to -100 ~ 100.",
-	using_layering: "@Hibato Sakuno's unique layering method.",
-	optimize_apply_effects: "Turn on visual motion for some effects.",
-	add_to_effect_transform: "Add the properties to an effect called Transform.",
+	using_selected_layer_name: "Use selected layer name instead of MIDI track name　",
+	normalize_pan_to_100: "Normalize the pan to -100 ~ 100",
+	using_layering: "@Hibato Sakuno's unique layering method",
+	optimize_apply_effects: "Turn on visual motion for some effects",
+	add_to_effect_transform: "Add the properties to an effect called Transform",
 	sure_to_import_pure_quarter_midi: "Are you sure you want to import the pure quarter notes MIDI file?",
 	pure_quarter_midi: "Pure quarter notes MIDI",
 	add_at_top_of_expression: "Prepend to expressions",
@@ -119,6 +120,7 @@ const English: typeof SChinese = {
 	motion_float_right: "Float Right",
 	motion_float_up: "Float Up",
 	motion_float_down: "Float Down",
+	script_translator: "Script Translator: ",
 };
 
 export default English;

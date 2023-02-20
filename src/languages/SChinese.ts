@@ -1,4 +1,5 @@
 const SChinese = {
+	__translator__: "",
 	ok: "确定",
 	cancel: "取消",
 	channel_abbr: "通道",
@@ -50,11 +51,11 @@ const SChinese = {
 	about_script_engine: "关于脚本引擎",
 	import_om_utils: "导入 om utils",
 	import_pure_quarter_midi: "导入纯四分 MIDI",
-	using_selected_layer_name: "使用选中图层名称而不是 MIDI 轨道名称。",
-	normalize_pan_to_100: "声像标准化到 -100 ~ 100。",
-	using_layering: "@冰鸠樱乃的特有图层叠叠乐方法。",
-	optimize_apply_effects: "为部分效果开启视觉动画。",
-	add_to_effect_transform: "将属性添加到效果中的变换中。",
+	using_selected_layer_name: "使用选中图层名称而不是 MIDI 轨道名称",
+	normalize_pan_to_100: "声像标准化到 -100 ~ 100",
+	using_layering: "@冰鸠樱乃的特有图层叠叠乐方法",
+	optimize_apply_effects: "为部分效果开启视觉动画",
+	add_to_effect_transform: "将属性添加到效果中的变换中",
 	sure_to_import_pure_quarter_midi: "确定要导入纯四分音符 MIDI 文件吗？",
 	pure_quarter_midi: "纯四分音符 MIDI",
 	add_at_top_of_expression: "在表达式顶部添加",
@@ -117,6 +118,7 @@ const SChinese = {
 	motion_float_right: "右浮",
 	motion_float_up: "上浮",
 	motion_float_down: "下浮",
+	script_translator: "脚本翻译：",
 };
 
 export default SChinese;

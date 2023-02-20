@@ -56,7 +56,10 @@ export default class SettingsDialog {
 		this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.separator = new Separator(this.group, "vertical");
 		this.rightGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill", spacing: 5 });
-		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: localize(uiStr.about, User.githubPage, appDisplayName, BridgeTalk.appSpecifier, "v" + User.version) }, { multiline: true, scrolling: true });
+		let about = localize(uiStr.about, User.githubPage, appDisplayName, BridgeTalk.appSpecifier, "v" + User.version);
+		const translator = localize(uiStr.__translator__);
+		if (translator !== "") about += "\n" + localize(uiStr.script_translator) + translator;
+		this.aboutLbl = addControl(this.leftGroup, "statictext", { text: about }, { multiline: true, scrolling: true });
 		this.openGithubBtnGroup = new FlowGroup(this.leftGroup, 3, ["fill", "bottom"]);
 		this.openGithubLatestBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.check_update) + DIALOG_SIGN });
 		this.openGithubPageBtn = this.openGithubBtnGroup.add("button", { text: localize(uiStr.repository_link) });

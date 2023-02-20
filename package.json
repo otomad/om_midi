@@ -2,7 +2,7 @@
   "name": "om_midi",
   "version": "3.0",
   "description": "After Effects Expression Library",
-  "main": "dist/om_midi.jsx",
+  "main": "dist/om midi.jsx",
   "scripts": {
     "tsc": "tsc",
     "build": "rollup -c",

@@ -385,9 +385,12 @@ export default class Core {
 						
 						const MOVEMENT_RATIO = 10;
 						const movement = source.width / MOVEMENT_RATIO;
-						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT ? -1 : 1;
+						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_UP ? -1 : 1;
 						const key = addKey(seconds);
-						setValueAtKey(key, [currentAnchor[0] + direction * movement, currentAnchor[1]]);
+						if (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT)
+							setValueAtKey(key, [currentAnchor[0] + direction * movement, currentAnchor[1]]);
+						else
+							setValueAtKey(key, [currentAnchor[0], currentAnchor[1] + direction * movement]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = addKey(noteOffSeconds);
 						setValueAtKey(key2, currentAnchor);

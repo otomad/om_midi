@@ -1,6 +1,7 @@
 import SChinese from "./SChinese";
 
 const Vietnamese: typeof SChinese = {
+	__translator__: "Cyahega",
 	ok: "OK",
 	cancel: "Hủy",
 	channel_abbr: "CH",
@@ -52,11 +53,11 @@ const Vietnamese: typeof SChinese = {
 	about_script_engine: "Về ExtendScript engine",
 	import_om_utils: "Nhập om utils",
 	import_pure_quarter_midi: "Nhập MIDI quý thuần túy",
-	using_selected_layer_name: "Sử dụng tên layer đã chọn thay vì tên track MIDI.",
-	normalize_pan_to_100: "Normalize pan từ -100 ~ 100.",
-	using_layering: "Phương pháp layering độc nhất của @Hibato Sakuno.",
-	optimize_apply_effects: "Bật visual motion cho một số hiệu ứng.",
-	add_to_effect_transform: "Thêm các thuộc tính vào một hiệu ứng gọi là Transform.",
+	using_selected_layer_name: "Sử dụng tên layer đã chọn thay vì tên track MIDI",
+	normalize_pan_to_100: "Normalize pan từ -100 ~ 100",
+	using_layering: "Phương pháp layering độc nhất của @Băng Cưu Anh Nãi　",
+	optimize_apply_effects: "Bật visual motion cho một số hiệu ứng",
+	add_to_effect_transform: "Thêm các thuộc tính vào một hiệu ứng gọi là Transform",
 	sure_to_import_pure_quarter_midi: "Bạn có chắc chắn muốn nhập nốt tệp MIDI quý thuần túy không?",
 	pure_quarter_midi: "Nốt MIDI quý thuần túy",
 	add_at_top_of_expression: "Thêm vào biểu thức",
@@ -96,10 +97,10 @@ const Vietnamese: typeof SChinese = {
 	no_options_checked_error: "Lỗi: Vui lòng chọn ít nhất 1 tùy chọn.",
 	no_layer_selected_error: "Error: Không có layer nào được chọn trong composition hiện tại.",
 	not_one_track_for_apply_effects_only_error: "Lỗi: Áp dụng hiệu ứng chỉ có thể chọn một track MIDI cùng một lúc.",
-	end_of_track_position_error: "Lỗi: Track kết thúc ở sai vị trí.  Dự kiến ​​1%, thực tế 2%.",
+	end_of_track_position_error: "Lỗi: Track kết thúc ở sai vị trí. Dự kiến ​​1%, thực tế 2%.",
 	cannot_set_time_remap_error: "Lỗi: Sắp xếp lại thời gian không thể đặt cho layer được chọn.",
 	cannot_tuning_error: "Lỗi: Layer đã chọn không chứa âm thanh nên không thể tune được.",
-	about: "Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nCông cụ xác định: %3\n\nCác tác giả script gốc: David Van Brink (omino), Dora (NGDXW), Z4HD\nTác giả script: Lan Âm\nLink lưu trữ: %1",
+	about: "Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nCông cụ xác định: %3\n\nTác giả gốc: David Van Brink (omino), Dora (NGDXW), Z4HD\nTác giả: Lan Âm\nLink lưu trữ: %1",
 	horizontal_mirror: "Lật ngang kiểu gương",
 	advanced_scale: "Tỉ lệ nâng cao",
 	loading_midi: "Đang tải %1 ...",
@@ -112,13 +113,14 @@ const Vietnamese: typeof SChinese = {
 	audio_levels: "Audio level",
 	notes_velocity: "Nốt velocity",
 	has_no_video_error: "Lỗi: Layet đã chọn không chứa video nên không thể áp dụng hiệu ứng đã chọn.",
-	motion_for_horizontal_flip: "Motion cho hiệu ứng lật ngang",
+	motion_for_horizontal_flip: "Motion cho hiệu ứng lật ngang　",
 	motion_entrance: "Vào",
 	motion_exit: "Ra",
 	motion_float_left: "Nổi trái",
 	motion_float_right: "Nổi phải",
 	motion_float_up: "Nổi lên",
 	motion_float_down: "Nổi xuống",
+	script_translator: "Thông dịch viên: ",
 };
 
 export default Vietnamese;

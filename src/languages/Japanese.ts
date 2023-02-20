@@ -1,6 +1,7 @@
 import SChinese from "./SChinese";
 
 const Japanese: typeof SChinese = {
+	__translator__: "",
 	ok: "OK",
 	cancel: "キャンセル",
 	channel_abbr: "チャネル",
@@ -52,11 +53,11 @@ const Japanese: typeof SChinese = {
 	about_script_engine: "スクリプトエンジンについて",
 	import_om_utils: "om utils をインポート",
 	import_pure_quarter_midi: "純粋な 4 分 MIDI をインポート",
-	using_selected_layer_name: "MIDI トラック名の代わりに、選択したレイヤー名を使用します。",
-	normalize_pan_to_100: "パンを -100~100 に正規化します。",
-	using_layering: "@氷鳩さくのの特有なレイヤリング方法。",
-	optimize_apply_effects: "一部の効果の視覚モーションを有効にする。",
-	add_to_effect_transform: "変換という効果にプロパティを追加します。",
+	using_selected_layer_name: "MIDI トラック名の代わりに、選択したレイヤー名を使用します",
+	normalize_pan_to_100: "パンを -100~100 に正規化します",
+	using_layering: "@氷鳩さくのの特有なレイヤリング方法",
+	optimize_apply_effects: "一部の効果の視覚モーションを有効にする",
+	add_to_effect_transform: "変換という効果にプロパティを追加します",
 	sure_to_import_pure_quarter_midi: "純粋な 4 分音符 MIDI ファイルをインポートしてもよろしいですか？",
 	pure_quarter_midi: "純粋な 4 分音符 MIDI",
 	add_at_top_of_expression: "式の先頭に追加",
@@ -99,7 +100,7 @@ const Japanese: typeof SChinese = {
 	end_of_track_position_error: "エラー：トラックの終了位置が間違っています。期待される %1、実際には %2。",
 	cannot_set_time_remap_error: "エラー：選択したレイヤーにタイム リマップを設定できません。",
 	cannot_tuning_error: "エラー：選択したレイヤーにはオーディオが含まれていないため、調整できません。",
-	about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\nバージョン：%4\nアプリ：%2\nスペック：%3\n\n脚本原作者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、家鼈大帝\n脚本作者：蘭音\nリポジトリ リンク：%1",
+	about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\nバージョン：%4\nアプリ：%2\nスペック：%3\n\n元開発者：デビッド・ヴァン・ブリンク（オミノ）、ドラ (NGDXW)、家鼈大帝\n開発者：蘭音\nリポジトリ リンク：%1",
 	horizontal_mirror: "水平方向のミラー",
 	advanced_scale: "高度なスケール",
 	loading_midi: "%1 を読み込んでいます...",
@@ -119,6 +120,7 @@ const Japanese: typeof SChinese = {
 	motion_float_right: "フロートライト",
 	motion_float_up: "フロートアップ",
 	motion_float_down: "フロートダウン",
+	script_translator: "訳者：",
 };
 
 export default Japanese;
