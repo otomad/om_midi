@@ -19,7 +19,7 @@ Dự án hiện tại được viết lại bằng công nghệ mới như TypeS
 
 Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahega**](https://github.com/cyahega).
 
-**Các dự án khác:** [Otomad Helper dành cho Vegas](https://github.com/otomad/OtomadHelper).
+**Các dự án khác:** [Otomad Helper dành cho Vegas](https://github.com/otomad/OtomadHelper/blob/winform/README_vi-VN.md).
 
 ### Các tài liệu
 * [Tài liệu tiếng Trung của Z4HD](https://om.z4hd.cf/)
