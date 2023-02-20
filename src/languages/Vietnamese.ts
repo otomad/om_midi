@@ -100,7 +100,7 @@ const Vietnamese: typeof SChinese = {
 	end_of_track_position_error: "Lỗi: Track kết thúc ở sai vị trí. Dự kiến ​​1%, thực tế 2%.",
 	cannot_set_time_remap_error: "Lỗi: Sắp xếp lại thời gian không thể đặt cho layer được chọn.",
 	cannot_tuning_error: "Lỗi: Layer đã chọn không chứa âm thanh nên không thể tune được.",
-	about: "Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nCông cụ xác định: %3\n\nTác giả gốc: David Van Brink (omino), Dora (NGDXW), Gia Miết Thái Đâ\nTác giả: Lan Âm\nLink lưu trữ: %1",
+	about: "Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nXác định phiên bản: %3\n\nTác giả gốc: David Van Brink (omino), Dora (NGDXW), Gia Miết Thái Đâ\nTác giả: Lan Âm\nLink lưu trữ: %1",
 	horizontal_mirror: "Lật ngang kiểu gương",
 	advanced_scale: "Tỉ lệ nâng cao",
 	loading_midi: "Đang tải %1 ...",
