@@ -5,16 +5,18 @@
 	<h2 id="om_midi">om midi</h2>
 	<p><b>兰音</b></p>
 
-[English](README.md) | **简体中文** | [日本語](README_ja-JP.md)
+[English](README.md) | **简体中文** | [日本語](README_ja-JP.md) | [Tiếng Việt](README_vi-VN.md)
 </div>
 
 **om midi**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。
 
-感谢脚本原作者们 [David Van Brink (omino)](https://omino.com/)、[Dora (NGDXW)](https://space.bilibili.com/40208180)、[家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
+感谢脚本原作者们 [@David Van Brink (omino)](https://omino.com/)、[@Dora (NGDXW)](https://space.bilibili.com/40208180)、[@家鳖大帝](https://github.com/Z4HD)的努力工作。此仓库基于家鳖大帝的原始仓库 [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh) 修改而成。
 
 当前项目根据旧版的脚本使用 TypeScript 等新技术进行重写。
 
 **关于“om midi”的拼写规范：所有**字母**小写**，即便位于句首时也是如此，然而在全部大写的语境下允许忽略该条；单词间使用**空格**分隔而不是下划线。
+
+越南语翻译由 [@Cyahega](https://github.com/Cyahega) 提供。
 
 **姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
@@ -23,7 +25,7 @@
 * [我的中文发行说明](https://www.bilibili.com/read/cv18532219)
 
 ### 支持的 AE 版本
-理论上支持 `CS5` 及以后的版本。并且理论上 Windows 和 macOS 都能支持。
+理论上支持 `CS4` 及以后的版本。并且理论上 Windows 和 macOS 都能支持。
 
 ### 安装
 下载脚本文件。
@@ -31,6 +33,7 @@
 #### `om midi`
 将其移动至位于 After Effects 安装目录的 `Scripts\ScriptUI Panels` 文件夹中。
 > (例如：C:\Program Files\Adobe\Adobe After Effects 2022\Scripts\ScriptUI Panels)
+
 #### `om utils`
 有两种方式导入：
 1. 放置在 aep 项目的相同目录下。
@@ -52,14 +55,14 @@ footage("om_utils.jsx").sourceData;
 ### 版本对比
 > 除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。
 
-版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文 UI | 额外的实用关键帧 | 手动选择轨道 | 更改 BPM | 动态 BPM
-:--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---:
-v0.1 | [David Van Brink (omino) 的原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌
-v1.0 | [Dora (NGDXW) 的改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌
-v1.0 闰 | [表达式预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌
-v1.2 | [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌
-v2.0 | [Dora (NGDXW) 的再版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌
-v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️
+| 版本 | 通用名称 | 多轨支持 | 添加关键帧至图层 | 中文 UI | 额外的实用关键帧 | 手动选择轨道 | 更改 BPM | 动态 BPM |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| v0.1 | [David Van Brink (omino) 的原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| v1.0 | [Dora (NGDXW) 的改版](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
+| v1.0 闰 | [表达式预设](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
+| v1.2 | [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
+| v2.0 | [Dora (NGDXW) 的再版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
+| v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
 ### 参考
 #### 之前版本
