@@ -1,7 +1,7 @@
 import SChinese from "./SChinese";
 
 const English: typeof SChinese = {
-	__translator__: "Someone else",
+	__translator__: "",
 	ok: "OK",
 	cancel: "Cancel",
 	channel_abbr: "CH",
