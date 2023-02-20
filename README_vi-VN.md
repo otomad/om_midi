@@ -11,7 +11,7 @@
 
 **om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và âm thanh nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
 
-Chân thành cảm ơn những người tạo ra script là [@David Van Brink (omino)](https://omino.com/), [@Dora (NGDXW)](https://space.bilibili.com/40208180), [@Z4HD](https://github.com/Z4HD) vì công sức của họ. Và lưu trữ (repository) này được chỉnh sửa dựa trên lưu trữ của Z4HD là [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
+Chân thành cảm ơn những người tạo ra script là [@David Van Brink (omino)](https://omino.com/), [@Dora (NGDXW)](https://space.bilibili.com/40208180), [@Gia Miết Thái Đâ](https://github.com/Z4HD) vì công sức của họ. Và lưu trữ (repository) này được chỉnh sửa dựa trên lưu trữ của Gia Miết Thái Đâ là [om_midi_NGDXW_zh](https://github.com/Z4HD/om_midi_NGDXW_zh).
 
 Dự án hiện tại được viết lại bằng công nghệ mới như TypeScript dựa trên script kế thừa.
 
@@ -22,7 +22,7 @@ Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahe
 **Các dự án khác:** [Otomad Helper dành cho Vegas](https://github.com/otomad/OtomadHelper/blob/winform/README_vi-VN.md).
 
 ### Các tài liệu
-* [Tài liệu tiếng Trung của Z4HD](https://om.z4hd.cf/)
+* [Tài liệu tiếng Trung của Gia Miết Thái Đâ](https://om.z4hd.cf/)
 * [Ghi chú cập nhật bằng tiếng Trung của tôi](https://www.bilibili.com/read/cv18532219)
 
 ### Phiên bản AE được hỗ trợ 
@@ -61,7 +61,7 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 | v0.1 | [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
-| v1.2 | [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
+| v1.2 | [Phiên bản tiếng Trung của Gia Miết Thái Đâ](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
@@ -70,7 +70,7 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 * [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398)
 * [Preset biểu thức (expression)](https://www.bilibili.com/video/av29649969)
-* [Phiên bản tiếng Trung của Z4HD](https://github.com/Z4HD/om_midi_NGDXW_zh)
+* [Phiên bản tiếng Trung của Gia Miết Thái Đâ](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487)
 #### Các video giới thiệu
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)
