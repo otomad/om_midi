@@ -246,7 +246,7 @@ export default class Core {
 			mirrorIndex = Core.getEffects(layer).addProperty("ADBE Mirror").propertyIndex;
 			(Core.getEffects(layer).property(mirrorIndex).property(1) as TwoDProperty).setValue([source.width / 2, source.height / 2]);
 		}
-		const requireAdjustAnchor = optimize && (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT);
+		const requireAdjustAnchor = optimize && (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT || hFlipMotion === HFlipMotionType.FLOAT_UP || hFlipMotion === HFlipMotionType.FLOAT_DOWN);
 		let currentAnchor: TwoDPoint = [960, 540];
 		let currentScale = 100;
 		let geometry2Index = 0;

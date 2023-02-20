@@ -117,6 +117,8 @@ const Japanese: typeof SChinese = {
 	motion_exit: "終了",
 	motion_float_left: "フロートレフト",
 	motion_float_right: "フロートライト",
+	motion_float_up: "フロートアップ",
+	motion_float_down: "フロートダウン",
 };
 
 export default Japanese;

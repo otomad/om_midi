@@ -117,6 +117,8 @@ const English: typeof SChinese = {
 	motion_exit: "Exit",
 	motion_float_left: "Float Left",
 	motion_float_right: "Float Right",
+	motion_float_up: "Float Up",
+	motion_float_down: "Float Down",
 };
 
 export default English;

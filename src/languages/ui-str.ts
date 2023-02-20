@@ -1,9 +1,10 @@
 import English from "./English";
 import Japanese from "./Japanese";
 import SChinese from "./SChinese";
+import Vietnamese from "./Vietnamese";
 import hasOwn from "../modules/hasOwn";
 
-type LangTag = "zh" | "en" | "ja";
+type LangTag = "zh" | "en" | "ja" | "vi";
 
 export type ZString = {
 	[tag in LangTag]: string
@@ -20,6 +21,7 @@ for (const key in SChinese) {
 			zh: SChinese[key],
 			en: English[key],
 			ja: Japanese[key],
+			vi: Vietnamese[key],
 		};
 	}
 }

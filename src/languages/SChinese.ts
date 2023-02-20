@@ -115,6 +115,8 @@ const SChinese = {
 	motion_exit: "退出",
 	motion_float_left: "左浮",
 	motion_float_right: "右浮",
+	motion_float_up: "上浮",
+	motion_float_down: "下浮",
 };
 
 export default SChinese;

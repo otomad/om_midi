@@ -69,7 +69,7 @@ export default class SettingsDialog {
 			label: this.languageLbl,
 			control: this.languageCombo,
 		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"));
-		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語");
+		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語", "Tiếng Việt");
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
@@ -86,7 +86,7 @@ export default class SettingsDialog {
 		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
 		this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
 		({ control: this.hFlipMotionCombo } = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist"));
-		addItems(this.hFlipMotionCombo, localize(uiStr.motion_entrance), localize(uiStr.motion_exit), localize(uiStr.motion_float_left), localize(uiStr.motion_float_right));
+		addItems(this.hFlipMotionCombo, localize(uiStr.motion_entrance), localize(uiStr.motion_exit), localize(uiStr.motion_float_left), localize(uiStr.motion_float_right), localize(uiStr.motion_float_up), localize(uiStr.motion_float_down));
 		const selectedHFlipMotionIndex = Setting.getMotionForHorizontalFlip();
 		if (selectedHFlipMotionIndex > 0 && selectedHFlipMotionIndex < this.hFlipMotionCombo.items.length)
 			this.hFlipMotionCombo.selection = selectedHFlipMotionIndex;
@@ -133,7 +133,7 @@ export default class SettingsDialog {
 		this.window.show();
 	}
 	
-	private static langIso = ["", "zh_CN", "en", "ja"];
+	private static langIso = ["", "zh_CN", "en", "ja", "vi"];
 	
 	private addPanel(parent: ContainerType, name: string, margins: [number, number, number, number] = [10, 13, 10, 3]): Panel {
 		return addControl(parent, "panel", {
