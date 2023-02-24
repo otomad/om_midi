@@ -13,9 +13,12 @@ export default class ApplyEffectsTab extends BaseTab<ScrollGroup> {
 	timeRemap2: Checkbox = this.addCheckbox();
 	pingpong: Checkbox = this.addCheckbox();
 	hFlip: Checkbox = this.addCheckbox();
+	vFlip: Checkbox = this.addCheckbox();
+	ccwFlip: Checkbox = this.addCheckbox();
+	cwFlip: Checkbox = this.addCheckbox();
 	hMirror: Checkbox = this.addCheckbox();
-	cwRotation: Checkbox = this.addCheckbox();
 	ccwRotation: Checkbox = this.addCheckbox();
+	cwRotation: Checkbox = this.addCheckbox();
 	negative: Checkbox = this.addCheckbox();
 	mapVelToOpacity = new MappingVelocityCheckbox(this.group.content, uiStr.opacity, [0, 100], [0, 100]);
 	tuning: Checkbox = this.addCheckbox();
@@ -40,8 +43,15 @@ export default class ApplyEffectsTab extends BaseTab<ScrollGroup> {
 		this.basePitchGroup.enabled = false;
 		this.mapVelToVolume = new MappingVelocityCheckbox(this.group.content, uiStr.audio_levels, [-192, 12], [-40, 0]);
 		this.mapVelToVolume.group.margins = [0, 7, 10, 0];
-		this.cwRotation.onClick = () => this.ccwRotation.value = false;
+		const flips = [this.hFlip, this.vFlip, this.ccwFlip, this.cwFlip];
+		for (const flip of flips)
+			flip.onClick = () => {
+				for (const otherFlip of flips)
+					if (otherFlip !== flip)
+						otherFlip.value = false;
+			};
 		this.ccwRotation.onClick = () => this.cwRotation.value = false;
+		this.cwRotation.onClick = () => this.ccwRotation.value = false;
 		this.timeRemap.onClick = () => this.timeRemap2.value = this.pingpong.value = false;
 		this.timeRemap2.onClick = () => this.timeRemap.value = this.pingpong.value = false;
 		this.pingpong.onClick = () => this.timeRemap.value = this.timeRemap2.value = false;
@@ -59,9 +69,12 @@ export default class ApplyEffectsTab extends BaseTab<ScrollGroup> {
 		this.timeRemap2.text = localize(uiStr.time_remap) + localize(uiStr.paren_truncated);
 		this.pingpong.text = localize(uiStr.pingpong);
 		this.hFlip.text = localize(uiStr.horizontal_flip);
+		this.vFlip.text = localize(uiStr.vertical_flip);
+		this.ccwFlip.text = localize(uiStr.ccw_flip);
+		this.cwFlip.text = localize(uiStr.cw_flip);
 		this.hMirror.text = localize(uiStr.horizontal_mirror);
-		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.ccwRotation.text = localize(uiStr.ccw_ratation);
+		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.negative.text = localize(uiStr.invert_color);
 		this.tuning.text = localize(uiStr.tuning);
 		this.mapVelToOpacity.checkbox.text = localize(uiStr.map_velocity_to_opacity);

@@ -10,8 +10,8 @@ export default class NullObjTab extends BaseTab<ScrollGroup> {
 	duration: Checkbox = this.addCheckbox();
 	scale: Checkbox = this.addCheckbox();
 	advancedScale: Checkbox = this.addCheckbox();
-	cwRotation: Checkbox = this.addCheckbox();
 	ccwRotation: Checkbox = this.addCheckbox();
+	cwRotation: Checkbox = this.addCheckbox();
 	count: Checkbox = this.addCheckbox();
 	bool: Checkbox = this.addCheckbox();
 	timeRemap: Checkbox = this.addCheckbox();
@@ -33,8 +33,8 @@ export default class NullObjTab extends BaseTab<ScrollGroup> {
 		this.duration.text = localize(uiStr.duration);
 		this.scale.text = localize(uiStr.scale);
 		this.advancedScale.text = localize(uiStr.advanced_scale);
-		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.ccwRotation.text = localize(uiStr.ccw_ratation);
+		this.cwRotation.text = localize(uiStr.cw_rotation);
 		this.count.text = localize(uiStr.count);
 		this.bool.text = localize(uiStr.bool);
 		this.timeRemap.text = localize(uiStr.time_remap);

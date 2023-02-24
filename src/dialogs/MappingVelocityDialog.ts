@@ -1,5 +1,5 @@
 import ConfigJsonNS from "../core/ConfigJsonNS";
-import { CannotFindWindowError } from "../errors";
+import { CannotFindWindowError, InvalidMappingVelocityValuesError } from "../errors";
 import uiStr, { ZString } from "../languages/ui-str";
 import addControl, { addGroup } from "../modules/addControl";
 import setNumberEditText from "../modules/setNumberEditText";
@@ -31,7 +31,17 @@ export default class MappingVelocityDialog {
 		
 		this.window.defaultElement = this.okBtn;
 		this.window.cancelElement = this.cancelBtn;
-		this.okBtn.onClick = () => { this.dialogResult = true; this.window.close(); };
+		this.okBtn.onClick = () => {
+			const result = this.getResult();
+			try {
+				if (result.velocityLess >= result.velocityMore || result.targetLess > result.targetMore)
+					throw new InvalidMappingVelocityValuesError();
+			} catch {
+				return;
+			}
+			this.dialogResult = true;
+			this.window.close();
+		};
 		if (data) {
 			this.velocityLessTxt.text = String(data.velocityLess);
 			this.velocityMoreTxt.text = String(data.velocityMore);
@@ -48,13 +58,7 @@ export default class MappingVelocityDialog {
 		this.window.center();
 		this.window.show();
 		if (!this.dialogResult) return undefined;
-		const result = new ConfigJsonNS.MappingVelocity({
-			velocityLess: parseFloat(this.velocityLessTxt.text),
-			velocityMore: parseFloat(this.velocityMoreTxt.text),
-			targetLess: parseFloat(this.targetLessTxt.text),
-			targetMore: parseFloat(this.targetMoreTxt.text),
-		});
-		return result;
+		return this.getResult();
 	}
 	
 	addRow(name: ZString): [EditText, EditText] {
@@ -64,5 +68,14 @@ export default class MappingVelocityDialog {
 		addControl(group, "statictext", { text: "~" });
 		const more = addControl(group, "edittext", { characters });
 		return [less, more];
+	}
+	
+	private getResult() {
+		return new ConfigJsonNS.MappingVelocity({
+			velocityLess: parseFloat(this.velocityLessTxt.text),
+			velocityMore: parseFloat(this.velocityMoreTxt.text),
+			targetLess: parseFloat(this.targetLessTxt.text),
+			targetMore: parseFloat(this.targetMoreTxt.text),
+		});
 	}
 }

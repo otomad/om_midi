@@ -133,3 +133,9 @@ export class HasNoVideoError extends MyError {
 		super(localize(uiStr.has_no_video_error));
 	}
 }
+
+export class InvalidMappingVelocityValuesError extends MyError {
+	constructor() {
+		super(localize(uiStr.invalid_mapping_velocity_values_error));
+	}
+}
