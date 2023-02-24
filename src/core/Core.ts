@@ -259,7 +259,8 @@ export default class Core {
 			opacity() { return this.prop().property(9) as OneDProperty; },
 			anchor() { return this.prop().property(1) as TwoDProperty; },
 		};
-		if (effectsTab.hFlip.value || effectsTab.cwRotation.value || effectsTab.ccwRotation.value || effectsTab.mapVelToOpacity.value) {
+		const isFlips = effectsTab.hFlip.value || effectsTab.vFlip.value || effectsTab.ccwFlip.value || effectsTab.cwFlip.value;
+		if (isFlips || effectsTab.cwRotation.value || effectsTab.ccwRotation.value || effectsTab.mapVelToOpacity.value) {
 			if (!addToGeometry2) {
 				if (!layer.hasVideo)
 					throw new HasNoVideoError();
@@ -337,7 +338,7 @@ export default class Core {
 				} else
 					noteOffSeconds = (noteSecondEvent.interruptDurationSecond ?? noteSecondEvent.durationSecond ?? 0)
 						- MIN_INTERVAL + noteSecondEvent.startSecond + startTime;
-				if (effectsTab.hFlip.value) {
+				if (isFlips) {
 					const addKey = (seconds: number) => !addToGeometry2 ? layer.scale.addKey(seconds) :
 						(geometry2.scaleHeight().addKey(seconds), geometry2.scaleWidth().addKey(seconds));
 					const setValueAtKey = (keyIndex: number, value: TwoDPoint) =>
@@ -354,14 +355,23 @@ export default class Core {
 						this.setPointKeyEase(geometry2.scaleWidth(), keyIndex, easeType, isHold));
 					
 					const key = addKey(seconds);
-					const scale = (noteOnCount % 2 ? -1 : 1) * currentScale;
+					const mod2 = noteOnCount % 2, mod4 = noteOnCount % 4;
+					let signs_bool = [!mod2, true] as [boolean, boolean];
+					if (effectsTab.vFlip.value)
+						signs_bool = [true, !mod2];
+					else if (effectsTab.ccwFlip.value)
+						signs_bool = [mod4 === 3 || mod4 === 0, mod4 === 0 || mod4 === 1];
+					else if (effectsTab.cwFlip.value)
+						signs_bool = [mod4 === 0 || mod4 === 1, mod4 === 3 || mod4 === 0];
+					const signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1] as [number, number];
 					const enterIncremental = ENTER_INCREMENTAL / 100 * Math.abs(currentScale);
 					if (!optimize || !hasDuration || requireAdjustAnchor) {
-						setValueAtKey(key, [scale, currentScale]);
+						setValueAtKey(key, [currentScale, currentScale]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						let value1: TwoDPoint = [scale + enterIncremental * Math.sign(scale), currentScale + enterIncremental],
-							value2: TwoDPoint = [scale, currentScale];
+						const increasedScale = currentScale + enterIncremental;
+						let value1: TwoDPoint = [increasedScale * signs[0], increasedScale * signs[1]],
+							value2: TwoDPoint = [currentScale * signs[0], currentScale * signs[1]];
 						if (hFlipMotion === HFlipMotionType.EXIT)
 							[value1, value2] = [value2, value1];
 						setValueAtKey(key, value1);
