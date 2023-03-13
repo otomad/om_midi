@@ -25,7 +25,7 @@
 * [家鳖大帝的中文说明文档](https://om.z4hd.cf/)
 * [我的中文发行说明](https://www.bilibili.com/read/cv18532219)
 
-### 支持的 AE 版本
+### **兼容性**
 理论上支持 `CS4` 及以后的版本。并且理论上 Windows 和 macOS 都能支持。
 
 ### 安装
@@ -33,7 +33,7 @@
 
 #### `om midi`
 将其移动至位于 After Effects 安装目录的 `Scripts\ScriptUI Panels` 文件夹中。
-> (例如：C:\Program Files\Adobe\Adobe After Effects 2022\Scripts\ScriptUI Panels)
+> (例如：C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
 
 #### `om utils`
 有两种方式导入：

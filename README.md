@@ -30,7 +30,7 @@ Vietnamese translation provided by [@Cyahega](https://github.com/Cyahega).
 * [Z4HD's Chinese Documentation](https://om.z4hd.cf/)
 * [My Chinese Release Notes](https://www.bilibili.com/read/cv18532219)
 
-### Supported AE Versions
+### **Compatibility**
 `CS4` and later versions are theoretically supported. And both Windows and macOS are theoretically supported.
 
 ### Install
@@ -38,7 +38,7 @@ Download the latest script files.
 
 #### `om midi`
 Placed in the `Scripts\ScriptUI Panels` folder located in the After Effects installation directory.
-> (ie. C:\Program Files\Adobe\Adobe After Effects 2022\Scripts\ScriptUI Panels)
+> (ie. C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
 
 #### `om utils`
 There are two ways to import:

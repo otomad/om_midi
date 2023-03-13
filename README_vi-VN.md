@@ -25,7 +25,7 @@ Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahe
 * [Tài liệu tiếng Trung của Gia Miết Thái Đâ](https://om.z4hd.cf/)
 * [Ghi chú cập nhật bằng tiếng Trung của tôi](https://www.bilibili.com/read/cv18532219)
 
-### Phiên bản AE được hỗ trợ 
+### **Độ tương thích**
 `CS4` và các phiên bản sau này về mặt lý thuyết là được hỗ trợ . Và cả 2 hệ điều hành Windows và macOS về mặt lý thuyết là được hỗ trợ.
 
 ### Cài đặt
@@ -33,7 +33,7 @@ Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahe
 
 #### `om midi`
 Đặt script vào thư mục `Scripts\ScriptUI Panels` nằm trong đường dẫn cài đặt của After Effects.
-> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2022\Scripts\ScriptUI Panels)
+> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
 
 #### `om utils`
 Có 2 cách để nhập vào:
