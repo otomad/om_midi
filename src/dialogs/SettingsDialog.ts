@@ -72,7 +72,7 @@ export default class SettingsDialog {
 			label: this.languageLbl,
 			control: this.languageCombo,
 		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"));
-		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語", "Tiếng Việt");
+		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語", "Tiếng Việt", "한국어");
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
@@ -136,7 +136,7 @@ export default class SettingsDialog {
 		this.window.show();
 	}
 	
-	private static langIso = ["", "zh_CN", "en", "ja", "vi"];
+	private static langIso = ["", "zh_CN", "en", "ja", "vi", "ko"];
 	
 	private addPanel(parent: ContainerType, name: string, margins: [number, number, number, number] = [10, 13, 10, 3]): Panel {
 		return addControl(parent, "panel", {
