@@ -6,7 +6,7 @@
 	<p><b><i>Lan Âm</i></b></p>
 	<p><a href="https://github.com/otomad/om_midi/releases/latest"><img src="https://img.shields.io/badge/-Tải%20ngay%20phiên%20bản%20mới%20nhất!-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMiAwYS44LjggMCAwIDAtLjguOHYxMS40TDcuMjYgOS40NGEuODAzLjgwMyAwIDAgMC0xLjEzLjA3NGwtMS4wNSAxLjJhLjguOCAwIDAgMCAuMDczIDEuMTNsNi4zMyA1LjU0YS43OTUuNzk1IDAgMCAwIDEuMDUgMGw2LjMyLTUuNTRhLjguOCAwIDAgMCAuMDc0LTEuMTNsLTEuMDUtMS4yYS44MDQuODA0IDAgMCAwLTEuMTMtLjA3NGwtMy4xNCAyLjc2Vi44YS44LjggMCAwIDAtLjgtLjh6bS04IDIwLjhhLjguOCAwIDAgMC0uOC44djEuNmEuOC44IDAgMCAwIC44LjhoMTcuNmEuOC44IDAgMCAwIC44LS44di0xLjZhLjguOCAwIDAgMC0uOC0uOHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="Download" /></a></p>
 
-[English](README.md) | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | **Tiếng Việt**
+[English](README.md) | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | **Tiếng Việt** | [한국어](README_ko-KR.md)
 </div>
 
 **om midi**, là một script hỗ trợ làm Otomad/YTPMV dành cho **After Effects**. Nó là một script giúp tự động chuyển đổi file MIDI thành keyframe trong After Effects. Hi vọng rằng với sự trợ giúp từ om midi, mọi người sẽ được cứu rỗi khỏi việc căn chỉnh video và âm thanh nhàm chán, và dành nhiều năng lượng hơn vào việc sáng tạo tác phẩm của mình.
@@ -17,9 +17,11 @@ Dự án hiện tại được viết lại bằng công nghệ mới như TypeS
 
 **Quy ước chính tả cho "om midi": Tất cả các chữ thường**, thậm chí ở đầu câu, tuy nhiên có thể bỏ qua khi ngữ cảnh là chữ viết hoa; các từ được phân tách bằng **dấu cách** thay vì dấu gạch dưới.
 
-Phiên bản Việt hoá của script này được thực hiện bởi [**Cyahega**](https://github.com/cyahega).
-
 **Các dự án khác:** [Otomad Helper dành cho Vegas](https://github.com/otomad/OtomadHelper/blob/winform/README_vi-VN.md).
+
+### Dịch giả
+* Bản dịch tiếng Việt được cung cấp bởi [@Cyahega](https://github.com/Cyahega).
+* Bản dịch tiếng Hàn được cung cấp bởi @binmode.
 
 ### Các tài liệu
 * [Tài liệu tiếng Trung của Gia Miết Thái Đâ](https://om.z4hd.cf/)
@@ -77,8 +79,7 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
 #### Phụ thuộc vào
 * [Rollup TypeScript Scaffolding của Motion Developer](https://github.com/motiondeveloper/expression-globals-typescript)
-* Adobe Types của [Silly-V](https://github.com/Silly-V/Adobe-TS-ExtendScript) và [aenhancers](https://github.com/aenhancers/Types-for-Adobe)
+* [Loại TypeScript cho các sản phẩm Adobe](https://github.com/aenhancers/Types-for-Adobe)
 * [midi-parser-js của Sergi Guzman (colxi)- Thông số kỹ thuật định dạng tệp MIDI](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
-* [mmkr](https://github.com/stysmmaker/mmkr) và [AddMarkersFromJSON](https://github.com/stysmmaker/AddMarkersFromJSON) của MMaker.
 
 </div>

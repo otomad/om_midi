@@ -6,7 +6,7 @@
 	<p><b>蘭音</b></p>
 	<p><a href="https://github.com/otomad/om_midi/releases/latest"><img src="https://img.shields.io/badge/-ここをクリックして最新版をダウンロード！-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMiAwYS44LjggMCAwIDAtLjguOHYxMS40TDcuMjYgOS40NGEuODAzLjgwMyAwIDAgMC0xLjEzLjA3NGwtMS4wNSAxLjJhLjguOCAwIDAgMCAuMDczIDEuMTNsNi4zMyA1LjU0YS43OTUuNzk1IDAgMCAwIDEuMDUgMGw2LjMyLTUuNTRhLjguOCAwIDAgMCAuMDc0LTEuMTNsLTEuMDUtMS4yYS44MDQuODA0IDAgMCAwLTEuMTMtLjA3NGwtMy4xNCAyLjc2Vi44YS44LjggMCAwIDAtLjgtLjh6bS04IDIwLjhhLjguOCAwIDAgMC0uOC44djEuNmEuOC44IDAgMCAwIC44LjhoMTcuNmEuOC44IDAgMCAwIC44LS44di0xLjZhLjguOCAwIDAgMC0uOC0uOHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="Download" /></a></p>
 
-[English](README.md) | [<span lang="zh-CN">简体中文</span>](README_zh-CN.md) | **日本語** | [Tiếng Việt](README_vi-VN.md)
+[English](README.md) | [<span lang="zh-CN">简体中文</span>](README_zh-CN.md) | **日本語** | [Tiếng Việt](README_vi-VN.md) | [한국어](README_ko-KR.md)
 </div>
 
 **om midi** は、**After Effects** 用の音 MAD / YTPMV アシスタント スクリプトです。After Effects で MIDI ファイルをキーフレームに自動変換するスクリプトです。om midi の助けを借りて、人々が退屈なビデオとオーディオの調整から解放され、よりクリエイティブな作品により多くのエネルギーを注ぐことができることを願っています。
@@ -17,9 +17,11 @@
 
 **「om midi」の綴り規則：**<wbr />文頭であっても、**すべて**の文字は**小文字**です、コンテキストがすべて大文字の場合は無視できます。単語はアンダースコアではなく**スペース**で区切られます。
 
-ベトナム語翻訳は [@Cyahega](https://github.com/Cyahega) によって提供されています。
-
 **姉妹プロジェクト：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
+
+### 訳者
+* ベトナム語翻訳は [@Cyahega](https://github.com/Cyahega) によって提供されています。
+* 韓国語翻訳は @빈모드 によって提供されています。
 
 ### ドキュメンテーション
 * [家鼈大帝の中国語ドキュメント](https://om.z4hd.cf/)
@@ -77,8 +79,7 @@ After Effects でスクリプトを開くと、図のようなエラーが発生
 * [陳沈晨 - メロン風.アエプ](https://www.bilibili.com/video/av9778499)
 #### 依存
 * [Motion Developer の Rollup TypeScript スキャフォールディング](https://github.com/motiondeveloper/expression-globals-typescript)
-* [Silly-V](https://github.com/Silly-V/Adobe-TS-ExtendScript) と [aenhancers](https://github.com/aenhancers/Types-for-Adobe) の Adobe タイプ
-* [Sergi Guzman (colxi) の MIDI パーサー JS - MIDI ファイル形式の仕様](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
-* MMaker の [mmkr](https://github.com/stysmmaker/mmkr) と [JSON からマーカーを追加](https://github.com/stysmmaker/AddMarkersFromJSON)
+* [Adobe 製品の TypeScript タイプ](https://github.com/aenhancers/Types-for-Adobe)
+* [Sergi Guzman (colxi) の midi-parser-js - MIDI ファイル形式の仕様](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>

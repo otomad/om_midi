@@ -11,7 +11,7 @@
 	</p>
 	<p><a href="https://github.com/otomad/om_midi/releases/latest"><img src="https://img.shields.io/badge/-Get%20the%20download%20link%20now!-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMiAwYS44LjggMCAwIDAtLjguOHYxMS40TDcuMjYgOS40NGEuODAzLjgwMyAwIDAgMC0xLjEzLjA3NGwtMS4wNSAxLjJhLjguOCAwIDAgMCAuMDczIDEuMTNsNi4zMyA1LjU0YS43OTUuNzk1IDAgMCAwIDEuMDUgMGw2LjMyLTUuNTRhLjguOCAwIDAgMCAuMDc0LTEuMTNsLTEuMDUtMS4yYS44MDQuODA0IDAgMCAwLTEuMTMtLjA3NGwtMy4xNCAyLjc2Vi44YS44LjggMCAwIDAtLjgtLjh6bS04IDIwLjhhLjguOCAwIDAgMC0uOC44djEuNmEuOC44IDAgMCAwIC44LjhoMTcuNmEuOC44IDAgMCAwIC44LS44di0xLjZhLjguOCAwIDAgMC0uOC0uOHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="Download" /></a></p>
 
-**English** | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | [Tiếng Việt](README_vi-VN.md)
+**English** | [简体中文](README_zh-CN.md) | [日本語](README_ja-JP.md) | [Tiếng Việt](README_vi-VN.md) | [한국어](README_ko-KR.md)
 </div>
 
 **om midi**, an Otomad/YTPMV assistant script for **After Effects**. It is a script that automatically converts MIDI files to keyframes in After Effects. Hope that with the help of om midi, people can be rescued from tedious aligning video and audio, and put more energy into more creative works.
@@ -22,9 +22,11 @@ The current project is rewritten using new technologies like TypeScript based on
 
 **Spelling conventions for "om midi": All lowercase** letters, even at the beginning of a sentence, however can be ignored where the context is all uppercase; words are separated by **spaces** instead of underscores.
 
-Vietnamese translation provided by [@Cyahega](https://github.com/Cyahega).
-
 **Sister Projects:** [Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper).
+
+### Translators
+* Vietnamese translation provided by [@Cyahega](https://github.com/Cyahega).
+* Korean translation provided by binmode.
 
 ### Documentations
 * [Z4HD's Chinese Documentation](https://om.z4hd.cf/)
@@ -82,8 +84,7 @@ Please enable *Edit > Preferences > Scripting & Expressions > Allow Scripts to W
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
 #### Dependencies
 * [Motion Developer's Rollup TypeScript Scaffolding](https://github.com/motiondeveloper/expression-globals-typescript)
-* [Silly-V's](https://github.com/Silly-V/Adobe-TS-ExtendScript) and [aenhancers's](https://github.com/aenhancers/Types-for-Adobe) Adobe Types
+* [TypeScript types for Adobe Products](https://github.com/aenhancers/Types-for-Adobe)
 * [Sergi Guzman (colxi)'s midi-parser-js - MIDI File Format Specifications](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
-* MMaker's [mmkr](https://github.com/stysmmaker/mmkr) and [AddMarkersFromJSON](https://github.com/stysmmaker/AddMarkersFromJSON)
 
 </div>
