@@ -75,8 +75,8 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 * [가별대제의 중국판](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora(NGDXW)의 두 번째 개정판](https://www.bilibili.com/read/cv1217487)
 #### 소개 동영상
-* [용의 조상 - 거리에서.ㅏㅔㅍ](https://www.bilibili.com/video/av9228581)
-* [진심신 - 멜론 스타일.ㅏㅔㅍ](https://www.bilibili.com/video/av9778499)
+* [용의 조상 - 거리에서.앺](https://www.bilibili.com/video/av9228581)
+* [진심신 - 멜론 스타일.앺](https://www.bilibili.com/video/av9778499)
 #### 종속성
 * [Motion Developer의 Rollup TypeScript 스캐폴딩](https://github.com/motiondeveloper/expression-globals-typescript)
 * [Adobe 제품의 TypeScript 유형](https://github.com/aenhancers/Types-for-Adobe)
