@@ -26,7 +26,7 @@ The current project is rewritten using new technologies like TypeScript based on
 
 ### Translators
 * Vietnamese translation provided by [@Cyahega](https://github.com/Cyahega).
-* Korean translation provided by binmode.
+* Korean translation provided by @binmode.
 
 ### Documentations
 * [Z4HD's Chinese Documentation](https://om.z4hd.cf/)
