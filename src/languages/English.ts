@@ -57,7 +57,7 @@ const English: typeof SChinese = {
 	normalize_pan_to_100: "Normalize the pan to -100 ~ 100",
 	using_layering: "@Hibato Sakuno's unique layering method",
 	optimize_apply_effects: "Turn on visual motion for some effects",
-	add_to_effect_transform: "Add the properties to an effect called Transform",
+	add_to_effect_transform: "Add the properties to an effect named Transform",
 	sure_to_import_pure_quarter_midi: "Are you sure you want to import the pure quarter notes MIDI file?",
 	pure_quarter_midi: "Pure quarter notes MIDI",
 	add_at_top_of_expression: "Prepend to expressions",
