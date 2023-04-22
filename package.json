@@ -1,7 +1,7 @@
 {
 	"name": "om_midi",
 	"version": "3.x",
-	"description": "After Effects Expression Library",
+	"description": "Otomad/YTPMV assistant scripts for After Effects.",
 	"main": "dist/om midi.jsx",
 	"scripts": {
 		"tsc": "tsc",
