@@ -1,6 +1,6 @@
 {
 	"name": "om_midi",
-	"version": "3.0",
+	"version": "3.x",
 	"description": "After Effects Expression Library",
 	"main": "dist/om midi.jsx",
 	"scripts": {
@@ -11,14 +11,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "https://github.com/otomad/om_midi.git"
 	},
 	"author": "",
-	"license": "MIT",
+	"license": "GPL-3.0",
 	"bugs": {
-		"url": ""
+		"url": "https://github.com/otomad/om_midi/issues"
 	},
-	"homepage": "",
+	"homepage": "https://github.com/otomad/om_midi",
 	"devDependencies": {
 		"@rollup/plugin-replace": "^2.4.1",
 		"@rollup/plugin-typescript": "^8.2.0",
