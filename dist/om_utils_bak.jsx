@@ -165,5 +165,16 @@ Utils = {
 		for (var key in object)
 			keys.push(key);
 		throw keys.join();
+	},
+	/**
+	 * 获取指定文本图层的实际宽高值。
+	 * @param {Layer} targetLayer - 文本图层。
+	 * @returns {[number, number]} 指定文本图层的实际宽高值。
+	 */
+	getTextSize: function (targetLayer) {
+		var width = targetLayer.sourceRectAtTime().width, height = targetLayer.sourceRectAtTime().height;
+		var scale = targetLayer.transform.scale;
+		var percentW = (scale[0] - 100) * 0.01, percentH = (scale[1] - 100) * 0.01;
+		return [width + percentW * width, height + percentH * height];
 	}
 }
