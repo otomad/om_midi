@@ -50,6 +50,9 @@ $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));
 footage("om_utils.jsx").sourceData;
 ```
 
+### 자습서
+[![Get started with om midi in 1.5 minutes](covers/youtube_cover.svg)](https://youtu.be/amDtqY_HsGM)
+
 #### 오빠 조심하세요
 After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생한 경우  
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  

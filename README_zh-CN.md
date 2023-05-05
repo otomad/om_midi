@@ -50,6 +50,9 @@ $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));
 footage("om_utils.jsx").sourceData;
 ```
 
+### 教程
+[![一分半上手 om midi](covers/youtube_cover.svg)](https://b23.tv/g98ALSe)
+
 #### 值得注意的是
 如果 After Effects 在打开脚本时引发如图所示的错误。  
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
