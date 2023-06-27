@@ -58,6 +58,9 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 *편집 > 기본 설정 > 스크립트 및 표현식 > 스크립트 파일 쓰기 및 네트워크 액세스 허용*.
 
+### Roadmap
+[GitHub 프로젝트 **OTOMAD+** 바로가기 >](https://github.com/users/otomad/projects/2)
+
 ### 버전 비교
 > v1.2 를 제외한 다른 버전은 버전 번호를 제공하지 않습니다. 그래서 그 버전 번호들은 내가 직접 작성한 것이다.
 

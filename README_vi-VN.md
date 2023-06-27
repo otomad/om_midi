@@ -58,6 +58,9 @@ Nếu After Effects hiện lên lỗi như dưới đây khi mở script.
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to Write Files and Access Network*.
 
+### Roadmap
+[Chuyển đến Dự án GitHub **OTOMAD+** >](https://github.com/users/otomad/projects/2)
+
 ### So sánh các phiên bản
 > Ngoại trừ v1.2, không có thẻ phiên bản được ghi rõ cho các phiên bản khác. Vì vậy, các thẻ phiên bản được xác định bởi chính tôi.
 

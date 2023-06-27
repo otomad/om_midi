@@ -63,6 +63,9 @@ If After Effects raises an error as shown when opening the script.
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 Please enable *Edit > Preferences > Scripting & Expressions > Allow Scripts to Write Files and Access Network*.
 
+### Roadmap
+[Go to GitHub Project **OTOMAD+** >](https://github.com/users/otomad/projects/2)
+
 ### Versions Comparison
 > Except v1.2, no version tags are given for others. So those version tags are defined by myself.
 

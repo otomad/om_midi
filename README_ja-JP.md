@@ -58,6 +58,9 @@ After Effects でスクリプトを開くと、図のようなエラーが発生
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 *編集 > 環境設定 > スクリプトとエクスプレッション > スクリプトによるファイルへの書き込みとネットワークへのアクセスを許可* を有効にしてください。
 
+### ロードマップ
+[GitHub プロジェクト **OTOMAD+** に移動します >](https://github.com/users/otomad/projects/2)
+
 ### バージョン比較
 > v1.2 を除き、その他のバージョン タグは付与されません。そのため、これらのバージョン タグは自分で定義しています。
 

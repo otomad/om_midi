@@ -58,6 +58,9 @@ footage("om_utils.jsx").sourceData;
 ![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
 请启用 *编辑 > 首选项 > 脚本和表达式 > 允许脚本写入文件和访问网络*。
 
+### 路线图
+[转到 GitHub 项目 **OTOMAD+** >](https://github.com/users/otomad/projects/2)
+
 ### 版本对比
 > 除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。
 
