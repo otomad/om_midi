@@ -46,6 +46,7 @@
 		"@typescript-eslint/ban-ts-comment": "off",
 		"eqeqeq": "error",
 		"@typescript-eslint/ban-types": "off",
-		"@typescript-eslint/no-namespace": "off"
+		"@typescript-eslint/no-namespace": "off",
+		"prefer-const": ["error", { "destructuring": "all" }]
 	}
 }

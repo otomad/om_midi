@@ -1,6 +1,5 @@
 /// <reference path="addControl.d.ts" />
 
-import { ZString } from "../languages/ui-str";
 import assign from "./assign";
 
 /**
@@ -55,9 +54,10 @@ interface IRegularGroup<C extends ControlTypeName> {
  * @param type - 设置控件类型。
  * @param params - 设置控件参数。
  * @param properties - 设置控件属性。
+ * @param doNotSetLabelMinWidth - 不要设置文本标签的最大宽度。
  * @returns 行栏目。
  */
-export function addGroup<C extends ControlTypeName>(parent: ContainerType, name: string, type?: C, params?: ParamsType<C>, properties?: PropertiesType<C>): IRegularGroup<C> {
+export function addGroup<C extends ControlTypeName>(parent: ContainerType, name: string, type?: C, params?: ParamsType<C>, properties?: PropertiesType<C>, doNotSetLabelMinWidth?: boolean): IRegularGroup<C> {
 	//#region functions
 	const addGroup = () => addControl(parent, "group", { orientation: "row", spacing: 7, alignment: "fill", alignChildren: "fill" });
 	const setLabelMinWidth = (label: StaticText) => {
@@ -66,7 +66,7 @@ export function addGroup<C extends ControlTypeName>(parent: ContainerType, name:
 	};
 	const addLabel = (parent: Group, text: string) => {
 		const label = addControl(parent, "statictext", { text });
-		setLabelMinWidth(label);
+		if (!doNotSetLabelMinWidth) setLabelMinWidth(label);
 		return label;
 	};
 	//#endregion

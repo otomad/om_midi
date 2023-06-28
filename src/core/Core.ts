@@ -1,4 +1,4 @@
-import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, HasNoVideoError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
+import { CannotFindCompositionError, CannotSetTimeRemapError, CannotTuningError, EmptySubtitlesError, HasNoVideoError, InvalidDurationError, MyError, NoLayerSelectedError, NoMidiError, NoOptionsCheckedError, NotOneTrackForApplyEffectsOnlyError } from "../errors";
 import Portal from "../ui/Portal";
 import getComp from "../modules/getComp";
 import Setting from "../settings/Setting";
@@ -46,6 +46,8 @@ export default class Core {
 					this.applyMarkerConductor(comp);
 				else if (tool === this.portal.toolsTab.ease)
 					this.applyEase100Percent(comp);
+				else if (tool === this.portal.toolsTab.subtitle)
+					this.applyGenerateSubtitles(comp);
 			}
 		} catch (error) {
 			throw new MyError(error as Error);
@@ -544,7 +546,8 @@ export default class Core {
 		const layers = comp.selectedLayers;
 		for (const layer of layers) {
 			if (layer === undefined) continue;
-			for (const property of layer.selectedProperties as Property[]) {
+			const selectedProperties = Core.getSelectedProperties(layer);
+			for (const property of selectedProperties) {
 				if (property === undefined) continue;
 				for (const keyIndex of property.selectedKeys) {
 					if (keyIndex === undefined) continue;
@@ -552,6 +555,23 @@ export default class Core {
 				}
 			}
 		}
+	}
+	
+	applyGenerateSubtitles(comp: CompItem) {
+		const { subtitle } = this.portal.toolsTab;
+		const duration = parseFloat(subtitle.durationTxt.text);
+		const subtitlesText = subtitle.subtitlesText.text;
+		if (!isFinite(duration) || duration <= 0) throw new InvalidDurationError();
+		if (!subtitlesText.trim().length) throw new EmptySubtitlesError();
+		const subtitles = subtitlesText.replace(/\r\n|\n\r|\r|\n/g, "\n").split("\n");
+		
+		app.beginUndoGroup("om midi - Apply Batch Subtitle Generation");
+		const layer = comp.layers.addText();
+		const startTime = layer.startTime = this.getStartTime(comp);
+		subtitles.forEach((line, index) => {
+			if (!line.trim().length) return;
+			layer.sourceText.setValueAtTime(startTime + index * duration, new TextDocument(line));
+		});
 	}
 	
 	//#region 辅助方法
@@ -602,6 +622,28 @@ export default class Core {
 	 */
 	private static getEffects(layer: AVLayer): PropertyGroup {
 		return layer("Effects") as PropertyGroup;
+	}
+	
+	/**
+	 * 获取选中的参数，用以获取选中的关键帧，但是要避免选中参数组，如果是参数组则通过递归来获取真正的参数。
+	 * @param layer - 图层或参数类。
+	 * @returns 选中的参数。
+	 */
+	private static getSelectedProperties(layer: Layer | _PropertyClasses[]): Property[] {
+		const properties: Property[] = [];
+		const propertyClasses = layer instanceof Array ? layer : layer.selectedProperties;
+		for (const property of propertyClasses) {
+			if (property === undefined) continue;
+			else if (property instanceof Property)
+				properties.push(property);
+			else {
+				const subProperties: _PropertyClasses[] = [];
+				for (let i = 1; i <= property.numProperties; i++)
+					subProperties.push(property.property(i));
+				properties.push(...this.getSelectedProperties(subProperties));
+			}
+		}
+		return properties;
 	}
 	
 	/**
@@ -719,10 +761,20 @@ export default class Core {
 		if (ease.length !== 0)
 			property.setTemporalEaseAtKey(keyIndex, ease as [KeyframeEase]);
 		const anotherSide = isHold ? KeyframeInterpolationType.HOLD : KeyframeInterpolationType.LINEAR;
+		const original: [KeyframeInterpolationType, KeyframeInterpolationType] =
+			[property.keyInInterpolationType(keyIndex), property.keyOutInterpolationType(keyIndex)];
 		if (easeType === EaseType.EASE_IN)
 			property.setInterpolationTypeAtKey(keyIndex, KeyframeInterpolationType.BEZIER, anotherSide);
 		else if (easeType === EaseType.EASE_OUT)
 			property.setInterpolationTypeAtKey(keyIndex, anotherSide, KeyframeInterpolationType.BEZIER);
+		else if (easeType === EaseType.LINEAR)
+			property.setInterpolationTypeAtKey(keyIndex, KeyframeInterpolationType.LINEAR);
+		else if (easeType === EaseType.HOLD)
+			property.setInterpolationTypeAtKey(keyIndex, KeyframeInterpolationType.HOLD);
+		else if (easeType === EaseType.HOLD_IN)
+			property.setInterpolationTypeAtKey(keyIndex, KeyframeInterpolationType.HOLD, original[1]);
+		else if (easeType === EaseType.HOLD_OUT)
+			property.setInterpolationTypeAtKey(keyIndex, original[0], KeyframeInterpolationType.HOLD);
 	}
 	//#endregion
 	

@@ -9,7 +9,7 @@ import { CannotFindWindowError, MidiNoTrackError, MyError } from "../errors";
 import Midi from "../midi/Midi";
 import ProgressPalette from "../dialogs/ProgressPalette";
 import MidiTrackSelector from "./MidiTrackSelector";
-import uiStr, { DYNAMIC_BPM_SIGN } from "../languages/ui-str";
+import uiStr, { DIALOG_SIGN, DYNAMIC_BPM_SIGN } from "../languages/ui-str";
 import BaseTab from "./BaseTab";
 import Core from "../core/Core";
 import MidiTrack from "../midi/MidiTrack";
@@ -60,7 +60,7 @@ export default class Portal {
 			group: this.selectMidiGroup,
 			label: this.selectMidiLbl,
 			control: this.selectMidiBtn,
-		} = addGroup(this.group, "", "button", { text: "...", size: [MIDI_BUTTON_WIDTH, MIDI_BUTTON_HEIGHT] }));
+		} = addGroup(this.group, "", "button", { text: DIALOG_SIGN, size: [MIDI_BUTTON_WIDTH, MIDI_BUTTON_HEIGHT] }));
 		this.selectMidiName = addControl(this.selectMidiGroup, "statictext", { alignment: FILL_CENTER });
 		({
 			group: this.selectTrackGroup,

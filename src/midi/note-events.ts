@@ -9,7 +9,7 @@ export class NoteEvent {
 }
 
 export class MetaEvent extends NoteEvent {
-	readonly type: MetaEventType = 0;
+	readonly type: MetaEventType = MetaEventType.UNDEFINED;
 	
 	constructor(type: MetaEventType) {
 		super();
@@ -58,11 +58,7 @@ export class SmpteOffsetMetaEvent extends MetaEvent {
 	
 	constructor(smpteOffset: number[]) {
 		super(MetaEventType.SMPTE_OFFSET);
-		this.hour = smpteOffset[0];
-		this.min = smpteOffset[1];
-		this.sec = smpteOffset[2];
-		this.fr = smpteOffset[3];
-		this.subFr = smpteOffset[4];
+		[this.hour, this.min, this.sec, this.fr, this.subFr] = smpteOffset;
 	}
 }
 
@@ -78,10 +74,7 @@ export class TimeSignatureMetaEvent extends MetaEvent {
 	
 	constructor(timeSignature: number[]) {
 		super(MetaEventType.TIME_SIGNATURE);
-		this.number = timeSignature[0];
-		this.denom = timeSignature[1];
-		this.metro = timeSignature[2];
-		this.thirtySeconds = timeSignature[3];
+		[this.number, this.denom, this.metro, this.thirtySeconds] = timeSignature;
 	}
 	
 	toString() {
@@ -117,8 +110,7 @@ abstract class NoteOnOffEvent extends RegularEvent {
 	
 	constructor(type: RegularEventType, channel: number, values: number[]) {
 		super(type, channel, values);
-		this.pitch = values[0];
-		this.velocity = values[1];
+		[this.pitch, this.velocity] = values;
 	}
 }
 

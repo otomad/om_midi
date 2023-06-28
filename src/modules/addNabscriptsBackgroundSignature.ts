@@ -1,5 +1,4 @@
-
-/** 
+/**
  * Draw some random rectangles (position, size, color, alpha) on the window background
  */
 export default function addNabscriptsBackgroundSignature(window: Window) {

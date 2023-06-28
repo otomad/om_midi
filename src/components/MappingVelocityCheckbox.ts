@@ -1,6 +1,6 @@
 import ConfigJsonNS from "../core/ConfigJsonNS";
 import MappingVelocityDialog from "../dialogs/MappingVelocityDialog";
-import { ZString } from "../languages/ui-str";
+import { DIALOG_SIGN, ZString } from "../languages/ui-str";
 import addControl from "../modules/addControl";
 import clamp from "../modules/clamp";
 import map from "../modules/map";
@@ -23,7 +23,7 @@ export default class MappingVelocityCheckbox {
 		this.mapping = new ConfigJsonNS.MappingVelocity({ targetLess: defaultRange[0], targetMore: defaultRange[1] });
 		this.group = addControl(parent, "group", { orientation: "row" });
 		this.checkbox = addControl(this.group, "checkbox", { text });
-		this.advanceBtn = addControl(this.group, "button", { text: "...", size: [MIDI_BUTTON_WIDTH, 18] });
+		this.advanceBtn = addControl(this.group, "button", { text: DIALOG_SIGN, size: [MIDI_BUTTON_WIDTH, 18] });
 		this.checkbox.onClick = () => this.value = this.checkbox.value;
 		this.advanceBtn.onClick = () => {
 			const result = new MappingVelocityDialog(targetText, targetRange, this.mapping).showDialog();

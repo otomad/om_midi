@@ -42,6 +42,9 @@ export enum MetaEventType {
 	SMPTE_OFFSET = 0x54,
 	TIME_SIGNATURE = 0x58,
 	SEQUENCER_SPECIFIC = 0x7F,
+	
+	// 未定义
+	UNDEFINED = 0,
 }
 
 /**

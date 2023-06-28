@@ -139,3 +139,15 @@ export class InvalidMappingVelocityValuesError extends MyError {
 		super(localize(uiStr.invalid_mapping_velocity_values_error));
 	}
 }
+
+export class InvalidDurationError extends MyError {
+	constructor() {
+		super(localize(uiStr.invalid_duration_error));
+	}
+}
+
+export class EmptySubtitlesError extends MyError {
+	constructor() {
+		super(localize(uiStr.empty_subtitles_error));
+	}
+}

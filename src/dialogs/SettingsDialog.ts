@@ -71,7 +71,7 @@ export default class SettingsDialog {
 			group: this.languageGroup,
 			label: this.languageLbl,
 			control: this.languageCombo,
-		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist"));
+		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist", undefined, undefined, true));
 		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語", "Tiếng Việt", "한국어");
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
