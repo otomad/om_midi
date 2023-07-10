@@ -368,7 +368,7 @@ export default class Core {
 					const signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1] as [number, number];
 					const enterIncremental = ENTER_INCREMENTAL / 100 * Math.abs(currentScale);
 					if (!optimize || !hasDuration || requireAdjustAnchor) {
-						setValueAtKey(key, [currentScale, currentScale]);
+						setValueAtKey(key, [currentScale * signs[0], currentScale * signs[1]]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
 						const increasedScale = currentScale + enterIncremental;
