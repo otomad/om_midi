@@ -19,6 +19,19 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
+		"paths": {
+			"*": [
+				"./src/types/*",
+			]
+		},
+		/* "plugins": [
+			{
+				"transform": "typescript-plugin-styled-components",
+				"type": "config",
+				"minify": true,
+				"ssr": true,
+			}
+		] */
 	},
 	"include": [
 		"src",

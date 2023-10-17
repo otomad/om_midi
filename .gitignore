@@ -10,3 +10,4 @@ lerna-debug.log*
 node_modules/
 desktop.ini
 .DS_Store
+src/types/auto-imports.d.ts

@@ -1,8 +1,4 @@
-**/*.js
-**/*.jsx
-**/*.ts
-**/*.tsx
-!src/**/*.js
-!src/**/*.jsx
-!src/**/*.ts
-!src/**/*.tsx
+dist/*
+.output/*
+node_modules/*
+**/dist/*

@@ -12,7 +12,6 @@ module.exports = {
 		"plugin:react-hooks/recommended",
 	],
 	overrides: [],
-	ignorePatterns: ["dist"],
 	parser: "@typescript-eslint/parser",
 	parserOptions: {
 		ecmaVersion: "latest",
