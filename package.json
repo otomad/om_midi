@@ -8,32 +8,31 @@
 		"lib": "lib"
 	},
 	"scripts": {
-		"tsc": "tsc",
-		"build": "rollup -c",
-		"watch": "rollup -cw",
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"release": "npm run build && gh release create $(node -pe \"require('./package.json').version\") $(node -pe \"require('./package.json').main\")"
 	},
 	"author": "Ranne",
 	"license": "GPL",
 	"dependencies": {
-		"@rollup/plugin-typescript": "^9.0.1",
-		"@types/react-transition-group": "^4.4.5",
-		"csinterface-ts": "^1.0.3",
 		"react": "^18.2.0",
-		"react-transition-group": "^4.4.5",
-		"rollup": "^3.2.3",
-		"rollup-plugin-copy": "^3.4.0",
-		"rollup-plugin-postcss": "^4.0.2",
-		"sass": "^1.55.0",
-		"tslib": "^2.4.0",
-		"typescript": "^4.8.4"
+		"react-dom": "^18.2.0",
+		"react-transition-group": "^4.4.5"
 	},
 	"devDependencies": {
-		"@types/react-dom": "^18.0.6",
-		"@typescript-eslint/eslint-plugin": "^5.40.1",
-		"@typescript-eslint/parser": "^5.40.1",
-		"eslint": "^8.25.0",
+		"@types/react": "^18.2.15",
+		"@types/react-dom": "^18.2.7",
+		"@types/react-transition-group": "^4.4.5",
+		"@typescript-eslint/eslint-plugin": "^6.8.0",
+		"@typescript-eslint/parser": "^6.8.0",
+		"@vitejs/plugin-react-swc": "^3.3.2",
+		"csinterface-ts": "^1.0.3",
+		"eslint": "^8.45.0",
 		"eslint-plugin-react": "^7.31.10",
-		"react-dom": "^18.2.0"
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.3",
+		"typescript": "^5.1.6",
+		"vite": "^4.4.5"
 	}
 }

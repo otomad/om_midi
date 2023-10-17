@@ -1,21 +1,34 @@
 {
 	"compilerOptions": {
 		"module": "ESNext",
-		"target": "ES2022",
+		"target": "ESNext",
 		"noImplicitAny": true,
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
+		"skipLibCheck": true,
 		"strict": true,
-		"typeRoots": [],
 		"lib": [
-			"DOM",
-			"DOM.Iterable",
 			"ESNext",
+			"ESNext.AsyncIterable",
 			"ES2015.Promise",
+			"DOM",
+			"DOM.Iterable"
 		],
-		"jsx": "react",
+		"jsx": "react-jsx",
 		"allowSyntheticDefaultImports": true,
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
 	},
+	"include": [
+		"src",
+	],
 	"exclude": [
 		"node_modules",
+	],
+	"references": [
+		{
+			"path": "./tsconfig.node.json",
+		},
 	],
 }
