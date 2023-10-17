@@ -2,10 +2,12 @@
 import react from "@vitejs/plugin-react-swc";
 import autoImport from "unplugin-auto-import/vite";
 import { defineConfig } from "vite";
+// import babel from "vite-plugin-babel";
 
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
+		// babel(),
 		react(),
 		autoImport({
 			imports: [
