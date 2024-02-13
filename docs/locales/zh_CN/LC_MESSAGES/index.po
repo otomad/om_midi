@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Otomad
+# This file is distributed under the same license as the om midi package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: om midi 4.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-13 21:44+0800\n"
+"PO-Revision-Date: 2024-02-13 21:45+0800\n"
+"Last-Translator: \n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Generated-By: Babel 2.14.0\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: ../../source/index.rst:2 f9f381f0e29e4295b362f5c9af8c598d
+msgid "Welcome to om midi Documentation!"
+msgstr "欢迎来到 om midi 说明文档！"
+
+#: ../../source/index.rst:4 44380db63bb34e5f848f5860672c8c47
+msgid ""
+"**om midi**, a YTPMV/Otomad assistant script for **After Effects**. It "
+"is a script that automatically converts MIDI files to keyframes in After "
+"Effects. Hope that with the help of om midi, people can be rescued from "
+"tedious aligning video and audio, and put more energy into more creative "
+"works."
+msgstr ""
+"**om midi**，**After Effects** 的音 MAD / YTPMV 辅助脚本。它是一个能够自"
+"动将 MIDI 文件转换为 After Effects 中关键帧的脚本。希望在 om midi 的帮助"
+"下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造"
+"性的工作中。"
+
+#: ../../source/index.rst:6 7ec9f3f0aea14bf3bf944a461872ce05
+msgid ""
+"Check out the :doc:`usage` section for further information, including "
+"how to :ref:`installation` the extension."
+msgstr ""
+"查看:doc:`usage`部分以了解更多信息，包括如何:ref:`installation`该扩展。"
+
+#: ../../source/index.rst:10 4d9727b447cd4a2bbdf69afd39023a8b
+msgid "This project is under active development."
+msgstr "该项目正在积极开发中。"
+
+#: ../../source/index.rst:13 3df1d072d5b2435482c8dc4e3f79a8d1
+msgid "Languages"
+msgstr "语言"
+
+#: ../../source/index.rst:15 f8d5dc0e98e1426799ec027e91a85e3c
+msgid ""
+"You can also click on the “Read the Docs” menu on the bottom left corner "
+"of any page to switch languages."
+msgstr "您也可以在任意页面点击左下角的“Read the Docs”菜单来切换语言。"
+
+#: ../../source/index.rst:20 cd5d2aaa8f1b4358b9d8e78dd882fd54
+msgid "**English**"
+msgstr "`English </>`_"
+
+#: ../../source/index.rst:21 5ec2053b5c5647f09458806262d2d2e8
+msgid "`简体中文 </zh_CN>`_"
+msgstr "**简体中文**"
+
+#: ../../source/index.rst:23 16cd15e4c1e1415e974aa6f362489fb2
+msgid ""
+"To learn more about the features of om midi, click on any of the "
+"following pages below..."
+msgstr "要了解关于 om midi 的更多功能，请单击下方的任意页面……"
+
+#: ../../source/index.rst:26 9fefdef5598f4de9bd29bde4c9fd5b43
+msgid "Contents"
+msgstr "目录"

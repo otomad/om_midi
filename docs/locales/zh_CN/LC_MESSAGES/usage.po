@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Otomad
+# This file is distributed under the same license as the om midi package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: om midi 4.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-13 21:46+0800\n"
+"PO-Revision-Date: 2024-02-13 21:47+0800\n"
+"Last-Translator: \n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Generated-By: Babel 2.14.0\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: ../../source/usage.rst:2 c851e5abef284188a475773f79f8c7a6
+msgid "Usage"
+msgstr "用法"
+
+#: ../../source/usage.rst:7 7fb7de6c6b444e6d93cc76767d481c00
+msgid "Installation"
+msgstr "安装"
+
+#: ../../source/usage.rst:9 d52c171d09e14d56a57903091f45b50a
+msgid ""
+"Download the script file and move it to the ``Script\\ScriptUI`` folder "
+"located in the Adobe After Effects installation directory."
+msgstr ""
+"下载脚本文件并将其移动至位于 Adobe After Effects 安装目录的 "
+"``Script\\ScriptUI`` 文件夹中。"
+
+#: ../../source/usage.rst:11 33fea337c6cf48dfb65a17f86e053fbc
+msgid "Where is the installation directory for AE?"
+msgstr "AE 的安装目录在哪？"
+
+#: ../../source/usage.rst:13 1fe99b493b2348fb828f54872fa2822b
+msgid ""
+"Perhaps a Google search can provide a better answer. Here are some "
+"examples, which may vary depending on the AE version or installation "
+"settings:"
+msgstr ""
+"也许谷歌搜索一番可以得到更好的答案。下面是一些示例，实际情况可能因 AE 版本"
+"不同或安装设置不同而有区别："
+
+#: ../../source/usage.rst:15 5ad246e35b714bdbb323cd50dfd166be
+msgid "(Windows: C:\\\\Program Files\\\\Adobe\\\\Adobe After Effects 2024)"
+msgstr "(Windows：C:\\\\Program Files\\\\Adobe\\\\Adobe After Effects 2024)"
+
+#: ../../source/usage.rst:18 6c5189aa53b84928b3809cd2f2c97090
+msgid "Startup"
+msgstr "启动"
+
+#: ../../source/usage.rst:20 11a8145d2e0f4c42a31d122d9a14621d
+msgid "*Window > om midi.jsx*"
+msgstr "*窗口 > om midi.jsx*"
