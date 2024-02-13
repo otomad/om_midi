@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: om midi 4.0.0\n"
+"Project-Id-Version: om midi 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 21:44+0800\n"
-"PO-Revision-Date: 2024-02-13 21:45+0800\n"
+"POT-Creation-Date: 2024-02-13 23:23+0800\n"
+"PO-Revision-Date: 2024-02-13 23:25+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "Language: zh_CN\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Generated-By: Babel 2.14.0\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: ../../source/index.rst:2 f9f381f0e29e4295b362f5c9af8c598d
+#: ../../source/index.rst:2 0b9e09b499c048c892c00424857db679
 msgid "Welcome to om midi Documentation!"
 msgstr "欢迎来到 om midi 说明文档！"
 
-#: ../../source/index.rst:4 44380db63bb34e5f848f5860672c8c47
+#: ../../source/index.rst:4 8654219c2734460f8caaca6357eb4c3b
 msgid ""
 "**om midi**, a YTPMV/Otomad assistant script for **After Effects**. It "
 "is a script that automatically converts MIDI files to keyframes in After "
@@ -37,41 +37,42 @@ msgstr ""
 "下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造"
 "性的工作中。"
 
-#: ../../source/index.rst:6 7ec9f3f0aea14bf3bf944a461872ce05
+#: ../../source/index.rst:6 b05e7e0264e14ebbaddd8af6f79676f2
 msgid ""
-"Check out the :doc:`usage` section for further information, including "
-"how to :ref:`installation` the extension."
+"Check out the :doc:`usage <usage>` section for further information, "
+"including how to :ref:`install <installation>` the extension."
 msgstr ""
-"查看:doc:`usage`部分以了解更多信息，包括如何:ref:`installation`该扩展。"
+"查看:doc:`用法 <usage>`部分以了解更多信息，包括如何:ref:`安装 "
+"<installation>`该扩展。"
 
-#: ../../source/index.rst:10 4d9727b447cd4a2bbdf69afd39023a8b
+#: ../../source/index.rst:10 2d413c10eaed41dbb56bbbf7fe0f93ba
 msgid "This project is under active development."
 msgstr "该项目正在积极开发中。"
 
-#: ../../source/index.rst:13 3df1d072d5b2435482c8dc4e3f79a8d1
+#: ../../source/index.rst:13 97114c38ec5042baaeecb972a5ac3171
 msgid "Languages"
 msgstr "语言"
 
-#: ../../source/index.rst:15 f8d5dc0e98e1426799ec027e91a85e3c
+#: ../../source/index.rst:15 ea6f72afeb944ce4870c8a2b6cce5d1d
 msgid ""
 "You can also click on the “Read the Docs” menu on the bottom left corner "
 "of any page to switch languages."
 msgstr "您也可以在任意页面点击左下角的“Read the Docs”菜单来切换语言。"
 
-#: ../../source/index.rst:20 cd5d2aaa8f1b4358b9d8e78dd882fd54
+#: ../../source/index.rst:20 5583cd2e54fb4ff492802b36005294b8
 msgid "**English**"
 msgstr "`English </>`_"
 
-#: ../../source/index.rst:21 5ec2053b5c5647f09458806262d2d2e8
+#: ../../source/index.rst:21 4634dee19a9f49e0b7ce1c2072a5bcc2
 msgid "`简体中文 </zh_CN>`_"
 msgstr "**简体中文**"
 
-#: ../../source/index.rst:23 16cd15e4c1e1415e974aa6f362489fb2
+#: ../../source/index.rst:23 39d7f274934b4de9842edad7701f411b
 msgid ""
 "To learn more about the features of om midi, click on any of the "
 "following pages below..."
 msgstr "要了解关于 om midi 的更多功能，请单击下方的任意页面……"
 
-#: ../../source/index.rst:26 9fefdef5598f4de9bd29bde4c9fd5b43
+#: ../../source/index.rst:26 2c26013af9754fe980ecdfc9471df1a3
 msgid "Contents"
 msgstr "目录"

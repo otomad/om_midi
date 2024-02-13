@@ -6,8 +6,8 @@ project = "om midi"
 copyright = "2024, Otomad"
 author = "Otomad"
 
-release = "4.0"
-version = "4.0.0"
+release = "5.0"
+version = "5.0.0"
 
 # -- General configuration
 
