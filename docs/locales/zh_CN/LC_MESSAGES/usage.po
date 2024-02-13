@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: om midi 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 21:46+0800\n"
-"PO-Revision-Date: 2024-02-13 21:47+0800\n"
+"POT-Creation-Date: 2024-02-13 23:43+0800\n"
+"PO-Revision-Date: 2024-02-13 23:46+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "Language: zh_CN\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Generated-By: Babel 2.14.0\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: ../../source/usage.rst:2 c851e5abef284188a475773f79f8c7a6
+#: ../../source/usage.rst:2 b739704eed3b41de8e59b760ef166e6f
 msgid "Usage"
 msgstr "用法"
 
-#: ../../source/usage.rst:7 7fb7de6c6b444e6d93cc76767d481c00
+#: ../../source/usage.rst:7 a9800c4c12c34d319b051ab2540fa86f
 msgid "Installation"
 msgstr "安装"
 
-#: ../../source/usage.rst:9 d52c171d09e14d56a57903091f45b50a
+#: ../../source/usage.rst:9 f0c5d525cbac4994bf3a47c23bbb7777
 msgid ""
 "Download the script file and move it to the ``Script\\ScriptUI`` folder "
 "located in the Adobe After Effects installation directory."
@@ -36,27 +36,138 @@ msgstr ""
 "下载脚本文件并将其移动至位于 Adobe After Effects 安装目录的 "
 "``Script\\ScriptUI`` 文件夹中。"
 
-#: ../../source/usage.rst:11 33fea337c6cf48dfb65a17f86e053fbc
+#: ../../source/usage.rst:11 f8f287bcfb4b48ceac44fc5eae98974f
 msgid "Where is the installation directory for AE?"
 msgstr "AE 的安装目录在哪？"
 
-#: ../../source/usage.rst:13 1fe99b493b2348fb828f54872fa2822b
+#: ../../source/usage.rst:13 53bf3d44c3f34802a487d98875192d62
 msgid ""
-"Perhaps a Google search can provide a better answer. Here are some "
-"examples, which may vary depending on the AE version or installation "
-"settings:"
+"Perhaps a Google search can provide a better answer. Here are some examples, "
+"which may vary depending on the AE version or installation settings:"
 msgstr ""
-"也许谷歌搜索一番可以得到更好的答案。下面是一些示例，实际情况可能因 AE 版本"
-"不同或安装设置不同而有区别："
+"也许谷歌搜索一番可以得到更好的答案。下面是一些示例，实际情况可能因 AE 版本不同"
+"或安装设置不同而有区别："
 
-#: ../../source/usage.rst:15 5ad246e35b714bdbb323cd50dfd166be
+#: ../../source/usage.rst:15 35e0d184cac9405f913d9fa379f778e0
 msgid "(Windows: C:\\\\Program Files\\\\Adobe\\\\Adobe After Effects 2024)"
 msgstr "(Windows：C:\\\\Program Files\\\\Adobe\\\\Adobe After Effects 2024)"
 
-#: ../../source/usage.rst:18 6c5189aa53b84928b3809cd2f2c97090
+#: ../../source/usage.rst:18 f78e125296fa4bd7a5748c7b118f71fc
 msgid "Startup"
 msgstr "启动"
 
-#: ../../source/usage.rst:20 11a8145d2e0f4c42a31d122d9a14621d
+#: ../../source/usage.rst:20 75913dc38b144834a89ae4dfc20bea52
 msgid "*Window > om midi.jsx*"
 msgstr "*窗口 > om midi.jsx*"
+
+#: ../../source/usage.rst:23 9a17bfb96fb843338f004669970fef6d
+msgid "Versions Comparison"
+msgstr "版本对比"
+
+#: ../../source/usage.rst:25 015b00c9bcc943d38c318e1abfa6f268
+msgid ""
+"Except v1.2, no version tags are given for others. So those version tags are "
+"defined by myself."
+msgstr "除了 v1.2 之外，其它的版本均没有给出版本号。因此那些版本号是我自拟的。"
+
+#: ../../source/usage.rst:28 2af76cbc62094527b0e7a1f3e55ea727
+msgid "Ver."
+msgstr "版本"
+
+#: ../../source/usage.rst:28 0ee4609c6e5f47c38047f0bd4d78aba8
+msgid "Common Name"
+msgstr "通用名称"
+
+#: ../../source/usage.rst:28 f3981b60c0f944f9b3001c62893b7ef7
+msgid "Multitrack Support"
+msgstr "多轨支持"
+
+#: ../../source/usage.rst:28 177ccfec28814b08b81575d2cac6e755
+msgid "Add Keyframes to Layers"
+msgstr "添加关键帧至图层"
+
+#: ../../source/usage.rst:28 8f9aea9d4fcd4b7cafeaae49d70e422b
+msgid "Additional Useful Keyframes"
+msgstr "额外的实用关键帧"
+
+#: ../../source/usage.rst:28 7b277b0794054ada8467bb4a990bd5de
+msgid "Manually Select MIDI Tracks"
+msgstr "手动选择轨道"
+
+#: ../../source/usage.rst:28 7b00d179644b46e8992cf1bc6f1cac47
+msgid "Change BPM"
+msgstr "更改 BPM"
+
+#: ../../source/usage.rst:28 37ef9640833140fb9b0c040febfcd8ab
+msgid "Dynamic BPM"
+msgstr "动态 BPM"
+
+#: ../../source/usage.rst:30 e90a8885864a4202ad54ecf5ca0a444d
+msgid "v0.1"
+msgstr ""
+
+#: ../../source/usage.rst:30 733efb885b7b4dadb144f61d1a3b8d9b
+msgid ""
+"`David Van Brink (omino)'s Original Edition <https://omino.com/"
+"pixelblog/2011/12/26/ae-hello-again-midi/>`_"
+msgstr ""
+"`David Van Brink (omino) 的原版 <https://omino.com/pixelblog/2011/12/26/ae-"
+"hello-again-midi/>`_"
+
+#: ../../source/usage.rst:30 ../../source/usage.rst:32 ../../source/usage.rst:34
+#: ../../source/usage.rst:36 ../../source/usage.rst:38 ../../source/usage.rst:40
+#: 01f718c3d18d4103bc1aaead1851cb0a 038a47a54d7a448f8806022001642c5c
+#: 209acca245fb4d15a156f4b3fc017528
+msgid "✔️"
+msgstr ""
+
+#: ../../source/usage.rst:30 ../../source/usage.rst:32 ../../source/usage.rst:34
+#: ../../source/usage.rst:36 ../../source/usage.rst:38
+#: 11f50d6a93404c44977604070e5efa57 31ed7f0792764455b068ed07819db1d1
+#: 39bccf6b9a97459b84d0de52998f69fa 5a9d383c0a13413a84550209ded47c88
+#: a452001b74404deab7e8ceced5cd9caf a48e6ebef2f74fe29753a47e04a3689a
+#: c8096cff71f54f3b901423f2e0acf4b9 cd8b651ce8fc4822ab69c7fb90775ebd
+#: ece8d23589654e4a95f2d6a45e89ca65
+msgid "❌"
+msgstr ""
+
+#: ../../source/usage.rst:32 1a9d5b9a6ff544b1a55f2e804612232d
+msgid "v1.0"
+msgstr ""
+
+#: ../../source/usage.rst:32 55f7d47a49b54df283efe2be547e188e
+msgid "`Dora (NGDXW)'s Revision <https://www.bilibili.com/read/cv170398>`_"
+msgstr "`Dora (NGDXW) 的改版 <https://www.bilibili.com/read/cv170398>`_"
+
+#: ../../source/usage.rst:34 686b496f3514410499c4f39f2261a0bb
+msgid "v1.0 Plus"
+msgstr "v1.0 闰"
+
+#: ../../source/usage.rst:34 43be1bacb54a423ca16d03853140f9f4
+msgid "`Expression Presets <https://www.bilibili.com/video/av29649969>`_"
+msgstr "`表达式预设 <https://www.bilibili.com/video/av29649969>`_"
+
+#: ../../source/usage.rst:36 a194c16969b841938e79098094e9237a
+msgid "v1.2"
+msgstr ""
+
+#: ../../source/usage.rst:36 f17c744c90704a3da94a167a5e61888e
+msgid "`Z4HD's Chinese Edition <https://github.com/Z4HD/om_midi_NGDXW_zh>`_"
+msgstr "`家鳖大帝的汉化版 <https://github.com/Z4HD/om_midi_NGDXW_zh>`_"
+
+#: ../../source/usage.rst:38 9620c20788fe4ae8ab02021dfd6b2ffb
+msgid "v2.0"
+msgstr ""
+
+#: ../../source/usage.rst:38 ae5b2701b3db4734a5c52c2ee0369375
+msgid ""
+"`Dora (NGDXW)'s Second Revision <https://www.bilibili.com/read/cv1217487>`_"
+msgstr "`Dora (NGDXW) 的再版 <https://www.bilibili.com/read/cv1217487>`_"
+
+#: ../../source/usage.rst:40 30bd964bc35b4416b54c9c5dd2cb96dd
+msgid "v3.x"
+msgstr ""
+
+#: ../../source/usage.rst:40 329949d9b729429989abf4d072630972
+msgid "**Current Version**"
+msgstr "**当前版本**"
