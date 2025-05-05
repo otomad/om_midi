@@ -13,8 +13,9 @@ export default class Ease100Percent extends BaseTool {
 	easeHoldRadio: RadioButton;
 	easeHoldInRadio: RadioButton;
 	easeHoldOutRadio: RadioButton;
+	ignoreHoldKeysCheck: Checkbox;
 	//#endregion
-	
+
 	constructor(parent: ToolsTab) {
 		super(parent);
 		this.easeInRadio = addControl(this.group, "radiobutton", { value: true });
@@ -24,9 +25,10 @@ export default class Ease100Percent extends BaseTool {
 		this.easeHoldRadio = addControl(this.group, "radiobutton");
 		this.easeHoldInRadio = addControl(this.group, "radiobutton");
 		this.easeHoldOutRadio = addControl(this.group, "radiobutton");
+		this.ignoreHoldKeysCheck = addControl(this.group, "checkbox");
 		this.translate();
 	}
-	
+
 	getValue(): EaseType {
 		if (this.easeInOutRadio.value) return EaseType.EASE_IN_OUT;
 		else if (this.easeOutRadio.value) return EaseType.EASE_OUT;
@@ -36,7 +38,7 @@ export default class Ease100Percent extends BaseTool {
 		else if (this.easeHoldOutRadio.value) return EaseType.HOLD_OUT;
 		else return EaseType.EASE_IN;
 	}
-	
+
 	translate(): void {
 		this.easeInRadio.text = localize(uiStr.ease_in);
 		this.easeOutRadio.text = localize(uiStr.ease_out);
@@ -45,5 +47,6 @@ export default class Ease100Percent extends BaseTool {
 		this.easeHoldRadio.text = localize(uiStr.hold_both);
 		this.easeHoldInRadio.text = localize(uiStr.hold_in);
 		this.easeHoldOutRadio.text = localize(uiStr.hold_out);
+		this.ignoreHoldKeysCheck.text = "忽略定格关键帧";
 	}
 }

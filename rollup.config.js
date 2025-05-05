@@ -8,7 +8,7 @@ import User from "./src/user.ts";
 import path from "path";
 import cleanup from "rollup-plugin-cleanup";
 
-const enableTerser = true;
+const enableTerser = false;
 
 export default [{
 	input: "src/index.ts",

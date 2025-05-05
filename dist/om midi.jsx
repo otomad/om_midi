@@ -11,11 +11,11 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2024 年 6 月 18 日 星期二 晚上 22:26:23
+ * 构建日期：2025年5月5日星期一晚上10点24分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
- * 日期：2011 年 12 月 25 日 星期日 晚上 22:58:10 太平洋时间
+ * 日期：2011年12月25日星期日晚上10点58分 太平洋时间
  * 作者：大卫·范·布林克
  *
  * 此脚本是 omino Adobe 脚本套件的一部分。
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Tuesday, June 18, 2024 10:26 PM
+ * Building Date: Monday, May 5, 2025 10:24 PM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:
@@ -1648,6 +1648,7 @@
             _this.easeHoldRadio = addControl(_this.group, "radiobutton");
             _this.easeHoldInRadio = addControl(_this.group, "radiobutton");
             _this.easeHoldOutRadio = addControl(_this.group, "radiobutton");
+            _this.ignoreHoldKeysCheck = addControl(_this.group, "checkbox");
             _this.translate();
             return _this;
         }
@@ -1675,6 +1676,7 @@
             this.easeHoldRadio.text = localize(uiStr.hold_both);
             this.easeHoldInRadio.text = localize(uiStr.hold_in);
             this.easeHoldOutRadio.text = localize(uiStr.hold_out);
+            this.ignoreHoldKeysCheck.text = "忽略定格关键帧";
         };
         return Ease100Percent;
     }(BaseTool));
@@ -3643,6 +3645,7 @@
         Core.prototype.applyEase100Percent = function (comp) {
             app.beginUndoGroup("om midi - Apply Easing 100%");
             var easeType = this.portal.toolsTab.ease.getValue();
+            var ignoreHoldKeys = this.portal.toolsTab.ease.ignoreHoldKeysCheck.value;
             var layers = comp.selectedLayers;
             for (var _i = 0, layers_1 = layers; _i < layers_1.length; _i++) {
                 var layer = layers_1[_i];
@@ -3657,7 +3660,11 @@
                         var keyIndex = _c[_b];
                         if (keyIndex === undefined)
                             continue;
-                        this.setPointKeyEase(property, keyIndex, easeType, false);
+                        var holdAnotherSide = false;
+                        if (ignoreHoldKeys && (property.keyInInterpolationType(keyIndex) === KeyframeInterpolationType.HOLD ||
+                            property.keyOutInterpolationType(keyIndex) === KeyframeInterpolationType.HOLD))
+                            holdAnotherSide = true;
+                        this.setPointKeyEase(property, keyIndex, easeType, holdAnotherSide);
                     }
                 }
             }

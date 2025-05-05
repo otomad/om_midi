@@ -20,11 +20,11 @@ const SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
 export default class Core {
 	portal: Portal;
 	nullSource?: AVItem;
-	
+
 	constructor(portal: Portal) {
 		this.portal = portal;
 	}
-	
+
 	apply() {
 		const comp = getComp();
 		if (comp === null) throw new CannotFindCompositionError();
@@ -56,25 +56,25 @@ export default class Core {
 			app.endUndoGroup();
 		}
 	}
-	
+
 	applyCreateNullObject(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Create Null Object");
 		const nullTab = this.portal.nullObjTab;
 		if (!this.portal.midi || this.portal.selectedTracks.length === 0) throw new NoMidiError();
 		const checks = nullTab.getCheckedChecks();
 		if (checks.length === 0) throw new NoOptionsCheckedError();
-		
+
 		//#region 设置
 		let usingSelectedLayerName = Setting.getUsingSelectedLayerName();
 		const selectedLayer = this.getSelectLayer(comp);
 		if (selectedLayer === null) usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
 		const pan100 = Setting.getNormalizePanTo100();
 		//#endregion
-		
+
 		const secondsPerTick = this.getSecondsPerTick();
 		const startTime = this.getStartTime(comp);
 		const integrator = this.getIntegrator();
-		
+
 		for (const track of this.portal.selectedTracks) {
 			if (track === undefined && !this.portal.midi.isPureQuarter) continue;
 			const nullLayer = this.createNullLayer(comp);
@@ -89,7 +89,7 @@ export default class Core {
 				this.addSliderControl(nullLayer, check.text); // 限制：只能存储索引值。
 			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType) =>
 				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
-			
+
 			let noteOnCount = 0, // 音符开计数。
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF, // 上一次音符事件类型。
 				lastEventStartTick = -1, // 上一次迄今基本时间。
@@ -174,7 +174,7 @@ export default class Core {
 			this.dealNoteEvents(track, comp, secondsPerTick, startTime, addNoteEvent);
 		}
 	}
-	
+
 	applyMarkerConductor(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Marker Conductor");
 		const marker = this.portal.toolsTab.marker;
@@ -207,7 +207,7 @@ export default class Core {
 			}
 		}
 	}
-	
+
 	applyEffects(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Effects");
 		const effectsTab = this.portal.applyEffectsTab;
@@ -236,7 +236,7 @@ export default class Core {
 		const addToGeometry2 = Setting.getAddToEffectTransform();
 		const hFlipMotion = Setting.getMotionForHorizontalFlip() as HFlipMotionType;
 		//#endregion
-		
+
 		//#region 预处理效果
 		if (layer.timeRemapEnabled) layer.timeRemapEnabled = false;
 		const source: AVItem = layer.source;
@@ -319,7 +319,7 @@ export default class Core {
 			invertProp().setValue(100);
 		}
 		//#endregion
-		
+
 		let noteOnCount = 0,
 			lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
 			lastEventStartTick = -1;
@@ -355,7 +355,7 @@ export default class Core {
 						!addToGeometry2 ? this.setPointKeyEase(layer.scale, keyIndex, easeType, isHold) :
 						(this.setPointKeyEase(geometry2.scaleHeight(), keyIndex, easeType, isHold),
 						this.setPointKeyEase(geometry2.scaleWidth(), keyIndex, easeType, isHold));
-					
+
 					const key = addKey(seconds);
 					const mod2 = noteOnCount % 2, mod4 = noteOnCount % 4;
 					let signs_bool = [!mod2, true] as [boolean, boolean];
@@ -394,7 +394,7 @@ export default class Core {
 						const setPointKeyEase = (keyIndex: number, easeType: EaseType, isHold: boolean) =>
 							!addToGeometry2 ? this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
 							this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
-						
+
 						const MOVEMENT_RATIO = 10;
 						const movement = source.width / MOVEMENT_RATIO;
 						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_UP ? -1 : 1;
@@ -421,7 +421,7 @@ export default class Core {
 					const setPointKeyEase = (keyIndex: number, easeType: EaseType, isHold: boolean) =>
 						!addToGeometry2 ? this.setPointKeyEase(layer.rotation, keyIndex, easeType, isHold) :
 						this.setPointKeyEase(geometry2.rotation(), keyIndex, easeType, isHold);
-					
+
 					const value = effectsTab.cwRotation.value ? (noteOnCount % 4) * 90 : ((4 - noteOnCount % 4) % 4) * 90;
 					const key = addKey(seconds);
 					if (!optimize || !hasDuration) {
@@ -445,7 +445,7 @@ export default class Core {
 					const setInterpolationTypeAtKey = (keyIndex: number, inType: KeyframeInterpolationType) =>
 						!addToGeometry2 ? layer.opacity.setInterpolationTypeAtKey(keyIndex, inType) :
 						geometry2.opacity().setInterpolationTypeAtKey(keyIndex, inType);
-					
+
 					const value = effectsTab.mapVelToOpacity.map(noteEvent.velocity);
 					const key = addKey(seconds);
 					setValueAtKey(key, value);
@@ -506,7 +506,7 @@ export default class Core {
 						}
 						audioLayer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
 					}
-					
+
 					if (effectsTab.mapVelToVolume.value) {
 						const audioLevels = audioLayer.audio.audioLevels;
 						const key = audioLevels.addKey(seconds);
@@ -532,17 +532,18 @@ export default class Core {
 				lastEventStartTick = noteEvent.startTick;
 			} else if (noteEvent instanceof NoteOffEvent) {
 				// const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
-				
+
 				// lastEventType = RegularEventType.NOTE_OFF;
 				// lastEventStartTick = noteEvent.startTick;
 			}
 		};
 		this.dealNoteEvents(track, comp, secondsPerTick, curStartTime, addNoteEvent);
 	}
-	
+
 	applyEase100Percent(comp: CompItem) {
 		app.beginUndoGroup("om midi - Apply Easing 100%");
 		const easeType = this.portal.toolsTab.ease.getValue();
+		const ignoreHoldKeys = this.portal.toolsTab.ease.ignoreHoldKeysCheck.value;
 		const layers = comp.selectedLayers;
 		for (const layer of layers) {
 			if (layer === undefined) continue;
@@ -551,12 +552,17 @@ export default class Core {
 				if (property === undefined) continue;
 				for (const keyIndex of property.selectedKeys) {
 					if (keyIndex === undefined) continue;
-					this.setPointKeyEase(property, keyIndex, easeType, false);
+					let holdAnotherSide = false;
+					if (ignoreHoldKeys && (
+						property.keyInInterpolationType(keyIndex) === KeyframeInterpolationType.HOLD ||
+						property.keyOutInterpolationType(keyIndex) === KeyframeInterpolationType.HOLD
+					)) holdAnotherSide = true;
+					this.setPointKeyEase(property, keyIndex, easeType, holdAnotherSide);
 				}
 			}
 		}
 	}
-	
+
 	applyGenerateSubtitles(comp: CompItem) {
 		const { subtitle } = this.portal.toolsTab;
 		const duration = parseFloat(subtitle.durationTxt.text);
@@ -564,7 +570,7 @@ export default class Core {
 		if (!isFinite(duration) || duration <= 0) throw new InvalidDurationError();
 		if (!subtitlesText.trim().length) throw new EmptySubtitlesError();
 		const subtitles = subtitlesText.replace(/\r\n|\n\r|\r|\n/g, "\n").split("\n");
-		
+
 		app.beginUndoGroup("om midi - Apply Batch Subtitle Generation");
 		const layer = comp.layers.addText();
 		const startTime = layer.startTime = this.getStartTime(comp);
@@ -573,7 +579,7 @@ export default class Core {
 			layer.sourceText.setValueAtTime(startTime + index * duration, new TextDocument(line));
 		});
 	}
-	
+
 	//#region 辅助方法
 	/**
 	 * 创建一个空对象图层。
@@ -614,7 +620,7 @@ export default class Core {
 		nullLayer.enabled = false;
 		return nullLayer;
 	}
-	
+
 	/**
 	 * 获取指定图层的效果属性集合。
 	 * @param layer - 图层。
@@ -623,7 +629,7 @@ export default class Core {
 	private static getEffects(layer: AVLayer): PropertyGroup {
 		return layer("Effects") as PropertyGroup;
 	}
-	
+
 	/**
 	 * 获取选中的参数，用以获取选中的关键帧，但是要避免选中参数组，如果是参数组则通过递归来获取真正的参数。
 	 * @param layer - 图层或参数类。
@@ -645,7 +651,7 @@ export default class Core {
 		}
 		return properties;
 	}
-	
+
 	/**
 	 * 为指定图层添加一个表达式控制 - 滑块控制的效果。
 	 * @param layer - 图层。
@@ -657,7 +663,7 @@ export default class Core {
 		slider.name = name;
 		return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
 	}
-	
+
 	private setValueAtTime(layer: AVLayer, checks: Checkbox[], check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType: KeyframeInterpolationType = inType): void {
 		const index = checks.indexOf(check);
 		if (index === -1) return;
@@ -667,7 +673,7 @@ export default class Core {
 		slider.setValueAtKey(key, value);
 		slider.setInterpolationTypeAtKey(key, inType, outType);
 	}
-	
+
 	/**
 	 * 获取当前合成所选中的第一个图层。
 	 * @param comp - 合成。
@@ -679,7 +685,7 @@ export default class Core {
 		if (layer instanceof AVLayer) return layer;
 		return null;
 	}
-	
+
 	private getSecondsPerTick(): number {
 		if (!this.portal.midi) throw new NoMidiError();
 		let secondsPerTick: number;
@@ -693,7 +699,7 @@ export default class Core {
 		}
 		return secondsPerTick;
 	}
-	
+
 	/**
 	 * 获取开始时间。
 	 * @param comp - 合成。
@@ -710,7 +716,7 @@ export default class Core {
 		else if (startTimePos === 2) return comp.workAreaStart;
 		else return 0;
 	}
-	
+
 	private dealNoteEvents(track: MidiTrack | undefined, comp: CompItem, secondsPerTick: number, startTime: number, addNoteEvent: (noteEvent: NoteEvent) => void) {
 		if (track !== undefined)
 			for (const noteEvent of track)
@@ -721,7 +727,7 @@ export default class Core {
 				addNoteEvent(new NoteOnEvent(0, 60, 100, +!!noteCount, 1, noteCount++));
 		}
 	}
-	
+
 	/**
 	 * 根据界面中的用户设定获取原始音高。
 	 * @returns 原始音高。
@@ -730,7 +736,7 @@ export default class Core {
 		const tab = this.portal.applyEffectsTab;
 		return tab.basePitchOctCombo.getSelectedIndex() * 12 + tab.basePitchKeyCombo.getSelectedIndex();
 	}
-	
+
 	/**
 	 * 拆分图层。
 	 * @param layer - 图层。
@@ -745,7 +751,7 @@ export default class Core {
 		newLayer.outPoint = outPoint;
 		return newLayer;
 	}
-	
+
 	/**
 	 * 为关键帧设置 100% 的缓动曲线。
 	 * @param property - 属性。
@@ -777,7 +783,7 @@ export default class Core {
 			property.setInterpolationTypeAtKey(keyIndex, original[0], KeyframeInterpolationType.HOLD);
 	}
 	//#endregion
-	
+
 	/**
 	 * 获取一个效果中的变换。如果有现成的就不用再次创建了。
 	 * @param layer - 图层。
@@ -795,7 +801,7 @@ export default class Core {
 		property.name = TRANSFORM_NAME;
 		return property;
 	}
-	
+
 	private getIntegrator() {
 		const midi = this.portal.midi;
 		return midi && midi.isDynamicBpm && midi.integrator && this.portal.isUseDynamicBpm() ? midi.integrator : undefined;
