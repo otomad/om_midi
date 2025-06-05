@@ -140,6 +140,7 @@ const SChinese = {
 	enter_incremental: "缩放比率",
 	movement_incremental: "浮入位移比率",
 	rotation_incremental: "旋转角度",
+	legato_for_time_remap: "时间重映射时填补间隙",
 };
 
 export default SChinese;

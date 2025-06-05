@@ -233,6 +233,10 @@ export default class Core {
 		const optimize = Setting.getOptimizeApplyEffects();
 		const addToGeometry2 = Setting.getAddToEffectTransform();
 		const hFlipMotion = Setting.getMotionForHorizontalFlip() as HFlipMotionType;
+		const _enterIncremental = Setting.getEnterIncremental(),
+			_movementIncremental = Setting.getMovementIncremental(),
+			_rotationIncremental = Setting.getRotationIncremental();
+		const legatoForTimeRemap = Setting.getLegatoForTimeRemap();
 		//#endregion
 
 		//#region 预处理效果
@@ -320,7 +324,8 @@ export default class Core {
 
 		let noteOnCount = 0,
 			lastEventType: RegularEventType = RegularEventType.NOTE_OFF,
-			lastEventStartTick = -1;
+			lastEventStartTick = -1,
+			lastTimeRemapKeys: [noteOnKey: number, noteOffKey: number] | undefined;
 		const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
 			if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent))
 				return; // 跳过同一时间点上的音符。
@@ -364,7 +369,7 @@ export default class Core {
 					else if (effectsTab.cwFlip.value)
 						signs_bool = [mod4 === 0 || mod4 === 1, mod4 === 3 || mod4 === 0];
 					const signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1] as [number, number];
-					const enterIncremental = Setting.getEnterIncremental() / 100 * Math.abs(currentScale);
+					const enterIncremental = _enterIncremental / 100 * Math.abs(currentScale);
 					if (!optimize || !hasDuration || requireAdjustAnchor) {
 						setValueAtKey(key, [currentScale * signs[0], currentScale * signs[1]]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
@@ -393,7 +398,7 @@ export default class Core {
 							!addToGeometry2 ? this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
 							this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
 
-						const movement = source.width / Setting.getMovementIncremental();
+						const movement = source.width / _movementIncremental;
 						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_UP ? -1 : 1;
 						const key = addKey(seconds);
 						if (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT)
@@ -425,7 +430,7 @@ export default class Core {
 						setValueAtKey(key, value);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						const startValue = value + Setting.getRotationIncremental() * (effectsTab.cwRotation.value ? -1 : 1);
+						const startValue = value + _rotationIncremental * (effectsTab.cwRotation.value ? -1 : 1);
 						setValueAtKey(key, startValue);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = addKey(noteOffSeconds);
@@ -454,6 +459,17 @@ export default class Core {
 						const inPointTime = layer.timeRemap.keyTime(1);
 						layer.timeRemap.setValueAtTime(inPointTime + seconds - startTime, inPointValue);
 					}
+					if (legatoForTimeRemap && lastTimeRemapKeys) {
+						const [lastKey1, lastKey2] = lastTimeRemapKeys;
+						let value = layer.timeRemap.keyValue(lastKey2);
+						if (effectsTab.timeRemap2.value)
+							value = Math.min(seconds - MIN_INTERVAL - layer.timeRemap.keyTime(lastKey1) + layer.timeRemap.keyValue(lastKey1), (layer.source as AVItem).duration);
+						layer.timeRemap.removeKey(lastKey2);
+						const key2 = layer.timeRemap.addKey(seconds - MIN_INTERVAL);
+						layer.timeRemap.setValueAtKey(key2, value);
+						layer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						lastTimeRemapKeys = undefined;
+					}
 					const key = layer.timeRemap.addKey(seconds);
 					const direction = !(noteOnCount % 2);
 					layer.timeRemap.setValueAtKey(key, curStartTime);
@@ -472,6 +488,7 @@ export default class Core {
 							layer.timeRemap.setValueAtKey(key2, sourceLength);
 						}
 						layer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+						lastTimeRemapKeys = [key, key2];
 					}
 				}
 				if (effectsTab.negative.value) {

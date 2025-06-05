@@ -9,15 +9,15 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 	private parent: MidiReader;
 	private offset: number;
 	private size: number;
-	
+
 	constructor(parent: MidiReader, offset: number, size: number) {
 		super();
 		this.__proto__ = new.target.prototype;
-		
+
 		this.parent = parent;
 		this.offset = offset;
 		this.size = size;
-		
+
 		this.readNotes();
 	}
 
@@ -45,7 +45,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 		const bpm = 6e7 / this.tempo;
 		return parseFloat(bpm.toFixed(3));
 	}
-	
+
 	private readNotes(): void {
 		const endOffset = this.offset + this.size;
 		const noteOnStack: events.NoteOnEvent[] = []; // 音符开事件栈，用于匹配音符关事件。为什么是栈而不是队列？这与 FL Studio 相匹配。
@@ -135,6 +135,13 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 										if (startTick <= prevNoteOn.startTick) noteOn.interruptDuration = 0;
 										else prevNoteOn.interruptDuration = startTick - prevNoteOn.startTick; // 中断复音上的其它音符开。
 								noteOnStack.push(noteOn);
+								/* for (let i = this.length - 1; i >= 0; i--) {
+									const prevNoteOn = this[i];
+									if (prevNoteOn instanceof events.NoteOnEvent && prevNoteOn.startTick < startTick) {
+										if (prevNoteOn.nextNoteOnStartTick !== undefined) break;
+										prevNoteOn.nextNoteOnStartTick = startTick;
+									}
+								} */
 								break;
 							}
 							case RegularEventType.NOTE_OFF: {
@@ -189,7 +196,7 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 			}
 		}
 	}
-	
+
 	/**
 	 * 表示标识当前轨道的名称。
 	 * 用于在界面当中显示。
@@ -201,13 +208,13 @@ export default class MidiTrack extends Array<events.NoteEvent> {
 		description += ` (${this.noteCount})`;
 		return description;
 	}
-	
+
 	/**
 	 * 返回当前指针的偏移量。
 	 * 只是为了调试更方便。
 	 * @returns 当前指针的偏移量。
 	 */
 	getPointer() { return this.parent.getPointer(); }
-	
+
 	midi() { return this.parent.midi; }
 }

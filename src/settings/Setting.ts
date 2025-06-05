@@ -17,6 +17,7 @@ const defs = {
 	EnterIncremental: 15, // 水平翻转的优化效果的缩放比率变换值，单位百分比。
 	MovementIncremental: 10, // 水平翻转的优化效果浮入位移比率变换值，单位百分比。
 	RotationIncremental: 15, // 顺时针和逆时针旋转的优化效果变换值，单位角度。
+	LegatoForTimeRemap: false,
 };
 
 type SettingTag = keyof typeof defs;

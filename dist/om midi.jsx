@@ -11,7 +11,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2025年6月6日星期五凌晨1点40分
+ * 构建日期：2025年6月6日星期五凌晨3点09分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Friday, June 6, 2025 1:40 AM
+ * Building Date: Friday, June 6, 2025 3:09 AM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:
@@ -640,6 +640,7 @@
         enter_incremental: "缩放比率",
         movement_incremental: "浮入位移比率",
         rotation_incremental: "旋转角度",
+        legato_for_time_remap: "时间重映射时填补间隙",
     };
 
     var Vietnamese = {
@@ -1733,7 +1734,8 @@
         MotionForHorizontalFlip: 0,
         EnterIncremental: 15,
         MovementIncremental: 10,
-        RotationIncremental: 15, // 顺时针和逆时针旋转的优化效果变换值，单位角度。
+        RotationIncremental: 15,
+        LegatoForTimeRemap: false,
     };
     var Setting = { defs: __assign({}, defs) };
     var _loop_1 = function (tag) {
@@ -2547,6 +2549,13 @@
                                                 prevNoteOn.interruptDuration = startTick - prevNoteOn.startTick;
                                     } // 中断复音上的其它音符开。
                                     noteOnStack.push(noteOn);
+                                    /* for (let i = this.length - 1; i >= 0; i--) {
+                                        const prevNoteOn = this[i];
+                                        if (prevNoteOn instanceof events.NoteOnEvent && prevNoteOn.startTick < startTick) {
+                                            if (prevNoteOn.nextNoteOnStartTick !== undefined) break;
+                                            prevNoteOn.nextNoteOnStartTick = startTick;
+                                        }
+                                    } */
                                     break;
                                 }
                                 case RegularEventType.NOTE_OFF: {
@@ -2859,6 +2868,8 @@
             this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.normalize_pan_to_100) });
             this.normalizePanTo100.value = Setting.getNormalizePanTo100();
             this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
+            this.legatoForTimeRemap = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.legato_for_time_remap) });
+            this.legatoForTimeRemap.value = Setting.getLegatoForTimeRemap();
             this.usingLayering = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.using_layering) });
             this.usingLayering.value = Setting.getUsingLayering();
             this.addToEffectTransform = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.add_to_effect_transform) });
@@ -2888,6 +2899,7 @@
                 Setting.setEnterIncremental(+_this.optimizeEnterIncrementalTxt.text);
                 Setting.setMovementIncremental(+_this.optimizeMovementIncrementalTxt.text);
                 Setting.setRotationIncremental(+_this.optimizeRotationIncrementalTxt.text);
+                Setting.setLegatoForTimeRemap(_this.legatoForTimeRemap.value);
                 Setting.setLanguage(_this.languageCombo.getSelectedIndex());
                 $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
                 _this.window.close();
@@ -3347,6 +3359,8 @@
             var optimize = Setting.getOptimizeApplyEffects();
             var addToGeometry2 = Setting.getAddToEffectTransform();
             var hFlipMotion = Setting.getMotionForHorizontalFlip();
+            var _enterIncremental = Setting.getEnterIncremental(), _movementIncremental = Setting.getMovementIncremental(), _rotationIncremental = Setting.getRotationIncremental();
+            var legatoForTimeRemap = Setting.getLegatoForTimeRemap();
             //#endregion
             //#region 预处理效果
             if (layer.timeRemapEnabled)
@@ -3436,7 +3450,7 @@
                 invertProp().setValue(100);
             }
             //#endregion
-            var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventStartTick = -1;
+            var noteOnCount = 0, lastEventType = RegularEventType.NOTE_OFF, lastEventStartTick = -1, lastTimeRemapKeys;
             var addNoteEvent = function (noteEvent) {
                 var _a;
                 var _b, _c, _d, _e;
@@ -3486,7 +3500,7 @@
                         else if (effectsTab.cwFlip.value)
                             signs_bool = [mod4 === 0 || mod4 === 1, mod4 === 3 || mod4 === 0];
                         var signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1];
-                        var enterIncremental = Setting.getEnterIncremental() / 100 * Math.abs(currentScale);
+                        var enterIncremental = _enterIncremental / 100 * Math.abs(currentScale);
                         if (!optimize || !hasDuration || requireAdjustAnchor) {
                             setValueAtKey(key, [currentScale * signs[0], currentScale * signs[1]]);
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
@@ -3517,7 +3531,7 @@
                                 return !addToGeometry2 ? _this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
                                     _this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
                             };
-                            var movement = source.width / Setting.getMovementIncremental();
+                            var movement = source.width / _movementIncremental;
                             var direction = hFlipMotion === HFlipMotionType$1.FLOAT_LEFT || hFlipMotion === HFlipMotionType$1.FLOAT_UP ? -1 : 1;
                             var key_1 = addKey_1(seconds);
                             if (hFlipMotion === HFlipMotionType$1.FLOAT_LEFT || hFlipMotion === HFlipMotionType$1.FLOAT_RIGHT)
@@ -3552,7 +3566,7 @@
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
                         }
                         else {
-                            var startValue = value + Setting.getRotationIncremental() * (effectsTab.cwRotation.value ? -1 : 1);
+                            var startValue = value + _rotationIncremental * (effectsTab.cwRotation.value ? -1 : 1);
                             setValueAtKey(key, startValue);
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
                             var key2 = addKey(noteOffSeconds);
@@ -3582,6 +3596,17 @@
                             var inPointTime = layer.timeRemap.keyTime(1);
                             layer.timeRemap.setValueAtTime(inPointTime + seconds - startTime, inPointValue);
                         }
+                        if (legatoForTimeRemap && lastTimeRemapKeys) {
+                            var lastKey1 = lastTimeRemapKeys[0], lastKey2 = lastTimeRemapKeys[1];
+                            var value = layer.timeRemap.keyValue(lastKey2);
+                            if (effectsTab.timeRemap2.value)
+                                value = Math.min(seconds - MIN_INTERVAL - layer.timeRemap.keyTime(lastKey1) + layer.timeRemap.keyValue(lastKey1), layer.source.duration);
+                            layer.timeRemap.removeKey(lastKey2);
+                            var key2 = layer.timeRemap.addKey(seconds - MIN_INTERVAL);
+                            layer.timeRemap.setValueAtKey(key2, value);
+                            layer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                            lastTimeRemapKeys = undefined;
+                        }
                         var key = layer.timeRemap.addKey(seconds);
                         var direction = !(noteOnCount % 2);
                         layer.timeRemap.setValueAtKey(key, curStartTime);
@@ -3601,6 +3626,7 @@
                                 layer.timeRemap.setValueAtKey(key2, sourceLength);
                             }
                             layer.timeRemap.setInterpolationTypeAtKey(key2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
+                            lastTimeRemapKeys = [key, key2];
                         }
                     }
                     if (effectsTab.negative.value) {

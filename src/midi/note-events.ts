@@ -10,7 +10,7 @@ export class NoteEvent {
 
 export class MetaEvent extends NoteEvent {
 	readonly type: MetaEventType = MetaEventType.UNDEFINED;
-	
+
 	constructor(type: MetaEventType) {
 		super();
 		this.type = type;
@@ -19,7 +19,7 @@ export class MetaEvent extends NoteEvent {
 
 export class TextMetaEvent extends MetaEvent {
 	readonly content: string;
-	
+
 	constructor(type: MetaEventType, content: string) {
 		super(type);
 		this.content = content;
@@ -41,7 +41,7 @@ export class TempoMetaEvent extends NumberMetaEvent {
 	 * 微秒每四分音符
 	 */
 	readonly tempo: number;
-	
+
 	constructor(tempo: number) {
 		super(MetaEventType.SET_TEMPO, tempo);
 		this.tempo = tempo;
@@ -55,7 +55,7 @@ export class SmpteOffsetMetaEvent extends MetaEvent {
 	readonly sec: number;
 	readonly fr: number;
 	readonly subFr: number;
-	
+
 	constructor(smpteOffset: number[]) {
 		super(MetaEventType.SMPTE_OFFSET);
 		[this.hour, this.min, this.sec, this.fr, this.subFr] = smpteOffset;
@@ -71,12 +71,12 @@ export class TimeSignatureMetaEvent extends MetaEvent {
 	readonly metro: number;
 	/** 每 24 个 MIDI 时钟对应的 32 分音符的数目。一般是 8。 */
 	readonly thirtySeconds: number;
-	
+
 	constructor(timeSignature: number[]) {
 		super(MetaEventType.TIME_SIGNATURE);
 		[this.number, this.denom, this.metro, this.thirtySeconds] = timeSignature;
 	}
-	
+
 	toString() {
 		return this.number + "/" + 2 ** this.denom;
 	}
@@ -84,7 +84,7 @@ export class TimeSignatureMetaEvent extends MetaEvent {
 
 export class CustomMetaEvent extends MetaEvent {
 	readonly value: number[];
-	
+
 	constructor(type: MetaEventType, values: number[]) {
 		super(type);
 		this.value = values;
@@ -95,7 +95,7 @@ export class RegularEvent extends NoteEvent {
 	readonly type: RegularEventType;
 	readonly values: number[];
 	readonly channel: number;
-	
+
 	constructor(type: RegularEventType, channel: number, values: number[]) {
 		super();
 		this.type = type;
@@ -107,7 +107,7 @@ export class RegularEvent extends NoteEvent {
 abstract class NoteOnOffEvent extends RegularEvent {
 	readonly pitch: number;
 	readonly velocity: number;
-	
+
 	constructor(type: RegularEventType, channel: number, values: number[]) {
 		super(type, channel, values);
 		[this.pitch, this.velocity] = values;
@@ -121,7 +121,9 @@ export class NoteOnEvent extends NoteOnOffEvent {
 	duration?: number;
 	/** 单轨音 MAD 特殊用途。当有复音时中断前一个音的音符开。 */
 	interruptDuration?: number;
-	
+	/** 下一个音符开的开始时刻，可能为未定义。 */
+	// nextNoteOnStartTick?: number;
+
 	constructor(channel: number, pitch: number, velocity: number, deltaTime: number, duration: number, startTick: number);
 	constructor(channel: number, values: number[]);
 	constructor(channel: number, values: number[] | number, velocity?: number, deltaTime?: number, duration?: number, startTick?: number) {
@@ -138,7 +140,7 @@ export class NoteOnEvent extends NoteOnOffEvent {
 
 export class NoteOffEvent extends NoteOnOffEvent {
 	noteOn?: NoteOnEvent;
-	
+
 	constructor(channel: number, values: number[]) {
 		super(RegularEventType.NOTE_OFF, channel, values);
 	}
@@ -153,7 +155,7 @@ export class SystemExclusiveEvent extends RegularEvent {
 export class ControllerEvent extends RegularEvent {
 	readonly controller: ControllerType;
 	readonly value: number;
-	
+
 	constructor(channel: number, values: number[]) {
 		super(RegularEventType.CONTROLLER, channel, values);
 		this.controller = values[0];
@@ -163,12 +165,12 @@ export class ControllerEvent extends RegularEvent {
 
 export class PitchBendEvent extends RegularEvent {
 	readonly value: number;
-	
+
 	constructor(channel: number, values: number[]) {
 		super(RegularEventType.PITCH_BEND_EVENT, channel, values);
 		this.value = PitchBendEvent.take7Bit(values[1]) << 7 | PitchBendEvent.take7Bit(values[0]);
 	}
-	
+
 	/**
 	 * 取后 7 位。
 	 * @param b - 1 个字节。
@@ -183,7 +185,7 @@ export class NoteOnSecondEvent extends NoteOnEvent {
 	startSecond: number;
 	durationSecond?: number;
 	interruptDurationSecond?: number;
-	
+
 	constructor(raw: NoteOnEvent, startSecond: number) {
 		super(raw.channel, raw.values);
 		assign(this, raw);
