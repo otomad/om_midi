@@ -137,6 +137,9 @@ const SChinese = {
 	browse: "浏览",
 	file_too_large_info: "文件过大，是否仍要打开？",
 	will_clear_existing_text_info: "将会清除现有的文本内容，系统可能不会保留您的更改。",
+	enter_incremental: "缩放比率",
+	movement_incremental: "浮入位移比率",
+	rotation_incremental: "旋转角度",
 };
 
 export default SChinese;

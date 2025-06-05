@@ -10,6 +10,7 @@ import Portal from "../ui/Portal";
 import Midi from "../midi/Midi";
 import FlowGroup from "../containers/FlowGroup";
 import addNabscriptsBackgroundSignature from "../modules/addNabscriptsBackgroundSignature";
+import setNumberEditText from "../modules/setNumberEditText";
 
 const appDisplayName = BridgeTalk.getDisplayName(BridgeTalk.appSpecifier);
 
@@ -36,6 +37,12 @@ export default class SettingsDialog {
 	normalizePanTo100: Checkbox;
 	optimizeApplyEffects: Checkbox;
 	hFlipMotionCombo: DropDownList;
+	optimizeEnterIncrementalLbl: StaticText;
+	optimizeEnterIncrementalTxt: EditText;
+	optimizeMovementIncrementalLbl: StaticText;
+	optimizeMovementIncrementalTxt: EditText;
+	optimizeRotationIncrementalLbl: StaticText;
+	optimizeRotationIncrementalTxt: EditText;
 	addToEffectTransform: Checkbox;
 	openGithubBtnGroup: FlowGroup;
 	openGithubLatestBtn: Button;
@@ -44,14 +51,14 @@ export default class SettingsDialog {
 	importPureQuarterMidiBtn: Button;
 	extendScriptEngineAboutBtn: Button;
 	//#endregion
-	
+
 	constructor(portal: Portal) {
 		this.portal = portal;
 		this.window = new Window("dialog", `${localize(uiStr.settings)} - ${User.scriptName} v${User.version}`, undefined, {
 			resizeable: false,
 		});
 		if (this.window === null) throw new CannotFindWindowError();
-		
+
 		this.group = addControl(this.window, "group", { orientation: "row", alignChildren: "fill", alignment: "fill" });
 		this.leftGroup = addControl(this.group, "group", { orientation: "column", alignChildren: "fill", alignment: "fill" });
 		this.separator = new Separator(this.group, "vertical");
@@ -88,17 +95,20 @@ export default class SettingsDialog {
 		this.addToEffectTransform.value = Setting.getAddToEffectTransform();
 		this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
 		this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
-		({ control: this.hFlipMotionCombo } = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist"));
+		({ control: this.hFlipMotionCombo } = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist", { alignment: ["fill", "center"] }));
 		addItems(this.hFlipMotionCombo, localize(uiStr.motion_entrance), localize(uiStr.motion_exit), localize(uiStr.motion_float_left), localize(uiStr.motion_float_right), localize(uiStr.motion_float_up), localize(uiStr.motion_float_down));
 		const selectedHFlipMotionIndex = Setting.getMotionForHorizontalFlip();
 		if (selectedHFlipMotionIndex > 0 && selectedHFlipMotionIndex < this.hFlipMotionCombo.items.length)
 			this.hFlipMotionCombo.selection = selectedHFlipMotionIndex;
+		({ label: this.optimizeEnterIncrementalLbl, control: this.optimizeEnterIncrementalTxt } = addGroup(this.applyEffectsPanel, localize(uiStr.enter_incremental), "edittext", { text: Setting.getEnterIncremental().toString(), alignment: ["fill", "center"] }));
+		({ label: this.optimizeMovementIncrementalLbl, control: this.optimizeMovementIncrementalTxt } = addGroup(this.applyEffectsPanel, localize(uiStr.movement_incremental), "edittext", { text: Setting.getMovementIncremental().toString(), alignment: ["fill", "center"] }));
+		({ label: this.optimizeRotationIncrementalLbl, control: this.optimizeRotationIncrementalTxt } = addGroup(this.applyEffectsPanel, localize(uiStr.rotation_incremental), "edittext", { text: Setting.getRotationIncremental().toString(), alignment: ["fill", "center"] }));
 		this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
 		this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
 		this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
 		this.window.defaultElement = this.okBtn;
 		this.window.cancelElement = this.cancelBtn;
-		
+
 		this.okBtn.onClick = () => {
 			Setting.setUsingSelectedLayerName(this.usingSelectedLayerName.value);
 			Setting.setUsingLayering(this.usingLayering.value);
@@ -106,6 +116,9 @@ export default class SettingsDialog {
 			Setting.setNormalizePanTo100(this.normalizePanTo100.value);
 			Setting.setAddToEffectTransform(this.addToEffectTransform.value);
 			Setting.setMotionForHorizontalFlip(this.hFlipMotionCombo.getSelectedIndex());
+			Setting.setEnterIncremental(+this.optimizeEnterIncrementalTxt.text);
+			Setting.setMovementIncremental(+this.optimizeMovementIncrementalTxt.text);
+			Setting.setRotationIncremental(+this.optimizeRotationIncrementalTxt.text);
 			Setting.setLanguage(this.languageCombo.getSelectedIndex());
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()];
 			this.window.close();
@@ -127,17 +140,20 @@ export default class SettingsDialog {
 		this.extendScriptEngineAboutBtn.onClick = () => $.about();
 		this.optimizeApplyEffects.onClick = () => this.hFlipMotionCombo.enabled = this.optimizeApplyEffects.value;
 		this.optimizeApplyEffects.onClick();
-		
+		setNumberEditText(this.optimizeEnterIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.EnterIncremental);
+		setNumberEditText(this.optimizeMovementIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.MovementIncremental);
+		setNumberEditText(this.optimizeRotationIncrementalTxt, { type: "decimal", min: -360, max: 360 }, Setting.defs.RotationIncremental);
+
 		addNabscriptsBackgroundSignature(this.window);
 	}
-	
+
 	showDialog() {
 		this.window.center();
 		this.window.show();
 	}
-	
+
 	private static langIso = ["", "zh_CN", "en", "ja", "vi", "ko"];
-	
+
 	private addPanel(parent: ContainerType, name: string, margins: [number, number, number, number] = [10, 13, 10, 3]): Panel {
 		return addControl(parent, "panel", {
 			text: name,
@@ -148,7 +164,7 @@ export default class SettingsDialog {
 			margins,
 		});
 	}
-	
+
 	private getDefaultLocale() {
 		if (!Setting.getLanguage()) {
 			$.locale = "";

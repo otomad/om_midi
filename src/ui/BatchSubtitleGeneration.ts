@@ -8,7 +8,7 @@ import ToolsTab from "./ToolsTab";
 export default class BatchSubtitleGeneration extends BaseTool {
 	//#region 组件对象
 	browseButton: Button;
-	subtitlesText: EditText;
+	subtitlesTxt: EditText;
 	durationGroup: Group;
 	durationLbl: StaticText;
 	durationTxt: EditText;
@@ -18,7 +18,7 @@ export default class BatchSubtitleGeneration extends BaseTool {
 	constructor(parent: ToolsTab) {
 		super(parent);
 		this.browseButton = addControl(this.group, "button", { alignment: ["fill", "top"] });
-		this.subtitlesText = addControl(this.group, "edittext", { alignment: ["fill", "fill"] }, { multiline: true });
+		this.subtitlesTxt = addControl(this.group, "edittext", { alignment: ["fill", "fill"] }, { multiline: true });
 		({
 			group: this.durationGroup,
 			label: this.durationLbl,
@@ -28,7 +28,7 @@ export default class BatchSubtitleGeneration extends BaseTool {
 		this.durationGroup.alignment = ["fill", "bottom"];
 		setNumberEditText(this.durationTxt, { type: "decimal", min: 0, minNeq: true }, 1);
 		this.translate();
-		
+
 		this.browseButton.onClick = () => {
 			const file = File.openDialog(localize(uiStr.open), `${localize(uiStr.text_document)}:*.txt;*.text;*.log;*.md;*.lrc;*.srt,${localize(uiStr.all_files)}:*.*`);
 			if (file === null) return;
@@ -44,12 +44,12 @@ export default class BatchSubtitleGeneration extends BaseTool {
 			if (!this.isEditTextEmpty())
 				if (!confirm(localize(uiStr.will_clear_existing_text_info), true, ""))
 					return;
-			this.subtitlesText.text = content;
+			this.subtitlesTxt.text = content;
 		};
 	}
 
 	private isEditTextEmpty() {
-		return !this.subtitlesText.text.trim().length;
+		return !this.subtitlesTxt.text.trim().length;
 	}
 
 	translate(): void {

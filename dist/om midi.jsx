@@ -11,7 +11,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2025年5月5日星期一晚上10点24分
+ * 构建日期：2025年6月6日星期五凌晨1点40分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Monday, May 5, 2025 10:24 PM
+ * Building Date: Friday, June 6, 2025 1:40 AM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:
@@ -348,6 +348,7 @@
         hold_both: "Hold both",
         hold_in: "Hold in",
         hold_out: "Hold out",
+        ignore_hold_keys: "Ignore hold keys",
         second_unit: "Seconds",
         open: "Open",
         text_document: "Text Document",
@@ -488,6 +489,7 @@
         hold_both: "ホールド両側",
         hold_in: "ホールド左側",
         hold_out: "ホールド右側",
+        ignore_hold_keys: "ホールドキーを無視",
         second_unit: "秒",
         open: "開く",
         text_document: "テキスト ファイル",
@@ -628,12 +630,16 @@
         hold_both: "定格两边",
         hold_in: "定格左边",
         hold_out: "定格右边",
+        ignore_hold_keys: "忽略定格关键帧",
         second_unit: "秒",
         open: "打开",
         text_document: "文本文档",
         browse: "浏览",
         file_too_large_info: "文件过大，是否仍要打开？",
         will_clear_existing_text_info: "将会清除现有的文本内容，系统可能不会保留您的更改。",
+        enter_incremental: "缩放比率",
+        movement_incremental: "浮入位移比率",
+        rotation_incremental: "旋转角度",
     };
 
     var Vietnamese = {
@@ -768,6 +774,7 @@
         hold_both: "Giữ cả hai bên",
         hold_in: "Giữ bên trái",
         hold_out: "Giữ bên phải",
+        ignore_hold_keys: "Bỏ qua các phím giữ",
         second_unit: "Giây",
         open: "Mở",
         text_document: "Tài liệu văn bản",
@@ -908,6 +915,7 @@
         hold_both: "양쪽 유지",
         hold_in: "왼쪽 유지",
         hold_out: "오른쪽 유지",
+        ignore_hold_keys: "유지 키를 무시하십시오",
         second_unit: "초",
         open: "열기",
         text_document: "텍스트 문서",
@@ -1676,7 +1684,7 @@
             this.easeHoldRadio.text = localize(uiStr.hold_both);
             this.easeHoldInRadio.text = localize(uiStr.hold_in);
             this.easeHoldOutRadio.text = localize(uiStr.hold_out);
-            this.ignoreHoldKeysCheck.text = "忽略定格关键帧";
+            this.ignoreHoldKeysCheck.text = localize(uiStr.ignore_hold_keys);
         };
         return Ease100Percent;
     }(BaseTool));
@@ -1723,8 +1731,11 @@
         NullObjectStartTime: 0,
         LastTool: 0,
         MotionForHorizontalFlip: 0,
+        EnterIncremental: 15,
+        MovementIncremental: 10,
+        RotationIncremental: 15, // 顺时针和逆时针旋转的优化效果变换值，单位角度。
     };
-    var Setting = {};
+    var Setting = { defs: __assign({}, defs) };
     var _loop_1 = function (tag) {
         if (hasOwn(defs, tag)) {
             Setting["get" + tag] = function (def) {
@@ -1745,7 +1756,7 @@
             var _a;
             var _this = _super.call(this, parent) || this;
             _this.browseButton = addControl(_this.group, "button", { alignment: ["fill", "top"] });
-            _this.subtitlesText = addControl(_this.group, "edittext", { alignment: ["fill", "fill"] }, { multiline: true });
+            _this.subtitlesTxt = addControl(_this.group, "edittext", { alignment: ["fill", "fill"] }, { multiline: true });
             (_a = addGroup(_this.group, localize(uiStr.duration), "edittext", { text: "1", alignment: ["fill", "center"] }, undefined, true), _this.durationGroup = _a.group, _this.durationLbl = _a.label, _this.durationTxt = _a.control);
             _this.durationUnit = addControl(_this.durationGroup, "statictext", { text: localize(uiStr.second_unit), alignment: ["right", "center"] });
             _this.durationGroup.alignment = ["fill", "bottom"];
@@ -1769,12 +1780,12 @@
                 if (!_this.isEditTextEmpty())
                     if (!confirm(localize(uiStr.will_clear_existing_text_info), true, ""))
                         return;
-                _this.subtitlesText.text = content;
+                _this.subtitlesTxt.text = content;
             };
             return _this;
         }
         BatchSubtitleGeneration.prototype.isEditTextEmpty = function () {
-            return !this.subtitlesText.text.trim().length;
+            return !this.subtitlesTxt.text.trim().length;
         };
         BatchSubtitleGeneration.prototype.translate = function () {
             this.browseButton.text = localize(uiStr.browse) + DIALOG_SIGN;
@@ -2813,7 +2824,7 @@
     var SettingsDialog = /** @class */ (function () {
         //#endregion
         function SettingsDialog(portal) {
-            var _a;
+            var _a, _b, _c, _d;
             var _this = this;
             this.portal = portal;
             this.window = new Window("dialog", localize(uiStr.settings) + " - " + User.scriptName + " v" + User.version, undefined, {
@@ -2854,11 +2865,14 @@
             this.addToEffectTransform.value = Setting.getAddToEffectTransform();
             this.optimizeApplyEffects = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.optimize_apply_effects) });
             this.optimizeApplyEffects.value = Setting.getOptimizeApplyEffects();
-            (this.hFlipMotionCombo = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist").control);
+            (this.hFlipMotionCombo = addGroup(this.applyEffectsPanel, localize(uiStr.motion_for_horizontal_flip), "dropdownlist", { alignment: ["fill", "center"] }).control);
             addItems(this.hFlipMotionCombo, localize(uiStr.motion_entrance), localize(uiStr.motion_exit), localize(uiStr.motion_float_left), localize(uiStr.motion_float_right), localize(uiStr.motion_float_up), localize(uiStr.motion_float_down));
             var selectedHFlipMotionIndex = Setting.getMotionForHorizontalFlip();
             if (selectedHFlipMotionIndex > 0 && selectedHFlipMotionIndex < this.hFlipMotionCombo.items.length)
                 this.hFlipMotionCombo.selection = selectedHFlipMotionIndex;
+            (_b = addGroup(this.applyEffectsPanel, localize(uiStr.enter_incremental), "edittext", { text: Setting.getEnterIncremental().toString(), alignment: ["fill", "center"] }), this.optimizeEnterIncrementalLbl = _b.label, this.optimizeEnterIncrementalTxt = _b.control);
+            (_c = addGroup(this.applyEffectsPanel, localize(uiStr.movement_incremental), "edittext", { text: Setting.getMovementIncremental().toString(), alignment: ["fill", "center"] }), this.optimizeMovementIncrementalLbl = _c.label, this.optimizeMovementIncrementalTxt = _c.control);
+            (_d = addGroup(this.applyEffectsPanel, localize(uiStr.rotation_incremental), "edittext", { text: Setting.getRotationIncremental().toString(), alignment: ["fill", "center"] }), this.optimizeRotationIncrementalLbl = _d.label, this.optimizeRotationIncrementalTxt = _d.control);
             this.buttonGroup = addControl(this.rightGroup, "group", { orientation: "row", alignment: ["fill", "bottom"], alignChildren: ["right", "center"] });
             this.okBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.ok) });
             this.cancelBtn = addControl(this.buttonGroup, "button", { text: localize(uiStr.cancel) });
@@ -2871,6 +2885,9 @@
                 Setting.setNormalizePanTo100(_this.normalizePanTo100.value);
                 Setting.setAddToEffectTransform(_this.addToEffectTransform.value);
                 Setting.setMotionForHorizontalFlip(_this.hFlipMotionCombo.getSelectedIndex());
+                Setting.setEnterIncremental(+_this.optimizeEnterIncrementalTxt.text);
+                Setting.setMovementIncremental(+_this.optimizeMovementIncrementalTxt.text);
+                Setting.setRotationIncremental(+_this.optimizeRotationIncrementalTxt.text);
                 Setting.setLanguage(_this.languageCombo.getSelectedIndex());
                 $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
                 _this.window.close();
@@ -2893,6 +2910,9 @@
             this.extendScriptEngineAboutBtn.onClick = function () { return $.about(); };
             this.optimizeApplyEffects.onClick = function () { return _this.hFlipMotionCombo.enabled = _this.optimizeApplyEffects.value; };
             this.optimizeApplyEffects.onClick();
+            setNumberEditText(this.optimizeEnterIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.EnterIncremental);
+            setNumberEditText(this.optimizeMovementIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.MovementIncremental);
+            setNumberEditText(this.optimizeRotationIncrementalTxt, { type: "decimal", min: -360, max: 360 }, Setting.defs.RotationIncremental);
             addNabscriptsBackgroundSignature(this.window);
         }
         SettingsDialog.prototype.showDialog = function () {
@@ -3077,8 +3097,6 @@
     var MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
     var NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
     var TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
-    var ENTER_INCREMENTAL = 15; // 水平翻转的优化效果变换值，单位百分比。
-    var ROTATION_INCREMENTAL = 15; // 顺时针和逆时针旋转的优化效果变换值，单位角度。
     var SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
     var Core = /** @class */ (function () {
         function Core(portal) {
@@ -3217,12 +3235,12 @@
                                 return;
                             lastPan = noteEvent.value;
                             var pan = noteEvent.value - 64; // 64 为中置 0。
-                            if (pan100) { // 规范到 -100 ~ 100（小数）。
+                            if (pan100) // 规范到 -100 ~ 100（小数）。
                                 if (pan < 0)
                                     pan = pan / 64 * 100;
                                 else if (pan > 0)
                                     pan = pan / 63 * 100;
-                            } // 否则是 -64 ~ 63（整数），两边没对齐。
+                            // 否则是 -64 ~ 63（整数），两边没对齐。
                             setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
                         }
                         else if (controller === ControllerType.MAIN_VOLUME) { // 主音量。
@@ -3286,7 +3304,7 @@
                 if (startTime >= comp.displayStartTime)
                     layer.marker.setValueAtTime(startTime, new MarkerValue(String(beat)));
                 if (unit === 0) {
-                    beat = beat % parseInt(marker.beatTxt.text) + 1;
+                    beat = beat % parseInt(marker.beatTxt.text, 10) + 1;
                     startTime += 60 / bpm; // 周期 BPM
                 }
                 else {
@@ -3468,7 +3486,7 @@
                         else if (effectsTab.cwFlip.value)
                             signs_bool = [mod4 === 0 || mod4 === 1, mod4 === 3 || mod4 === 0];
                         var signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1];
-                        var enterIncremental = ENTER_INCREMENTAL / 100 * Math.abs(currentScale);
+                        var enterIncremental = Setting.getEnterIncremental() / 100 * Math.abs(currentScale);
                         if (!optimize || !hasDuration || requireAdjustAnchor) {
                             setValueAtKey(key, [currentScale * signs[0], currentScale * signs[1]]);
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
@@ -3499,8 +3517,7 @@
                                 return !addToGeometry2 ? _this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
                                     _this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
                             };
-                            var MOVEMENT_RATIO = 10;
-                            var movement = source.width / MOVEMENT_RATIO;
+                            var movement = source.width / Setting.getMovementIncremental();
                             var direction = hFlipMotion === HFlipMotionType$1.FLOAT_LEFT || hFlipMotion === HFlipMotionType$1.FLOAT_UP ? -1 : 1;
                             var key_1 = addKey_1(seconds);
                             if (hFlipMotion === HFlipMotionType$1.FLOAT_LEFT || hFlipMotion === HFlipMotionType$1.FLOAT_RIGHT)
@@ -3535,7 +3552,7 @@
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
                         }
                         else {
-                            var startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
+                            var startValue = value + Setting.getRotationIncremental() * (effectsTab.cwRotation.value ? -1 : 1);
                             setValueAtKey(key, startValue);
                             setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
                             var key2 = addKey(noteOffSeconds);
@@ -3672,7 +3689,7 @@
         Core.prototype.applyGenerateSubtitles = function (comp) {
             var subtitle = this.portal.toolsTab.subtitle;
             var duration = parseFloat(subtitle.durationTxt.text);
-            var subtitlesText = subtitle.subtitlesText.text;
+            var subtitlesText = subtitle.subtitlesTxt.text;
             if (!isFinite(duration) || duration <= 0)
                 throw new InvalidDurationError();
             if (!subtitlesText.trim().length)
@@ -3800,9 +3817,8 @@
                 throw new NoMidiError();
             var secondsPerTick;
             var ticksPerQuarter = this.portal.midi.timeDivision; // 基本时间每四分音符
-            if (ticksPerQuarter instanceof Array) {
+            if (ticksPerQuarter instanceof Array)
                 secondsPerTick = 1 / ticksPerQuarter[0] / ticksPerQuarter[1]; // 帧每秒这种格式不支持，随便弄一个数不要报错就好了。
-            }
             else {
                 var quartersPerMinute = parseFloat(this.portal.selectBpmTxt.text), // 四分音符每分钟 (BPM)
                 secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符

@@ -13,8 +13,6 @@ import HFlipMotionType from "../modules/HFlipMotionType";
 const MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
 const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
 const TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
-const ENTER_INCREMENTAL = 15; // 水平翻转的优化效果变换值，单位百分比。
-const ROTATION_INCREMENTAL = 15; // 顺时针和逆时针旋转的优化效果变换值，单位角度。
 const SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
 
 export default class Core {
@@ -143,10 +141,10 @@ export default class Core {
 						if (lastPan === noteEvent.value) return;
 						lastPan = noteEvent.value;
 						let pan = noteEvent.value - 64; // 64 为中置 0。
-						if (pan100) { // 规范到 -100 ~ 100（小数）。
+						if (pan100) // 规范到 -100 ~ 100（小数）。
 							if (pan < 0) pan = pan / 64 * 100;
 							else if (pan > 0) pan = pan / 63 * 100;
-						} // 否则是 -64 ~ 63（整数），两边没对齐。
+						// 否则是 -64 ~ 63（整数），两边没对齐。
 						setValueAtTime(nullTab.pan, seconds, pan, KeyframeInterpolationType.HOLD);
 					} else if (controller === ControllerType.MAIN_VOLUME) { // 主音量。
 						if (lastVolume === noteEvent.value) return;
@@ -198,7 +196,7 @@ export default class Core {
 			if (startTime >= comp.displayStartTime)
 				layer.marker.setValueAtTime(startTime, new MarkerValue(String(beat)));
 			if (unit === 0) {
-				beat = beat % parseInt(marker.beatTxt.text) + 1;
+				beat = beat % parseInt(marker.beatTxt.text, 10) + 1;
 				startTime += 60 / bpm; // 周期 BPM
 			} else {
 				beat++;
@@ -366,7 +364,7 @@ export default class Core {
 					else if (effectsTab.cwFlip.value)
 						signs_bool = [mod4 === 0 || mod4 === 1, mod4 === 3 || mod4 === 0];
 					const signs = [signs_bool[0] ? 1 : -1, signs_bool[1] ? 1 : -1] as [number, number];
-					const enterIncremental = ENTER_INCREMENTAL / 100 * Math.abs(currentScale);
+					const enterIncremental = Setting.getEnterIncremental() / 100 * Math.abs(currentScale);
 					if (!optimize || !hasDuration || requireAdjustAnchor) {
 						setValueAtKey(key, [currentScale * signs[0], currentScale * signs[1]]);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
@@ -395,8 +393,7 @@ export default class Core {
 							!addToGeometry2 ? this.setPointKeyEase(layer.anchorPoint, keyIndex, easeType, isHold) :
 							this.setPointKeyEase(geometry2.anchor(), keyIndex, easeType, isHold);
 
-						const MOVEMENT_RATIO = 10;
-						const movement = source.width / MOVEMENT_RATIO;
+						const movement = source.width / Setting.getMovementIncremental();
 						const direction = hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_UP ? -1 : 1;
 						const key = addKey(seconds);
 						if (hFlipMotion === HFlipMotionType.FLOAT_LEFT || hFlipMotion === HFlipMotionType.FLOAT_RIGHT)
@@ -428,7 +425,7 @@ export default class Core {
 						setValueAtKey(key, value);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
 					} else {
-						const startValue = value + ROTATION_INCREMENTAL * (effectsTab.cwRotation.value ? -1 : 1);
+						const startValue = value + Setting.getRotationIncremental() * (effectsTab.cwRotation.value ? -1 : 1);
 						setValueAtKey(key, startValue);
 						setInterpolationTypeAtKey(key, KeyframeInterpolationType.LINEAR);
 						const key2 = addKey(noteOffSeconds);
@@ -566,7 +563,7 @@ export default class Core {
 	applyGenerateSubtitles(comp: CompItem) {
 		const { subtitle } = this.portal.toolsTab;
 		const duration = parseFloat(subtitle.durationTxt.text);
-		const subtitlesText = subtitle.subtitlesText.text;
+		const subtitlesText = subtitle.subtitlesTxt.text;
 		if (!isFinite(duration) || duration <= 0) throw new InvalidDurationError();
 		if (!subtitlesText.trim().length) throw new EmptySubtitlesError();
 		const subtitles = subtitlesText.replace(/\r\n|\n\r|\r|\n/g, "\n").split("\n");
@@ -638,7 +635,7 @@ export default class Core {
 	private static getSelectedProperties(layer: Layer | _PropertyClasses[]): Property[] {
 		const properties: Property[] = [];
 		const propertyClasses = layer instanceof Array ? layer : layer.selectedProperties;
-		for (const property of propertyClasses) {
+		for (const property of propertyClasses)
 			if (property === undefined) continue;
 			else if (property instanceof Property)
 				properties.push(property);
@@ -648,7 +645,7 @@ export default class Core {
 					subProperties.push(property.property(i));
 				properties.push(...this.getSelectedProperties(subProperties));
 			}
-		}
+
 		return properties;
 	}
 
@@ -690,9 +687,9 @@ export default class Core {
 		if (!this.portal.midi) throw new NoMidiError();
 		let secondsPerTick: number;
 		const ticksPerQuarter = this.portal.midi.timeDivision; // 基本时间每四分音符
-		if (ticksPerQuarter instanceof Array) {
+		if (ticksPerQuarter instanceof Array)
 			secondsPerTick = 1 / ticksPerQuarter[0] / ticksPerQuarter[1]; // 帧每秒这种格式不支持，随便弄一个数不要报错就好了。
-		} else {
+		else {
 			const quartersPerMinute = parseFloat(this.portal.selectBpmTxt.text), // 四分音符每分钟 (BPM)
 				secondsPerQuarter = 60 / quartersPerMinute; // 秒每四分音符
 			secondsPerTick = secondsPerQuarter / ticksPerQuarter; // 秒每基本时间

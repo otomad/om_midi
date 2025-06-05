@@ -9,7 +9,6 @@ module.exports = {
 	extends: [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:react-hooks/recommended",
 	],
 	overrides: [],
 	parser: "@typescript-eslint/parser",
@@ -19,7 +18,6 @@ module.exports = {
 	},
 	plugins: [
 		"@typescript-eslint",
-		"react-refresh",
 	],
 	rules: {
 		"indent": ["error", "tab", {
@@ -168,9 +166,5 @@ module.exports = {
 			"asyncArrow": "always",
 		}],
 		"@typescript-eslint/no-useless-constructor": "error",
-		"react-refresh/only-export-components": [
-			"warn",
-			{ allowConstantExport: true },
-		],
 	},
 };
