@@ -130,6 +130,7 @@ const SChinese = {
 	hold_both: "定格两边",
 	hold_in: "定格左边",
 	hold_out: "定格右边",
+	ignore_hold_keys: "忽略定格关键帧",
 	second_unit: "秒",
 	open: "打开",
 	text_document: "文本文档",

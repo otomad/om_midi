@@ -132,6 +132,7 @@ const English: typeof SChinese = {
 	hold_both: "Hold both",
 	hold_in: "Hold in",
 	hold_out: "Hold out",
+	ignore_hold_keys: "Ignore hold keys",
 	second_unit: "Seconds",
 	open: "Open",
 	text_document: "Text Document",

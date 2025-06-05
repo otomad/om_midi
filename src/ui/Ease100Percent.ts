@@ -47,6 +47,6 @@ export default class Ease100Percent extends BaseTool {
 		this.easeHoldRadio.text = localize(uiStr.hold_both);
 		this.easeHoldInRadio.text = localize(uiStr.hold_in);
 		this.easeHoldOutRadio.text = localize(uiStr.hold_out);
-		this.ignoreHoldKeysCheck.text = "忽略定格关键帧";
+		this.ignoreHoldKeysCheck.text = localize(uiStr.ignore_hold_keys);
 	}
 }

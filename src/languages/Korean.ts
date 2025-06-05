@@ -132,6 +132,7 @@ const Korean: typeof SChinese = {
 	hold_both: "양쪽 유지",
 	hold_in: "왼쪽 유지",
 	hold_out: "오른쪽 유지",
+	ignore_hold_keys: "유지 키를 무시하십시오",
 	second_unit: "초",
 	open: "열기",
 	text_document: "텍스트 문서",

@@ -132,6 +132,7 @@ const Japanese: typeof SChinese = {
 	hold_both: "ホールド両側",
 	hold_in: "ホールド左側",
 	hold_out: "ホールド右側",
+	ignore_hold_keys: "ホールドキーを無視",
 	second_unit: "秒",
 	open: "開く",
 	text_document: "テキスト ファイル",

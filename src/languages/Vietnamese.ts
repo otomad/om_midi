@@ -132,6 +132,7 @@ const Vietnamese: typeof SChinese = {
 	hold_both: "Giữ cả hai bên",
 	hold_in: "Giữ bên trái",
 	hold_out: "Giữ bên phải",
+	ignore_hold_keys: "Bỏ qua các phím giữ",
 	second_unit: "Giây",
 	open: "Mở",
 	text_document: "Tài liệu văn bản",
