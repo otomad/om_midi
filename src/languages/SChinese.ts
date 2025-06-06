@@ -101,7 +101,7 @@ const SChinese = {
 	end_of_track_position_error: "错误：音轨结束位置有误。应为 %1，实际 %2。",
 	cannot_set_time_remap_error: "错误：所选图层不能设置时间重映射。",
 	cannot_tuning_error: "错误：所选图层不包含音频，不能进行调音。",
-	about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 音轨的音高、力度和持续时间等滑块控件。\n\n脚本版本：%4\n应用程序：%2\n应用版本：%3\n\n脚本作者：兰音\n脚本原作者：David Van Brink (omino)、Dora (NGDXW)、家鳖大帝\n仓库地址：%1",
+	about: "om midi 是一个 After Effects 的音 MAD / YTPMV 辅助脚本。它是一个能够自动将 MIDI 文件转换为 After Effects 中关键帧的脚本。\n希望在 om midi 的帮助下，可以把人们从枯燥繁重的音画对齐中解救出来，把更多的精力投入到更有创造性的工作中。\n\n功能描述：读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 音轨的音高、力度和持续时间等滑块控件。\n\n脚本版本：%4\n应用程序：%2\n应用版本：%3\n\n脚本作者：兰澈祈\n脚本原作者：David Van Brink (omino)、Dora (NGDXW)、家鳖大帝\n仓库地址：%1",
 	horizontal_mirror: "水平镜像",
 	advanced_scale: "高级缩放",
 	loading_midi: "加载 %1 ...",

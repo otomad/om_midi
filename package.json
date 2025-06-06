@@ -7,7 +7,8 @@
 		"tsc": "tsc",
 		"build": "rollup -c",
 		"watch": "rollup -cw",
-		"release": "npm run build && gh release create $(node -pe \"require('./package.json').version\") $(node -pe \"require('./package.json').main\")"
+		"release": "npm run build && gh release create $(node -pe \"require('./package.json').version\") $(node -pe \"require('./package.json').main\")",
+		"postinstall": "patch-package"
 	},
 	"repository": {
 		"type": "git",
@@ -27,10 +28,11 @@
 		"@typescript-eslint/parser": "^5.53.0",
 		"eslint": "^8.34.0",
 		"jest": "^26.6.3",
+		"patch-package": "^8.0.0",
 		"prettier": "^3.5.3",
 		"rollup": "^2.42.4",
 		"rollup-plugin-ae-jsx": "^2.0.0",
-		"rollup-plugin-license": "^2.8.1",
+		"rollup-plugin-license": "^3.6.0",
 		"rollup-plugin-prettier": "^4.1.2",
 		"rollup-plugin-terser": "^7.0.2",
 		"ts-jest": "^26.5.4",
@@ -39,7 +41,13 @@
 	},
 	"dependencies": {
 		"expression-globals-typescript": "^3.2.6",
+		"moment": "npm:moment-timezone@^0.6.0",
 		"rollup-plugin-cleanup": "^3.2.1",
 		"types-for-adobe": "github:pravdomil/types-for-adobe"
+	},
+	"overrides": {
+		"rollup-plugin-license": {
+			"moment": "npm:moment-timezone@^0.6.0"
+		}
 	}
 }

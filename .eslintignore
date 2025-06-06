@@ -3,3 +3,4 @@
 **/*.ts
 !src/**/*.js
 !src/**/*.ts
+!*.config.js

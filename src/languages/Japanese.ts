@@ -103,7 +103,7 @@ const Japanese: typeof SChinese = {
 	end_of_track_position_error: "エラー：トラックの終了位置が間違っています。期待される %1、実際には %2。",
 	cannot_set_time_remap_error: "エラー：選択したレイヤーにタイム リマップを設定できません。",
 	cannot_tuning_error: "エラー：選択したレイヤーにはオーディオが含まれていないため、調整できません。",
-	about: "標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\nバージョン：%4\nアプリ：%2\nスペック：%3\n\n開発者：蘭音\n元開発者：David Van Brink (omino)、Dora (NGDXW)、家鼈大帝\nリポジトリ リンク：%1",
+	about: "om midi、After Effects 用の Otomad/YTPMV アシスタントスクリプト。MIDI ファイルを After Effects でキーフレームに自動的に変換するスクリプトです。\nom midi の助けで、ビデオとオーディオを一致させるのが退屈なことから人々を救い、よりクリエイティブな作品により多くのエネルギーを投入することができることを願っています。\n\n機能的な説明：標準 MIDI ファイルを読み取り、その MIDI ファイル内のノートとコントローラーに対応するレイヤーとキーフレームを作成します。\n\nバージョン：%4\nアプリ：%2\nスペック：%3\n\n開発者：蘭澈 祈\n元開発者：David Van Brink (omino)、Dora (NGDXW)、家鼈大帝\nリポジトリ リンク：%1",
 	horizontal_mirror: "水平方向のミラー",
 	advanced_scale: "高度なスケール",
 	loading_midi: "%1 を読み込んでいます...",

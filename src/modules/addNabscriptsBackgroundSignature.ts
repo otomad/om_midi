@@ -2,23 +2,23 @@
  * Draw some random rectangles (position, size, color, alpha) on the window background
  */
 export default function addNabscriptsBackgroundSignature(window: Window) {
-	const SOLID_COLOR = window.graphics.BrushType.SOLID_COLOR;
-	
-	const whiteBrush = window.graphics.newBrush(SOLID_COLOR, [1, 1, 1, 1]);
+	const { SOLID_COLOR } = window.graphics.BrushType;
+
+	// const whiteBrush = window.graphics.newBrush(SOLID_COLOR, [1, 1, 1, 1]);
 	const rand = Math.random() * 0.25;
 	const bgBrush = window.graphics.newBrush(SOLID_COLOR, [rand, rand, rand, 1]);
 	window.graphics.backgroundColor = bgBrush;
 	// window.gr.aboutPnl.graphics.backgroundColor = whiteBrush;
 
 	window.layout.layout(true); // to get window bounds
-	
-	
+
+
 	const numRect = 24;
 	const minOpacity = 0.05;
 	const maxOpacity = 0.15;
 
-	const leftEdge = 0;
-	const topEdge = 0;
+	// const leftEdge = 0;
+	// const topEdge = 0;
 	const rightEdge = window.windowBounds.width;
 	const bottomEdge = window.windowBounds.height;
 

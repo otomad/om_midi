@@ -103,7 +103,7 @@ const Vietnamese: typeof SChinese = {
 	end_of_track_position_error: "Lỗi: Track kết thúc ở sai vị trí. Dự kiến ​​1%, thực tế 2%.",
 	cannot_set_time_remap_error: "Lỗi: Sắp xếp lại thời gian không thể đặt cho layer được chọn.",
 	cannot_tuning_error: "Lỗi: Layer đã chọn không chứa âm thanh nên không thể tune được.",
-	about: "Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nXác định phiên bản: %3\n\nTác giả: Lan Âm\nTác giả gốc: David Van Brink (omino), Dora (NGDXW), Gia Miết Thái Đâ\nLink lưu trữ: %1",
+	about: "om midi, một kịch bản trợ lý Otomad/YTPMV cho After Effects. Nó là một kịch bản tự động chuyển đổi các tệp MIDI thành khung khóa trong After Effects.\nHy vọng rằng với sự giúp đỡ của om midi, mọi người có thể được cứu khỏi việc sắp xếp video và âm thanh nhàm chán, và đặt nhiều năng lượng hơn vào các tác phẩm sáng tạo hơn.\n\nMô tả chức năng: Nó đọc một tệp trình tự MIDI tiêu chuẩn và tạo các layer cũng như khung hình chính tương ứng với các nốt và bộ điều khiển trong tệp trình tự MIDI đó.\n\nPhiên bản: %4\nỨng dụng: %2\nXác định phiên bản: %3\n\nTác giả: Lan Triệt Kì\nTác giả gốc: David Van Brink (omino), Dora (NGDXW), Gia Miết Thái Đâ\nLink lưu trữ: %1",
 	horizontal_mirror: "Lật ngang kiểu gương",
 	advanced_scale: "Tỉ lệ nâng cao",
 	loading_midi: "Đang tải %1 ...",
@@ -139,11 +139,11 @@ const Vietnamese: typeof SChinese = {
 	browse: "Duyệt tìm",
 	file_too_large_info: "File này quá lớn. Bạn có muốn mở nó không?",
 	will_clear_existing_text_info: "Nội dung văn bản tồn tại sẽ bị xoá và thay đổi của bạn có thể không được giữ lại.",
-	enter_incremental: "Scale ratio",
-	movement_incremental: "Float movement ratio",
-	rotation_incremental: "Rotation angle",
-	legato_for_time_remap: "Legato for time remap",
-	multikey_for_chords: "Multikey for Chords",
+	enter_incremental: "Tỷ lệ thu phóng",
+	movement_incremental: "Tỷ lệ chuyển động nổi",
+	rotation_incremental: "Góc quay",
+	legato_for_time_remap: "Legato khi ánh xạ lại thời gian",
+	multikey_for_chords: "Đa keyframe cho Hợp âm (Chord)",
 };
 
 export default Vietnamese;

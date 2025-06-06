@@ -103,7 +103,7 @@ const Korean: typeof SChinese = {
 	end_of_track_position_error: "오류: 트랙이 잘못된 위치에서 끝납니다. 예상 위치 %1, 실제 위치 %2.",
 	cannot_set_time_remap_error: "오류: 선택한 계층에 대해 시간 다시 맵핑을 설정할 수 없습니다",
 	cannot_tuning_error: "오류: 선택한 레이어에 오디오가 없으므로 튜닝할 수 없습니다.",
-	about: "표준 MIDI 시퀀스 파일을 읽고 해당 MIDI 시퀀스 파일의 노트와 컨트롤러에 해당하는 레이어와 키 프레임을 만듭니다.\n\n버전: %4\n응용: %2\n지정자: %3\n\n저자: 란음\n원작자: David Van Brink (omino), Dora (NGDXW), 가별대제\n저장소 링크: %1",
+	about: "om midi, After Effects를 위한 Otomad/YTPMV 보조 스크립트입니다. MIDI 파일을 After Effects에서 키프레임으로 자동으로 변환하는 스크립트입니다.\nom midi의 도움으로 사람들이 지루한 비디오와 오디오를 정렬시키는 것을 구원하고 더 창조적인 작품에 더 많은 에너지를 투입할 수 있기를 바랍니다.\n\n기능적 설명: 표준 MIDI 시퀀스 파일을 읽고 해당 MIDI 시퀀스 파일의 노트와 컨트롤러에 해당하는 레이어와 키 프레임을 만듭니다.\n\n버전: %4\n응용: %2\n지정자: %3\n\n저자: 란철기\n원작자: David Van Brink (omino), Dora (NGDXW), 가별대제\n저장소 링크: %1",
 	horizontal_mirror: "수평 반전",
 	advanced_scale: "고급 비율",
 	loading_midi: "로딩중 %1 ...",

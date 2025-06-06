@@ -80,8 +80,8 @@ export default class SettingsDialog {
 			group: this.languageGroup,
 			label: this.languageLbl,
 			control: this.languageCombo,
-		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist", undefined, undefined, true));
-		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, "简体中文", "English", "日本語", "Tiếng Việt", "한국어");
+		} = addGroup(this.generalPanel, localize(uiStr.language), "dropdownlist", { alignment: ["fill", "center"] }, undefined, true));
+		addItems(this.languageCombo, localize(uiStr.app_default) + ` (${this.getDefaultLocale()})`, ...SettingsDialog.langNames);
 		const selectedLanguageIndex = Setting.getLanguage();
 		if (selectedLanguageIndex > 0 && selectedLanguageIndex < this.languageCombo.items.length)
 			this.languageCombo.selection = selectedLanguageIndex;
@@ -146,7 +146,8 @@ export default class SettingsDialog {
 		};
 		this.importOmUtilsBtn.onClick = () => new ImportOmUtilsDialog().showDialog();
 		this.extendScriptEngineAboutBtn.onClick = () => $.about();
-		this.optimizeApplyEffects.onClick = () => this.hFlipMotionCombo.enabled = this.optimizeApplyEffects.value;
+		this.optimizeApplyEffects.onClick = () =>
+			this.hFlipMotionCombo.enabled = this.optimizeEnterIncrementalTxt.enabled = this.optimizeMovementIncrementalTxt.enabled = this.optimizeRotationIncrementalTxt.enabled = this.optimizeApplyEffects.value;
 		this.optimizeApplyEffects.onClick();
 		setNumberEditText(this.optimizeEnterIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.EnterIncremental);
 		setNumberEditText(this.optimizeMovementIncrementalTxt, { type: "decimal", min: 0, max: 100 }, Setting.defs.MovementIncremental);
@@ -161,6 +162,7 @@ export default class SettingsDialog {
 	}
 
 	private static langIso = ["", "zh_CN", "en", "ja", "vi", "ko"];
+	private static langNames = ["简体中文", "English", "日本語", "Tiếng Việt", "한국어"];
 
 	private addPanel(parent: ContainerType, name: string, margins: [number, number, number, number] = [10, 13, 10, 3]): Panel {
 		return addControl(parent, "panel", {
@@ -174,15 +176,20 @@ export default class SettingsDialog {
 	}
 
 	private getDefaultLocale() {
-		if (!Setting.getLanguage()) {
-			$.locale = "";
-			return $.locale;
-		} else {
-			const locale = $.locale;
-			$.locale = "";
-			const result = $.locale;
-			$.locale = locale;
-			return result;
-		}
+		const iso = (() => {
+			if (!Setting.getLanguage()) {
+				$.locale = "";
+				return $.locale;
+			} else {
+				const locale = $.locale;
+				$.locale = "";
+				const result = $.locale;
+				$.locale = locale;
+				return result;
+			}
+		})();
+		const index = SettingsDialog.langIso.indexOf(iso) - 1;
+		if (index >= 0 && index < SettingsDialog.langNames.length) return SettingsDialog.langNames[index];
+		else return iso;
 	}
 }

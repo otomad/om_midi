@@ -7,8 +7,32 @@ import license from "rollup-plugin-license";
 import User from "./src/user.ts";
 import path from "path";
 import cleanup from "rollup-plugin-cleanup";
+import moment from "moment";
 
-const enableTerser = false;
+moment.locale("en", {
+	longDateFormat: {
+		LT: "h:mm:ss A",
+		LLLL: "dddd, MMMM Do, y NNNN LT Z z",
+	},
+});
+moment.locale("zh-cn", {
+	longDateFormat: {
+		LLLL: "NNNN y 年 M 月 D 日 dddd A H:mm:ss Z z",
+	},
+	eras: [{
+		since: "0001-01-01",
+		until: +Infinity,
+		offset: 1,
+		name: "公元",
+	}, {
+		until: -Infinity,
+		since: "0000-12-31",
+		offset: 1,
+		name: "公元前",
+	}],
+});
+
+const enableTerser = true;
 
 export default [{
 	input: "src/index.ts",
@@ -21,7 +45,7 @@ export default [{
 		externalLiveBindings: false,
 		interop: false, // fuck the shit `_interopDefaultLegacy`.
 	},
-	onwarn: function (warning) {
+	onwarn(warning) {
 		console.warn(warning.message);
 	},
 	context: "this",
@@ -57,8 +81,12 @@ export default [{
 				content: {
 					file: path.join(__dirname, "banner.template.ejs"),
 				},
-				data: User,
-			}
+				data: {
+					...User,
+					projectStartDateIso: "2022-08-08T10:08:03",
+					ominoDateIso: "2011-12-25T22:58:10",
+				},
+			},
 		}),
 	],
 }];
