@@ -117,7 +117,7 @@ const English: typeof SChinese = {
 	audio_levels: "Audio levels",
 	notes_velocity: "Notes velocity",
 	has_no_video_error: "Error: The selected layer does not contain video so that the selected effect cannot be applied.",
-	motion_for_horizontal_flip: "Motion for Flips",
+	motion_for_horizontal_flip: "Motion for flips",
 	motion_entrance: "Entrance",
 	motion_exit: "Exit",
 	motion_float_left: "Float Left",
