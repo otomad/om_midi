@@ -12,7 +12,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：公元 2025 年 6 月 7 日 星期六 凌晨 4:13:31 +08:00 CST
+ * 构建日期：公元 2025 年 6 月 7 日 星期六 凌晨 4:25:08 +08:00 CST
  * 项目开始日期：公元 2022 年 8 月 8 日 星期一 上午 10:08:03 +08:00 CST
  * Copyright © 2022, Rantetsu Inori - Licensed under GPLv3
  *
@@ -42,7 +42,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Saturday, June 7th, 2025 Anno Domini 4:13:31 AM +08:00 CST
+ * Building Date: Saturday, June 7th, 2025 Anno Domini 4:25:08 AM +08:00 CST
  * Project Start Date: Monday, August 8th, 2022 Anno Domini 10:08:03 AM +08:00 CST
  * Copyright © 2022, Rantetsu Inori - Licensed under GPLv3
  *

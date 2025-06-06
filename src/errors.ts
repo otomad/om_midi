@@ -2,12 +2,12 @@ import uiStr from "./languages/ui-str";
 
 export class MyError extends Error {
 	isMyError = true;
-	
+
 	constructor(msg: Error);
 	constructor(msg: string);
 	constructor(msg: string | Error) {
 		// 如果参数就是一个 MyError，就不用再警告了。
-		if (typeof msg === "string" || !(msg instanceof MyError)) 
+		if (typeof msg === "string" || !(msg instanceof MyError))
 			alert(msg.toString(), localize(uiStr.error), true);
 		super(msg.toString());
 		this.__proto__ = new.target.prototype;
