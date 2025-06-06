@@ -11,6 +11,7 @@ import EaseType from "../modules/EaseType";
 import HFlipMotionType from "../modules/HFlipMotionType";
 
 const MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
+const EPSILON = 1e-4; // After Effects 的数字精度很低，如果两个数的差距小于这个值，则视为这两个数相等。单位秒，此处设为 1 丝秒，实际值比这个值更小。
 const NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
 const TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
 const SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
@@ -67,6 +68,7 @@ export default class Core {
 		const selectedLayer = this.getSelectLayer(comp);
 		if (selectedLayer === null) usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
 		const pan100 = Setting.getNormalizePanTo100();
+		const multikeyForChords = Setting.getMultikeyForChords();
 		//#endregion
 
 		const secondsPerTick = this.getSecondsPerTick();
@@ -85,29 +87,48 @@ export default class Core {
 				startTime + comp.duration;
 			for (const check of checks)
 				this.addSliderControl(nullLayer, check.text); // 限制：只能存储索引值。
-			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType) =>
-				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
+			const setValueAtTime = (check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType?: KeyframeInterpolationType, dodge: boolean = false) =>
+				this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType, dodge);
 
-			let noteOnCount = 0, // 音符开计数。
+			let noteOnCount = 0, // 音符开计数，对于复音不额外计数。
+				noteOnChordCount = 0, // 音符开计数，对于复音仍额外计数。
 				lastEventType: RegularEventType = RegularEventType.NOTE_OFF, // 上一次音符事件类型。
 				lastEventStartTick = -1, // 上一次迄今基本时间。
 				lastPan = NaN, lastVolume = NaN, lastGlide = NaN; // 上一次声像、音量、弯音。
 			const addNoteEvent = (noteEvent: NoteEvent) => { // 严格模式下不能在块内声明函数。
-				if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
-					return; // 跳过同一时间点上的音符。
 				const noteSecondEvent = integrator ? integrator.getSecond(noteEvent) as NoteOnSecondEvent : undefined;
 				const seconds = noteSecondEvent ? noteSecondEvent.startSecond :
 					noteEvent.startTick * secondsPerTick;
+				if (
+					noteEvent.startTick <= lastEventStartTick &&
+					!(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) &&
+					(noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent)
+				) { // 跳过同一时间点上的音符。
+					if (multikeyForChords)
+						if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
+							noteOnChordCount++;
+							setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD, undefined, true);
+							setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD, undefined, true);
+							setValueAtTime(nullTab.duration, seconds, (noteEvent.duration ?? 0) * secondsPerTick, KeyframeInterpolationType.HOLD, undefined, true); // 持续时间单位改为秒。
+							setValueAtTime(nullTab.count, seconds, noteOnChordCount, KeyframeInterpolationType.HOLD, undefined, false);
+							setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD, undefined, true);
+						} else if (noteEvent instanceof NoteOnEvent && noteEvent.velocity === 0 || noteEvent instanceof NoteOffEvent) { // 音符关。力度为 0 的音符开视为音符关。
+							const noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
+							setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD, undefined, true); // 新增松键力度。
+							setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD, undefined, true);
+						}
+					return;
+				}
 				if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
 					if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
 						+noteEvent.interruptDuration! < 0 || +noteEvent.duration! < 0) return;
 					// ExtendScript 最新迷惑行为：undefined < 0 为 true！！！
 					// 解决方法：将 undefined 前加一元正号强行转换为数字类型 NaN，即可进行比较。
-					noteOnCount++;
+					noteOnCount++; noteOnChordCount++;
 					setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.duration, seconds, (noteEvent.duration ?? 0) * secondsPerTick, KeyframeInterpolationType.HOLD); // 持续时间单位改为秒。
-					setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
+					setValueAtTime(nullTab.count, seconds, !multikeyForChords ? noteOnCount : noteOnChordCount, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.bool, seconds, noteOnCount % 2, KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
 					setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? 100 : -100, KeyframeInterpolationType.HOLD);
 					setValueAtTime(nullTab.advancedScale, seconds, noteOnCount % 2 ? 1 : -1, KeyframeInterpolationType.HOLD);
@@ -215,7 +236,7 @@ export default class Core {
 		const isTunningOnly = effectsTab.getCheckedChecks().length === 1 && effectsTab.tuning.value;
 		const _layer = this.getSelectLayer(comp);
 		if (_layer === null) throw new NoLayerSelectedError();
-		let layer = _layer; // 去掉后，所有函数内部截获的 layer 变量可能会为 null。
+		let layer = _layer; // 去掉后，所有箭头函数内部截获的 layer 变量可能会为 null。
 		const secondsPerTick = this.getSecondsPerTick();
 		const track = this.portal.selectedTracks[0];
 		let startTime = this.getStartTime(comp);
@@ -678,11 +699,25 @@ export default class Core {
 		return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
 	}
 
-	private setValueAtTime(layer: AVLayer, checks: Checkbox[], check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType: KeyframeInterpolationType = inType): void {
+	/**
+	 * 在指定时间处设置关键帧。
+	 * @param layer - 图层。
+	 * @param checks - 复选框们。
+	 * @param check - 复选框。
+	 * @param seconds - 秒数。
+	 * @param value - 值。
+	 * @param inType - 入点关键帧类型。
+	 * @param outType - 出点关键帧类型。
+	 * @param dodge - 如果指定时间处现已有关键帧，是否自动避让在旁边一点点创建关键帧？
+	 */
+	private setValueAtTime(layer: AVLayer, checks: Checkbox[], check: Checkbox, seconds: number, value: number, inType: KeyframeInterpolationType, outType: KeyframeInterpolationType = inType, dodge: boolean = false): void {
 		const index = checks.indexOf(check);
 		if (index === -1) return;
 		// 注：根据说明文档，将创建的效果等属性的引用赋值给变量后，下一次创建新的效果时，之前的引用会变为“对象无效”。只能通过其序号进行访问。
 		const slider = Core.getEffects(layer).property(index + 1).property(1) as OneDProperty;
+		if (dodge)
+			while (Math.abs(slider.keyTime(slider.nearestKeyIndex(seconds)) - seconds) < EPSILON) // After Effects 的数字精度很低，实际上两个数有细微的差别。
+				seconds += MIN_INTERVAL;
 		const key = slider.addKey(seconds);
 		slider.setValueAtKey(key, value);
 		slider.setInterpolationTypeAtKey(key, inType, outType);
@@ -700,6 +735,9 @@ export default class Core {
 		return null;
 	}
 
+	/**
+	 * 获取几秒钟每刻。
+	 */
 	private getSecondsPerTick(): number {
 		if (!this.portal.midi) throw new NoMidiError();
 		let secondsPerTick: number;
@@ -816,6 +854,9 @@ export default class Core {
 		return property;
 	}
 
+	/**
+	 * 获取可变 BPM 积分器。
+	 */
 	private getIntegrator() {
 		const midi = this.portal.midi;
 		return midi && midi.isDynamicBpm && midi.integrator && this.portal.isUseDynamicBpm() ? midi.integrator : undefined;

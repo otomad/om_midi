@@ -95,7 +95,7 @@ const Vietnamese: typeof SChinese = {
 	midi_no_track_error: "Lỗi: Tệp MIDI không có track nào hợp lệ",
 	not_after_effects_error: "Lỗi: Vui lòng sử dụng script tại Adobe After Effects.",
 	cannot_create_file_error: "Lỗi: Không thể tạo tệp",
-	cannot_find_composition_error: "Lỗi: Không thể tìm được một composition còn hoạt động. Vui lòng kích hoạt composition trước .\n\nGiải pháp: Mở một composition trước, sau đó click vào composite preview hoặc track window để khiến nó hoạt động.",
+	cannot_find_composition_error: "Lỗi: Không thể tìm được một composition còn hoạt động. Vui lòng kích hoạt composition trước .\n\nGiải pháp: Mở một composition trước, sau đó click vào composite preview hoặc dòng thời gian window để khiến nó hoạt động.",
 	no_midi_error: "Lỗi: Vui lòng mở một tệp MIDI hợp lệ trước.",
 	no_options_checked_error: "Lỗi: Vui lòng chọn ít nhất 1 tùy chọn.",
 	no_layer_selected_error: "Lỗi: Không có layer nào được chọn trong composition hiện tại.",
@@ -139,6 +139,11 @@ const Vietnamese: typeof SChinese = {
 	browse: "Duyệt tìm",
 	file_too_large_info: "File này quá lớn. Bạn có muốn mở nó không?",
 	will_clear_existing_text_info: "Nội dung văn bản tồn tại sẽ bị xoá và thay đổi của bạn có thể không được giữ lại.",
+	enter_incremental: "Scale ratio",
+	movement_incremental: "Float movement ratio",
+	rotation_incremental: "Rotation angle",
+	legato_for_time_remap: "Legato for time remap",
+	multikey_for_chords: "Multikey for Chords",
 };
 
 export default Vietnamese;

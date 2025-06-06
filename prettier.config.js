@@ -9,4 +9,5 @@ export default {
 	printWidth: 2000,
 	bracketSpacing: true,
 	endOfLine: "lf",
+	experimentalTernaries: true,
 };

@@ -11,7 +11,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：2025年6月6日星期五凌晨3点09分
+ * 构建日期：2025年6月7日星期六凌晨1点14分
  * Copyright (c) 2022 ~, Ranne
  *
  * 原作者介绍：
@@ -40,7 +40,7 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Friday, June 6, 2025 3:09 AM
+ * Building Date: Saturday, June 7, 2025 1:14 AM
  * Copyright (c) 2022 ~, Ranne
  *
  * Introduction by the Original Author:
@@ -288,7 +288,7 @@
         count: "Count",
         bool: "Bool",
         time_remap: "Time Remap",
-        pingpong: "Ping-pong",
+        pingpong: "Ping-Pong",
         note_on: "Note On",
         channel_pan: "Channel Pan",
         channel_volume: "Channel Volume",
@@ -311,7 +311,7 @@
         midi_no_track_error: "Error: This MIDI file does not contain any valid tracks.",
         not_after_effects_error: "Error: Please use this script on Adobe After Effects.",
         cannot_create_file_error: "Error: Could not create file.",
-        cannot_find_composition_error: "Error: Could not find an active composition. Please activate a composition first.\n\nSolution: Open a composite first, then click on the composite preview or track window to make it active.",
+        cannot_find_composition_error: "Error: Could not find an active composition. Please activate a composition first.\n\nSolution: Open a composite first, then click on the composite preview or timeline window to make it active.",
         no_midi_error: "Error: Please open a valid MIDI file first.",
         no_options_checked_error: "Error: Please check at least one option.",
         no_layer_selected_error: "Error: No layers are selected in the current composition.",
@@ -355,6 +355,11 @@
         browse: "Browse",
         file_too_large_info: "The file is too large. Do you want to open it anyway?",
         will_clear_existing_text_info: "Existing text content will be cleared and your changes may not be retained.",
+        enter_incremental: "Scale ratio",
+        movement_incremental: "Float movement ratio",
+        rotation_incremental: "Rotation angle",
+        legato_for_time_remap: "Legato when time remap",
+        multikey_for_chords: "Multikey for Chords",
     };
 
     var Japanese = {
@@ -452,7 +457,7 @@
         midi_no_track_error: "エラー：MIDI ファイルに有効なトラックが含まれていません。",
         not_after_effects_error: "エラー：Adobe After Effects でこのスクリプトを使用してください。",
         cannot_create_file_error: "エラー：ファイルを作成できませんでした。",
-        cannot_find_composition_error: "エラー：アクティブな構成が見つかりません。最初にコンポジションをアクティブにしてください。\n\n解決策: まずコンポジットを開き、コンポジット プレビューまたはトラック ウィンドウをクリックしてアクティブにします。",
+        cannot_find_composition_error: "エラー：アクティブな構成が見つかりません。最初にコンポジションをアクティブにしてください。\n\n解決策: まずコンポジットを開き、コンポジット プレビューまたはタイムライン ウィンドウをクリックしてアクティブにします。",
         no_midi_error: "エラー：最初に有効な MIDI ファイルを開いてください。",
         no_options_checked_error: "エラー：少なくとも 1 つのオプションをオンにしてください。",
         no_layer_selected_error: "エラー：現在のコンポジションでレイヤーが選択されていません。",
@@ -496,6 +501,11 @@
         browse: "参照",
         file_too_large_info: "ファイルが大きすぎて開きますか？",
         will_clear_existing_text_info: "既存のテキストコンテンツが消去され、変更内容が保持されない場合があります。",
+        enter_incremental: "スケール比率",
+        movement_incremental: "浮動動き比率",
+        rotation_incremental: "回転角度",
+        legato_for_time_remap: "タイムリマップ時レガト",
+        multikey_for_chords: "マルチキーコード",
     };
 
     var SChinese = {
@@ -533,11 +543,11 @@
         ease_in: "缓入",
         ease_out: "缓出",
         ease_in_out: "缓入缓出",
-        midi_track_selector_title: "选择 MIDI 轨道",
-        select_at_least_one_track: "请至少选择一条轨道。",
+        midi_track_selector_title: "选择 MIDI 音轨",
+        select_at_least_one_track: "请至少选择一条音轨。",
         no_midi_file_selected: "未选择 MIDI 文件",
         select_midi_file: "MIDI 文件",
-        select_midi_track: "选择轨道",
+        select_midi_track: "选择音轨",
         set_midi_bpm: "设定 BPM",
         start_time: "开始时间",
         display_start_time: "显示开始时间",
@@ -551,7 +561,7 @@
         about_script_engine: "关于脚本引擎",
         import_om_utils: "导入 om utils",
         import_pure_quarter_midi: "导入纯四分 MIDI",
-        using_selected_layer_name: "使用选中图层名称而不是 MIDI 轨道名称",
+        using_selected_layer_name: "使用选中图层名称而不是 MIDI 音轨名称",
         normalize_pan_to_100: "声像标准化到 -100 ~ 100",
         using_layering: "@冰鸠樱乃的特有图层叠叠乐方法",
         optimize_apply_effects: "为部分效果开启视觉动画",
@@ -588,20 +598,20 @@
         unsupported_setting_type_error: "错误：不支持的设置数据类型。",
         file_unreadable_error: "错误：无法读取文件。该文件可能已占用或不存在。",
         midi_header_validation_error: "错误：MIDI 文件头验证失败（不是标准 MIDI 文件或文件已损坏）。",
-        midi_track_header_validation_error: "错误：MIDI 轨道块标头验证失败。",
+        midi_track_header_validation_error: "错误：MIDI 音轨块标头验证失败。",
         midi_custom_events_error: "错误：自定义 MIDI 事件无法读取。",
-        midi_no_track_error: "错误：该 MIDI 文件不包含任何有效轨道。",
+        midi_no_track_error: "错误：该 MIDI 文件不包含任何有效音轨。",
         not_after_effects_error: "错误：请在 Adobe After Effects 上使用此脚本。",
         cannot_create_file_error: "错误：无法创建文件。",
-        cannot_find_composition_error: "错误：无法找到活动合成。请先激活一个合成。\n\n解决方法：请先打开一个合成，然后点击一下该合成的预览画面或轨道的窗口使之处于活跃状态即可。",
+        cannot_find_composition_error: "错误：无法找到活动合成。请先激活一个合成。\n\n解决方法：请先打开一个合成，然后点击一下该合成的预览画面或时间轴的窗口使之处于活跃状态即可。",
         no_midi_error: "错误：请先打开一个有效的 MIDI 文件。",
         no_options_checked_error: "错误：请至少勾选一个项目。",
         no_layer_selected_error: "错误：在当前合成中未选中任何图层。",
-        not_one_track_for_apply_effects_only_error: "错误：应用效果只能同时选择一条轨道。",
-        end_of_track_position_error: "错误：轨道结束位置有误。应为 %1，实际 %2。",
+        not_one_track_for_apply_effects_only_error: "错误：应用效果只能同时选择一条音轨。",
+        end_of_track_position_error: "错误：音轨结束位置有误。应为 %1，实际 %2。",
         cannot_set_time_remap_error: "错误：所选图层不能设置时间重映射。",
         cannot_tuning_error: "错误：所选图层不包含音频，不能进行调音。",
-        about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 轨道的音高、力度和持续时间等滑块控件。\n\n脚本版本：%4\n应用程序：%2\n应用版本：%3\n\n脚本作者：兰音\n脚本原作者：David Van Brink (omino)、Dora (NGDXW)、家鳖大帝\n仓库地址：%1",
+        about: "读取一个 MIDI 序列，并为当前合成添加一个或多个新图层，其中包含各个 MIDI 音轨的音高、力度和持续时间等滑块控件。\n\n脚本版本：%4\n应用程序：%2\n应用版本：%3\n\n脚本作者：兰音\n脚本原作者：David Van Brink (omino)、Dora (NGDXW)、家鳖大帝\n仓库地址：%1",
         horizontal_mirror: "水平镜像",
         advanced_scale: "高级缩放",
         loading_midi: "加载 %1 ...",
@@ -641,6 +651,7 @@
         movement_incremental: "浮入位移比率",
         rotation_incremental: "旋转角度",
         legato_for_time_remap: "时间重映射时填补间隙",
+        multikey_for_chords: "复音多帧",
     };
 
     var Vietnamese = {
@@ -738,7 +749,7 @@
         midi_no_track_error: "Lỗi: Tệp MIDI không có track nào hợp lệ",
         not_after_effects_error: "Lỗi: Vui lòng sử dụng script tại Adobe After Effects.",
         cannot_create_file_error: "Lỗi: Không thể tạo tệp",
-        cannot_find_composition_error: "Lỗi: Không thể tìm được một composition còn hoạt động. Vui lòng kích hoạt composition trước .\n\nGiải pháp: Mở một composition trước, sau đó click vào composite preview hoặc track window để khiến nó hoạt động.",
+        cannot_find_composition_error: "Lỗi: Không thể tìm được một composition còn hoạt động. Vui lòng kích hoạt composition trước .\n\nGiải pháp: Mở một composition trước, sau đó click vào composite preview hoặc dòng thời gian window để khiến nó hoạt động.",
         no_midi_error: "Lỗi: Vui lòng mở một tệp MIDI hợp lệ trước.",
         no_options_checked_error: "Lỗi: Vui lòng chọn ít nhất 1 tùy chọn.",
         no_layer_selected_error: "Lỗi: Không có layer nào được chọn trong composition hiện tại.",
@@ -782,6 +793,11 @@
         browse: "Duyệt tìm",
         file_too_large_info: "File này quá lớn. Bạn có muốn mở nó không?",
         will_clear_existing_text_info: "Nội dung văn bản tồn tại sẽ bị xoá và thay đổi của bạn có thể không được giữ lại.",
+        enter_incremental: "Scale ratio",
+        movement_incremental: "Float movement ratio",
+        rotation_incremental: "Rotation angle",
+        legato_for_time_remap: "Legato for time remap",
+        multikey_for_chords: "Multikey for Chords",
     };
 
     var Korean = {
@@ -879,7 +895,7 @@
         midi_no_track_error: "오류: 이 MIDI 파일에 올바른 트랙이 없습니다.",
         not_after_effects_error: "오류: Adobe After Effects 에서 이 스크립트를 사용하십시오.",
         cannot_create_file_error: "오류: 파일을 만들 수 없습니다.",
-        cannot_find_composition_error: "오류: 활성 구성을 찾을 수 없습니다. 먼저 구성을 활성화하십시오.\n\n해결방법: 컴포지트를 먼저 연 다음 컴포지트 미리보기 또는 트랙 창을 클릭하여 활성화합니다.",
+        cannot_find_composition_error: "오류: 활성 구성을 찾을 수 없습니다. 먼저 구성을 활성화하십시오.\n\n해결방법: 컴포지트를 먼저 연 다음 컴포지트 미리보기 또는 타임라인 창을 클릭하여 활성화합니다.",
         no_midi_error: "오류: 유효한 MIDI 파일을 여십시오.",
         no_options_checked_error: "오류: 하나 이상의 옵션을 선택하십시오.",
         no_layer_selected_error: "오류: 현재 작성에서 선택한 레이어가 없습니다.",
@@ -923,6 +939,11 @@
         browse: "검색",
         file_too_large_info: "파일이 너무 큽니다. 그래도 열어 보시겠습니까?",
         will_clear_existing_text_info: "기존 텍스트 콘텐츠가 지워지고 변경 사항이 유지되지 않을 수 있습니다.",
+        enter_incremental: "스케일 비율",
+        movement_incremental: "부동 운동 비율",
+        rotation_incremental: "회전 각",
+        legato_for_time_remap: "레가토 시간 리시간",
+        multikey_for_chords: "코드를 위한 멀티키",
     };
 
     var uiStr = {};
@@ -1736,6 +1757,7 @@
         MovementIncremental: 10,
         RotationIncremental: 15,
         LegatoForTimeRemap: false,
+        MultikeyForChords: false,
     };
     var Setting = { defs: __assign({}, defs) };
     var _loop_1 = function (tag) {
@@ -2867,6 +2889,8 @@
             this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
             this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.normalize_pan_to_100) });
             this.normalizePanTo100.value = Setting.getNormalizePanTo100();
+            this.multikeyForChords = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.multikey_for_chords) });
+            this.multikeyForChords.value = Setting.getMultikeyForChords();
             this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
             this.legatoForTimeRemap = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.legato_for_time_remap) });
             this.legatoForTimeRemap.value = Setting.getLegatoForTimeRemap();
@@ -2900,6 +2924,7 @@
                 Setting.setMovementIncremental(+_this.optimizeMovementIncrementalTxt.text);
                 Setting.setRotationIncremental(+_this.optimizeRotationIncrementalTxt.text);
                 Setting.setLegatoForTimeRemap(_this.legatoForTimeRemap.value);
+                Setting.setMultikeyForChords(_this.multikeyForChords.value);
                 Setting.setLanguage(_this.languageCombo.getSelectedIndex());
                 $.locale = SettingsDialog.langIso[_this.languageCombo.getSelectedIndex()];
                 _this.window.close();
@@ -3107,6 +3132,7 @@
     var HFlipMotionType$1 = HFlipMotionType;
 
     var MIN_INTERVAL = 5e-4; // 最小间隔，为前一音符关与当前音符开之间避让而腾出的间隔，单位秒，默认为 5 丝秒。
+    var EPSILON = 1e-4; // After Effects 的数字精度很低，如果两个数的差距小于这个值，则视为这两个数相等。单位秒，此处设为 1 丝秒，实际值比这个值更小。
     var NULL_SOURCE_NAME = "om midi null"; // 生成的空对象纯色名称。为避免造成不必要的麻烦因此统一用英文，下同。
     var TRANSFORM_NAME = "om midi Transform"; // 生成的变换效果名称。
     var SHOW_PROGRESSBAR = false; // 是否显示进度条调色板。
@@ -3165,6 +3191,7 @@
             if (selectedLayer === null)
                 usingSelectedLayerName = false; // 如果没有选中任何图层，自然肯定不能使用图层名称了。
             var pan100 = Setting.getNormalizePanTo100();
+            var multikeyForChords = Setting.getMultikeyForChords();
             //#endregion
             var secondsPerTick = this.getSecondsPerTick();
             var startTime = this.getStartTime(comp);
@@ -3185,20 +3212,39 @@
                     var check = checks_1[_d];
                     this_1.addSliderControl(nullLayer, check.text);
                 } // 限制：只能存储索引值。
-                var setValueAtTime = function (check, seconds, value, inType, outType) {
-                    return _this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType);
+                var setValueAtTime = function (check, seconds, value, inType, outType, dodge) {
+                    if (dodge === void 0) { dodge = false; }
+                    return _this.setValueAtTime(nullLayer, checks, check, startTime + seconds, value, inType, outType, dodge);
                 };
-                var noteOnCount = 0, // 音符开计数。
+                var noteOnCount = 0, // 音符开计数，对于复音不额外计数。
+                noteOnChordCount = 0, // 音符开计数，对于复音仍额外计数。
                 lastEventType = RegularEventType.NOTE_OFF, // 上一次音符事件类型。
                 lastEventStartTick = -1, // 上一次迄今基本时间。
                 lastPan = NaN, lastVolume = NaN, lastGlide = NaN; // 上一次声像、音量、弯音。
                 var addNoteEvent = function (noteEvent) {
-                    var _a, _b, _c;
-                    if (noteEvent.startTick <= lastEventStartTick && !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) && (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent))
-                        return; // 跳过同一时间点上的音符。
+                    var _a, _b, _c, _d;
                     var noteSecondEvent = integrator ? integrator.getSecond(noteEvent) : undefined;
                     var seconds = noteSecondEvent ? noteSecondEvent.startSecond :
                         noteEvent.startTick * secondsPerTick;
+                    if (noteEvent.startTick <= lastEventStartTick &&
+                        !(lastEventType === RegularEventType.NOTE_OFF && noteEvent instanceof NoteOnEvent) &&
+                        (noteEvent instanceof NoteOnEvent || noteEvent instanceof NoteOffEvent)) { // 跳过同一时间点上的音符。
+                        if (multikeyForChords)
+                            if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
+                                noteOnChordCount++;
+                                setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD, undefined, true);
+                                setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD, undefined, true);
+                                setValueAtTime(nullTab.duration, seconds, ((_a = noteEvent.duration) !== null && _a !== void 0 ? _a : 0) * secondsPerTick, KeyframeInterpolationType.HOLD, undefined, true); // 持续时间单位改为秒。
+                                setValueAtTime(nullTab.count, seconds, noteOnChordCount, KeyframeInterpolationType.HOLD, undefined, false);
+                                setValueAtTime(nullTab.noteOn, seconds, 1, KeyframeInterpolationType.HOLD, undefined, true);
+                            }
+                            else if (noteEvent instanceof NoteOnEvent && noteEvent.velocity === 0 || noteEvent instanceof NoteOffEvent) { // 音符关。力度为 0 的音符开视为音符关。
+                                var noteOffSeconds = seconds - MIN_INTERVAL; // 比前一个时间稍晚一点的时间，用于同一轨道上的同时音符。
+                                setValueAtTime(nullTab.velocity, noteOffSeconds, noteEvent.velocity, KeyframeInterpolationType.HOLD, undefined, true); // 新增松键力度。
+                                setValueAtTime(nullTab.noteOn, seconds, 0, KeyframeInterpolationType.HOLD, undefined, true);
+                            }
+                        return;
+                    }
                     if (noteEvent instanceof NoteOnEvent && noteEvent.velocity !== 0) { // 音符开。
                         if (noteEvent.interruptDuration === 0 || noteEvent.duration === 0 ||
                             +noteEvent.interruptDuration < 0 || +noteEvent.duration < 0)
@@ -3206,10 +3252,11 @@
                         // ExtendScript 最新迷惑行为：undefined < 0 为 true！！！
                         // 解决方法：将 undefined 前加一元正号强行转换为数字类型 NaN，即可进行比较。
                         noteOnCount++;
+                        noteOnChordCount++;
                         setValueAtTime(nullTab.pitch, seconds, noteEvent.pitch, KeyframeInterpolationType.HOLD);
                         setValueAtTime(nullTab.velocity, seconds, noteEvent.velocity, KeyframeInterpolationType.HOLD);
-                        setValueAtTime(nullTab.duration, seconds, ((_a = noteEvent.duration) !== null && _a !== void 0 ? _a : 0) * secondsPerTick, KeyframeInterpolationType.HOLD); // 持续时间单位改为秒。
-                        setValueAtTime(nullTab.count, seconds, noteOnCount, KeyframeInterpolationType.HOLD);
+                        setValueAtTime(nullTab.duration, seconds, ((_b = noteEvent.duration) !== null && _b !== void 0 ? _b : 0) * secondsPerTick, KeyframeInterpolationType.HOLD); // 持续时间单位改为秒。
+                        setValueAtTime(nullTab.count, seconds, !multikeyForChords ? noteOnCount : noteOnChordCount, KeyframeInterpolationType.HOLD);
                         setValueAtTime(nullTab.bool, seconds, noteOnCount % 2, KeyframeInterpolationType.HOLD); // 迷惑行为，为了和旧版脚本行为保持一致。
                         setValueAtTime(nullTab.scale, seconds, noteOnCount % 2 ? 100 : -100, KeyframeInterpolationType.HOLD);
                         setValueAtTime(nullTab.advancedScale, seconds, noteOnCount % 2 ? 1 : -1, KeyframeInterpolationType.HOLD);
@@ -3221,11 +3268,11 @@
                         if (noteEvent.interruptDuration !== undefined || noteEvent.duration !== undefined) {
                             var noteOffSeconds = void 0;
                             if (!noteSecondEvent) {
-                                var duration = (_b = noteEvent.interruptDuration) !== null && _b !== void 0 ? _b : noteEvent.duration;
+                                var duration = (_c = noteEvent.interruptDuration) !== null && _c !== void 0 ? _c : noteEvent.duration;
                                 noteOffSeconds = (noteEvent.startTick + duration) * secondsPerTick - MIN_INTERVAL;
                             }
                             else
-                                noteOffSeconds = ((_c = noteSecondEvent.interruptDurationSecond) !== null && _c !== void 0 ? _c : noteSecondEvent.durationSecond)
+                                noteOffSeconds = ((_d = noteSecondEvent.interruptDurationSecond) !== null && _d !== void 0 ? _d : noteSecondEvent.durationSecond)
                                     - MIN_INTERVAL + noteSecondEvent.startSecond;
                             setValueAtTime(nullTab.timeRemap, noteOffSeconds, 1, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
                             setValueAtTime(nullTab.pingpong, noteOffSeconds, noteOnCount % 2, KeyframeInterpolationType.LINEAR, KeyframeInterpolationType.HOLD);
@@ -3342,7 +3389,7 @@
             var _layer = this.getSelectLayer(comp);
             if (_layer === null)
                 throw new NoLayerSelectedError();
-            var layer = _layer; // 去掉后，所有函数内部截获的 layer 变量可能会为 null。
+            var layer = _layer; // 去掉后，所有箭头函数内部截获的 layer 变量可能会为 null。
             var secondsPerTick = this.getSecondsPerTick();
             var track = this.portal.selectedTracks[0];
             var startTime = this.getStartTime(comp);
@@ -3814,13 +3861,28 @@
             slider.name = name;
             return slider.propertyIndex; // 向索引组添加新属性时，将从头开始重新创建索引组，从而使对属性的所有现有引用无效。
         };
-        Core.prototype.setValueAtTime = function (layer, checks, check, seconds, value, inType, outType) {
+        /**
+         * 在指定时间处设置关键帧。
+         * @param layer - 图层。
+         * @param checks - 复选框们。
+         * @param check - 复选框。
+         * @param seconds - 秒数。
+         * @param value - 值。
+         * @param inType - 入点关键帧类型。
+         * @param outType - 出点关键帧类型。
+         * @param dodge - 如果指定时间处现已有关键帧，是否自动避让在旁边一点点创建关键帧？
+         */
+        Core.prototype.setValueAtTime = function (layer, checks, check, seconds, value, inType, outType, dodge) {
             if (outType === void 0) { outType = inType; }
+            if (dodge === void 0) { dodge = false; }
             var index = checks.indexOf(check);
             if (index === -1)
                 return;
             // 注：根据说明文档，将创建的效果等属性的引用赋值给变量后，下一次创建新的效果时，之前的引用会变为“对象无效”。只能通过其序号进行访问。
             var slider = Core.getEffects(layer).property(index + 1).property(1);
+            if (dodge)
+                while (Math.abs(slider.keyTime(slider.nearestKeyIndex(seconds)) - seconds) < EPSILON) // After Effects 的数字精度很低，实际上两个数有细微的差别。
+                    seconds += MIN_INTERVAL;
             var key = slider.addKey(seconds);
             slider.setValueAtKey(key, value);
             slider.setInterpolationTypeAtKey(key, inType, outType);
@@ -3838,6 +3900,9 @@
                 return layer;
             return null;
         };
+        /**
+         * 获取几秒钟每刻。
+         */
         Core.prototype.getSecondsPerTick = function () {
             if (!this.portal.midi)
                 throw new NoMidiError();
@@ -3953,6 +4018,9 @@
             property.name = TRANSFORM_NAME;
             return property;
         };
+        /**
+         * 获取可变 BPM 积分器。
+         */
         Core.prototype.getIntegrator = function () {
             var midi = this.portal.midi;
             return midi && midi.isDynamicBpm && midi.integrator && this.portal.isUseDynamicBpm() ? midi.integrator : undefined;

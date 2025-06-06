@@ -95,7 +95,7 @@ const Korean: typeof SChinese = {
 	midi_no_track_error: "오류: 이 MIDI 파일에 올바른 트랙이 없습니다.",
 	not_after_effects_error: "오류: Adobe After Effects 에서 이 스크립트를 사용하십시오.",
 	cannot_create_file_error: "오류: 파일을 만들 수 없습니다.",
-	cannot_find_composition_error: "오류: 활성 구성을 찾을 수 없습니다. 먼저 구성을 활성화하십시오.\n\n해결방법: 컴포지트를 먼저 연 다음 컴포지트 미리보기 또는 트랙 창을 클릭하여 활성화합니다.",
+	cannot_find_composition_error: "오류: 활성 구성을 찾을 수 없습니다. 먼저 구성을 활성화하십시오.\n\n해결방법: 컴포지트를 먼저 연 다음 컴포지트 미리보기 또는 타임라인 창을 클릭하여 활성화합니다.",
 	no_midi_error: "오류: 유효한 MIDI 파일을 여십시오.",
 	no_options_checked_error: "오류: 하나 이상의 옵션을 선택하십시오.",
 	no_layer_selected_error: "오류: 현재 작성에서 선택한 레이어가 없습니다.",
@@ -139,6 +139,11 @@ const Korean: typeof SChinese = {
 	browse: "검색",
 	file_too_large_info: "파일이 너무 큽니다. 그래도 열어 보시겠습니까?",
 	will_clear_existing_text_info: "기존 텍스트 콘텐츠가 지워지고 변경 사항이 유지되지 않을 수 있습니다.",
+	enter_incremental: "스케일 비율",
+	movement_incremental: "부동 운동 비율",
+	rotation_incremental: "회전 각",
+	legato_for_time_remap: "레가토 시간 리시간",
+	multikey_for_chords: "코드를 위한 멀티키",
 };
 
 export default Korean;

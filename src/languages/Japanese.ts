@@ -95,7 +95,7 @@ const Japanese: typeof SChinese = {
 	midi_no_track_error: "エラー：MIDI ファイルに有効なトラックが含まれていません。",
 	not_after_effects_error: "エラー：Adobe After Effects でこのスクリプトを使用してください。",
 	cannot_create_file_error: "エラー：ファイルを作成できませんでした。",
-	cannot_find_composition_error: "エラー：アクティブな構成が見つかりません。最初にコンポジションをアクティブにしてください。\n\n解決策: まずコンポジットを開き、コンポジット プレビューまたはトラック ウィンドウをクリックしてアクティブにします。",
+	cannot_find_composition_error: "エラー：アクティブな構成が見つかりません。最初にコンポジションをアクティブにしてください。\n\n解決策: まずコンポジットを開き、コンポジット プレビューまたはタイムライン ウィンドウをクリックしてアクティブにします。",
 	no_midi_error: "エラー：最初に有効な MIDI ファイルを開いてください。",
 	no_options_checked_error: "エラー：少なくとも 1 つのオプションをオンにしてください。",
 	no_layer_selected_error: "エラー：現在のコンポジションでレイヤーが選択されていません。",
@@ -139,6 +139,11 @@ const Japanese: typeof SChinese = {
 	browse: "参照",
 	file_too_large_info: "ファイルが大きすぎて開きますか？",
 	will_clear_existing_text_info: "既存のテキストコンテンツが消去され、変更内容が保持されない場合があります。",
+	enter_incremental: "スケール比率",
+	movement_incremental: "浮動動き比率",
+	rotation_incremental: "回転角度",
+	legato_for_time_remap: "タイムリマップ時レガト",
+	multikey_for_chords: "マルチキーコード",
 };
 
 export default Japanese;

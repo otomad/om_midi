@@ -51,6 +51,7 @@ export default [{
 				defaults: false, // 直接禁用默认得了。
 			},
 		}),
+		// !enableTerser && prettier(),
 		license({
 			banner: {
 				content: {

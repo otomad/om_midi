@@ -45,6 +45,7 @@ export default class SettingsDialog {
 	optimizeRotationIncrementalTxt: EditText;
 	addToEffectTransform: Checkbox;
 	legatoForTimeRemap: Checkbox;
+	multikeyForChords: Checkbox;
 	openGithubBtnGroup: FlowGroup;
 	openGithubLatestBtn: Button;
 	openGithubPageBtn: Button;
@@ -89,6 +90,8 @@ export default class SettingsDialog {
 		this.usingSelectedLayerName.value = Setting.getUsingSelectedLayerName();
 		this.normalizePanTo100 = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.normalize_pan_to_100) });
 		this.normalizePanTo100.value = Setting.getNormalizePanTo100();
+		this.multikeyForChords = addControl(this.nullObjPanel, "checkbox", { text: localize(uiStr.multikey_for_chords) });
+		this.multikeyForChords.value = Setting.getMultikeyForChords();
 		this.applyEffectsPanel = this.addPanel(this.rightGroup, localize(uiStr.apply_effects));
 		this.legatoForTimeRemap = addControl(this.applyEffectsPanel, "checkbox", { text: localize(uiStr.legato_for_time_remap) });
 		this.legatoForTimeRemap.value = Setting.getLegatoForTimeRemap();
@@ -123,6 +126,7 @@ export default class SettingsDialog {
 			Setting.setMovementIncremental(+this.optimizeMovementIncrementalTxt.text);
 			Setting.setRotationIncremental(+this.optimizeRotationIncrementalTxt.text);
 			Setting.setLegatoForTimeRemap(this.legatoForTimeRemap.value);
+			Setting.setMultikeyForChords(this.multikeyForChords.value);
 			Setting.setLanguage(this.languageCombo.getSelectedIndex());
 			$.locale = SettingsDialog.langIso[this.languageCombo.getSelectedIndex()];
 			this.window.close();

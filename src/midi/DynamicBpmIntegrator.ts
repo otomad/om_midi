@@ -1,7 +1,7 @@
 import { UnsupportedFpsTimeDivisionError } from "../errors";
 import BpmKeysData from "./BpmKeysData";
 import MidiTrack from "./MidiTrack";
-import { NoteOffEvent, NoteSecondEvent, NoteOnEvent, NoteOnSecondEvent, TempoMetaEvent, NoteEvent } from "./note-events";
+import { NoteSecondEvent, NoteOnEvent, NoteOnSecondEvent, TempoMetaEvent, NoteEvent } from "./note-events";
 
 /**
  * 动态 BPM 积分器。
@@ -10,7 +10,7 @@ export default class DynamicBpmIntegrator {
 	private readonly tempoTrack: MidiTrack;
 	private readonly datas: BpmKeysData[] = [];
 	private readonly ticksPerQuarter: number;
-	
+
 	constructor(tempoTrack: MidiTrack) {
 		this.tempoTrack = tempoTrack;
 		const midi = tempoTrack.midi();
@@ -19,7 +19,7 @@ export default class DynamicBpmIntegrator {
 		this.ticksPerQuarter = midi.timeDivision as number;
 		this.initData();
 	}
-	
+
 	private initData() {
 		for (const note of this.tempoTrack)
 			if (note instanceof TempoMetaEvent) {
@@ -41,9 +41,9 @@ export default class DynamicBpmIntegrator {
 			}
 		write(this.datas.length);
 	}
-	
+
 	private getLastData(): BpmKeysData | undefined { return this.datas[this.datas.length - 1]; }
-	
+
 	getSecond(note: NoteOnEvent): NoteOnSecondEvent;
 	getSecond(note: NoteEvent): NoteSecondEvent;
 	getSecond(note: NoteOnEvent | NoteEvent): NoteOnSecondEvent | NoteSecondEvent {

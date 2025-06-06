@@ -72,7 +72,7 @@ const English: typeof SChinese = {
 	count: "Count",
 	bool: "Bool",
 	time_remap: "Time Remap",
-	pingpong: "Ping-pong",
+	pingpong: "Ping-Pong",
 	note_on: "Note On",
 	channel_pan: "Channel Pan",
 	channel_volume: "Channel Volume",
@@ -95,7 +95,7 @@ const English: typeof SChinese = {
 	midi_no_track_error: "Error: This MIDI file does not contain any valid tracks.",
 	not_after_effects_error: "Error: Please use this script on Adobe After Effects.",
 	cannot_create_file_error: "Error: Could not create file.",
-	cannot_find_composition_error: "Error: Could not find an active composition. Please activate a composition first.\n\nSolution: Open a composite first, then click on the composite preview or track window to make it active.",
+	cannot_find_composition_error: "Error: Could not find an active composition. Please activate a composition first.\n\nSolution: Open a composite first, then click on the composite preview or timeline window to make it active.",
 	no_midi_error: "Error: Please open a valid MIDI file first.",
 	no_options_checked_error: "Error: Please check at least one option.",
 	no_layer_selected_error: "Error: No layers are selected in the current composition.",
@@ -139,6 +139,11 @@ const English: typeof SChinese = {
 	browse: "Browse",
 	file_too_large_info: "The file is too large. Do you want to open it anyway?",
 	will_clear_existing_text_info: "Existing text content will be cleared and your changes may not be retained.",
+	enter_incremental: "Scale ratio",
+	movement_incremental: "Float movement ratio",
+	rotation_incremental: "Rotation angle",
+	legato_for_time_remap: "Legato when time remap",
+	multikey_for_chords: "Multikey for Chords",
 };
 
 export default English;
