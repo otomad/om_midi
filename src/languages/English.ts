@@ -142,7 +142,7 @@ const English: typeof SChinese = {
 	enter_incremental: "Scale ratio",
 	movement_incremental: "Float movement ratio",
 	rotation_incremental: "Rotation angle",
-	legato_for_time_remap: "Legato when time remap",
+	legato_for_time_remap: "Legato when time remapping",
 	multikey_for_chords: "Multikey for Chords",
 };
 
