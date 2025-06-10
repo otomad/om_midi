@@ -9,13 +9,13 @@ import path from "path";
 import cleanup from "rollup-plugin-cleanup";
 import moment from "moment";
 
-moment.locale("en", {
+moment.updateLocale("en", {
 	longDateFormat: {
 		LT: "h:mm:ss A",
 		LLLL: "dddd, MMMM Do, NNNN y LT Z z",
 	},
 });
-moment.locale("zh-cn", {
+moment.updateLocale("zh-cn", {
 	longDateFormat: {
 		LLLL: "NNNN y 年 M 月 D 日 dddd A H:mm:ss Z z",
 	},
