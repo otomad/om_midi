@@ -12,7 +12,7 @@ import moment from "moment";
 moment.locale("en", {
 	longDateFormat: {
 		LT: "h:mm:ss A",
-		LLLL: "dddd, MMMM Do, y NNNN LT Z z",
+		LLLL: "dddd, MMMM Do, NNNN y LT Z z",
 	},
 });
 moment.locale("zh-cn", {

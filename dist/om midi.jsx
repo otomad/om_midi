@@ -12,7 +12,7 @@
  * 在此处获取最新版：https://github.com/otomad/om_midi/releases/latest
  * 仓库地址：https://github.com/otomad/om_midi
  *
- * 构建日期：公元 2025 年 6 月 7 日 星期六 凌晨 4:59:29 +08:00 CST
+ * 构建日期：公元 2025 年 6 月 11 日 星期三 早上 6:56:48 +08:00 CST
  * 项目开始日期：公元 2022 年 8 月 8 日 星期一 上午 10:08:03 +08:00 CST
  * Copyright © 2022, Rantetsu Inori - Licensed under GPLv3
  *
@@ -42,12 +42,12 @@
  * Get the Latest Version Here: https://github.com/otomad/om_midi/releases/latest
  * Repository Link: https://github.com/otomad/om_midi
  *
- * Building Date: Saturday, June 7th, 2025 Anno Domini 4:59:29 AM +08:00 CST
- * Project Start Date: Monday, August 8th, 2022 Anno Domini 10:08:03 AM +08:00 CST
+ * Building Date: Wednesday, June 11th, Anno Domini 2025 6:56:48 AM +08:00 CST
+ * Project Start Date: Monday, August 8th, Anno Domini 2022 10:08:03 AM +08:00 CST
  * Copyright © 2022, Rantetsu Inori - Licensed under GPLv3
  *
  * Introduction by the Original Author:
- * Date: Sunday, December 25th, 2011 Anno Domini 10:58:10 PM -08:00 PST
+ * Date: Sunday, December 25th, Anno Domini 2011 10:58:10 PM -08:00 PST
  * Author: David Van Brink
  * This script is part of the omino adobe script suite.
  *
