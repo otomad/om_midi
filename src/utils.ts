@@ -4,7 +4,7 @@
  *     1. 放置在 aep 工程的相同目录下。
  *     在图层表达式中声明
  *     <pre>{@code $.evalFile(thisProject.fullPath.replace(/\\[^\\]*$/, "\\om_utils.jsx"));}</pre>
- * 
+ *
  *     2. 放置在任意位置，然后添加到 AE 项目中。
  *     在图层表达式中声明
  *     <pre>{@code footage("om_utils.jsx").sourceData;}</pre>

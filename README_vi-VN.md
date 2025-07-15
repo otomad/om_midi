@@ -35,7 +35,7 @@ Dự án hiện tại được viết lại bằng công nghệ mới như TypeS
 
 #### `om midi`
 Đặt script vào thư mục `Scripts\ScriptUI Panels` nằm trong đường dẫn cài đặt của After Effects.
-> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
+> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
 
 #### `om utils`
 Có 2 cách để nhập vào:
@@ -53,9 +53,9 @@ footage("om_utils.jsx").sourceData;
 ### Hướng dẫn
 [![Get started with om midi in 1.5 minutes](covers/youtube_cover.svg)](https://youtu.be/amDtqY_HsGM)
 
-#### Đặc biệt 
-Nếu After Effects hiện lên lỗi như dưới đây khi mở script.  
-![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
+#### Đặc biệt
+Nếu After Effects hiện lên lỗi như dưới đây khi mở script.
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
 Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to Write Files and Access Network*.
 
 ### Roadmap

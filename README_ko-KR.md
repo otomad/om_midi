@@ -35,7 +35,7 @@
 
 #### `om midi`
 After Effects 설치 디렉토리에 있는 `Scripts\ScriptUI Panels` 폴더로 이동합니다.
-> (예: C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
+> (예: C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
 
 #### `om utils`
 다음과 같은 두 가지 방법으로 가져올 수 있습니다.
@@ -54,8 +54,8 @@ footage("om_utils.jsx").sourceData;
 [![Get started with om midi in 1.5 minutes](covers/youtube_cover.svg)](https://youtu.be/amDtqY_HsGM)
 
 #### 오빠 조심하세요
-After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생한 경우  
-![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
+After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생한 경우
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
 *편집 > 기본 설정 > 스크립트 및 표현식 > 스크립트 파일 쓰기 및 네트워크 액세스 허용*.
 
 ### Roadmap
@@ -89,4 +89,3 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 * [Sergi Guzman(colxi)의 midi-parser-js - MIDI 파일 형식 사양](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>
-

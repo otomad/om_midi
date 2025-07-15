@@ -35,7 +35,7 @@
 
 #### `om midi`
 将其移动至位于 After Effects 安装目录的 `Scripts\ScriptUI Panels` 文件夹中。
-> (例如：C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
+> (例如：C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
 
 #### `om utils`
 有两种方式导入：
@@ -54,8 +54,8 @@ footage("om_utils.jsx").sourceData;
 [![一分半上手 om midi](covers/youtube_cover.svg)](https://b23.tv/g98ALSe)
 
 #### 值得注意的是
-如果 After Effects 在打开脚本时引发如图所示的错误。  
-![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
+如果 After Effects 在打开脚本时引发如图所示的错误。
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
 请启用 *编辑 > 首选项 > 脚本和表达式 > 允许脚本写入文件和访问网络*。
 
 ### 路线图
@@ -89,4 +89,3 @@ footage("om_utils.jsx").sourceData;
 * [Sergi Guzman (colxi) 的 MIDI 解析器 JS - MIDI 文件格式规范](https://github.com/colxi/midi-parser-js/wiki/MIDI-File-Format-Specifications)
 
 </div>
-

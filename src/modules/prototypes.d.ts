@@ -4,6 +4,14 @@ interface String {
 	 * @returns 删除头尾空白字符后的字符串。
 	 */
 	trim(): string;
+
+	/**
+	 * 查找字符串中是否包含指定的子字符串？
+	 * @param search - 要查找的子字符串。
+	 * @param start - 从字符串的指定位置开始查找，默认为 0。
+	 * @returns 包含指定的子字符串？
+	 */
+	includes(search: string, start?: number): boolean;
 }
 
 interface Array<T> {
@@ -21,7 +29,7 @@ interface Array<T> {
 	 * @returns 是否包含该对象。
 	 */
 	includes(item: T): boolean;
-	
+
 	/**
 	 * 遍历数组。
 	 * @param callbackfn - 回调函数。
@@ -56,6 +64,6 @@ interface Object {
 	 * @param prop - 要测试的属性的字符串名称。
 	 * @returns 指定的对象已直接定义了指定的属性？
 	 */
-	//@ts-ignore
+	// @ts-ignore
 	hasOwn<T extends object, K extends string>(obj: T, prop: K): prop is keyof T;
 }

@@ -35,7 +35,7 @@
 
 #### `om midi`
 After Effects のインストール ディレクトリにある `Scripts\ScriptUI Panels` フォルダーに配置されます。
-> (例えば：C:\Program Files\Adobe\Adobe After Effects 2023\Scripts\ScriptUI Panels)
+> (例えば：C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
 
 #### `om utils`
 インポートする方法は 2 つあります。
@@ -54,8 +54,8 @@ footage("om_utils.jsx").sourceData;
 [![Get started with om midi in 1.5 minutes](covers/youtube_cover.svg)](https://youtu.be/amDtqY_HsGM)
 
 #### お兄ちゃん気をつけてね
-After Effects でスクリプトを開くと、図のようなエラーが発生する場合。  
-![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)  
+After Effects でスクリプトを開くと、図のようなエラーが発生する場合。
+![After Effects No Access Files](./covers/After_Effects_No_Access_Files.png)
 *編集 > 環境設定 > スクリプトとエクスプレッション > スクリプトによるファイルへの書き込みとネットワークへのアクセスを許可* を有効にしてください。
 
 ### ロードマップ

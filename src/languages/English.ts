@@ -93,7 +93,7 @@ const English: typeof SChinese = {
 	midi_track_header_validation_error: "Error: MIDI track header chunks validation failed.",
 	midi_custom_events_error: "Error: Custom MIDI events could not be read.",
 	midi_no_track_error: "Error: This MIDI file does not contain any valid tracks.",
-	not_after_effects_error: "Error: Please use this script on Adobe After Effects.",
+	not_after_effects_error: "Error: Please use this script in Adobe After Effects.",
 	cannot_create_file_error: "Error: Could not create file.",
 	cannot_find_composition_error: "Error: Could not find an active composition. Please activate a composition first.\n\nSolution: Open a composite first, then click on the composite preview or timeline window to make it active.",
 	no_midi_error: "Error: Please open a valid MIDI file first.",
