@@ -15,9 +15,11 @@
 
 현재 프로젝트는 이전 버전의 스크립트에 따라 TypeScript 와 같은 새로운 기술을 사용하여 다시 작성됩니다.
 
-**'om midi' 에 대한 맞춤법 규범: 모든** 알파벳 **소문자는** 문장 첫머리에 있을 때도 마찬가지이지만 모든 대문자의 언어 환경에서 이 조항을 무시할 수 있습니다. 단어는 밑줄 대신 **공백으로** 구분됩니다.
+**om midi 에 대한 맞춤법 규범: 모든** 알파벳 **소문자는** 문장 첫머리에 있을 때도 마찬가지이지만 모든 대문자의 언어 환경에서 이 조항을 무시할 수 있습니다. 단어는 밑줄 대신 **공백으로** 구분됩니다.
 
 **자매 프로젝트:** [Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper).
+
+**om midi 의 또 다른 분기:** [ReOm MIDI](https://github.com/FuouM/AE-ReOm-MIDI) — [Fuou Marinas](https://github.com/FuouM)가 관리하는, 초기 om midi를 기반으로 하되 다른 방향을 추구하는 독립적인 브랜치입니다.
 
 ### 번역자
 * 베트남어 번역은 [@Cyahega](https://github.com/Cyahega) 에서 제공합니다.
@@ -35,7 +37,7 @@
 
 #### `om midi`
 After Effects 설치 디렉토리에 있는 `Scripts\ScriptUI Panels` 폴더로 이동합니다.
-> (예: C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
+> (예: C:\Program Files\Adobe\Adobe After Effects 2026\Scripts\ScriptUI Panels)
 
 #### `om utils`
 다음과 같은 두 가지 방법으로 가져올 수 있습니다.
@@ -73,6 +75,42 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 | v2.0 | [Dora(NGDXW)의 두 번째 개정판](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **현재 버전** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
+#### 지점 관계
+
+```mermaid
+flowchart LR
+    %% Definitions
+    DVB-IE["David Van Brink(omino)의 오리지널 에디션<br>v0.1"]
+    Dora-R["Dora(NGDXW)의 개정판<br>v1.0"]
+    EP["표현식 사전 설정<br>v1.0 윤"]
+    Z4HD-CE["가별대제의 중국판<br>v1.2"]
+    Dora-R2["Dora(NGDXW)의 두 번째 개정판<br>v2.0"]
+    CV["현재 버전<br>v3.x"]:::current
+    FM-R["Fuou Marinas의 개정판"]
+
+    %% Connections
+    DVB-IE --> Dora-R
+    Dora-R --> EP
+    Dora-R --> Z4HD-CE
+    Dora-R --> Dora-R2
+    EP --> Dora-R2
+    Dora-R2 --> CV
+    Z4HD-CE --> CV
+    DVB-IE --> FM-R
+
+    %% Class definitions
+    classDef current font-weight:bold
+
+	%% Click events
+	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
+	click Dora-R "https://www.bilibili.com/read/cv170398"
+	click EP "https://www.bilibili.com/video/av29649969"
+	click Z4HD-CE "https://github.com/Z4HD/om_midi_NGDXW_zh"
+	click Dora-R2 "https://www.bilibili.com/read/cv1217487"
+	click CV "https://github.com/otomad/om_midi"
+	click FM-R "https://github.com/FuouM/AE-ReOm-MIDI"
+```
+
 ### 참조
 #### 이전 버전
 * [David Van Brink(omino)의 오리지널 에디션](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
@@ -80,6 +118,8 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 * [표현식 사전 설정](https://www.bilibili.com/video/av29649969)
 * [가별대제의 중국판](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora(NGDXW)의 두 번째 개정판](https://www.bilibili.com/read/cv1217487)
+#### 기타 지점
+* [Fuou Marinas의 개정판](https://github.com/FuouM/AE-ReOm-MIDI)
 #### 소개 동영상
 * [용의 조상 - 거리에서.앺](https://www.bilibili.com/video/av9228581)
 * [진심신 - 멜론 스타일.앺](https://www.bilibili.com/video/av9778499)

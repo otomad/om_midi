@@ -19,6 +19,8 @@
 
 **姊妹项目：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
+**另一分支的 om midi:** [ReOm MIDI](https://github.com/FuouM/AE-ReOm-MIDI) — 由 [Fuou Marinas](https://github.com/FuouM) 维护的基于原版 om midi 的不同发展方向的独立分支。
+
 ### 翻译
 * 越南语翻译由 [@Cyahega](https://github.com/Cyahega) 提供。
 * 韩语翻译由 @빈모드 提供。
@@ -35,7 +37,7 @@
 
 #### `om midi`
 将其移动至位于 After Effects 安装目录的 `Scripts\ScriptUI Panels` 文件夹中。
-> (例如：C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
+> (例如：C:\Program Files\Adobe\Adobe After Effects 2026\Scripts\ScriptUI Panels)
 
 #### `om utils`
 有两种方式导入：
@@ -73,6 +75,42 @@ footage("om_utils.jsx").sourceData;
 | v2.0 | [Dora (NGDXW) 的再版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **当前版本** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
+#### 分支关系
+
+```mermaid
+flowchart LR
+    %% Definitions
+    DVB-IE["David Van Brink (omino) 的原版<br>v0.1"]
+    Dora-R["Dora (NGDXW) 的改版<br>v1.0"]
+    EP["表达式预设<br>v1.0 闰"]
+    Z4HD-CE["家鳖大帝的汉化版<br>v1.2"]
+    Dora-R2["Dora (NGDXW) 的再版<br>v2.0"]
+    CV["当前版本<br>v3.x"]:::current
+    FM-R["Fuou Marinas 的改版"]
+
+    %% Connections
+    DVB-IE --> Dora-R
+    Dora-R --> EP
+    Dora-R --> Z4HD-CE
+    Dora-R --> Dora-R2
+    EP --> Dora-R2
+    Dora-R2 --> CV
+    Z4HD-CE --> CV
+    DVB-IE --> FM-R
+
+    %% Class definitions
+    classDef current font-weight:bold
+
+	%% Click events
+	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
+	click Dora-R "https://www.bilibili.com/read/cv170398"
+	click EP "https://www.bilibili.com/video/av29649969"
+	click Z4HD-CE "https://github.com/Z4HD/om_midi_NGDXW_zh"
+	click Dora-R2 "https://www.bilibili.com/read/cv1217487"
+	click CV "https://github.com/otomad/om_midi"
+	click FM-R "https://github.com/FuouM/AE-ReOm-MIDI"
+```
+
 ### 参考
 #### 之前版本
 * [David Van Brink (omino) 的原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
@@ -80,6 +118,8 @@ footage("om_utils.jsx").sourceData;
 * [表达式预设](https://www.bilibili.com/video/av29649969)
 * [家鳖大帝的汉化版](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora (NGDXW) 的再版](https://www.bilibili.com/read/cv1217487)
+#### 其它分支
+* [Fuou Marinas 的改版](https://github.com/FuouM/AE-ReOm-MIDI)
 #### 介绍视频
 * [龍之祖者 - 在街上.后效项](https://www.bilibili.com/video/av9228581)
 * [陈沈晨 - 瓜风.后效项](https://www.bilibili.com/video/av9778499)

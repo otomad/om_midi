@@ -3,7 +3,7 @@
 [![Cover](cover.png)](#om_midi)
 <div align="center">
 	<h2 id="om_midi">om midi</h2>
-	<p><b><i>Ranne</i></b></p>
+	<!-- <p><b><i>Ranne</i></b></p> -->
 	<p>
 		<img src="https://img.shields.io/badge/STATE-STABLE-green?style=flat-square" alt="Badge" />
 		<img src="https://img.shields.io/badge/VERSION-3.43.15.0-orange?style=flat-square" alt="Badge" />
@@ -24,6 +24,8 @@ The current project is rewritten using new technologies like TypeScript based on
 
 **Sister Projects:** [Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper).
 
+**Another branch of om midi:** [ReOm MIDI](https://github.com/FuouM/AE-ReOm-MIDI) — An independent branch based on the initial om midi with a different direction, maintained by [Fuou Marinas](https://github.com/FuouM).
+
 ### Translators
 * Vietnamese translation provided by [@Cyahega](https://github.com/Cyahega).
 * Korean translation provided by @binmode.
@@ -40,7 +42,7 @@ Download the latest script files.
 
 #### `om midi`
 Placed in the `Scripts\ScriptUI Panels` folder located in the After Effects installation directory.
-> (i.e. C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
+> (i.e. C:\Program Files\Adobe\Adobe After Effects 2026\Scripts\ScriptUI Panels)
 
 #### `om utils`
 There are two ways to import:
@@ -71,20 +73,58 @@ Please enable *Edit > Preferences > Scripting & Expressions > Allow Scripts to W
 
 | Ver. | Common Name | Multitrack Support | Add Keyframes to Layers | English UI | Additional Useful Keyframes | Manually Select MIDI Tracks | Change BPM | Dynamic BPM |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| v0.1 | [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| v0.1 | [David Van Brink (omino)'s Initial Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | v1.0 | [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | v1.0 Plus | [Expression Presets](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ✔️ | ✔️ | ❌ | ❌ | ❌ |
 | v1.2 | [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v2.0 | [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **Current Version** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
+#### Branch Relationship
+
+```mermaid
+flowchart LR
+    %% Definitions
+    DVB-IE["David Van Brink (omino)'s Initial Edition<br>v0.1"]
+    Dora-R["Dora (NGDXW)'s Revision<br>v1.0"]
+    EP["Expression Presets<br>v1.0 Plus"]
+    Z4HD-CE["Z4HD's Chinese Edition<br>v1.2"]
+    Dora-R2["Dora (NGDXW)'s Second Revision<br>v2.0"]
+    CV["Current Version<br>v3.x"]:::current
+    FM-R["Fuou Marinas's Revision"]
+
+    %% Connections
+    DVB-IE --> Dora-R
+    Dora-R --> EP
+    Dora-R --> Z4HD-CE
+    Dora-R --> Dora-R2
+    EP --> Dora-R2
+    Dora-R2 --> CV
+    Z4HD-CE --> CV
+    DVB-IE --> FM-R
+
+    %% Class definitions
+    classDef current font-weight:bold
+
+	%% Click events
+	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
+	click Dora-R "https://www.bilibili.com/read/cv170398"
+	click EP "https://www.bilibili.com/video/av29649969"
+	click Z4HD-CE "https://github.com/Z4HD/om_midi_NGDXW_zh"
+	click Dora-R2 "https://www.bilibili.com/read/cv1217487"
+	click CV "https://github.com/otomad/om_midi"
+	click FM-R "https://github.com/FuouM/AE-ReOm-MIDI"
+```
+
 ### References
 #### Previous Versions
-* [David Van Brink (omino)'s Original Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
+* [David Van Brink (omino)'s Initial Edition](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
 * [Dora (NGDXW)'s Revision](https://www.bilibili.com/read/cv170398)
 * [Expression Presets](https://www.bilibili.com/video/av29649969)
 * [Z4HD's Chinese Edition](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora (NGDXW)'s Second Revision](https://www.bilibili.com/read/cv1217487)
+#### Other Branches
+* [Fuou Marinas's Revision](https://github.com/FuouM/AE-ReOm-MIDI)
 #### Introduction Videos
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)

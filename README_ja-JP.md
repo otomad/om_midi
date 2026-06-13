@@ -19,6 +19,9 @@
 
 **姉妹プロジェクト：**[Otomad Helper for Vegas](https://github.com/otomad/OtomadHelper)。
 
+**om midi の別のブランチ：** [ReOm MIDI](https://github.com/FuouM/AE-ReOm-MIDI) —
+原版の om midi をベースに、異なる方向性を持つ独立したブランチで、[Fuou Marinas](https://github.com/FuouM) によって維持されている。
+
 ### 訳者
 * ベトナム語翻訳は [@Cyahega](https://github.com/Cyahega) によって提供されています。
 * 韓国語翻訳は @빈모드 によって提供されています。
@@ -35,7 +38,7 @@
 
 #### `om midi`
 After Effects のインストール ディレクトリにある `Scripts\ScriptUI Panels` フォルダーに配置されます。
-> (例えば：C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
+> (例えば：C:\Program Files\Adobe\Adobe After Effects 2026\Scripts\ScriptUI Panels)
 
 #### `om utils`
 インポートする方法は 2 つあります。
@@ -73,6 +76,42 @@ After Effects でスクリプトを開くと、図のようなエラーが発生
 | v2.0 | [Dora (NGDXW) の再訂版](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **現在版** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
 
+#### ブランチの関係
+
+```mermaid
+flowchart LR
+    %% Definitions
+    DVB-IE["David Van Brink (omino) の原版<br>v0.1"]
+    Dora-R["Dora (NGDXW) の改版<br>v1.0"]
+    EP["エクスプレッションプリセット<br>v1.0 閏"]
+    Z4HD-CE["家鼈大帝の中国語版<br>v1.2"]
+    Dora-R2["Dora (NGDXW) の再訂版<br>v2.0"]
+    CV["現在版<br>v3.x"]:::current
+    FM-R["Fuou Marinas の改版"]
+
+    %% Connections
+    DVB-IE --> Dora-R
+    Dora-R --> EP
+    Dora-R --> Z4HD-CE
+    Dora-R --> Dora-R2
+    EP --> Dora-R2
+    Dora-R2 --> CV
+    Z4HD-CE --> CV
+    DVB-IE --> FM-R
+
+    %% Class definitions
+    classDef current font-weight:bold
+
+	%% Click events
+	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
+	click Dora-R "https://www.bilibili.com/read/cv170398"
+	click EP "https://www.bilibili.com/video/av29649969"
+	click Z4HD-CE "https://github.com/Z4HD/om_midi_NGDXW_zh"
+	click Dora-R2 "https://www.bilibili.com/read/cv1217487"
+	click CV "https://github.com/otomad/om_midi"
+	click FM-R "https://github.com/FuouM/AE-ReOm-MIDI"
+```
+
 ### 参考文献
 #### 以前のバージョン
 * [David Van Brink (omino) の原版](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/)
@@ -80,6 +119,8 @@ After Effects でスクリプトを開くと、図のようなエラーが発生
 * [エクスプレッションプリセット](https://www.bilibili.com/video/av29649969)
 * [家鼈大帝の中国語版](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Dora (NGDXW) の再訂版](https://www.bilibili.com/read/cv1217487)
+#### その他のブランチ
+* [Fuou Marinas の改版](https://github.com/FuouM/AE-ReOm-MIDI)
 #### 紹介ビデオ
 * [竜の祖者 - 通りで.アエプ](https://www.bilibili.com/video/av9228581)
 * [陳沈晨 - メロン風.アエプ](https://www.bilibili.com/video/av9778499)

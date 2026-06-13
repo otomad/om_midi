@@ -19,6 +19,8 @@ Dự án hiện tại được viết lại bằng công nghệ mới như TypeS
 
 **Các dự án khác:** [Otomad Helper dành cho Vegas](https://github.com/otomad/OtomadHelper/blob/winform/README_vi-VN.md).
 
+**Một nhánh khác của om midi:** [ReOm MIDI](https://github.com/FuouM/AE-ReOm-MIDI) — Một nhánh độc lập dựa trên nhánh ban đầu là om midi với hướng đi khác, được duy trì bởi [Fuou Marinas](https://github.com/FuouM).
+
 ### Dịch giả
 * Bản dịch tiếng Việt được cung cấp bởi [@Cyahega](https://github.com/Cyahega).
 * Bản dịch tiếng Hàn được cung cấp bởi @binmode.
@@ -35,7 +37,7 @@ Dự án hiện tại được viết lại bằng công nghệ mới như TypeS
 
 #### `om midi`
 Đặt script vào thư mục `Scripts\ScriptUI Panels` nằm trong đường dẫn cài đặt của After Effects.
-> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2025\Scripts\ScriptUI Panels)
+> (Ví dụ. C:\Program Files\Adobe\Adobe After Effects 2026\Scripts\ScriptUI Panels)
 
 #### `om utils`
 Có 2 cách để nhập vào:
@@ -68,10 +70,46 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---:  |
 | v0.1 | [Phiên bản gốc của David Van Brink (omino)](https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/) | ✔️ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | v1.0 | [Bản sửa đổi của Dora (NGDXW)](https://www.bilibili.com/read/cv170398) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
-| v1.0 Plus | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
+| v1.0 Nhuận | [Preset biểu thức (Expression)](https://www.bilibili.com/video/av29649969) | ✔️ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v1.2 | [Phiên bản tiếng Trung của Gia Miết Thái Đâ](https://github.com/Z4HD/om_midi_NGDXW_zh) | ✔️ | ❌ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v2.0 | [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487) | ❌ | ✔️ | ❌ | ✔️ | ❌ | ❌ | ❌ |
 | v3.x | **Phiên bản hiện tại** | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
+
+#### Mối quan hệ giữa các nhánh
+
+```mermaid
+flowchart LR
+    %% Definitions
+    DVB-IE["Phiên bản gốc của David Van Brink (omino)<br>v0.1"]
+    Dora-R["Bản sửa đổi của Dora (NGDXW)<br>v1.0"]
+    EP["Preset biểu thức (Expression)<br>v1.0 Nhuận"]
+    Z4HD-CE["Phiên bản tiếng Trung của Gia Miết Thái Đâ<br>v1.2"]
+    Dora-R2["Bản sửa đổi thứ hai của Dora (NGDXW)<br>v2.0"]
+    CV["Phiên bản hiện tại<br>v3.x"]:::current
+    FM-R["Bản sửa đổi của Fuou Marinas"]
+
+    %% Connections
+    DVB-IE --> Dora-R
+    Dora-R --> EP
+    Dora-R --> Z4HD-CE
+    Dora-R --> Dora-R2
+    EP --> Dora-R2
+    Dora-R2 --> CV
+    Z4HD-CE --> CV
+    DVB-IE --> FM-R
+
+    %% Class definitions
+    classDef current font-weight:bold
+
+	%% Click events
+	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
+	click Dora-R "https://www.bilibili.com/read/cv170398"
+	click EP "https://www.bilibili.com/video/av29649969"
+	click Z4HD-CE "https://github.com/Z4HD/om_midi_NGDXW_zh"
+	click Dora-R2 "https://www.bilibili.com/read/cv1217487"
+	click CV "https://github.com/otomad/om_midi"
+	click FM-R "https://github.com/FuouM/AE-ReOm-MIDI"
+```
 
 ### Chú thích
 #### Các phiên bản trước
@@ -80,6 +118,8 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 * [Preset biểu thức (expression)](https://www.bilibili.com/video/av29649969)
 * [Phiên bản tiếng Trung của Gia Miết Thái Đâ](https://github.com/Z4HD/om_midi_NGDXW_zh)
 * [Bản sửa đổi thứ hai của Dora (NGDXW)](https://www.bilibili.com/read/cv1217487)
+#### Các chi nhánh khác
+* [Bản sửa đổi của Fuou Marinas](https://github.com/FuouM/AE-ReOm-MIDI)
 #### Các video giới thiệu
 * [Dragon Ancestor - Dans la rue.aep](https://www.bilibili.com/video/av9228581)
 * [Chen Shen Chen - melon style.aep](https://www.bilibili.com/video/av9778499)
