@@ -79,27 +79,27 @@ Vui lòng bật *Edit > Preferences > Scripting & Expressions > Allow Scripts to
 
 ```mermaid
 flowchart LR
-    %% Definitions
-    DVB-IE["Phiên bản gốc của David Van Brink (omino)<br>v0.1"]
-    Dora-R["Bản sửa đổi của Dora (NGDXW)<br>v1.0"]
-    EP["Preset biểu thức (Expression)<br>v1.0 Nhuận"]
-    Z4HD-CE["Phiên bản tiếng Trung của Gia Miết Thái Đâ<br>v1.2"]
-    Dora-R2["Bản sửa đổi thứ hai của Dora (NGDXW)<br>v2.0"]
-    CV["Phiên bản hiện tại<br>v3.x"]:::current
-    FM-R["Bản sửa đổi của Fuou Marinas"]
+	%% Definitions
+	DVB-IE["Phiên bản gốc của David Van Brink (omino)<br>v0.1"]
+	Dora-R["Bản sửa đổi của Dora (NGDXW)<br>v1.0"]
+	EP["Preset biểu thức (Expression)<br>v1.0 Nhuận"]
+	Z4HD-CE["Phiên bản tiếng Trung của Gia Miết Thái Đâ<br>v1.2"]
+	Dora-R2["Bản sửa đổi thứ hai của Dora (NGDXW)<br>v2.0"]
+	CV["Phiên bản hiện tại<br>v3.x"]:::current
+	FM-R["Bản sửa đổi của Fuou Marinas"]
 
-    %% Connections
-    DVB-IE --> Dora-R
-    Dora-R --> EP
-    Dora-R --> Z4HD-CE
-    Dora-R --> Dora-R2
-    EP --> Dora-R2
-    Dora-R2 --> CV
-    Z4HD-CE --> CV
-    DVB-IE --> FM-R
+	%% Connections
+	DVB-IE --> Dora-R
+	Dora-R --> EP
+	Dora-R --> Z4HD-CE
+	Dora-R --> Dora-R2
+	EP --> Dora-R2
+	Dora-R2 --> CV
+	Z4HD-CE --> CV
+	DVB-IE --> FM-R
 
-    %% Class definitions
-    classDef current font-weight:bold
+	%% Styles
+	style CV font-weight:bold,fill:#969,color:white
 
 	%% Click events
 	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"

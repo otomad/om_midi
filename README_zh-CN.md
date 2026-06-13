@@ -79,27 +79,27 @@ footage("om_utils.jsx").sourceData;
 
 ```mermaid
 flowchart LR
-    %% Definitions
-    DVB-IE["David Van Brink (omino) 的原版<br>v0.1"]
-    Dora-R["Dora (NGDXW) 的改版<br>v1.0"]
-    EP["表达式预设<br>v1.0 闰"]
-    Z4HD-CE["家鳖大帝的汉化版<br>v1.2"]
-    Dora-R2["Dora (NGDXW) 的再版<br>v2.0"]
-    CV["当前版本<br>v3.x"]:::current
-    FM-R["Fuou Marinas 的改版"]
+	%% Definitions
+	DVB-IE["David Van Brink (omino) 的原版<br>v0.1"]
+	Dora-R["Dora (NGDXW) 的改版<br>v1.0"]
+	EP["表达式预设<br>v1.0 闰"]
+	Z4HD-CE["家鳖大帝的汉化版<br>v1.2"]
+	Dora-R2["Dora (NGDXW) 的再版<br>v2.0"]
+	CV["当前版本<br>v3.x"]:::current
+	FM-R["Fuou Marinas 的改版"]
 
-    %% Connections
-    DVB-IE --> Dora-R
-    Dora-R --> EP
-    Dora-R --> Z4HD-CE
-    Dora-R --> Dora-R2
-    EP --> Dora-R2
-    Dora-R2 --> CV
-    Z4HD-CE --> CV
-    DVB-IE --> FM-R
+	%% Connections
+	DVB-IE --> Dora-R
+	Dora-R --> EP
+	Dora-R --> Z4HD-CE
+	Dora-R --> Dora-R2
+	EP --> Dora-R2
+	Dora-R2 --> CV
+	Z4HD-CE --> CV
+	DVB-IE --> FM-R
 
-    %% Class definitions
-    classDef current font-weight:bold
+	%% Styles
+	style CV font-weight:bold,fill:#969,color:white
 
 	%% Click events
 	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"

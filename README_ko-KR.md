@@ -79,27 +79,27 @@ After Effects 에서 스크립트를 열 때 그림과 같은 오류가 발생�
 
 ```mermaid
 flowchart LR
-    %% Definitions
-    DVB-IE["David Van Brink(omino)의 오리지널 에디션<br>v0.1"]
-    Dora-R["Dora(NGDXW)의 개정판<br>v1.0"]
-    EP["표현식 사전 설정<br>v1.0 윤"]
-    Z4HD-CE["가별대제의 중국판<br>v1.2"]
-    Dora-R2["Dora(NGDXW)의 두 번째 개정판<br>v2.0"]
-    CV["현재 버전<br>v3.x"]:::current
-    FM-R["Fuou Marinas의 개정판"]
+	%% Definitions
+	DVB-IE["David Van Brink(omino)의 오리지널 에디션<br>v0.1"]
+	Dora-R["Dora(NGDXW)의 개정판<br>v1.0"]
+	EP["표현식 사전 설정<br>v1.0 윤"]
+	Z4HD-CE["가별대제의 중국판<br>v1.2"]
+	Dora-R2["Dora(NGDXW)의 두 번째 개정판<br>v2.0"]
+	CV["현재 버전<br>v3.x"]:::current
+	FM-R["Fuou Marinas의 개정판"]
 
-    %% Connections
-    DVB-IE --> Dora-R
-    Dora-R --> EP
-    Dora-R --> Z4HD-CE
-    Dora-R --> Dora-R2
-    EP --> Dora-R2
-    Dora-R2 --> CV
-    Z4HD-CE --> CV
-    DVB-IE --> FM-R
+	%% Connections
+	DVB-IE --> Dora-R
+	Dora-R --> EP
+	Dora-R --> Z4HD-CE
+	Dora-R --> Dora-R2
+	EP --> Dora-R2
+	Dora-R2 --> CV
+	Z4HD-CE --> CV
+	DVB-IE --> FM-R
 
-    %% Class definitions
-    classDef current font-weight:bold
+	%% Styles
+	style CV font-weight:bold,fill:#969,color:white
 
 	%% Click events
 	click DVB-IE "https://omino.com/pixelblog/2011/12/26/ae-hello-again-midi/"
